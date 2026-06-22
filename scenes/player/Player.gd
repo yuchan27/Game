@@ -53,16 +53,18 @@ func _ready() -> void:
 	# Generated weapon overlay for directions missing weapon pixels in the current atlas.
 	weapon_line = Line2D.new()
 	weapon_line.name = "GeneratedWeaponOverlay"
-	weapon_line.z_index = 30
-	weapon_line.width = 6.0
+	weapon_line.z_index = 80
+	weapon_line.z_as_relative = false
+	weapon_line.width = 8.0
 	weapon_line.default_color = Color8(220, 162, 74)
 	weapon_line.visible = false
 	add_child(weapon_line)
 
 	weapon_detail_line = Line2D.new()
 	weapon_detail_line.name = "GeneratedWeaponDetail"
-	weapon_detail_line.z_index = 31
-	weapon_detail_line.width = 3.0
+	weapon_detail_line.z_index = 81
+	weapon_detail_line.z_as_relative = false
+	weapon_detail_line.width = 4.0
 	weapon_detail_line.default_color = Color8(70, 210, 226)
 	weapon_detail_line.visible = false
 	add_child(weapon_detail_line)
@@ -321,27 +323,9 @@ func _build_sprite_frames() -> void:
 	sprite.sprite_frames = frames
 
 
-func _source_direction_index(action_name: String, direction_index: int) -> int:
-	# The atlas idle/walk rows are horizontally mirrored relative to the gameplay direction index.
-	# Do not remap shoot/slash rows, because those attack rows already match projectile direction.
-	if action_name == "idle" or action_name == "walk":
-		match direction_index:
-			0:
-				return 4
-			1:
-				return 3
-			2:
-				return 2
-			3:
-				return 1
-			4:
-				return 0
-			5:
-				return 7
-			6:
-				return 6
-			7:
-				return 5
+func _source_direction_index(_action_name: String, direction_index: int) -> int:
+	# yuchan branch uses the atlas row order as the single source of truth.
+	# This prevents right-down movement from reading the left-down row.
 	return direction_index
 
 
@@ -454,9 +438,7 @@ func _update_weapon_overlay() -> void:
 	if weapon_line == null or weapon_detail_line == null:
 		return
 
-	var direction_index := _direction_index()
-	var needs_generated_overlay := state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
-	if not needs_generated_overlay:
+	if not (state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH]):
 		weapon_line.visible = false
 		weapon_detail_line.visible = false
 		return
@@ -474,28 +456,28 @@ func _draw_generated_weapon_overlay(mode: String) -> void:
 	var perpendicular := Vector2(-direction.y, direction.x)
 
 	if mode == "ranged":
-		var stock := anchor + direction * 10.0 - perpendicular * 4.0
-		var muzzle := anchor + direction * 68.0
-		weapon_line.width = 8.0
-		weapon_line.default_color = Color8(117, 82, 48)
+		var stock := anchor + direction * 5.0 - perpendicular * 5.0
+		var muzzle := anchor + direction * 76.0
+		weapon_line.width = 9.0
+		weapon_line.default_color = Color8(118, 77, 42)
 		weapon_line.points = PackedVector2Array([stock, muzzle])
 		weapon_line.visible = true
 
-		weapon_detail_line.width = 4.0
+		weapon_detail_line.width = 5.0
 		weapon_detail_line.default_color = Color8(62, 210, 226)
-		weapon_detail_line.points = PackedVector2Array([anchor + direction * 28.0 - perpendicular * 5.0, anchor + direction * 58.0 - perpendicular * 5.0])
+		weapon_detail_line.points = PackedVector2Array([anchor + direction * 28.0 - perpendicular * 6.0, anchor + direction * 66.0 - perpendicular * 6.0])
 		weapon_detail_line.visible = true
 	else:
-		var hilt := anchor + direction * 14.0 - perpendicular * 3.0
-		var tip := anchor + direction * 72.0
-		weapon_line.width = 5.0
-		weapon_line.default_color = Color8(226, 214, 170)
+		var hilt := anchor + direction * 9.0 - perpendicular * 3.0
+		var tip := anchor + direction * 78.0
+		weapon_line.width = 6.0
+		weapon_line.default_color = Color8(232, 218, 164)
 		weapon_line.points = PackedVector2Array([hilt, tip])
 		weapon_line.visible = true
 
-		weapon_detail_line.width = 6.0
+		weapon_detail_line.width = 7.0
 		weapon_detail_line.default_color = Color8(134, 82, 39)
-		weapon_detail_line.points = PackedVector2Array([hilt - perpendicular * 9.0, hilt + perpendicular * 9.0])
+		weapon_detail_line.points = PackedVector2Array([hilt - perpendicular * 10.0, hilt + perpendicular * 10.0])
 		weapon_detail_line.visible = true
 
 
