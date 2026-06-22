@@ -10,6 +10,7 @@ const MUSIC := {
 }
 
 const VOICE := {
+	"title_story": "res://assets/audio/voice_title_story.wav",
 	"intro_story": "res://assets/audio/voice_intro_story.wav"
 }
 
@@ -64,16 +65,17 @@ func play_music(id: String) -> void:
 	music_player.stream = stream
 	music_player.play()
 
-func play_voice(id: String) -> void:
+func play_voice(id: String) -> bool:
 	var path := String(VOICE.get(id, ""))
 	if path.is_empty():
-		return
+		return false
 	var stream := ASSET_LOADER.load_wav(path)
 	if stream == null:
-		return
+		return false
 	voice_player.stop()
 	voice_player.stream = stream
 	voice_player.play()
+	return true
 
 func stop_voice() -> void:
 	if voice_player != null:
