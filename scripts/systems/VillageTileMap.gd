@@ -2,6 +2,7 @@ extends TileMap
 class_name VillageTileMap
 
 const TILE_SIZE := 32
+const TILESET_PATH := "res://assets/sprites/tiles/yuchan_wasteland_tiles.png"
 
 const SOURCE_ID := 0
 const TILE_WASTELAND := Vector2i(0, 0)
@@ -23,23 +24,17 @@ func setup(new_map_size: Vector2i, new_seed: int) -> void:
 
 
 func _build_tileset() -> void:
-	var image := Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
+	var texture: Texture2D = load(TILESET_PATH)
+	if texture == null:
+		texture = ImageTexture.create_from_image(_fallback_tileset_image())
 
-	# Unified yuchan branch palette: dry wasteland floor + readable road + rare scrap detail.
-	_fill_wasteland_tile(image, TILE_WASTELAND, Color8(105, 88, 61), Color8(76, 63, 44), false, false)
-	_fill_wasteland_tile(image, TILE_DARK_SOIL, Color8(79, 72, 58), Color8(55, 52, 45), false, false)
-	_fill_wasteland_tile(image, TILE_ROAD, Color8(150, 110, 63), Color8(104, 77, 47), false, false)
-	_fill_wasteland_tile(image, TILE_ROAD_EDGE, Color8(121, 93, 58), Color8(82, 66, 47), false, false)
-	_fill_wasteland_tile(image, TILE_CRACKED, Color8(94, 84, 66), Color8(54, 48, 40), false, true)
-	_fill_wasteland_tile(image, TILE_SCRAP_PLATE, Color8(70, 72, 66), Color8(43, 45, 43), true, false)
-
-	var texture := ImageTexture.create_from_image(image)
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 	var atlas_source := TileSetAtlasSource.new()
 	atlas_source.texture = texture
 	atlas_source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	for x in range(6):
+	var tile_count := max(1, int(texture.get_width() / TILE_SIZE))
+	for x in range(tile_count):
 		atlas_source.create_tile(Vector2i(x, 0))
 
 	var new_tile_set := TileSet.new()
@@ -48,18 +43,26 @@ func _build_tileset() -> void:
 	tile_set = new_tile_set
 
 
-func _fill_wasteland_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, metal := false, cracked := false) -> void:
-	var start_x := tile_coords.x * TILE_SIZE
+func _fallback_tileset_image() -> Image:
+	var image := Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
+	_fill_fallback_tile(image, TILE_WASTELAND, Color8(105, 88, 61), Color8(76, 63, 44), false, false)
+	_fill_fallback_tile(image, TILE_DARK_SOIL, Color8(79, 72, 58), Color8(55, 52, 45), false, false)
+	_fill_fallback_tile(image, TILE_ROAD, Color8(150, 110, 63), Color8(104, 77, 47), false, false)
+	_fill_fallback_tile(image, TILE_ROAD_EDGE, Color8(121, 93, 58), Color8(82, 66, 47), false, false)
+	_fill_fallback_tile(image, TILE_CRACKED, Color8(94, 84, 66), Color8(54, 48, 40), false, true)
+	_fill_fallback_tile(image, TILE_SCRAP_PLATE, Color8(70, 72, 66), Color8(43, 45, 43), true, false)
+	return image
 
+
+func _fill_fallback_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, metal := false, cracked := false) -> void:
+	var start_x := tile_coords.x * TILE_SIZE
 	for y in range(TILE_SIZE):
 		for x in range(TILE_SIZE):
 			var shade := 0.0
 			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 37) == 0:
 				shade = 0.035
-			var c := base.lerp(line, 0.035 + shade)
-			image.set_pixel(start_x + x, y, c)
+			image.set_pixel(start_x + x, y, base.lerp(line, 0.035 + shade))
 
-	# Soft seams only; keep TileMap readable without the previous noisy checkerboard effect.
 	for i in range(TILE_SIZE):
 		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.11))
 		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.09))
@@ -67,10 +70,6 @@ func _fill_wasteland_tile(image: Image, tile_coords: Vector2i, base: Color, line
 	if metal:
 		for p in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
 			image.set_pixel(start_x + p.x, p.y, line.lightened(0.18))
-		for i in range(5, TILE_SIZE - 5):
-			if i % 11 == 0:
-				image.set_pixel(start_x + i, 5, line.lightened(0.12))
-				image.set_pixel(start_x + 5, i, line.lightened(0.10))
 
 	if cracked:
 		_draw_crack(image, start_x + 10, 9, [Vector2i(5, 4), Vector2i(6, -1), Vector2i(3, 5)], line.darkened(0.22))
