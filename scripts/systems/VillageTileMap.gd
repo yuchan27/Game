@@ -25,12 +25,13 @@ func setup(new_map_size: Vector2i, new_seed: int) -> void:
 func _build_tileset() -> void:
 	var image := Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
 
-	_fill_wasteland_tile(image, TILE_WASTELAND, Color8(104, 86, 58), Color8(75, 61, 43), false, false)
-	_fill_wasteland_tile(image, TILE_DARK_SOIL, Color8(70, 65, 52), Color8(48, 47, 41), false, false)
-	_fill_wasteland_tile(image, TILE_ROAD, Color8(146, 105, 58), Color8(98, 72, 45), false, false)
-	_fill_wasteland_tile(image, TILE_ROAD_EDGE, Color8(116, 88, 55), Color8(76, 62, 45), false, false)
-	_fill_wasteland_tile(image, TILE_CRACKED, Color8(91, 83, 66), Color8(48, 45, 39), false, true)
-	_fill_wasteland_tile(image, TILE_SCRAP_PLATE, Color8(67, 70, 65), Color8(38, 42, 43), true, false)
+	# Unified yuchan branch palette: dry wasteland floor + readable road + rare scrap detail.
+	_fill_wasteland_tile(image, TILE_WASTELAND, Color8(105, 88, 61), Color8(76, 63, 44), false, false)
+	_fill_wasteland_tile(image, TILE_DARK_SOIL, Color8(79, 72, 58), Color8(55, 52, 45), false, false)
+	_fill_wasteland_tile(image, TILE_ROAD, Color8(150, 110, 63), Color8(104, 77, 47), false, false)
+	_fill_wasteland_tile(image, TILE_ROAD_EDGE, Color8(121, 93, 58), Color8(82, 66, 47), false, false)
+	_fill_wasteland_tile(image, TILE_CRACKED, Color8(94, 84, 66), Color8(54, 48, 40), false, true)
+	_fill_wasteland_tile(image, TILE_SCRAP_PLATE, Color8(70, 72, 66), Color8(43, 45, 43), true, false)
 
 	var texture := ImageTexture.create_from_image(image)
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -53,26 +54,26 @@ func _fill_wasteland_tile(image: Image, tile_coords: Vector2i, base: Color, line
 	for y in range(TILE_SIZE):
 		for x in range(TILE_SIZE):
 			var shade := 0.0
-			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 23) == 0:
-				shade = 0.045
-			var c := base.lerp(line, 0.05 + shade)
+			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 37) == 0:
+				shade = 0.035
+			var c := base.lerp(line, 0.035 + shade)
 			image.set_pixel(start_x + x, y, c)
 
-	# Softer tile seams. This keeps TileMap readable without looking like a debug grid.
+	# Soft seams only; keep TileMap readable without the previous noisy checkerboard effect.
 	for i in range(TILE_SIZE):
-		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.18))
-		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.16))
+		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.11))
+		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.09))
 
 	if metal:
 		for p in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
-			image.set_pixel(start_x + p.x, p.y, line.lightened(0.22))
+			image.set_pixel(start_x + p.x, p.y, line.lightened(0.18))
 		for i in range(5, TILE_SIZE - 5):
-			if i % 9 == 0:
-				image.set_pixel(start_x + i, 5, line.lightened(0.16))
-				image.set_pixel(start_x + 5, i, line.lightened(0.12))
+			if i % 11 == 0:
+				image.set_pixel(start_x + i, 5, line.lightened(0.12))
+				image.set_pixel(start_x + 5, i, line.lightened(0.10))
 
 	if cracked:
-		_draw_crack(image, start_x + 10, 9, [Vector2i(5, 4), Vector2i(6, -1), Vector2i(3, 5)], line.darkened(0.25))
+		_draw_crack(image, start_x + 10, 9, [Vector2i(5, 4), Vector2i(6, -1), Vector2i(3, 5)], line.darkened(0.22))
 
 
 func _draw_crack(image: Image, start_x: int, start_y: int, offsets: Array[Vector2i], color: Color) -> void:
@@ -117,12 +118,12 @@ func _tile_for_position(x: int, y: int) -> Vector2i:
 	if plaza_shape <= 1.0 or vertical or horizontal:
 		return TILE_ROAD
 	if shoulder:
-		return TILE_ROAD_EDGE if rng_value % 10 != 0 else TILE_CRACKED
-	if rng_value % 41 == 0:
+		return TILE_ROAD_EDGE if rng_value % 16 != 0 else TILE_CRACKED
+	if rng_value % 73 == 0:
 		return TILE_SCRAP_PLATE
-	if rng_value % 37 == 0:
+	if rng_value % 61 == 0:
 		return TILE_CRACKED
-	if rng_value % 6 == 0:
+	if rng_value % 11 == 0:
 		return TILE_DARK_SOIL
 	return TILE_WASTELAND
 
