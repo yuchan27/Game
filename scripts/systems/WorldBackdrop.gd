@@ -3,6 +3,7 @@ class_name WorldBackdrop
 
 const TILE_SIZE := 32
 const SOURCE_ID := 0
+const WASTELAND_TILESET_PATH := "res://assets/sprites/tiles/yuchan_wasteland_tiles.png"
 
 const TILE_BASE := Vector2i(0, 0)
 const TILE_DARK := Vector2i(1, 0)
@@ -27,6 +28,26 @@ func setup(new_mode: String, size_tiles: Vector2i, new_seed: int, new_route_id :
 
 
 func _build_tileset() -> void:
+	var texture: Texture2D = load(WASTELAND_TILESET_PATH)
+	if texture == null:
+		texture = ImageTexture.create_from_image(_fallback_tileset_image())
+
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+
+	var atlas_source := TileSetAtlasSource.new()
+	atlas_source.texture = texture
+	atlas_source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
+	var tile_count := max(1, int(texture.get_width() / TILE_SIZE))
+	for x in range(tile_count):
+		atlas_source.create_tile(Vector2i(x, 0))
+
+	var new_tile_set := TileSet.new()
+	new_tile_set.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
+	new_tile_set.add_source(atlas_source, SOURCE_ID)
+	tile_set = new_tile_set
+
+
+func _fallback_tileset_image() -> Image:
 	var image := Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
 	var palette := _palette()
 	_fill_tile(image, TILE_BASE, palette[0], palette[1], false, false)
@@ -35,20 +56,7 @@ func _build_tileset() -> void:
 	_fill_tile(image, TILE_EDGE, palette[4], palette[2], false, false)
 	_fill_tile(image, TILE_CRACK, palette[0], palette[2], false, true)
 	_fill_tile(image, TILE_ACCENT, palette[5], palette[4], true, false)
-
-	var texture := ImageTexture.create_from_image(image)
-	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-
-	var atlas_source := TileSetAtlasSource.new()
-	atlas_source.texture = texture
-	atlas_source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	for x in range(6):
-		atlas_source.create_tile(Vector2i(x, 0))
-
-	var new_tile_set := TileSet.new()
-	new_tile_set.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	new_tile_set.add_source(atlas_source, SOURCE_ID)
-	tile_set = new_tile_set
+	return image
 
 
 func _palette() -> Array[Color]:
@@ -78,7 +86,6 @@ func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, r
 				shade = 0.035
 			image.set_pixel(start_x + x, y, base.lerp(line, 0.035 + shade))
 
-	# Soft seams only; this keeps the TileMap readable without looking like a debug grid.
 	for i in range(TILE_SIZE):
 		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.11))
 		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.09))
