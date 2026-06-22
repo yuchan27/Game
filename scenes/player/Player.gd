@@ -25,6 +25,8 @@ var camera_base_offset := Vector2.ZERO
 var shake_timer := 0.0
 var shake_strength := 0.0
 var weapon_sprite: Sprite2D
+var weapon_line: Line2D
+var weapon_detail_line: Line2D
 var current_weapon_asset_id := ""
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -39,6 +41,7 @@ func _ready() -> void:
 
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
+	# Kept for compatibility with equipment_changed, but hidden by default.
 	weapon_sprite = Sprite2D.new()
 	weapon_sprite.name = "WeaponOverlay"
 	weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -46,6 +49,23 @@ func _ready() -> void:
 	weapon_sprite.centered = true
 	weapon_sprite.visible = false
 	add_child(weapon_sprite)
+
+	# Generated weapon overlay for directions missing weapon pixels in the current atlas.
+	weapon_line = Line2D.new()
+	weapon_line.name = "GeneratedWeaponOverlay"
+	weapon_line.z_index = 30
+	weapon_line.width = 6.0
+	weapon_line.default_color = Color8(220, 162, 74)
+	weapon_line.visible = false
+	add_child(weapon_line)
+
+	weapon_detail_line = Line2D.new()
+	weapon_detail_line.name = "GeneratedWeaponDetail"
+	weapon_detail_line.z_index = 31
+	weapon_detail_line.width = 3.0
+	weapon_detail_line.default_color = Color8(70, 210, 226)
+	weapon_detail_line.visible = false
+	add_child(weapon_detail_line)
 
 	camera_base_offset = camera.offset
 
@@ -302,13 +322,26 @@ func _build_sprite_frames() -> void:
 
 
 func _source_direction_index(action_name: String, direction_index: int) -> int:
-	# 只修走路斜上動畫太不明顯的問題；射擊/揮砍不交換方向，避免攻擊方向反掉。
-	if action_name == "walk":
+	# The atlas idle/walk rows are horizontally mirrored relative to the gameplay direction index.
+	# Do not remap shoot/slash rows, because those attack rows already match projectile direction.
+	if action_name == "idle" or action_name == "walk":
 		match direction_index:
-			5:
+			0:
 				return 4
-			7:
+			1:
+				return 3
+			2:
+				return 2
+			3:
+				return 1
+			4:
 				return 0
+			5:
+				return 7
+			6:
+				return 6
+			7:
+				return 5
 	return direction_index
 
 
@@ -415,39 +448,55 @@ func _projectile_spawn_global() -> Vector2:
 
 
 func _update_weapon_overlay() -> void:
-	if weapon_sprite == null:
+	if weapon_sprite != null:
+		weapon_sprite.visible = false
+
+	if weapon_line == null or weapon_detail_line == null:
 		return
 
 	var direction_index := _direction_index()
-	var needs_overlay := state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
-	if not needs_overlay:
-		weapon_sprite.visible = false
+	var needs_generated_overlay := state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
+	if not needs_generated_overlay:
+		weapon_line.visible = false
+		weapon_detail_line.visible = false
 		return
 
-	var item_id := _weapon_overlay_item_id()
-	var equipment := DataRegistry.get_equipment(item_id)
-	var asset_id := String(equipment.get("weapon_sprite_asset_id", ""))
-	if asset_id.is_empty():
-		weapon_sprite.visible = false
-		return
+	var mode := "ranged" if state == PlayerState.SHOOT else "melee"
+	_draw_generated_weapon_overlay(mode)
 
-	if current_weapon_asset_id != asset_id:
-		current_weapon_asset_id = asset_id
-		var path := DataRegistry.asset_path(asset_id)
-		weapon_sprite.texture = ASSET_LOADER.load_png(path) if not path.is_empty() else null
 
-	if weapon_sprite.texture == null:
-		weapon_sprite.visible = false
-		return
-
+func _draw_generated_weapon_overlay(mode: String) -> void:
 	var direction := last_direction.normalized()
 	if direction.length() < 0.1:
 		direction = Vector2.RIGHT
 
-	weapon_sprite.visible = true
-	weapon_sprite.position = Vector2(0, -62) + direction * 34.0
-	weapon_sprite.rotation = direction.angle()
-	weapon_sprite.flip_v = abs(direction.angle()) > PI * 0.5
+	var anchor := Vector2(0, -62)
+	var perpendicular := Vector2(-direction.y, direction.x)
+
+	if mode == "ranged":
+		var stock := anchor + direction * 10.0 - perpendicular * 4.0
+		var muzzle := anchor + direction * 68.0
+		weapon_line.width = 8.0
+		weapon_line.default_color = Color8(117, 82, 48)
+		weapon_line.points = PackedVector2Array([stock, muzzle])
+		weapon_line.visible = true
+
+		weapon_detail_line.width = 4.0
+		weapon_detail_line.default_color = Color8(62, 210, 226)
+		weapon_detail_line.points = PackedVector2Array([anchor + direction * 28.0 - perpendicular * 5.0, anchor + direction * 58.0 - perpendicular * 5.0])
+		weapon_detail_line.visible = true
+	else:
+		var hilt := anchor + direction * 14.0 - perpendicular * 3.0
+		var tip := anchor + direction * 72.0
+		weapon_line.width = 5.0
+		weapon_line.default_color = Color8(226, 214, 170)
+		weapon_line.points = PackedVector2Array([hilt, tip])
+		weapon_line.visible = true
+
+		weapon_detail_line.width = 6.0
+		weapon_detail_line.default_color = Color8(134, 82, 39)
+		weapon_detail_line.points = PackedVector2Array([hilt - perpendicular * 9.0, hilt + perpendicular * 9.0])
+		weapon_detail_line.visible = true
 
 
 func _weapon_overlay_item_id() -> String:
