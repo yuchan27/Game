@@ -94,15 +94,15 @@ func _tile_for_position(x: int, y: int, road_strength: float) -> Vector2i:
 
 
 func _road_strength(x: int, y: int) -> float:
-	var cx := float(map_size.x) * 0.5
-	var cy := float(map_size.y) * 0.5
-	var plaza_shape := pow((float(x) - cx) / 10.5, 2.0) + pow((float(y) - cy) / 6.5, 2.0)
-	var plaza := plaza_shape <= 1.0
-	var vertical_center := cx + sin(float(y) * 0.22) * 1.4
-	var horizontal_center := cy + sin(float(x) * 0.18) * 1.2
-	var vertical := abs(float(x) - vertical_center) <= 2.2 and y >= 4 and y <= map_size.y - 2
-	var horizontal := abs(float(y) - horizontal_center) <= 2.2 and x >= 3 and x <= map_size.x - 2
-	var shoulder := plaza_shape <= 1.42 or abs(float(x) - vertical_center) <= 3.4 or abs(float(y) - horizontal_center) <= 3.4
+	var cx: float = float(map_size.x) * 0.5
+	var cy: float = float(map_size.y) * 0.5
+	var plaza_shape: float = pow((float(x) - cx) / 10.5, 2.0) + pow((float(y) - cy) / 6.5, 2.0)
+	var plaza: bool = plaza_shape <= 1.0
+	var vertical_center: float = cx + sin(float(y) * 0.22) * 1.4
+	var horizontal_center: float = cy + sin(float(x) * 0.18) * 1.2
+	var vertical: bool = abs(float(x) - vertical_center) <= 2.2 and y >= 4 and y <= map_size.y - 2
+	var horizontal: bool = abs(float(y) - horizontal_center) <= 2.2 and x >= 3 and x <= map_size.x - 2
+	var shoulder: bool = plaza_shape <= 1.42 or abs(float(x) - vertical_center) <= 3.4 or abs(float(y) - horizontal_center) <= 3.4
 	return 0.78 if plaza or vertical or horizontal else (0.22 if shoulder else 0.0)
 
 
