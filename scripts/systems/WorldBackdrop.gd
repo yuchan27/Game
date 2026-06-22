@@ -7,7 +7,7 @@ const SOURCE_ID := 0
 const TILE_BASE := Vector2i(0, 0)
 const TILE_DARK := Vector2i(1, 0)
 const TILE_ROAD := Vector2i(2, 0)
-const TILE_HAZARD := Vector2i(3, 0)
+const TILE_EDGE := Vector2i(3, 0)
 const TILE_CRACK := Vector2i(4, 0)
 const TILE_ACCENT := Vector2i(5, 0)
 
@@ -29,12 +29,12 @@ func setup(new_mode: String, size_tiles: Vector2i, new_seed: int, new_route_id :
 func _build_tileset() -> void:
 	var image := Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
 	var palette := _palette()
-	_fill_tile(image, TILE_BASE, palette[0], palette[1], false, false, false)
-	_fill_tile(image, TILE_DARK, palette[1], palette[2], false, false, false)
-	_fill_tile(image, TILE_ROAD, palette[3], palette[4], true, false, false)
-	_fill_tile(image, TILE_HAZARD, palette[1], palette[5], true, true, false)
-	_fill_tile(image, TILE_CRACK, palette[0], palette[2], false, false, true)
-	_fill_tile(image, TILE_ACCENT, palette[6], palette[4], true, false, false)
+	_fill_tile(image, TILE_BASE, palette[0], palette[1], false, false)
+	_fill_tile(image, TILE_DARK, palette[1], palette[2], false, false)
+	_fill_tile(image, TILE_ROAD, palette[3], palette[4], false, false)
+	_fill_tile(image, TILE_EDGE, palette[4], palette[2], false, false)
+	_fill_tile(image, TILE_CRACK, palette[0], palette[2], false, true)
+	_fill_tile(image, TILE_ACCENT, palette[5], palette[4], true, false)
 
 	var texture := ImageTexture.create_from_image(image)
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -54,57 +54,41 @@ func _build_tileset() -> void:
 func _palette() -> Array[Color]:
 	if mode == "guild":
 		return [
-			Color8(82, 80, 72), Color8(58, 58, 54), Color8(37, 38, 36),
-			Color8(96, 89, 73), Color8(178, 139, 61), Color8(202, 55, 50), Color8(118, 112, 99)
+			Color8(82, 80, 72), Color8(60, 59, 54), Color8(42, 42, 39),
+			Color8(96, 89, 73), Color8(132, 107, 65), Color8(118, 112, 99)
 		]
 
 	match route_id:
 		"toxic_marsh":
-			return [Color8(57, 72, 49), Color8(35, 48, 36), Color8(25, 35, 30), Color8(92, 86, 57), Color8(179, 142, 63), Color8(78, 174, 79), Color8(76, 92, 58)]
+			return [Color8(88, 86, 61), Color8(58, 70, 48), Color8(36, 48, 36), Color8(116, 94, 55), Color8(81, 88, 55), Color8(78, 144, 70)]
 		"crystal_scar":
-			return [Color8(63, 60, 72), Color8(43, 42, 55), Color8(30, 30, 42), Color8(83, 76, 88), Color8(184, 139, 76), Color8(147, 87, 216), Color8(92, 85, 112)]
+			return [Color8(92, 82, 72), Color8(68, 60, 72), Color8(45, 42, 56), Color8(126, 98, 62), Color8(84, 74, 88), Color8(129, 86, 184)]
 		"old_factory":
-			return [Color8(68, 69, 65), Color8(44, 47, 49), Color8(27, 30, 33), Color8(87, 83, 73), Color8(184, 143, 67), Color8(204, 76, 46), Color8(92, 96, 98)]
+			return [Color8(85, 80, 67), Color8(64, 65, 60), Color8(43, 46, 46), Color8(116, 94, 58), Color8(78, 76, 67), Color8(125, 98, 70)]
 		_:
-			return [Color8(86, 75, 58), Color8(55, 51, 43), Color8(35, 35, 32), Color8(126, 96, 59), Color8(187, 144, 66), Color8(210, 118, 45), Color8(102, 87, 68)]
+			return [Color8(104, 86, 58), Color8(74, 65, 49), Color8(52, 49, 42), Color8(142, 104, 58), Color8(96, 73, 48), Color8(116, 91, 64)]
 
 
-func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, rivets := false, hazard := false, cracked := false) -> void:
+func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, rivets := false, cracked := false) -> void:
 	var start_x := tile_coords.x * TILE_SIZE
 	for y in range(TILE_SIZE):
 		for x in range(TILE_SIZE):
 			var shade := 0.0
-			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 17) == 0:
-				shade = 0.07
-			image.set_pixel(start_x + x, y, base.lerp(line, 0.08 + shade))
+			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 29) == 0:
+				shade = 0.04
+			image.set_pixel(start_x + x, y, base.lerp(line, 0.045 + shade))
 
+	# Soft seams only; avoid the previous high-contrast checkerboard look.
 	for i in range(TILE_SIZE):
-		image.set_pixel(start_x + i, 0, line.darkened(0.18))
-		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.30))
-		image.set_pixel(start_x, i, line.darkened(0.18))
-		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.30))
-
-	for i in range(3, TILE_SIZE - 3):
-		image.set_pixel(start_x + i, 4, line.lightened(0.08))
-		image.set_pixel(start_x + 4, i, line.lightened(0.06))
+		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.14))
+		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.12))
 
 	if rivets:
-		for p in [Vector2i(5, 5), Vector2i(26, 5), Vector2i(5, 26), Vector2i(26, 26)]:
-			image.set_pixel(start_x + p.x, p.y, line.lightened(0.30))
-			image.set_pixel(start_x + p.x + 1, p.y, line.lightened(0.16))
-			image.set_pixel(start_x + p.x, p.y + 1, line.darkened(0.05))
-
-	if hazard:
-		for i in range(4, TILE_SIZE - 4):
-			if int(i / 4) % 2 == 0:
-				image.set_pixel(start_x + i, 4, line)
-				image.set_pixel(start_x + i, TILE_SIZE - 5, line)
-				image.set_pixel(start_x + 4, i, line)
-				image.set_pixel(start_x + TILE_SIZE - 5, i, line)
+		for p in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
+			image.set_pixel(start_x + p.x, p.y, line.lightened(0.18))
 
 	if cracked:
-		_draw_crack(image, start_x + 9, 8, [Vector2i(5, 5), Vector2i(8, -1), Vector2i(3, 7)], line.darkened(0.25))
-		_draw_crack(image, start_x + 21, 17, [Vector2i(-5, 3), Vector2i(7, 5), Vector2i(2, 6)], line.darkened(0.20))
+		_draw_crack(image, start_x + 10, 9, [Vector2i(5, 4), Vector2i(7, -1), Vector2i(4, 5)], line.darkened(0.22))
 
 
 func _draw_crack(image: Image, start_x: int, start_y: int, offsets: Array[Vector2i], color: Color) -> void:
@@ -140,23 +124,23 @@ func _tile_for_position(x: int, y: int) -> Vector2i:
 	if mode == "guild":
 		if x <= 1 or y <= 1 or x >= map_size.x - 2 or y >= map_size.y - 2:
 			return TILE_DARK
-		if h % 17 == 0:
+		if h % 53 == 0:
 			return TILE_CRACK
-		if h % 11 == 0:
+		if h % 31 == 0:
 			return TILE_ACCENT
 		return TILE_BASE if h % 5 != 0 else TILE_DARK
 
 	if road >= 0.70:
-		return TILE_ROAD if h % 8 != 0 else TILE_ACCENT
+		return TILE_ROAD
 	if road > 0.0:
-		return TILE_BASE if h % 4 != 0 else TILE_CRACK
-	if h % 23 == 0:
-		return TILE_HAZARD
-	if h % 13 == 0:
+		return TILE_EDGE if h % 8 != 0 else TILE_CRACK
+	if h % 47 == 0:
+		return TILE_ACCENT
+	if h % 41 == 0:
 		return TILE_CRACK
 	if h % 7 == 0:
-		return TILE_ACCENT
-	return TILE_DARK if h % 3 == 0 else TILE_BASE
+		return TILE_DARK
+	return TILE_BASE
 
 
 func _road_strength(x: int, y: int) -> float:
