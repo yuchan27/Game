@@ -1,6 +1,7 @@
 extends Node2D
 
 var title_layer: CanvasLayer
+var title_voice_active := false
 var intro_active := false
 
 func _ready() -> void:
@@ -17,12 +18,18 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if intro_active and event.is_action_pressed("ui_accept"):
 		_finish_intro_to_game()
+	elif title_voice_active and event.is_action_pressed("ui_accept"):
+		_skip_title_voice()
 
 func _build_title_screen() -> void:
-	# 主選單先顯示，旁白不在這裡播放。
-	AudioManager.stop_voice()
+	# 第一個畫面：主選單。這裡可以播放主選單說明，但不會自動進序章。
 	AudioManager.play_music("intro")
+	AudioManager.play_voice("intro_story")
+	title_voice_active = true
 	intro_active = false
+
+	if AudioManager.voice_player != null and not AudioManager.voice_player.finished.is_connected(_on_title_voice_finished):
+		AudioManager.voice_player.finished.connect(_on_title_voice_finished)
 
 	if title_layer == null or not is_instance_valid(title_layer):
 		title_layer = CanvasLayer.new()
@@ -41,8 +48,8 @@ func _build_title_screen() -> void:
 	root.add_child(backdrop)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(720, 420)
-	panel.position = Vector2(300, 150)
+	panel.custom_minimum_size = Vector2(720, 460)
+	panel.position = Vector2(300, 130)
 	panel.add_theme_stylebox_override("panel", _panel_style())
 	root.add_child(panel)
 
@@ -74,27 +81,46 @@ func _build_title_screen() -> void:
 	new_button.pressed.connect(_new_game)
 	stack.add_child(new_button)
 
+	var skip_button := Button.new()
+	skip_button.text = "跳過說明"
+	skip_button.pressed.connect(_skip_title_voice)
+	stack.add_child(skip_button)
+
 	var help := Label.new()
-	help.text = "WASD 移動｜滑鼠左鍵依裝備攻擊｜E 互動｜Tab 人物裝備｜M 地圖｜Esc 暫停"
+	help.text = "WASD 移動｜滑鼠左鍵依裝備攻擊｜E 互動｜Tab 人物裝備｜M 地圖｜Esc 暫停\n主選單說明播放中；按 Enter 或點擊跳過說明。"
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	help.add_theme_font_size_override("font_size", 14)
 	stack.add_child(help)
 
-func _continue_game() -> void:
+func _on_title_voice_finished() -> void:
+	title_voice_active = false
+	if AudioManager.voice_player != null and AudioManager.voice_player.finished.is_connected(_on_title_voice_finished):
+		AudioManager.voice_player.finished.disconnect(_on_title_voice_finished)
+
+func _skip_title_voice() -> void:
+	if not title_voice_active:
+		return
+	title_voice_active = false
+	if AudioManager.voice_player != null and AudioManager.voice_player.finished.is_connected(_on_title_voice_finished):
+		AudioManager.voice_player.finished.disconnect(_on_title_voice_finished)
 	AudioManager.stop_voice()
+
+func _continue_game() -> void:
+	_skip_title_voice()
 	intro_active = false
 	if title_layer != null:
 		title_layer.queue_free()
 	SaveManager.load_game(true, true)
 
 func _new_game() -> void:
-	AudioManager.stop_voice()
+	_skip_title_voice()
 	GameState.reset_new_run(true)
 	_show_intro()
 
 func _show_intro() -> void:
-	# 按下開始遊戲後才播放序章旁白；旁白結束或按 Enter 後正式進入村莊。
+	# 第二個畫面：序章。開始遊戲後才進入；旁白結束或按 Enter/跳過後正式進入村莊。
 	intro_active = true
+	title_voice_active = false
 	AudioManager.play_music("intro")
 	AudioManager.play_voice("intro_story")
 
@@ -138,8 +164,13 @@ func _show_intro() -> void:
 	body.add_theme_font_size_override("font_size", 20)
 	stack.add_child(body)
 
+	var skip_button := Button.new()
+	skip_button.text = "跳過序章"
+	skip_button.pressed.connect(_finish_intro_to_game)
+	stack.add_child(skip_button)
+
 	var skip := Label.new()
-	skip.text = "旁白播放中；按 Enter 可跳過。旁白結束後會進入遊戲。"
+	skip.text = "旁白播放中；按 Enter 或點擊跳過序章可直接進入遊戲。"
 	skip.add_theme_font_size_override("font_size", 13)
 	stack.add_child(skip)
 

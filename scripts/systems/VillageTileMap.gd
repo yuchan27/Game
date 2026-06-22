@@ -57,7 +57,6 @@ func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color) -
 			var c := base.lerp(line, 0.16 + noise)
 			image.set_pixel(start_x + x, y, c)
 
-	# Subtle tile borders and grit to keep the generated map from looking flat.
 	for i in range(TILE_SIZE):
 		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.16))
 		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.12))

@@ -52,6 +52,7 @@ func _ready() -> void:
 	weapon_sprite.name = "WeaponOverlay"
 	weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	weapon_sprite.z_index = 5
+	weapon_sprite.centered = true
 	weapon_sprite.visible = false
 	add_child(weapon_sprite)
 
@@ -190,14 +191,26 @@ func _melee_attack(use_mouse_aim := false) -> void:
 	GameState.request_feedback("attack", shake)
 
 	var damage := 12 + GameState.get_stat_bonus("attack")
-	var reach: float = 86.0 if weapon_id == "breaker_hammer" else 74.0
+	var reach: float = 92.0 if weapon_id == "breaker_hammer" else 82.0
 	var attack_origin := _attack_anchor_global()
+	var attack_direction := last_direction.normalized()
+	if attack_direction.length() < 0.1:
+		attack_direction = Vector2.RIGHT
 
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		if enemy is Node2D and attack_origin.distance_to(enemy.global_position) <= reach:
-			var facing: Vector2 = (enemy.global_position - attack_origin).normalized()
-			if last_direction.dot(facing) > -0.05 and enemy.has_method("take_damage"):
-				enemy.take_damage(damage, true)
+		if not (enemy is Node2D):
+			continue
+		var enemy_center := _enemy_hit_center(enemy)
+		var enemy_radius := _enemy_hit_radius(enemy)
+		var to_enemy := enemy_center - attack_origin
+		var distance := to_enemy.length()
+		if distance > reach + enemy_radius:
+			continue
+		var facing := attack_direction
+		if distance > 0.01:
+			facing = to_enemy.normalized()
+		if attack_direction.dot(facing) > -0.35 and enemy.has_method("take_damage"):
+			enemy.take_damage(damage, true)
 
 
 func _ranged_attack() -> void:
@@ -388,16 +401,12 @@ func _source_direction_index(action_name: String, direction_index: int) -> int:
 	if PREFER_SPLIT_FRAME_FILES:
 		return direction_index
 
-	# 5 = 左上，7 = 右上
-	# 目前 preview 圖的左上 / 右上 walk 動作幅度太小，看起來像沒走路。
-	# 先用左走 / 右走動畫代替，讓斜上移動時至少有明顯走路動作。
 	if action_name == "walk":
 		match direction_index:
 			5:
-				return 4 # 左上改用左走
+				return 4
 			7:
-				return 0 # 右上改用右走
-
+				return 0
 	return direction_index
 
 
@@ -420,15 +429,8 @@ func _frame_count_for_animation(action_name: String, direction_index: int) -> in
 func _atlas_frame(atlas: Texture2D, action_index: int, direction_index: int, frame_index: int) -> AtlasTexture:
 	var frame_size := PixelArtFactory.PLAYER_FRAME_SIZE
 	var texture := AtlasTexture.new()
-
 	texture.atlas = atlas
-	texture.region = Rect2(
-		(action_index * PixelArtFactory.PLAYER_FRAMES_PER_ACTION + frame_index) * frame_size.x,
-		direction_index * frame_size.y,
-		frame_size.x,
-		frame_size.y
-	)
-
+	texture.region = Rect2((action_index * PixelArtFactory.PLAYER_FRAMES_PER_ACTION + frame_index) * frame_size.x, direction_index * frame_size.y, frame_size.x, frame_size.y)
 	return texture
 
 
@@ -478,23 +480,15 @@ func _set_timed_state(next_state: int, duration: float) -> void:
 
 
 func _is_action_state_locked() -> bool:
-	return action_state_timer > 0.0 and state in [
-		PlayerState.SHOOT,
-		PlayerState.DRAW_SWORD,
-		PlayerState.SLASH,
-		PlayerState.SWAP_TOOL,
-		PlayerState.INTERACT,
-		PlayerState.HIT,
-		PlayerState.DEAD
-	]
+	return action_state_timer > 0.0 and state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH, PlayerState.SWAP_TOOL, PlayerState.INTERACT, PlayerState.HIT, PlayerState.DEAD]
 
 
 func _spawn_attack_flash(effect_id: String, strength: float) -> void:
+	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
+		return
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
-
 	flash.setup(effect_id, last_direction, strength)
 	flash.global_position = _attack_anchor_global() + last_direction * 8.0
-
 	get_tree().current_scene.add_child(flash)
 
 
@@ -502,22 +496,79 @@ func _attack_anchor_global() -> Vector2:
 	return global_position + Vector2(0, -62)
 
 
+func get_hit_center() -> Vector2:
+	return global_position + Vector2(0, -42)
+
+
+func get_hit_radius() -> float:
+	return 34.0
+
+
+func _enemy_hit_center(enemy: Node) -> Vector2:
+	if enemy.has_method("get_hit_center"):
+		return enemy.call("get_hit_center")
+	if enemy is Node2D:
+		return enemy.global_position
+	return global_position
+
+
+func _enemy_hit_radius(enemy: Node) -> float:
+	if enemy.has_method("get_hit_radius"):
+		return float(enemy.call("get_hit_radius"))
+	return 32.0
+
+
 func _projectile_spawn_global() -> Vector2:
 	var direction := last_direction.normalized()
-
 	if direction.length() < 0.1:
 		direction = Vector2.RIGHT
-
 	return _attack_anchor_global() + direction * 46.0
 
 
 func _update_weapon_overlay() -> void:
-	# 目前的新角色動作圖已經把射擊與揮砍武器畫進角色幀內。
-	# 保留這個函式給 equipment_changed 訊號呼叫，但不要再疊一張 WeaponOverlay。
-	if weapon_sprite != null:
-		weapon_sprite.visible = false
+	if weapon_sprite == null:
+		return
 
-	current_weapon_asset_id = ""
+	var direction_index := _direction_index()
+	var needs_overlay := state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
+	if not needs_overlay:
+		weapon_sprite.visible = false
+		return
+
+	var item_id := _weapon_overlay_item_id()
+	var equipment := DataRegistry.get_equipment(item_id)
+	var asset_id := String(equipment.get("weapon_sprite_asset_id", ""))
+	if asset_id.is_empty():
+		weapon_sprite.visible = false
+		return
+
+	if current_weapon_asset_id != asset_id:
+		current_weapon_asset_id = asset_id
+		var path := DataRegistry.asset_path(asset_id)
+		weapon_sprite.texture = ASSET_LOADER.load_png(path) if not path.is_empty() else null
+
+	if weapon_sprite.texture == null:
+		weapon_sprite.visible = false
+		return
+
+	var direction := last_direction.normalized()
+	if direction.length() < 0.1:
+		direction = Vector2.RIGHT
+
+	weapon_sprite.visible = true
+	weapon_sprite.position = Vector2(0, -62) + direction * 34.0
+	weapon_sprite.rotation = direction.angle()
+	weapon_sprite.flip_v = abs(direction.angle()) > PI * 0.5
+
+
+func _weapon_overlay_item_id() -> String:
+	match state:
+		PlayerState.SHOOT:
+			return String(GameState.equipment.get("ranged", "pipe_rifle"))
+		PlayerState.DRAW_SWORD, PlayerState.SLASH:
+			return String(GameState.equipment.get("weapon", "rust_blade"))
+		_:
+			return String(GameState.active_attack_item_id())
 
 
 func _on_feedback_requested(kind: String, strength: float) -> void:
@@ -528,7 +579,6 @@ func _on_feedback_requested(kind: String, strength: float) -> void:
 		"player_dead":
 			_mark_combat_activity()
 			_set_timed_state(PlayerState.DEAD, 1.20)
-
 	_start_camera_shake(strength)
 
 
@@ -547,7 +597,6 @@ func _update_camera_shake(delta: float) -> void:
 		return
 
 	shake_timer = max(0.0, shake_timer - delta)
-
 	var falloff: float = shake_timer / max(0.01, 0.20 + shake_strength * 0.01)
 	var offset: Vector2 = Vector2(
 		randf_range(-1.0, 1.0),
