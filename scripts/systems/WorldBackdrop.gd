@@ -54,19 +54,19 @@ func _build_tileset() -> void:
 func _palette() -> Array[Color]:
 	if mode == "guild":
 		return [
-			Color8(82, 80, 72), Color8(60, 59, 54), Color8(42, 42, 39),
-			Color8(96, 89, 73), Color8(132, 107, 65), Color8(118, 112, 99)
+			Color8(80, 78, 70), Color8(60, 58, 52), Color8(43, 42, 38),
+			Color8(96, 86, 68), Color8(129, 104, 65), Color8(111, 106, 95)
 		]
 
 	match route_id:
 		"toxic_marsh":
-			return [Color8(88, 86, 61), Color8(58, 70, 48), Color8(36, 48, 36), Color8(116, 94, 55), Color8(81, 88, 55), Color8(78, 144, 70)]
+			return [Color8(90, 86, 60), Color8(64, 74, 49), Color8(40, 51, 37), Color8(118, 94, 55), Color8(83, 90, 56), Color8(78, 139, 70)]
 		"crystal_scar":
-			return [Color8(92, 82, 72), Color8(68, 60, 72), Color8(45, 42, 56), Color8(126, 98, 62), Color8(84, 74, 88), Color8(129, 86, 184)]
+			return [Color8(96, 82, 71), Color8(71, 60, 72), Color8(47, 42, 56), Color8(128, 96, 62), Color8(87, 74, 88), Color8(129, 86, 184)]
 		"old_factory":
-			return [Color8(85, 80, 67), Color8(64, 65, 60), Color8(43, 46, 46), Color8(116, 94, 58), Color8(78, 76, 67), Color8(125, 98, 70)]
+			return [Color8(88, 80, 67), Color8(66, 64, 58), Color8(46, 46, 43), Color8(120, 92, 57), Color8(82, 75, 64), Color8(119, 94, 68)]
 		_:
-			return [Color8(104, 86, 58), Color8(74, 65, 49), Color8(52, 49, 42), Color8(142, 104, 58), Color8(96, 73, 48), Color8(116, 91, 64)]
+			return [Color8(108, 88, 58), Color8(76, 65, 48), Color8(54, 49, 41), Color8(144, 104, 58), Color8(98, 73, 47), Color8(113, 90, 64)]
 
 
 func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, rivets := false, cracked := false) -> void:
@@ -74,21 +74,21 @@ func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, r
 	for y in range(TILE_SIZE):
 		for x in range(TILE_SIZE):
 			var shade := 0.0
-			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 29) == 0:
-				shade = 0.04
-			image.set_pixel(start_x + x, y, base.lerp(line, 0.045 + shade))
+			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 41) == 0:
+				shade = 0.035
+			image.set_pixel(start_x + x, y, base.lerp(line, 0.035 + shade))
 
-	# Soft seams only; avoid the previous high-contrast checkerboard look.
+	# Soft seams only; this keeps the TileMap readable without looking like a debug grid.
 	for i in range(TILE_SIZE):
-		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.14))
-		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.12))
+		image.set_pixel(start_x + i, TILE_SIZE - 1, line.darkened(0.11))
+		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.09))
 
 	if rivets:
 		for p in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
-			image.set_pixel(start_x + p.x, p.y, line.lightened(0.18))
+			image.set_pixel(start_x + p.x, p.y, line.lightened(0.16))
 
 	if cracked:
-		_draw_crack(image, start_x + 10, 9, [Vector2i(5, 4), Vector2i(7, -1), Vector2i(4, 5)], line.darkened(0.22))
+		_draw_crack(image, start_x + 10, 9, [Vector2i(5, 4), Vector2i(7, -1), Vector2i(4, 5)], line.darkened(0.20))
 
 
 func _draw_crack(image: Image, start_x: int, start_y: int, offsets: Array[Vector2i], color: Color) -> void:
@@ -124,21 +124,21 @@ func _tile_for_position(x: int, y: int) -> Vector2i:
 	if mode == "guild":
 		if x <= 1 or y <= 1 or x >= map_size.x - 2 or y >= map_size.y - 2:
 			return TILE_DARK
-		if h % 53 == 0:
+		if h % 79 == 0:
 			return TILE_CRACK
-		if h % 31 == 0:
+		if h % 61 == 0:
 			return TILE_ACCENT
-		return TILE_BASE if h % 5 != 0 else TILE_DARK
+		return TILE_BASE if h % 8 != 0 else TILE_DARK
 
 	if road >= 0.70:
 		return TILE_ROAD
 	if road > 0.0:
-		return TILE_EDGE if h % 8 != 0 else TILE_CRACK
-	if h % 47 == 0:
+		return TILE_EDGE if h % 14 != 0 else TILE_CRACK
+	if h % 83 == 0:
 		return TILE_ACCENT
-	if h % 41 == 0:
+	if h % 71 == 0:
 		return TILE_CRACK
-	if h % 7 == 0:
+	if h % 13 == 0:
 		return TILE_DARK
 	return TILE_BASE
 
