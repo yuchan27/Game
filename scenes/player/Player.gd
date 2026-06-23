@@ -19,8 +19,8 @@ const SLASH_SECOND_HIT_FRAME_INDEX := 10
 const SLASH_LAST_FRAME_INDEX := 12
 const SLASH_ANIMATION_SPEED := 10.125
 const SLASH_STATE_DURATION := 1.29
-const PROJECTILE_ANCHOR_OFFSET := Vector2(0, -14)
-const PROJECTILE_REACH := 38.0
+const PROJECTILE_RIGHT_HAND_OFFSET := Vector2(22, 20)
+const PROJECTILE_LEFT_HAND_OFFSET := Vector2(-22, 20)
 
 @export var move_speed: float = 180.0
 
@@ -598,10 +598,15 @@ func _enemy_hit_radius(enemy: Node) -> float:
 
 
 func _projectile_spawn_global() -> Vector2:
-	var direction := last_direction.normalized()
-	if direction.length() < 0.1:
-		direction = Vector2.RIGHT
-	return global_position + PROJECTILE_ANCHOR_OFFSET + direction * PROJECTILE_REACH
+	return global_position + _projectile_hand_offset()
+
+
+func _projectile_hand_offset() -> Vector2:
+	match _direction_index():
+		3, 4, 5:
+			return PROJECTILE_LEFT_HAND_OFFSET
+		_:
+			return PROJECTILE_RIGHT_HAND_OFFSET
 
 
 func _update_weapon_overlay() -> void:
