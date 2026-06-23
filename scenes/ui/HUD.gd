@@ -90,8 +90,8 @@ func _layout() -> void:
 	if controls_hint != null:
 		controls_hint.position = Vector2(max(16, (size.x - controls_hint.size.x) * 0.5), size.y - 116.0)
 	if dialogue_panel != null:
-		dialogue_panel.position = Vector2(max(24, (size.x - 920.0) * 0.5), size.y - 238.0)
-		dialogue_panel.size = Vector2(min(920.0, size.x - 48.0), 178)
+		dialogue_panel.position = Vector2(max(24, (size.x - 920.0) * 0.5), size.y - 308.0)
+		dialogue_panel.size = Vector2(min(920.0, size.x - 48.0), 248)
 	if minimap_panel != null:
 		if map_fullscreen:
 			minimap_panel.position = Vector2(48, 48)
@@ -131,56 +131,42 @@ func _build_hud() -> void:
 	_add_controls_hint()
 	_add_dialogue_box()
 	_add_pause_menu()
-
-	notice_label = Label.new()
-	notice_label.position = Vector2(22, 106)
-	notice_label.add_theme_font_size_override("font_size", 16)
-	notice_label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.68))
-	notice_label.visible = false
-	root.add_child(notice_label)
-	notice_timer = Timer.new()
-	notice_timer.one_shot = true
-	notice_timer.timeout.connect(func() -> void: notice_label.visible = false)
-	add_child(notice_timer)
+	_add_notice_label()
 
 func _build_status_panel() -> void:
 	status_panel = PanelContainer.new()
 	status_panel.name = "StatusPanel"
-	status_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.04, 0.045, 0.045, 0.84), Color(0.74, 0.46, 0.28, 0.95), 2))
+	status_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.04, 0.035, 0.025, 0.88), Color(0.90, 0.48, 0.26, 1.0), 2))
 	root.add_child(status_panel)
 	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 5)
+	stack.add_theme_constant_override("separation", 6)
 	status_panel.add_child(stack)
 	stats_label = Label.new()
 	stats_label.add_theme_font_size_override("font_size", 15)
-	stats_label.add_theme_color_override("font_color", Color(0.95, 0.92, 0.84))
 	stack.add_child(stats_label)
-	hp_bar = _make_bar(Color(0.86, 0.06, 0.04), Color(0.40, 0.0, 0.0))
+	hp_bar = _make_bar(Color(0.95, 0.06, 0.05), Color(0.25, 0.02, 0.02, 0.95))
+	ep_bar = _make_bar(Color(0.0, 0.85, 0.95), Color(0.02, 0.14, 0.17, 0.95))
 	stack.add_child(_bar_row("HP", hp_bar))
-	ep_bar = _make_bar(Color(0.06, 0.78, 0.92), Color(0.0, 0.20, 0.30))
 	stack.add_child(_bar_row("EP", ep_bar))
 
 func _build_quest_panel() -> void:
 	quest_panel = PanelContainer.new()
 	quest_panel.name = "QuestPanel"
-	quest_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.03, 0.035, 0.035, 0.70), Color(0.30, 0.32, 0.30, 0.85), 1))
+	quest_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.04, 0.035, 0.025, 0.82), Color(0.30, 0.32, 0.30, 0.88), 1))
 	root.add_child(quest_panel)
 	quest_label = Label.new()
-	quest_label.add_theme_font_size_override("font_size", 14)
-	quest_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	quest_label.add_theme_color_override("font_color", Color(0.92, 0.90, 0.82))
+	quest_label.add_theme_font_size_override("font_size", 15)
+	quest_label.add_theme_color_override("font_color", Color(0.92, 0.92, 0.86))
 	quest_panel.add_child(quest_label)
 
 func _build_inventory_panel() -> void:
 	inventory_panel = PanelContainer.new()
 	inventory_panel.name = "InventoryPanel"
-	inventory_panel.add_to_group("equipment_panel")
-	inventory_panel.z_index = 80
+	inventory_panel.z_index = 60
 	inventory_panel.visible = false
-	inventory_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.027, 0.026, 0.90), Color(0.82, 0.58, 0.24, 0.96), 2))
+	inventory_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.025, 0.025, 0.91), Color(0.86, 0.64, 0.26, 0.98), 2))
 	root.add_child(inventory_panel)
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(920, 600)
 	inventory_panel.add_child(scroll)
 	inventory_list = VBoxContainer.new()
 	inventory_list.add_theme_constant_override("separation", 10)
@@ -188,54 +174,39 @@ func _build_inventory_panel() -> void:
 
 func _add_quick_bar() -> void:
 	quick_bar_panel = PanelContainer.new()
-	quick_bar_panel.name = "QuickBarPanel"
-	quick_bar_panel.custom_minimum_size = Vector2(520, 64)
-	quick_bar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.025, 0.025, 0.78), Color(0.35, 0.32, 0.28, 0.85), 1))
+	quick_bar_panel.name = "QuickBar"
+	quick_bar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.03, 0.026, 0.018, 0.90), Color(0.45, 0.38, 0.22, 0.82), 1))
 	root.add_child(quick_bar_panel)
 	quick_bar = HBoxContainer.new()
-	quick_bar.name = "QuickBar"
-	quick_bar.add_theme_constant_override("separation", 6)
+	quick_bar.add_theme_constant_override("separation", 8)
 	quick_bar_panel.add_child(quick_bar)
 
 func _add_minimap() -> void:
 	minimap_panel = PanelContainer.new()
-	minimap_panel.name = "MiniMapPanel"
-	minimap_panel.add_to_group("minimap_panel")
-	minimap_panel.z_index = 45
-	minimap_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.030, 0.030, 0.90), Color(0.34, 0.42, 0.38, 0.92), 1))
+	minimap_panel.name = "MinimapPanel"
+	minimap_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.024, 0.022, 0.90), Color(0.30, 0.42, 0.42, 0.9), 1))
 	root.add_child(minimap_panel)
-	var map_stack := VBoxContainer.new()
-	map_stack.add_theme_constant_override("separation", 4)
-	minimap_panel.add_child(map_stack)
+	var stack := VBoxContainer.new()
+	minimap_panel.add_child(stack)
 	minimap_title = Label.new()
 	minimap_title.text = "地圖 M"
 	minimap_title.add_theme_font_size_override("font_size", 15)
-	map_stack.add_child(minimap_title)
+	stack.add_child(minimap_title)
 	map_view = MAP_VIEW.new()
-	map_view.expand_requested.connect(_open_full_map)
-	map_stack.add_child(map_view)
+	map_view.custom_minimum_size = Vector2(280, 160)
+	stack.add_child(map_view)
 
 func _add_tutorial() -> void:
 	tutorial_panel = PanelContainer.new()
 	tutorial_panel.name = "TutorialPanel"
-	tutorial_panel.add_to_group("tutorial_panel")
-	tutorial_panel.custom_minimum_size = Vector2(500, 246)
-	tutorial_panel.z_index = 72
 	tutorial_panel.visible = false
-	tutorial_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.028, 0.030, 0.92), Color(0.70, 0.55, 0.30, 0.95), 2))
+	tutorial_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.025, 0.022, 0.92), Color(0.86, 0.64, 0.26, 0.95), 2))
 	root.add_child(tutorial_panel)
-	var stack := VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 8)
-	tutorial_panel.add_child(stack)
-	var title := Label.new()
-	title.text = "R-17 基礎教學"
-	title.add_theme_font_size_override("font_size", 18)
-	stack.add_child(title)
-	var body := Label.new()
-	body.text = "WASD 移動。\n滑鼠左鍵依目前快捷裝備行動：刀會揮砍，槍會射擊，工具會掃描。\n右鍵或 K 連續射擊，空白鍵近戰，Q 切換快捷欄。\nE 與 NPC、建築或出口互動；Tab / I 開啟人物裝備與升級面板。\nM 開啟小地圖，再按一次或點擊小地圖可放大全屏地圖。\nF5 儲存，F9 讀檔，Esc 暫停。"
-	body.add_theme_font_size_override("font_size", 13)
-	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	stack.add_child(body)
+	var text := Label.new()
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text.add_theme_font_size_override("font_size", 14)
+	text.text = "操作說明\nWASD / 方向鍵：移動\nShift：奔跑（消耗 EP，停止後回復）\n滑鼠左鍵：使用目前快捷欄裝備攻擊\nE：互動、拾取、對話\nTab：人物裝備與背包\n1~4：切換快捷欄\nM：地圖 / 全屏地圖 / 關閉地圖\nESC：暫停、關閉面板"
+	tutorial_panel.add_child(text)
 
 func _add_controls_hint() -> void:
 	controls_hint = Label.new()
@@ -248,7 +219,7 @@ func _add_dialogue_box() -> void:
 	dialogue_panel = PanelContainer.new()
 	dialogue_panel.name = "DialoguePanel"
 	dialogue_panel.add_to_group("dialogue_panel")
-	dialogue_panel.custom_minimum_size = Vector2(920, 178)
+	dialogue_panel.custom_minimum_size = Vector2(920, 248)
 	dialogue_panel.z_index = 90
 	dialogue_panel.visible = false
 	dialogue_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.018, 0.020, 0.020, 0.92), Color(0.86, 0.64, 0.26, 0.98), 2))
@@ -257,7 +228,7 @@ func _add_dialogue_box() -> void:
 	row.add_theme_constant_override("separation", 14)
 	dialogue_panel.add_child(row)
 	dialogue_portrait = TextureRect.new()
-	dialogue_portrait.custom_minimum_size = Vector2(122, 142)
+	dialogue_portrait.custom_minimum_size = Vector2(122, 202)
 	dialogue_portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	dialogue_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(dialogue_portrait)
@@ -273,8 +244,8 @@ func _add_dialogue_box() -> void:
 	dialogue_role.add_theme_color_override("font_color", Color(0.72, 0.92, 0.92))
 	stack.add_child(dialogue_role)
 	dialogue_body = Label.new()
-	dialogue_body.add_theme_font_size_override("font_size", 17)
-	dialogue_body.custom_minimum_size = Vector2(740, 70)
+	dialogue_body.add_theme_font_size_override("font_size", 16)
+	dialogue_body.custom_minimum_size = Vector2(740, 132)
 	dialogue_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stack.add_child(dialogue_body)
 	var hint := Label.new()
@@ -378,26 +349,22 @@ func _refresh() -> void:
 		GameState.cores
 	]
 	quest_label.text = "場景：%s｜路線：%s\n委託：%s" % [GameState.current_scene_id, route_name, GameState.active_quest_summary()]
-	_refresh_hotbar()
 
 func _refresh_hotbar() -> void:
-	if quick_bar == null:
-		return
 	for child in quick_bar.get_children():
 		child.queue_free()
 	for i in range(GameState.quick_slots.size()):
 		var item_id := String(GameState.quick_slots[i])
 		var button := Button.new()
-		button.name = "QuickSlot%d" % [i + 1]
-		button.custom_minimum_size = Vector2(116, 48)
-		button.add_to_group("hotbar_slot")
-		button.set_meta("quick_slot_index", i)
-		button.text = "%s%d" % ["> " if i == GameState.active_quick_slot else "", i + 1]
-		button.tooltip_text = "%d：%s" % [i + 1, GameState.item_display_name(item_id)]
-		button.icon = _item_icon(item_id)
+		button.custom_minimum_size = Vector2(120, 48)
+		button.text = "%s %d" % [">" if i == GameState.active_quick_slot else "", i + 1]
+		if not item_id.is_empty():
+			button.icon = _item_icon(item_id)
+			button.tooltip_text = GameState.item_display_name(item_id)
 		button.expand_icon = true
 		button.add_theme_stylebox_override("normal", _button_style(i == GameState.active_quick_slot))
-		button.pressed.connect(GameState.use_quick_slot.bind(i))
+		button.add_theme_stylebox_override("hover", _button_style(true))
+		button.pressed.connect(func() -> void: GameState.use_quick_slot(i))
 		quick_bar.add_child(button)
 
 func _refresh_inventory() -> void:
@@ -407,37 +374,42 @@ func _refresh_inventory() -> void:
 		child.queue_free()
 	var title := Label.new()
 	title.text = "人物裝備：R-17 回收機器人"
-	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_font_size_override("font_size", 26)
 	inventory_list.add_child(title)
+	var current_item := GameState.active_attack_item_id()
+	var current_equipment := DataRegistry.get_equipment(current_item)
+	var current_name := String(current_equipment.get("name", GameState.item_display_name(current_item)))
+	var mode_label := _attack_mode_label(String(current_equipment.get("attack_mode", "melee")))
+	var active_label := Label.new()
+	active_label.text = "目前左鍵：%s（%s）｜升級點：%d" % [current_name, mode_label, GameState.upgrade_points]
+	active_label.add_theme_font_size_override("font_size", 18)
+	inventory_list.add_child(active_label)
 
-	var active := Label.new()
-	active.text = "目前左鍵：%s（%s）｜升級點：%d" % [GameState.item_display_name(GameState.active_attack_item_id()), _attack_mode_label(GameState.active_attack_mode()), GameState.upgrade_points]
-	active.add_theme_font_size_override("font_size", 16)
-	inventory_list.add_child(active)
+	var top := HBoxContainer.new()
+	top.add_theme_constant_override("separation", 18)
+	inventory_list.add_child(top)
 
-	var body := HBoxContainer.new()
-	body.add_theme_constant_override("separation", 18)
-	inventory_list.add_child(body)
-
-	var portrait_panel := PanelContainer.new()
-	portrait_panel.custom_minimum_size = Vector2(230, 285)
-	portrait_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.02, 0.018, 0.70), Color(0.35, 0.48, 0.50, 0.80), 1))
-	body.add_child(portrait_panel)
-	var portrait_stack := VBoxContainer.new()
-	portrait_stack.add_theme_constant_override("separation", 6)
-	portrait_panel.add_child(portrait_stack)
-	var portrait_title := Label.new()
-	portrait_title.text = "R-17 維修艙"
-	portrait_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	portrait_stack.add_child(portrait_title)
+	var profile := VBoxContainer.new()
+	profile.add_theme_constant_override("separation", 10)
+	var profile_panel := PanelContainer.new()
+	profile_panel.custom_minimum_size = Vector2(300, 330)
+	profile_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.025, 0.025, 0.82), Color(0.35, 0.55, 0.57, 0.95), 1))
+	var profile_stack := VBoxContainer.new()
+	profile_stack.alignment = BoxContainer.ALIGNMENT_CENTER
+	profile_panel.add_child(profile_stack)
+	var name_label := Label.new()
+	name_label.text = "R-17 維修艙"
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 20)
+	profile_stack.add_child(name_label)
 	var portrait := TextureRect.new()
-	portrait.custom_minimum_size = Vector2(190, 170)
+	portrait.custom_minimum_size = Vector2(170, 170)
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	portrait.texture = _player_preview_texture()
 	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	portrait_stack.add_child(portrait)
-	var vitals := Label.new()
-	vitals.text = "HP %d/%d\nEP %d/%d\n攻擊 %+d  防禦 %+d  速度 %+d" % [
+	portrait.texture = _player_preview_texture()
+	profile_stack.add_child(portrait)
+	var stat := Label.new()
+	stat.text = "HP %d/%d\nEP %d/%d\n攻擊 %+d  防禦 %+d  速度 %+d" % [
 		GameState.hp,
 		GameState.get_max_hp(),
 		GameState.ep,
@@ -446,73 +418,62 @@ func _refresh_inventory() -> void:
 		GameState.get_stat_bonus("defense"),
 		GameState.get_stat_bonus("speed")
 	]
-	vitals.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	portrait_stack.add_child(vitals)
+	stat.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stat.add_theme_font_size_override("font_size", 19)
+	profile_stack.add_child(stat)
+	profile.add_child(profile_panel)
+	top.add_child(profile)
 
-	var equipment_stack := VBoxContainer.new()
-	equipment_stack.add_theme_constant_override("separation", 8)
-	body.add_child(equipment_stack)
-	_add_equipment_card(equipment_stack, "近戰武器", "weapon")
-	_add_equipment_card(equipment_stack, "遠程武器", "ranged")
-	_add_equipment_card(equipment_stack, "護甲", "armor")
-	_add_equipment_card(equipment_stack, "工具", "tool")
-	var upgrades := HBoxContainer.new()
-	upgrades.add_theme_constant_override("separation", 6)
-	equipment_stack.add_child(upgrades)
-	_add_upgrade_button(upgrades, "HP", "hp")
-	_add_upgrade_button(upgrades, "EP", "ep")
-	_add_upgrade_button(upgrades, "攻擊", "attack")
-	_add_upgrade_button(upgrades, "防禦", "defense")
+	var equip_list := VBoxContainer.new()
+	equip_list.add_theme_constant_override("separation", 10)
+	top.add_child(equip_list)
+	_add_equipment_card(equip_list, "weapon", "近戰武器")
+	_add_equipment_card(equip_list, "ranged", "遠程武器")
+	_add_equipment_card(equip_list, "armor", "護甲")
+	_add_equipment_card(equip_list, "tool", "工具")
 
-	inventory_list.add_child(HSeparator.new())
-	var bag_title := Label.new()
-	bag_title.text = "背包物品（點擊裝備可穿戴）"
-	bag_title.add_theme_font_size_override("font_size", 17)
-	inventory_list.add_child(bag_title)
-	var bag_grid := GridContainer.new()
-	bag_grid.columns = 3
-	bag_grid.add_theme_constant_override("h_separation", 8)
-	bag_grid.add_theme_constant_override("v_separation", 8)
-	inventory_list.add_child(bag_grid)
+	var upgrade_row := HBoxContainer.new()
+	upgrade_row.add_theme_constant_override("separation", 8)
+	inventory_list.add_child(upgrade_row)
+	_add_upgrade_button(upgrade_row, "HP", "hp")
+	_add_upgrade_button(upgrade_row, "EP", "ep")
+	_add_upgrade_button(upgrade_row, "攻擊", "attack")
+	_add_upgrade_button(upgrade_row, "防禦", "defense")
+
+	var separator := HSeparator.new()
+	inventory_list.add_child(separator)
+	var bag_label := Label.new()
+	bag_label.text = "背包物品（點擊裝備可穿戴）"
+	bag_label.add_theme_font_size_override("font_size", 20)
+	inventory_list.add_child(bag_label)
+	var grid := GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 10)
+	inventory_list.add_child(grid)
 	for item_id in GameState.inventory.keys():
-		_add_bag_button(bag_grid, String(item_id), int(GameState.inventory[item_id]))
+		_add_bag_button(grid, String(item_id), int(GameState.inventory[item_id]))
 
-func _add_equipment_card(container: VBoxContainer, label_text: String, slot: String) -> void:
+func _add_equipment_card(container: VBoxContainer, slot: String, label: String) -> void:
 	var item_id := String(GameState.equipment.get(slot, ""))
-	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(470, 66)
-	card.add_theme_stylebox_override("panel", _panel_style(Color(0.03, 0.035, 0.035, 0.64), Color(0.22, 0.30, 0.32, 0.80), 1))
-	container.add_child(card)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	card.add_child(row)
-	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(62, 52)
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon.texture = _item_icon(item_id)
-	row.add_child(icon)
-	var text := VBoxContainer.new()
-	row.add_child(text)
-	var label := Label.new()
-	label.text = label_text
-	label.add_theme_font_size_override("font_size", 12)
-	label.add_theme_color_override("font_color", Color(0.70, 0.82, 0.82))
-	text.add_child(label)
-	var value := Label.new()
-	value.text = GameState.item_display_name(item_id)
-	value.add_theme_font_size_override("font_size", 16)
-	text.add_child(value)
-
-func _add_upgrade_button(container: HBoxContainer, label_text: String, kind: String) -> void:
+	var equipment := DataRegistry.get_equipment(item_id)
 	var button := Button.new()
-	button.text = label_text
-	button.custom_minimum_size = Vector2(72, 34)
+	button.custom_minimum_size = Vector2(560, 94)
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.text = "%s\n%s" % [label, String(equipment.get("name", item_id))]
+	button.icon = _item_icon(item_id)
+	button.expand_icon = true
+	button.pressed.connect(func() -> void: GameState.use_quick_slot(GameState.quick_slots.find(item_id)))
+	container.add_child(button)
+
+func _add_upgrade_button(container: HBoxContainer, label: String, kind: String) -> void:
+	var button := Button.new()
+	button.text = label
+	button.custom_minimum_size = Vector2(90, 42)
 	button.disabled = GameState.upgrade_points <= 0
 	button.pressed.connect(func() -> void:
 		if GameState.spend_upgrade_point(kind):
 			_refresh_inventory()
-			_refresh()
 	)
 	container.add_child(button)
 
@@ -572,7 +533,7 @@ func _show_dialogue(speaker: String, role: String, message: String) -> void:
 	dialogue_body.text = message
 	dialogue_portrait.texture = _portrait_for_speaker(speaker)
 	dialogue_panel.visible = true
-	dialogue_timer.start(10.0)
+	dialogue_timer.start(14.0)
 	_refresh_overlay_visibility()
 	_layout()
 
