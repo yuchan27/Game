@@ -28,28 +28,29 @@ func setup(new_mode: String, size_tiles: Vector2i, new_seed: int, new_route_id :
 
 
 func _build_tileset() -> void:
-	var texture: Texture2D = load(WASTELAND_TILESET_PATH)
+	var loaded_resource: Resource = load(WASTELAND_TILESET_PATH)
+	var texture: Texture2D = loaded_resource as Texture2D
 	if texture == null:
 		texture = ImageTexture.create_from_image(_fallback_tileset_image())
 
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
-	var atlas_source := TileSetAtlasSource.new()
+	var atlas_source: TileSetAtlasSource = TileSetAtlasSource.new()
 	atlas_source.texture = texture
 	atlas_source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	var tile_count := max(1, int(texture.get_width() / TILE_SIZE))
+	var tile_count: int = max(1, int(texture.get_width() / TILE_SIZE))
 	for x in range(tile_count):
 		atlas_source.create_tile(Vector2i(x, 0))
 
-	var new_tile_set := TileSet.new()
+	var new_tile_set: TileSet = TileSet.new()
 	new_tile_set.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
 	new_tile_set.add_source(atlas_source, SOURCE_ID)
 	tile_set = new_tile_set
 
 
 func _fallback_tileset_image() -> Image:
-	var image := Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
-	var palette := _palette()
+	var image: Image = Image.create(TILE_SIZE * 6, TILE_SIZE, false, Image.FORMAT_RGBA8)
+	var palette: Array[Color] = _palette()
 	_fill_tile(image, TILE_BASE, palette[0], palette[1], false, false)
 	_fill_tile(image, TILE_DARK, palette[1], palette[2], false, false)
 	_fill_tile(image, TILE_ROAD, palette[3], palette[4], false, false)
@@ -78,10 +79,10 @@ func _palette() -> Array[Color]:
 
 
 func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, rivets := false, cracked := false) -> void:
-	var start_x := tile_coords.x * TILE_SIZE
+	var start_x: int = tile_coords.x * TILE_SIZE
 	for y in range(TILE_SIZE):
 		for x in range(TILE_SIZE):
-			var shade := 0.0
+			var shade: float = 0.0
 			if ((x * 19 + y * 23 + tile_coords.x * 17 + int(world_seed)) % 41) == 0:
 				shade = 0.035
 			image.set_pixel(start_x + x, y, base.lerp(line, 0.035 + shade))
@@ -91,7 +92,7 @@ func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, r
 		image.set_pixel(start_x + TILE_SIZE - 1, i, line.darkened(0.09))
 
 	if rivets:
-		for p in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
+		for p: Vector2i in [Vector2i(6, 6), Vector2i(25, 6), Vector2i(6, 25), Vector2i(25, 25)]:
 			image.set_pixel(start_x + p.x, p.y, line.lightened(0.16))
 
 	if cracked:
@@ -99,21 +100,21 @@ func _fill_tile(image: Image, tile_coords: Vector2i, base: Color, line: Color, r
 
 
 func _draw_crack(image: Image, start_x: int, start_y: int, offsets: Array[Vector2i], color: Color) -> void:
-	var current := Vector2i(start_x, start_y)
-	for offset in offsets:
-		var target := current + offset
+	var current: Vector2i = Vector2i(start_x, start_y)
+	for offset: Vector2i in offsets:
+		var target: Vector2i = current + offset
 		_draw_pixel_line(image, current, target, color)
 		current = target
 
 
 func _draw_pixel_line(image: Image, from_pos: Vector2i, to_pos: Vector2i, color: Color) -> void:
-	var delta := to_pos - from_pos
+	var delta: Vector2i = to_pos - from_pos
 	var steps: int = max(abs(delta.x), abs(delta.y))
 	if steps <= 0:
 		return
 	for i in range(steps + 1):
-		var t := float(i) / float(steps)
-		var p := Vector2i(roundi(lerp(float(from_pos.x), float(to_pos.x), t)), roundi(lerp(float(from_pos.y), float(to_pos.y), t)))
+		var t: float = float(i) / float(steps)
+		var p: Vector2i = Vector2i(roundi(lerp(float(from_pos.x), float(to_pos.x), t)), roundi(lerp(float(from_pos.y), float(to_pos.y), t)))
 		if p.x >= 0 and p.y >= 0 and p.x < image.get_width() and p.y < image.get_height():
 			image.set_pixel(p.x, p.y, color)
 
@@ -126,8 +127,8 @@ func _generate_map() -> void:
 
 
 func _tile_for_position(x: int, y: int) -> Vector2i:
-	var h := _hash2i(x, y)
-	var road := _road_strength(x, y)
+	var h: int = _hash2i(x, y)
+	var road: float = _road_strength(x, y)
 	if mode == "guild":
 		if x <= 1 or y <= 1 or x >= map_size.x - 2 or y >= map_size.y - 2:
 			return TILE_DARK
@@ -153,10 +154,10 @@ func _tile_for_position(x: int, y: int) -> Vector2i:
 func _road_strength(x: int, y: int) -> float:
 	if mode == "guild":
 		return 0.0
-	var cx := float(map_size.x) * 0.5
+	var cx: float = float(map_size.x) * 0.5
 	var spawn_road: bool = abs(float(x) - cx) <= 3.2 and y >= int(float(map_size.y) * 0.45)
 	var mid_road: bool = abs(float(y) - float(map_size.y) * 0.52 - sin(float(x) * 0.08) * 2.0) <= 2.4
-	var route_bias := 0.0
+	var route_bias: float = 0.0
 	if route_id == "toxic_marsh":
 		route_bias = sin(float(x) * 0.05) * 1.8
 	elif route_id == "crystal_scar":
@@ -169,6 +170,6 @@ func _road_strength(x: int, y: int) -> float:
 
 
 func _hash2i(x: int, y: int) -> int:
-	var n := int(world_seed) + x * 374761393 + y * 668265263
+	var n: int = int(world_seed) + x * 374761393 + y * 668265263
 	n = (n ^ (n >> 13)) * 1274126177
 	return abs(n ^ (n >> 16))
