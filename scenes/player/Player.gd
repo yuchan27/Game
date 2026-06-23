@@ -133,13 +133,11 @@ func _physics_process(delta: float) -> void:
 		_ranged_attack()
 
 	if Input.is_action_just_pressed("swap_weapon"):
-		_set_timed_state(PlayerState.SWAP_TOOL, 0.22)
 		AudioManager.play_sfx("ui")
 		GameState.use_next_quick_slot()
 
 	for slot_index in range(4):
 		if Input.is_action_just_pressed("quick_slot_%d" % [slot_index + 1]):
-			_set_timed_state(PlayerState.SWAP_TOOL, 0.22)
 			GameState.use_quick_slot(slot_index)
 
 	if Input.is_action_just_pressed("interact"):
