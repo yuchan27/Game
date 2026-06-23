@@ -672,12 +672,12 @@ void fragment() {
 	hit_flash_material = ShaderMaterial.new()
 	hit_flash_material.shader = shader
 	hit_flash_material.set_shader_parameter("flash_amount", 0.0)
-	sprite.material = hit_flash_material
 
 
 func _start_hit_flash() -> void:
 	hit_flash_timer = HIT_FLASH_DURATION
 	if hit_flash_material != null:
+		sprite.material = hit_flash_material
 		hit_flash_material.set_shader_parameter("flash_amount", 1.0)
 
 
@@ -685,6 +685,8 @@ func _update_hit_flash(delta: float) -> void:
 	if hit_flash_timer <= 0.0:
 		if hit_flash_material != null:
 			hit_flash_material.set_shader_parameter("flash_amount", 0.0)
+		if sprite != null and sprite.material == hit_flash_material:
+			sprite.material = null
 		return
 	hit_flash_timer = max(0.0, hit_flash_timer - delta)
 	if hit_flash_material != null:
