@@ -12,6 +12,11 @@ const WORLD_PROP_SCRIPT := preload("res://scripts/components/WorldProp.gd")
 const LEVEL_GENERATOR_SCRIPT := preload("res://scripts/systems/LevelGenerator.gd")
 const PROJECTILE_POOL_SCRIPT := preload("res://scripts/systems/ProjectilePool.gd")
 
+const DEFAULT_PROP_NODES := 58
+const DEFAULT_RESOURCE_NODES := 24
+const DEFAULT_EVENT_NODES := 6
+const DEFAULT_ENEMY_LIMIT := 16
+
 var player: Node2D
 var world_size := Vector2(5760, 4480)
 var route_id := "scrap_highway"
@@ -87,15 +92,15 @@ func _spawn_exit() -> void:
 		add_child(gate)
 
 func _spawn_resources() -> void:
-	var count := int(DataRegistry.map_params.get("resource_nodes", 80))
+	var count := int(DataRegistry.map_params.get("resource_nodes", DEFAULT_RESOURCE_NODES))
 	var rect := _route_resource_rect()
-	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(count, rect, route_seed + 11, 110)
+	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(count, rect, route_seed + 11, 210)
 	var ids: Array = route_data.get("resource_mix", ["scrap", "ammo", "bio_crystal", "mutant_core"])
 	if ids.is_empty():
 		ids = ["scrap", "ammo", "bio_crystal", "mutant_core"]
 	for i in range(positions.size()):
 		var id := String(ids[i % ids.size()])
-		var amount := 1 + (i % 4)
+		var amount := 1 + (i % 2)
 		if id == "mutant_core":
 			amount = 1
 		var pickup: Area2D = PICKUP_SCRIPT.new()
@@ -104,8 +109,8 @@ func _spawn_resources() -> void:
 		add_child(pickup)
 
 func _spawn_props() -> void:
-	var count := int(DataRegistry.map_params.get("prop_nodes", 160))
-	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(count, Rect2(160, 180, world_size.x - 320, world_size.y - 900), route_seed + 301, 86)
+	var count := int(DataRegistry.map_params.get("prop_nodes", DEFAULT_PROP_NODES))
+	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(count, Rect2(160, 180, world_size.x - 320, world_size.y - 900), route_seed + 301, 190)
 	var prop_ids: Array = route_data.get("prop_mix", ["rust_rock", "dead_tree", "scrap_wall", "toxic_pool", "wreck", "signal_pylon", "road_marker"])
 	if prop_ids.is_empty():
 		prop_ids = ["rust_rock", "dead_tree", "scrap_wall", "toxic_pool", "wreck", "signal_pylon", "road_marker"]
@@ -162,15 +167,15 @@ func _spawn_route_landmarks() -> void:
 func _route_resource_rect() -> Rect2:
 	match route_id:
 		"scrap_highway":
-			return Rect2(220, world_size.y * 0.36, world_size.x - 440, world_size.y * 0.38)
+			return Rect2(260, world_size.y * 0.34, world_size.x - 520, world_size.y * 0.34)
 		"toxic_marsh":
-			return Rect2(world_size.x * 0.20, 220, world_size.x * 0.55, world_size.y - 900)
+			return Rect2(world_size.x * 0.22, 260, world_size.x * 0.50, world_size.y - 1100)
 		"crystal_scar":
-			return Rect2(260, 180, world_size.x - 520, world_size.y * 0.60)
+			return Rect2(320, 240, world_size.x - 640, world_size.y * 0.52)
 		"old_factory":
-			return Rect2(world_size.x * 0.28, 220, world_size.x * 0.62, world_size.y - 940)
+			return Rect2(world_size.x * 0.30, 260, world_size.x * 0.56, world_size.y - 1120)
 		_:
-			return Rect2(180, 180, world_size.x - 360, world_size.y - 620)
+			return Rect2(240, 240, world_size.x - 480, world_size.y - 900)
 
 func _prop_size(id: String, index: int) -> Vector2i:
 	match id:
@@ -194,7 +199,7 @@ func _prop_size(id: String, index: int) -> Vector2i:
 func _spawn_events() -> void:
 	if DataRegistry.events.is_empty():
 		return
-	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(int(DataRegistry.map_params.get("event_nodes", 18)), Rect2(240, 260, world_size.x - 480, world_size.y - 800), route_seed + 25, 260)
+	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(int(DataRegistry.map_params.get("event_nodes", DEFAULT_EVENT_NODES)), Rect2(300, 320, world_size.x - 600, world_size.y - 1100), route_seed + 25, 520)
 	for i in range(positions.size()):
 		var event_data: Dictionary = DataRegistry.events[i % DataRegistry.events.size()]
 		var event_id := "%s:%s" % [route_id, String(event_data.get("id", "event_%d" % i))]
@@ -229,8 +234,8 @@ func _spawn_enemies() -> void:
 			var id := String(raw_id)
 			if String(DataRegistry.get_enemy(id).get("type", "")) != "boss":
 				combat_enemy_ids.append(id)
-	var limit := int(DataRegistry.map_params.get("enemy_limit", 30))
-	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(limit, Rect2(220, 180, world_size.x - 440, world_size.y - 820), route_seed + 91, 170)
+	var limit := int(DataRegistry.map_params.get("enemy_limit", DEFAULT_ENEMY_LIMIT))
+	var positions := LEVEL_GENERATOR_SCRIPT.seeded_positions(limit, Rect2(260, 240, world_size.x - 520, world_size.y - 1100), route_seed + 91, 360)
 	for i in range(min(limit, positions.size())):
 		var id := String(combat_enemy_ids[i % combat_enemy_ids.size()])
 		var enemy: CharacterBody2D = ENEMY_SCRIPT.new()
