@@ -38,8 +38,6 @@ var world_bounds := Rect2()
 var camera_base_offset := Vector2.ZERO
 var shake_timer := 0.0
 var shake_strength := 0.0
-var weapon_sprite: Sprite2D
-var current_weapon_asset_id := ""
 var ep_change_carry: float = 0.0
 var ep_regen_delay: float = 0.0
 var is_sprinting: bool = false
@@ -64,14 +62,6 @@ func _ready() -> void:
 	set_meta("map_marker", "player")
 
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-
-	weapon_sprite = Sprite2D.new()
-	weapon_sprite.name = "WeaponOverlay"
-	weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	weapon_sprite.z_index = 5
-	weapon_sprite.centered = true
-	weapon_sprite.visible = false
-	add_child(weapon_sprite)
 
 	camera_base_offset = camera.offset
 
@@ -310,7 +300,8 @@ func _ranged_attack() -> void:
 	var shake := float(ranged.get("shake_strength", 0.06))
 
 	AudioManager.play_sfx(sfx_id)
-	_spawn_attack_flash(vfx_id, max(0.55, shake * 8.0))
+	if not vfx_id.begins_with("muzzle"):
+		_spawn_attack_flash(vfx_id, max(0.55, shake * 8.0))
 	GameState.request_feedback("attack", shake)
 
 	ranged_timer = float(ranged.get("cooldown", 0.25))
@@ -616,49 +607,7 @@ func _projectile_spawn_global() -> Vector2:
 
 
 func _update_weapon_overlay() -> void:
-	if weapon_sprite == null:
-		return
-
-	var direction_index := _direction_index()
-	var needs_overlay := state in [PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
-	if not needs_overlay:
-		weapon_sprite.visible = false
-		return
-
-	var item_id := _weapon_overlay_item_id()
-	var equipment := DataRegistry.get_equipment(item_id)
-	var asset_id := String(equipment.get("weapon_sprite_asset_id", ""))
-	if asset_id.is_empty():
-		weapon_sprite.visible = false
-		return
-
-	if current_weapon_asset_id != asset_id:
-		current_weapon_asset_id = asset_id
-		var path := DataRegistry.asset_path(asset_id)
-		weapon_sprite.texture = ASSET_LOADER.load_png(path) if not path.is_empty() else null
-
-	if weapon_sprite.texture == null:
-		weapon_sprite.visible = false
-		return
-
-	var direction := last_direction.normalized()
-	if direction.length() < 0.1:
-		direction = Vector2.RIGHT
-
-	weapon_sprite.visible = true
-	weapon_sprite.position = Vector2(0, -62) + direction * 34.0
-	weapon_sprite.rotation = direction.angle()
-	weapon_sprite.flip_v = abs(direction.angle()) > PI * 0.5
-
-
-func _weapon_overlay_item_id() -> String:
-	match state:
-		PlayerState.SHOOT:
-			return String(GameState.equipment.get("ranged", "pipe_rifle"))
-		PlayerState.DRAW_SWORD, PlayerState.SLASH:
-			return String(GameState.equipment.get("weapon", "rust_blade"))
-		_:
-			return String(GameState.active_attack_item_id())
+	pass
 
 
 func _on_feedback_requested(kind: String, strength: float) -> void:
