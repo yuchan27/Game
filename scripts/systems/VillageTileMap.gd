@@ -24,13 +24,10 @@ func setup(new_map_size: Vector2i, new_seed: int) -> void:
 
 
 func _build_tileset() -> void:
-	var texture: Texture2D = null
-	if ResourceLoader.exists(TILESET_PATH):
-		var loaded_resource: Resource = load(TILESET_PATH)
-		texture = loaded_resource as Texture2D
-	if texture == null:
-		texture = ImageTexture.create_from_image(_fallback_tileset_image())
-
+	# 這裡不再嘗試 load yuchan_wasteland_tiles.png。
+	# 原因：使用者本機可能只有 .import 或缺少原 PNG，Godot 會直接噴 Failed loading resource。
+	# 目前村莊 TileMap 先使用內建 fallback tileset，避免缺檔造成 console error。
+	var texture: Texture2D = ImageTexture.create_from_image(_fallback_tileset_image())
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 	var atlas_source: TileSetAtlasSource = TileSetAtlasSource.new()
