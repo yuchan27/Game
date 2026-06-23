@@ -697,7 +697,6 @@ func _on_feedback_requested(kind: String, strength: float) -> void:
 		"player_hit":
 			_mark_combat_activity()
 			_start_hit_flash()
-			_set_timed_state(PlayerState.HIT, 0.28)
 		"player_dead":
 			_mark_combat_activity()
 			_set_timed_state(PlayerState.DEAD, 1.20)
