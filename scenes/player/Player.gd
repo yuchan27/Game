@@ -22,6 +22,9 @@ const SLASH_STATE_DURATION := 1.29
 const PROJECTILE_RIGHT_HAND_OFFSET := Vector2(22, 20)
 const PROJECTILE_LEFT_HAND_OFFSET := Vector2(-22, 20)
 const SLASH_FLASH_OFFSET := Vector2(0, 8)
+const SHADOW_OFFSET := Vector2(0, 52)
+const SHADOW_RADIUS := Vector2(26, 8)
+const HIT_FLASH_DURATION := 0.16
 
 @export var move_speed: float = 180.0
 
@@ -51,6 +54,9 @@ var slash_reach: float = 0.0
 var slash_vfx_id: String = "slash_rust"
 var slash_shake_strength: float = 0.08
 var slash_direction: Vector2 = Vector2.RIGHT
+var hit_flash_timer: float = 0.0
+var hit_flash_material: ShaderMaterial
+var shadow_polygon: Polygon2D
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -63,6 +69,8 @@ func _ready() -> void:
 	set_meta("map_marker", "player")
 
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_create_shadow()
+	_setup_hit_flash_material()
 
 	camera_base_offset = camera.offset
 
@@ -81,6 +89,7 @@ func _physics_process(delta: float) -> void:
 	attack_timer = max(0.0, attack_timer - delta)
 	ranged_timer = max(0.0, ranged_timer - delta)
 	action_state_timer = max(0.0, action_state_timer - delta)
+	_update_hit_flash(delta)
 
 	if pending_slash and action_state_timer <= 0.0:
 		pending_slash = false
@@ -632,10 +641,62 @@ func _update_weapon_overlay() -> void:
 	pass
 
 
+func _create_shadow() -> void:
+	shadow_polygon = Polygon2D.new()
+	shadow_polygon.name = "PlayerShadow"
+	shadow_polygon.color = Color(0.0, 0.0, 0.0, 0.38)
+	shadow_polygon.position = sprite.position + SHADOW_OFFSET
+	shadow_polygon.z_index = -10
+	var points := PackedVector2Array()
+	for i in range(24):
+		var angle := TAU * float(i) / 24.0
+		points.append(Vector2(cos(angle) * SHADOW_RADIUS.x, sin(angle) * SHADOW_RADIUS.y))
+	shadow_polygon.polygon = points
+	add_child(shadow_polygon)
+
+
+func _setup_hit_flash_material() -> void:
+	var shader := Shader.new()
+	shader.code = """
+shader_type canvas_item;
+
+uniform float flash_amount : hint_range(0.0, 1.0) = 0.0;
+
+void fragment() {
+	vec4 src = texture(TEXTURE, UV) * COLOR;
+	float dark_red = max(src.r - 0.20, 0.0);
+	vec4 hit_color = vec4(dark_red, 0.0, 0.0, src.a);
+	COLOR = mix(src, hit_color, flash_amount);
+}
+"""
+	hit_flash_material = ShaderMaterial.new()
+	hit_flash_material.shader = shader
+	hit_flash_material.set_shader_parameter("flash_amount", 0.0)
+	sprite.material = hit_flash_material
+
+
+func _start_hit_flash() -> void:
+	hit_flash_timer = HIT_FLASH_DURATION
+	if hit_flash_material != null:
+		hit_flash_material.set_shader_parameter("flash_amount", 1.0)
+
+
+func _update_hit_flash(delta: float) -> void:
+	if hit_flash_timer <= 0.0:
+		if hit_flash_material != null:
+			hit_flash_material.set_shader_parameter("flash_amount", 0.0)
+		return
+	hit_flash_timer = max(0.0, hit_flash_timer - delta)
+	if hit_flash_material != null:
+		var amount := hit_flash_timer / HIT_FLASH_DURATION
+		hit_flash_material.set_shader_parameter("flash_amount", amount)
+
+
 func _on_feedback_requested(kind: String, strength: float) -> void:
 	match kind:
 		"player_hit":
 			_mark_combat_activity()
+			_start_hit_flash()
 			_set_timed_state(PlayerState.HIT, 0.28)
 		"player_dead":
 			_mark_combat_activity()
