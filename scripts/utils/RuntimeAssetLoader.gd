@@ -8,7 +8,7 @@ const GENERATED_ARMOR_ICONS := {
 }
 
 static func load_png(path: String) -> Texture2D:
-	var generated := _generated_armor_icon(path)
+	var generated := _generated_display_icon(path)
 	if generated != null:
 		return generated
 
@@ -31,14 +31,19 @@ static func load_wav(path: String) -> AudioStream:
 	var stream := AudioStreamWAV.load_from_file(absolute_path)
 	return stream
 
-static func _generated_armor_icon(path: String) -> Texture2D:
-	if not path.begins_with("res://assets/sprites/items/"):
-		return null
-
+static func _generated_display_icon(path: String) -> Texture2D:
 	var item_id := path.get_file().get_basename()
-	if not GENERATED_ARMOR_ICONS.has(item_id):
-		return null
+	var is_item_path := path.begins_with("res://assets/sprites/items/")
+	var is_blade_display_path := path == "res://assets/sprites/player/weapons/rust_blade_overlay.png"
 
+	if is_item_path and GENERATED_ARMOR_ICONS.has(item_id):
+		return _build_armor_texture(item_id)
+	if is_blade_display_path:
+		return _build_blade_texture()
+
+	return null
+
+static func _build_armor_texture(item_id: String) -> Texture2D:
 	var image := Image.create(88, 72, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
 	_draw_ellipse(image, Rect2i(18, 51, 52, 12), Color(0, 0, 0, 0.32))
@@ -51,6 +56,17 @@ static func _generated_armor_icon(path: String) -> Texture2D:
 		"industrial_exoshell":
 			_draw_armor_shape(image, Color8(70, 86, 102), Color8(28, 34, 42), Color8(85, 159, 224), false, true)
 
+	return ImageTexture.create_from_image(image)
+
+static func _build_blade_texture() -> Texture2D:
+	var image := Image.create(88, 72, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	_draw_ellipse(image, Rect2i(18, 51, 52, 12), Color(0, 0, 0, 0.30))
+	_draw_line(image, Vector2i(20, 54), Vector2i(63, 18), Color8(41, 43, 43), 6)
+	_draw_line(image, Vector2i(22, 52), Vector2i(62, 20), Color8(220, 213, 172), 3)
+	_draw_line(image, Vector2i(16, 48), Vector2i(32, 62), Color8(47, 39, 31), 6)
+	_draw_line(image, Vector2i(18, 48), Vector2i(32, 61), Color8(137, 75, 31), 3)
+	_draw_rect(image, Rect2i(29, 43, 13, 7), Color8(188, 130, 55))
 	return ImageTexture.create_from_image(image)
 
 static func _draw_armor_shape(image: Image, body: Color, outline: Color, core: Color, crystal := false, heavy := false) -> void:
