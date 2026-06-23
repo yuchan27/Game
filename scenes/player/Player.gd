@@ -21,6 +21,7 @@ const SLASH_ANIMATION_SPEED := 10.125
 const SLASH_STATE_DURATION := 1.29
 const PROJECTILE_RIGHT_HAND_OFFSET := Vector2(22, 20)
 const PROJECTILE_LEFT_HAND_OFFSET := Vector2(-22, 20)
+const SLASH_FLASH_OFFSET := Vector2(0, 8)
 
 @export var move_speed: float = 180.0
 
@@ -574,7 +575,7 @@ func _spawn_attack_flash(effect_id: String, strength: float, flash_direction: Ve
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
 	flash.setup(effect_id, direction, strength)
 	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
-		flash.global_position = _sprite_frame_center_global() + _hand_offset_for_direction(direction)
+		flash.global_position = _sprite_frame_center_global() + _hand_offset_for_direction(direction) + SLASH_FLASH_OFFSET
 	else:
 		flash.global_position = _attack_anchor_global() + direction * 8.0
 	get_tree().current_scene.add_child(flash)
