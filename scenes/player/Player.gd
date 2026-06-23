@@ -290,7 +290,10 @@ func _ranged_attack() -> void:
 		GameState.notify("彈藥不足：先用近戰清出空間，或回村補給。")
 		return
 
-	last_direction = _aim_direction()
+	var aim_target := get_global_mouse_position()
+	last_direction = _aim_direction_from_global_target(aim_target)
+	var projectile_start := _projectile_spawn_global()
+	last_direction = _aim_direction_from_origin(aim_target, projectile_start)
 	_set_timed_state(PlayerState.SHOOT, 0.22)
 
 	var sfx_id := String(ranged.get("sfx_id", "shoot"))
@@ -305,7 +308,6 @@ func _ranged_attack() -> void:
 	ranged_timer = float(ranged.get("cooldown", 0.25))
 
 	var projectile_damage := 10 + GameState.get_stat_bonus("attack")
-	var projectile_start := _projectile_spawn_global()
 	var pools := get_tree().get_nodes_in_group("projectile_pool")
 
 	if not pools.is_empty() and pools[0].has_method("fire_projectile"):
@@ -333,7 +335,11 @@ func _aim_direction() -> Vector2:
 
 
 func _aim_direction_from_global_target(target: Vector2) -> Vector2:
-	var aim := target - _attack_anchor_global()
+	return _aim_direction_from_origin(target, _attack_anchor_global())
+
+
+func _aim_direction_from_origin(target: Vector2, origin: Vector2) -> Vector2:
+	var aim := target - origin
 
 	if aim.length() < 8.0:
 		aim = last_direction

@@ -415,8 +415,10 @@ func _check_player_animation_contract() -> void:
 			var right_hand_muzzle: Vector2 = player._projectile_spawn_global()
 			player.last_direction = Vector2.LEFT
 			var left_hand_muzzle: Vector2 = player._projectile_spawn_global()
+			var aim_from_right_hand: Vector2 = player._aim_direction_from_origin(right_hand_muzzle + Vector2(-240, 0), right_hand_muzzle)
 			_expect(aim_right.dot(Vector2.RIGHT) > 0.99, "player ranged aim uses muzzle anchor for right target")
 			_expect(aim_down.dot(Vector2.DOWN) > 0.99, "player ranged aim uses muzzle anchor for down target")
+			_expect(aim_from_right_hand.dot(Vector2.LEFT) > 0.99, "player ranged projectile aims from hand origin to target")
 			_expect(right_hand_muzzle == sprite_center + Vector2(22, 20), "player projectile starts at raised right hand")
 			_expect(left_hand_muzzle == sprite_center + Vector2(-22, 20), "player projectile starts at raised left hand")
 	instance.queue_free()
