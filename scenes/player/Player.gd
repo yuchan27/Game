@@ -49,6 +49,7 @@ var slash_damage: int = 0
 var slash_reach: float = 0.0
 var slash_vfx_id: String = "slash_rust"
 var slash_shake_strength: float = 0.08
+var slash_direction: Vector2 = Vector2.RIGHT
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -105,7 +106,7 @@ func _physics_process(delta: float) -> void:
 
 	if not _is_action_state_locked():
 		_update_locomotion_state(input_direction)
-	elif input_direction.length() > 0.05 and state != PlayerState.SHOOT:
+	elif input_direction.length() > 0.05 and state not in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH]:
 		last_direction = input_direction.normalized()
 
 	var speed_bonus: int = GameState.get_stat_bonus("speed")
@@ -183,16 +184,16 @@ func _primary_attack_pressed() -> void:
 		"tool":
 			_use_tool_action()
 		_:
-			_melee_attack(true)
+			_melee_attack()
 
 
-func _melee_attack(use_mouse_aim := false) -> void:
+func _melee_attack() -> void:
 	if attack_timer > 0.0:
 		return
 	_mark_combat_activity()
 
-	if use_mouse_aim:
-		last_direction = _aim_direction()
+	last_direction = _aim_direction()
+	slash_direction = last_direction
 
 	var weapon_id := GameState.active_attack_item_id()
 	var weapon := DataRegistry.get_equipment(weapon_id)
@@ -227,6 +228,8 @@ func _try_queue_slash_followup() -> bool:
 		return false
 	if sprite.frame < SLASH_QUEUE_FRAME_INDEX:
 		return true
+	last_direction = _aim_direction()
+	slash_direction = last_direction
 	slash_followup_queued = true
 	action_state_timer = max(action_state_timer, SLASH_STATE_DURATION)
 	return true
@@ -257,11 +260,11 @@ func _update_slash_sequence() -> void:
 
 
 func _perform_slash_hit() -> void:
-	_spawn_attack_flash(slash_vfx_id, max(0.7, slash_shake_strength * 9.0))
+	_spawn_attack_flash(slash_vfx_id, max(0.7, slash_shake_strength * 9.0), slash_direction)
 	GameState.request_feedback("attack", slash_shake_strength)
 
 	var attack_origin := _attack_anchor_global()
-	var attack_direction := last_direction.normalized()
+	var attack_direction := slash_direction.normalized()
 	if attack_direction.length() < 0.1:
 		attack_direction = Vector2.RIGHT
 
@@ -567,10 +570,13 @@ func _is_action_state_locked() -> bool:
 	return action_state_timer > 0.0 and state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH, PlayerState.SWAP_TOOL, PlayerState.INTERACT, PlayerState.HIT, PlayerState.DEAD]
 
 
-func _spawn_attack_flash(effect_id: String, strength: float) -> void:
+func _spawn_attack_flash(effect_id: String, strength: float, flash_direction: Vector2 = Vector2.ZERO) -> void:
+	var direction: Vector2 = flash_direction.normalized()
+	if direction.length() < 0.1:
+		direction = last_direction
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
-	flash.setup(effect_id, last_direction, strength)
-	flash.global_position = _attack_anchor_global() + last_direction * 8.0
+	flash.setup(effect_id, direction, strength)
+	flash.global_position = _attack_anchor_global() + direction * 8.0
 	get_tree().current_scene.add_child(flash)
 
 
