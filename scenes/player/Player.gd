@@ -7,6 +7,8 @@ const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
 const PLAYER_ATLAS_PATH := "res://docs/recycler_player_multiaction_8dir_preview.png"
 const PLAYER_FRAME_DIR := "res://assets/sprites/player/frames"
 const PREFER_SPLIT_FRAME_FILES := false
+const SPRINT_SPEED_MULTIPLIER := 1.4
+const SPRINT_EP_PER_SECOND := 10.0
 
 @export var move_speed: float = 180.0
 
@@ -26,6 +28,7 @@ var shake_timer := 0.0
 var shake_strength := 0.0
 var weapon_sprite: Sprite2D
 var current_weapon_asset_id := ""
+var sprint_ep_accumulator := 0.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -85,8 +88,11 @@ func _physics_process(delta: float) -> void:
 	elif input_direction.length() > 0.05 and state != PlayerState.SHOOT:
 		last_direction = input_direction.normalized()
 
-	var speed_bonus := GameState.get_stat_bonus("speed")
-	velocity = input_direction * max(80.0, move_speed + speed_bonus)
+	var speed_bonus: int = GameState.get_stat_bonus("speed")
+	var current_speed: float = max(80.0, move_speed + float(speed_bonus))
+	if _consume_sprint_energy(input_direction, delta):
+		current_speed *= SPRINT_SPEED_MULTIPLIER
+	velocity = input_direction * current_speed
 	move_and_slide()
 
 	if has_world_bounds:
@@ -353,6 +359,28 @@ func _update_locomotion_state(input_direction: Vector2) -> void:
 		state = PlayerState.WALK
 	else:
 		state = PlayerState.IDLE
+
+
+func _consume_sprint_energy(input_direction: Vector2, delta: float) -> bool:
+	if input_direction.length() <= 0.05:
+		sprint_ep_accumulator = 0.0
+		return false
+	if not Input.is_action_pressed("dash"):
+		sprint_ep_accumulator = 0.0
+		return false
+	if GameState.ep <= 0:
+		sprint_ep_accumulator = 0.0
+		return false
+
+	sprint_ep_accumulator += SPRINT_EP_PER_SECOND * delta
+	var drain_amount: int = int(floor(sprint_ep_accumulator))
+	if drain_amount > 0:
+		drain_amount = min(drain_amount, GameState.ep)
+		GameState.ep = max(0, GameState.ep - drain_amount)
+		sprint_ep_accumulator -= float(drain_amount)
+		GameState.stats_changed.emit()
+
+	return GameState.ep > 0
 
 
 func _set_timed_state(next_state: int, duration: float) -> void:
