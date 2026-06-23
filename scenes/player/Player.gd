@@ -12,8 +12,9 @@ const SPRINT_EP_DRAIN_PER_SECOND := 10.0
 const SPRINT_REENABLE_EP_RATIO := 0.5
 const EP_REGEN_PER_SECOND := 20.0
 const EP_REGEN_DELAY_AFTER_COMBAT := 1.0
+const SLASH_FRAME_LIMIT := 8
 const SLASH_ANIMATION_SPEED := 10.125
-const SLASH_STATE_DURATION := 1.28
+const SLASH_STATE_DURATION := 0.79
 
 @export var move_speed: float = 180.0
 
@@ -437,6 +438,8 @@ func _frame_count_for_animation(action_name: String, direction_index: int) -> in
 		while FileAccess.file_exists("%s/%s/dir_%d/frame_%d.png" % [PLAYER_FRAME_DIR, action_name, direction_index, count]):
 			count += 1
 		if count > 0:
+			if action_name == "slash":
+				return int(min(count, SLASH_FRAME_LIMIT))
 			return count
 
 	return PixelArtFactory.PLAYER_FRAMES_PER_ACTION
