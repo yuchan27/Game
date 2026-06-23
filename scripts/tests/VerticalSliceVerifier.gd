@@ -414,7 +414,7 @@ func _check_player_animation_contract() -> void:
 			var muzzle: Vector2 = player._projectile_spawn_global()
 			_expect(aim_right.dot(Vector2.RIGHT) > 0.99, "player ranged aim uses muzzle anchor for right target")
 			_expect(aim_down.dot(Vector2.DOWN) > 0.99, "player ranged aim uses muzzle anchor for down target")
-			_expect(abs(muzzle.distance_to(anchor) - 46.0) < 0.1, "projectile spawn starts from weapon reach, not player feet")
+			_expect(abs(muzzle.distance_to(anchor) - 38.0) < 0.1, "projectile spawn starts from weapon reach, not player feet")
 	instance.queue_free()
 	await get_tree().process_frame
 

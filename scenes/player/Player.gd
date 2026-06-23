@@ -19,6 +19,8 @@ const SLASH_SECOND_HIT_FRAME_INDEX := 10
 const SLASH_LAST_FRAME_INDEX := 12
 const SLASH_ANIMATION_SPEED := 10.125
 const SLASH_STATE_DURATION := 1.29
+const PROJECTILE_ANCHOR_OFFSET := Vector2(0, -46)
+const PROJECTILE_REACH := 38.0
 
 @export var move_speed: float = 180.0
 
@@ -610,7 +612,7 @@ func _projectile_spawn_global() -> Vector2:
 	var direction := last_direction.normalized()
 	if direction.length() < 0.1:
 		direction = Vector2.RIGHT
-	return _attack_anchor_global() + direction * 46.0
+	return global_position + PROJECTILE_ANCHOR_OFFSET + direction * PROJECTILE_REACH
 
 
 func _update_weapon_overlay() -> void:
@@ -618,7 +620,7 @@ func _update_weapon_overlay() -> void:
 		return
 
 	var direction_index := _direction_index()
-	var needs_overlay := state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
+	var needs_overlay := state in [PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
 	if not needs_overlay:
 		weapon_sprite.visible = false
 		return
