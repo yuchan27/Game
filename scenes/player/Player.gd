@@ -12,8 +12,8 @@ const SPRINT_EP_DRAIN_PER_SECOND := 10.0
 const SPRINT_REENABLE_EP_RATIO := 0.5
 const EP_REGEN_PER_SECOND := 20.0
 const EP_REGEN_DELAY_AFTER_COMBAT := 1.0
-const SLASH_ANIMATION_SPEED := 13.5
-const SLASH_STATE_DURATION := 0.96
+const SLASH_ANIMATION_SPEED := 10.125
+const SLASH_STATE_DURATION := 1.28
 
 @export var move_speed: float = 180.0
 
@@ -193,7 +193,7 @@ func _melee_attack(use_mouse_aim := false) -> void:
 	GameState.request_feedback("attack", shake)
 
 	var damage := 12 + GameState.get_stat_bonus("attack")
-	var reach: float = 92.0 if weapon_id == "breaker_hammer" else 82.0
+	var reach: float = 112.0 if weapon_id == "breaker_hammer" else 104.0
 	var attack_origin := _attack_anchor_global()
 	var attack_direction := last_direction.normalized()
 	if attack_direction.length() < 0.1:
