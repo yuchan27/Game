@@ -8,16 +8,16 @@ const GENERATED_ARMOR_ICONS := {
 }
 
 static func load_png(path: String) -> Texture2D:
-	var generated := _generated_display_icon(path)
+	var generated: Texture2D = _generated_display_icon(path)
 	if generated != null:
 		return generated
 
 	if ResourceLoader.exists(path):
 		return load(path) as Texture2D
-	var absolute_path := ProjectSettings.globalize_path(path)
+	var absolute_path: String = ProjectSettings.globalize_path(path)
 	if not FileAccess.file_exists(absolute_path):
 		return null
-	var image := Image.new()
+	var image: Image = Image.new()
 	if image.load(absolute_path) != OK:
 		return null
 	return ImageTexture.create_from_image(image)
@@ -25,16 +25,16 @@ static func load_png(path: String) -> Texture2D:
 static func load_wav(path: String) -> AudioStream:
 	if ResourceLoader.exists(path):
 		return load(path) as AudioStream
-	var absolute_path := ProjectSettings.globalize_path(path)
+	var absolute_path: String = ProjectSettings.globalize_path(path)
 	if not FileAccess.file_exists(absolute_path):
 		return null
-	var stream := AudioStreamWAV.load_from_file(absolute_path)
+	var stream: AudioStreamWAV = AudioStreamWAV.load_from_file(absolute_path)
 	return stream
 
 static func _generated_display_icon(path: String) -> Texture2D:
-	var item_id := path.get_file().get_basename()
-	var is_item_path := path.begins_with("res://assets/sprites/items/")
-	var is_blade_display_path := path == "res://assets/sprites/player/weapons/rust_blade_overlay.png"
+	var item_id: String = path.get_file().get_basename()
+	var is_item_path: bool = path.begins_with("res://assets/sprites/items/")
+	var is_blade_display_path: bool = path == "res://assets/sprites/player/weapons/rust_blade_overlay.png"
 
 	if is_item_path and GENERATED_ARMOR_ICONS.has(item_id):
 		return _build_armor_texture(item_id)
@@ -44,7 +44,7 @@ static func _generated_display_icon(path: String) -> Texture2D:
 	return null
 
 static func _build_armor_texture(item_id: String) -> Texture2D:
-	var image := Image.create(88, 72, false, Image.FORMAT_RGBA8)
+	var image: Image = Image.create(88, 72, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
 	_draw_ellipse(image, Rect2i(18, 51, 52, 12), Color(0, 0, 0, 0.32))
 
@@ -59,7 +59,7 @@ static func _build_armor_texture(item_id: String) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 static func _build_blade_texture() -> Texture2D:
-	var image := Image.create(88, 72, false, Image.FORMAT_RGBA8)
+	var image: Image = Image.create(88, 72, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
 	_draw_ellipse(image, Rect2i(18, 51, 52, 12), Color(0, 0, 0, 0.30))
 	_draw_line(image, Vector2i(20, 54), Vector2i(63, 18), Color8(41, 43, 43), 6)
@@ -69,8 +69,15 @@ static func _build_blade_texture() -> Texture2D:
 	_draw_rect(image, Rect2i(29, 43, 13, 7), Color8(188, 130, 55))
 	return ImageTexture.create_from_image(image)
 
-static func _draw_armor_shape(image: Image, body: Color, outline: Color, core: Color, crystal := false, heavy := false) -> void:
-	var chest := Rect2i(30, 18, 29, 35)
+static func _build_placeholder_texture() -> Texture2D:
+	var image: Image = Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	_draw_rect(image, Rect2i(7, 7, 18, 18), Color8(42, 48, 47))
+	_draw_rect(image, Rect2i(10, 10, 12, 12), Color8(45, 189, 201))
+	return ImageTexture.create_from_image(image)
+
+static func _draw_armor_shape(image: Image, body: Color, outline: Color, core: Color, crystal: bool = false, heavy: bool = false) -> void:
+	var chest: Rect2i = Rect2i(30, 18, 29, 35)
 	_draw_rect(image, Rect2i(chest.position.x - 4, chest.position.y + 4, 5, 27), outline)
 	_draw_rect(image, Rect2i(chest.position.x + chest.size.x - 1, chest.position.y + 4, 5, 27), outline)
 	_draw_rect(image, chest.grow(3), outline)
@@ -90,39 +97,39 @@ static func _draw_armor_shape(image: Image, body: Color, outline: Color, core: C
 		_draw_circle(image, Vector2i(61, 18), 5, Color8(70, 137, 214))
 
 static func _draw_rect(image: Image, rect: Rect2i, color: Color) -> void:
-	for y in range(rect.position.y, rect.position.y + rect.size.y):
-		for x in range(rect.position.x, rect.position.x + rect.size.x):
+	for y: int in range(rect.position.y, rect.position.y + rect.size.y):
+		for x: int in range(rect.position.x, rect.position.x + rect.size.x):
 			_set_pixel_safe(image, x, y, color)
 
 static func _draw_circle(image: Image, center: Vector2i, radius: int, color: Color) -> void:
-	var r2 := radius * radius
-	for y in range(center.y - radius, center.y + radius + 1):
-		for x in range(center.x - radius, center.x + radius + 1):
-			var dx := x - center.x
-			var dy := y - center.y
+	var r2: int = radius * radius
+	for y: int in range(center.y - radius, center.y + radius + 1):
+		for x: int in range(center.x - radius, center.x + radius + 1):
+			var dx: int = x - center.x
+			var dy: int = y - center.y
 			if dx * dx + dy * dy <= r2:
 				_set_pixel_safe(image, x, y, color)
 
 static func _draw_ellipse(image: Image, rect: Rect2i, color: Color) -> void:
-	var center := Vector2(rect.position.x + rect.size.x * 0.5, rect.position.y + rect.size.y * 0.5)
-	var rx := max(1.0, rect.size.x * 0.5)
-	var ry := max(1.0, rect.size.y * 0.5)
-	for y in range(rect.position.y, rect.position.y + rect.size.y):
-		for x in range(rect.position.x, rect.position.x + rect.size.x):
-			var nx := (float(x) - center.x) / rx
-			var ny := (float(y) - center.y) / ry
+	var center: Vector2 = Vector2(float(rect.position.x) + float(rect.size.x) * 0.5, float(rect.position.y) + float(rect.size.y) * 0.5)
+	var rx: float = max(1.0, float(rect.size.x) * 0.5)
+	var ry: float = max(1.0, float(rect.size.y) * 0.5)
+	for y: int in range(rect.position.y, rect.position.y + rect.size.y):
+		for x: int in range(rect.position.x, rect.position.x + rect.size.x):
+			var nx: float = (float(x) - center.x) / rx
+			var ny: float = (float(y) - center.y) / ry
 			if nx * nx + ny * ny <= 1.0:
 				_set_pixel_safe(image, x, y, color)
 
-static func _draw_line(image: Image, from_pos: Vector2i, to_pos: Vector2i, color: Color, thickness := 1) -> void:
-	var delta := to_pos - from_pos
+static func _draw_line(image: Image, from_pos: Vector2i, to_pos: Vector2i, color: Color, thickness: int = 1) -> void:
+	var delta: Vector2i = to_pos - from_pos
 	var steps: int = max(abs(delta.x), abs(delta.y))
 	if steps <= 0:
 		_draw_circle(image, from_pos, max(1, thickness), color)
 		return
-	for i in range(steps + 1):
-		var t := float(i) / float(steps)
-		var p := Vector2i(roundi(lerp(float(from_pos.x), float(to_pos.x), t)), roundi(lerp(float(from_pos.y), float(to_pos.y), t)))
+	for i: int in range(steps + 1):
+		var t: float = float(i) / float(steps)
+		var p: Vector2i = Vector2i(roundi(lerp(float(from_pos.x), float(to_pos.x), t)), roundi(lerp(float(from_pos.y), float(to_pos.y), t)))
 		if thickness <= 1:
 			_set_pixel_safe(image, p.x, p.y, color)
 		else:
