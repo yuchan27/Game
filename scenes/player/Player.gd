@@ -12,9 +12,13 @@ const SPRINT_EP_DRAIN_PER_SECOND := 10.0
 const SPRINT_REENABLE_EP_RATIO := 0.5
 const EP_REGEN_PER_SECOND := 20.0
 const EP_REGEN_DELAY_AFTER_COMBAT := 1.0
-const SLASH_FRAME_LIMIT := 8
+const SLASH_FRAME_COUNT := 13
+const SLASH_QUEUE_FRAME_INDEX := 5
+const SLASH_FIRST_HIT_FRAME_INDEX := 7
+const SLASH_SECOND_HIT_FRAME_INDEX := 10
+const SLASH_LAST_FRAME_INDEX := 12
 const SLASH_ANIMATION_SPEED := 10.125
-const SLASH_STATE_DURATION := 0.79
+const SLASH_STATE_DURATION := 1.29
 
 @export var move_speed: float = 180.0
 
@@ -38,6 +42,13 @@ var ep_change_carry: float = 0.0
 var ep_regen_delay: float = 0.0
 var is_sprinting: bool = false
 var sprint_exhausted: bool = false
+var slash_followup_queued: bool = false
+var slash_first_hit_done: bool = false
+var slash_second_hit_done: bool = false
+var slash_damage: int = 0
+var slash_reach: float = 0.0
+var slash_vfx_id: String = "slash_rust"
+var slash_shake_strength: float = 0.08
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -108,13 +119,21 @@ func _physics_process(delta: float) -> void:
 
 	GameState.player_position = global_position
 
-	if Input.is_action_just_pressed("primary_attack"):
+	var primary_attack_pressed: bool = Input.is_action_just_pressed("primary_attack")
+	var melee_attack_pressed: bool = Input.is_action_just_pressed("attack_melee")
+
+	if primary_attack_pressed or melee_attack_pressed:
+		if _try_queue_slash_followup():
+			primary_attack_pressed = false
+			melee_attack_pressed = false
+
+	if primary_attack_pressed:
 		_primary_attack_pressed()
 
 	if Input.is_action_pressed("primary_attack") and GameState.active_attack_mode() == "ranged":
 		_ranged_attack()
 
-	if Input.is_action_just_pressed("attack_melee"):
+	if melee_attack_pressed:
 		_melee_attack()
 
 	if Input.is_action_just_pressed("attack_ranged") or Input.is_action_pressed("attack_ranged"):
@@ -143,6 +162,7 @@ func _physics_process(delta: float) -> void:
 	_update_weapon_overlay()
 	_update_camera_shake(delta)
 	_update_animation()
+	_update_slash_sequence()
 
 
 func set_world_bounds(bounds: Rect2) -> void:
@@ -190,11 +210,56 @@ func _melee_attack(use_mouse_aim := false) -> void:
 	var shake := float(weapon.get("shake_strength", 0.08))
 
 	AudioManager.play_sfx(sfx_id)
-	_spawn_attack_flash(vfx_id, max(0.7, shake * 9.0))
-	GameState.request_feedback("attack", shake)
 
-	var damage := 12 + GameState.get_stat_bonus("attack")
-	var reach: float = 112.0 if weapon_id == "breaker_hammer" else 104.0
+	slash_followup_queued = false
+	slash_first_hit_done = false
+	slash_second_hit_done = false
+	slash_damage = 12 + GameState.get_stat_bonus("attack")
+	slash_reach = 112.0 if weapon_id == "breaker_hammer" else 104.0
+	slash_vfx_id = vfx_id
+	slash_shake_strength = shake
+
+
+func _try_queue_slash_followup() -> bool:
+	if state != PlayerState.SLASH:
+		return false
+	if not current_animation.begins_with("slash_"):
+		return false
+	if sprite.frame < SLASH_QUEUE_FRAME_INDEX:
+		return true
+	slash_followup_queued = true
+	action_state_timer = max(action_state_timer, SLASH_STATE_DURATION)
+	return true
+
+
+func _update_slash_sequence() -> void:
+	if state != PlayerState.SLASH:
+		return
+	if not current_animation.begins_with("slash_"):
+		return
+
+	var frame_index: int = sprite.frame
+	if frame_index >= SLASH_FIRST_HIT_FRAME_INDEX and not slash_first_hit_done:
+		slash_first_hit_done = true
+		_perform_slash_hit()
+
+	if frame_index >= SLASH_FIRST_HIT_FRAME_INDEX and not slash_followup_queued:
+		sprite.pause()
+		action_state_timer = 0.0
+		return
+
+	if frame_index >= SLASH_SECOND_HIT_FRAME_INDEX and slash_followup_queued and not slash_second_hit_done:
+		slash_second_hit_done = true
+		_perform_slash_hit()
+
+	if frame_index >= SLASH_LAST_FRAME_INDEX:
+		action_state_timer = 0.0
+
+
+func _perform_slash_hit() -> void:
+	_spawn_attack_flash(slash_vfx_id, max(0.7, slash_shake_strength * 9.0))
+	GameState.request_feedback("attack", slash_shake_strength)
+
 	var attack_origin := _attack_anchor_global()
 	var attack_direction := last_direction.normalized()
 	if attack_direction.length() < 0.1:
@@ -207,13 +272,13 @@ func _melee_attack(use_mouse_aim := false) -> void:
 		var enemy_radius := _enemy_hit_radius(enemy)
 		var to_enemy := enemy_center - attack_origin
 		var distance := to_enemy.length()
-		if distance > reach + enemy_radius:
+		if distance > slash_reach + enemy_radius:
 			continue
 		var facing := attack_direction
 		if distance > 0.01:
 			facing = to_enemy.normalized()
 		if attack_direction.dot(facing) > -0.35 and enemy.has_method("take_damage"):
-			enemy.take_damage(damage, true)
+			enemy.take_damage(slash_damage, true)
 
 
 func _ranged_attack() -> void:
@@ -439,7 +504,7 @@ func _frame_count_for_animation(action_name: String, direction_index: int) -> in
 			count += 1
 		if count > 0:
 			if action_name == "slash":
-				return int(min(count, SLASH_FRAME_LIMIT))
+				return int(min(count, SLASH_FRAME_COUNT))
 			return count
 
 	return PixelArtFactory.PLAYER_FRAMES_PER_ACTION
