@@ -411,13 +411,14 @@ func _check_player_animation_contract() -> void:
 			var anchor: Vector2 = player._attack_anchor_global()
 			var aim_right: Vector2 = player._aim_direction_from_global_target(anchor + Vector2(240, 0))
 			var aim_down: Vector2 = player._aim_direction_from_global_target(anchor + Vector2(0, 240))
+			var sprite_center: Vector2 = animated_sprite.global_position if animated_sprite is AnimatedSprite2D else player.global_position
 			var right_hand_muzzle: Vector2 = player._projectile_spawn_global()
 			player.last_direction = Vector2.LEFT
 			var left_hand_muzzle: Vector2 = player._projectile_spawn_global()
 			_expect(aim_right.dot(Vector2.RIGHT) > 0.99, "player ranged aim uses muzzle anchor for right target")
 			_expect(aim_down.dot(Vector2.DOWN) > 0.99, "player ranged aim uses muzzle anchor for down target")
-			_expect(right_hand_muzzle == player.global_position + Vector2(22, 20), "player projectile starts at raised right hand")
-			_expect(left_hand_muzzle == player.global_position + Vector2(-22, 20), "player projectile starts at raised left hand")
+			_expect(right_hand_muzzle == sprite_center + Vector2(22, 20), "player projectile starts at raised right hand")
+			_expect(left_hand_muzzle == sprite_center + Vector2(-22, 20), "player projectile starts at raised left hand")
 	instance.queue_free()
 	await get_tree().process_frame
 

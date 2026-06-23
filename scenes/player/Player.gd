@@ -567,7 +567,10 @@ func _spawn_attack_flash(effect_id: String, strength: float, flash_direction: Ve
 		direction = last_direction
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
 	flash.setup(effect_id, direction, strength)
-	flash.global_position = _attack_anchor_global() + direction * 8.0
+	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
+		flash.global_position = _sprite_frame_center_global() + _hand_offset_for_direction(direction)
+	else:
+		flash.global_position = _attack_anchor_global() + direction * 8.0
 	get_tree().current_scene.add_child(flash)
 
 
@@ -598,11 +601,20 @@ func _enemy_hit_radius(enemy: Node) -> float:
 
 
 func _projectile_spawn_global() -> Vector2:
-	return global_position + _projectile_hand_offset()
+	return _sprite_frame_center_global() + _projectile_hand_offset()
+
+
+func _sprite_frame_center_global() -> Vector2:
+	return sprite.global_position if sprite != null else global_position
 
 
 func _projectile_hand_offset() -> Vector2:
-	match _direction_index():
+	return _hand_offset_for_direction(last_direction)
+
+
+func _hand_offset_for_direction(direction: Vector2) -> Vector2:
+	var direction_index := int(round(direction.angle() / (PI / 4.0))) & 7
+	match direction_index:
 		3, 4, 5:
 			return PROJECTILE_LEFT_HAND_OFFSET
 		_:
