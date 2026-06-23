@@ -24,8 +24,10 @@ func setup(new_map_size: Vector2i, new_seed: int) -> void:
 
 
 func _build_tileset() -> void:
-	var loaded_resource: Resource = load(TILESET_PATH)
-	var texture: Texture2D = loaded_resource as Texture2D
+	var texture: Texture2D = null
+	if ResourceLoader.exists(TILESET_PATH):
+		var loaded_resource: Resource = load(TILESET_PATH)
+		texture = loaded_resource as Texture2D
 	if texture == null:
 		texture = ImageTexture.create_from_image(_fallback_tileset_image())
 
