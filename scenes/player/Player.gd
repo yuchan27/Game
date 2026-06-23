@@ -8,10 +8,12 @@ const PLAYER_ATLAS_PATH := "res://docs/recycler_player_multiaction_8dir_preview.
 const PLAYER_FRAME_DIR := "res://assets/sprites/player/frames"
 const PREFER_SPLIT_FRAME_FILES := true
 const SPRINT_MULTIPLIER := 1.55
-const SPRINT_EP_DRAIN_PER_SECOND := 16.0
+const SPRINT_EP_DRAIN_PER_SECOND := 10.0
 const SPRINT_REENABLE_EP_RATIO := 0.5
 const EP_REGEN_PER_SECOND := 20.0
 const EP_REGEN_DELAY_AFTER_COMBAT := 1.0
+const SLASH_ANIMATION_SPEED := 13.5
+const SLASH_STATE_DURATION := 0.96
 
 @export var move_speed: float = 180.0
 
@@ -76,7 +78,7 @@ func _physics_process(delta: float) -> void:
 
 	if pending_slash and action_state_timer <= 0.0:
 		pending_slash = false
-		_set_timed_state(PlayerState.SLASH, 0.72)
+		_set_timed_state(PlayerState.SLASH, SLASH_STATE_DURATION)
 
 	var input_direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var wants_sprint: bool = Input.is_action_pressed("dash") and input_direction.length() > 0.05 and not _is_action_state_locked()
@@ -358,7 +360,7 @@ func _build_sprite_frames() -> void:
 			frames.add_animation(animation_name)
 			frames.set_animation_speed(
 				animation_name,
-				12.0 if action_name == "run" else (10.0 if action_name == "walk" else (8.0 if action_name == "idle" else 18.0))
+				_animation_speed_for_action(action_name)
 			)
 			frames.set_animation_loop(animation_name, action_name in ["idle", "walk", "run"])
 
@@ -395,6 +397,20 @@ func _fallback_action_index(action_name: String) -> int:
 	if action_index >= 0:
 		return action_index
 	return PixelArtFactory.PLAYER_ACTIONS.find("walk")
+
+
+func _animation_speed_for_action(action_name: String) -> float:
+	match action_name:
+		"run":
+			return 12.0
+		"walk":
+			return 10.0
+		"idle":
+			return 8.0
+		"slash":
+			return SLASH_ANIMATION_SPEED
+		_:
+			return 18.0
 
 
 func _source_direction_index(action_name: String, direction_index: int) -> int:
