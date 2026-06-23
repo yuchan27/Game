@@ -54,22 +54,37 @@ func _draw_route_frame(origin: Vector2, map_size: Vector2) -> void:
 	draw_line(Vector2(origin.x + 8, center.y), Vector2(origin.x + map_size.x - 8, center.y), Color(0.48, 0.43, 0.31, 0.55), 2.0)
 
 func _draw_group_markers(origin: Vector2, scale: float) -> void:
-	var group_order := ["map_prop", "map_station", "map_gate", "map_event", "map_pickup", "map_enemy", "map_boss", "map_npc", "map_player"]
-	for group_name in group_order:
+	for group_name: String in _visible_marker_groups():
 		for node in get_tree().get_nodes_in_group(group_name):
 			if not is_instance_valid(node) or not (node is Node2D):
 				continue
 			var marker := String(node.get_meta("map_marker", _marker_from_group(group_name)))
+			if not _should_draw_marker(marker):
+				continue
 			var color: Color = MARKER_COLORS.get(marker, Color.WHITE)
 			var node2d := node as Node2D
 			var pos := origin + node2d.global_position * scale
 			var radius := _marker_radius(marker)
 			draw_circle(pos, radius, color)
 			draw_circle(pos, max(1.5, radius * 0.42), Color(1.0, 1.0, 0.78, 0.9))
-			if full_screen and marker != "prop":
+			if full_screen and marker not in ["prop", "pickup", "enemy"]:
 				var label := String(node.get_meta("map_label", ""))
 				if not label.is_empty():
 					draw_string(ThemeDB.fallback_font, pos + Vector2(8, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color.WHITE)
+
+func _visible_marker_groups() -> Array[String]:
+	if GameState.current_scene_id == "wasteland":
+		if full_screen:
+			return ["map_gate", "map_event", "map_boss", "map_player"]
+		return ["map_gate", "map_boss", "map_player"]
+	return ["map_station", "map_gate", "map_npc", "map_player"]
+
+func _should_draw_marker(marker: String) -> bool:
+	if GameState.current_scene_id != "wasteland":
+		return marker in ["player", "npc", "station", "gate"]
+	if full_screen:
+		return marker in ["player", "gate", "event", "boss"]
+	return marker in ["player", "gate", "boss"]
 
 func _draw_viewport_box(origin: Vector2, scale: float, world: Vector2) -> void:
 	var player_nodes := get_tree().get_nodes_in_group("map_player")
@@ -81,16 +96,21 @@ func _draw_viewport_box(origin: Vector2, scale: float, world: Vector2) -> void:
 	draw_rect(Rect2(origin + camera_rect.position * scale, camera_rect.size * scale), Color(0.65, 0.82, 1.0, 0.28), false, 1.0)
 
 func _draw_legend() -> void:
-	var labels := [
-		["player", "玩家"],
-		["npc", "NPC"],
-		["station", "設施"],
-		["gate", "出口"],
-		["enemy", "敵人"],
-		["boss", "Boss"],
-		["pickup", "資源"],
-		["event", "事件"]
-	]
+	var labels := []
+	if GameState.current_scene_id == "wasteland":
+		labels = [
+			["player", "玩家"],
+			["gate", "出口"],
+			["event", "事件"],
+			["boss", "Boss"]
+		]
+	else:
+		labels = [
+			["player", "玩家"],
+			["npc", "NPC"],
+			["station", "設施"],
+			["gate", "出口"]
+		]
 	var x := 28.0
 	var y := size.y - 34.0
 	for item in labels:
