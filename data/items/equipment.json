@@ -11,7 +11,9 @@
       "weapon_sprite_asset_id": "player_weapon_rust_blade",
       "attack_vfx_id": "slash_rust",
       "sfx_id": "sfx_melee_heavy",
-      "shake_strength": 0.08
+      "shake_strength": 0.08,
+      "progression": "base",
+      "obtain_hint": "初始裝備"
     },
     "spark_cutter": {
       "name": "火花切割斧",
@@ -24,7 +26,9 @@
       "weapon_sprite_asset_id": "player_weapon_spark_cutter",
       "attack_vfx_id": "slash_spark",
       "sfx_id": "sfx_melee_heavy",
-      "shake_strength": 0.12
+      "shake_strength": 0.12,
+      "progression": "craftable",
+      "obtain_hint": "合成台製作：廢鐵 x20 + 污染晶核 x1"
     },
     "breaker_hammer": {
       "name": "重型拆解槌",
@@ -37,7 +41,9 @@
       "weapon_sprite_asset_id": "player_weapon_breaker_hammer",
       "attack_vfx_id": "slam_spark",
       "sfx_id": "sfx_melee_heavy",
-      "shake_strength": 0.2
+      "shake_strength": 0.2,
+      "progression": "guild_reward",
+      "obtain_hint": "公會任務獎勵：舊工廠核心討伐"
     },
     "pipe_rifle": {
       "name": "管線釘槍",
@@ -50,7 +56,9 @@
       "weapon_sprite_asset_id": "player_weapon_pipe_rifle",
       "attack_vfx_id": "muzzle_pipe",
       "sfx_id": "shoot",
-      "shake_strength": 0.06
+      "shake_strength": 0.06,
+      "progression": "base",
+      "obtain_hint": "初始裝備"
     },
     "coil_launcher": {
       "name": "線圈步槍",
@@ -63,7 +71,9 @@
       "weapon_sprite_asset_id": "player_weapon_coil_launcher",
       "attack_vfx_id": "muzzle_coil",
       "sfx_id": "sfx_shoot_coil",
-      "shake_strength": 0.1
+      "shake_strength": 0.1,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x28 + 異變核心 x2"
     },
     "acid_sprayer": {
       "name": "酸蝕噴射器",
@@ -76,7 +86,9 @@
       "weapon_sprite_asset_id": "player_weapon_acid_sprayer",
       "attack_vfx_id": "acid_spray",
       "sfx_id": "sfx_shoot_coil",
-      "shake_strength": 0.08
+      "shake_strength": 0.08,
+      "progression": "guild_reward",
+      "obtain_hint": "公會任務獎勵：工廠外圍破壞任務"
     },
     "patched_armor": {
       "name": "初階護甲",
@@ -87,7 +99,9 @@
       "stats": { "attack": 0, "defense": 3, "speed": -4 },
       "world_drop_asset_id": "item_patched_armor",
       "sfx_id": "ui",
-      "shake_strength": 0.0
+      "shake_strength": 0.0,
+      "progression": "base",
+      "obtain_hint": "初始裝備；也可用合成台修補：廢鐵 x12"
     },
     "light_reinforced_armor": {
       "name": "初階改良護甲",
@@ -98,7 +112,9 @@
       "stats": { "attack": 0, "defense": 5, "speed": -4 },
       "world_drop_asset_id": "item_light_reinforced_armor",
       "sfx_id": "ui",
-      "shake_strength": 0.0
+      "shake_strength": 0.0,
+      "progression": "craftable",
+      "obtain_hint": "合成台製作：廢鐵 x18 + 污染晶核 x1"
     },
     "crystal_guard": {
       "name": "中階護甲",
@@ -109,7 +125,9 @@
       "stats": { "attack": 0, "defense": 7, "speed": -5 },
       "world_drop_asset_id": "item_crystal_guard",
       "sfx_id": "ui",
-      "shake_strength": 0.0
+      "shake_strength": 0.0,
+      "progression": "craftable",
+      "obtain_hint": "合成台製作：廢鐵 x26 + 污染晶核 x2"
     },
     "hazard_armor": {
       "name": "中階防護甲",
@@ -120,7 +138,9 @@
       "stats": { "attack": 1, "defense": 9, "speed": -6 },
       "world_drop_asset_id": "item_hazard_armor",
       "sfx_id": "ui",
-      "shake_strength": 0.0
+      "shake_strength": 0.0,
+      "progression": "guild_reward",
+      "obtain_hint": "公會任務獎勵：紫晶裂隙偵查"
     },
     "industrial_exoshell": {
       "name": "高階外骨架",
@@ -131,7 +151,9 @@
       "stats": { "attack": 3, "defense": 12, "speed": -8 },
       "world_drop_asset_id": "item_industrial_exoshell",
       "sfx_id": "ui",
-      "shake_strength": 0.0
+      "shake_strength": 0.0,
+      "progression": "guild_reward",
+      "obtain_hint": "公會任務獎勵：舊工廠核心討伐"
     },
     "core_power_armor": {
       "name": "高階核心裝甲",
@@ -142,7 +164,9 @@
       "stats": { "attack": 5, "defense": 16, "speed": -10 },
       "world_drop_asset_id": "item_core_power_armor",
       "sfx_id": "ui",
-      "shake_strength": 0.0
+      "shake_strength": 0.0,
+      "progression": "guild_reward",
+      "obtain_hint": "公會任務獎勵：工廠外圍破壞任務"
     },
     "recycler_glove": {
       "name": "回收商手套",
@@ -155,7 +179,9 @@
       "weapon_sprite_asset_id": "player_tool_recycler_glove",
       "attack_vfx_id": "scan_pulse",
       "sfx_id": "interact",
-      "shake_strength": 0.02
+      "shake_strength": 0.02,
+      "progression": "base",
+      "obtain_hint": "初始工具；用來掃描、拾荒與回收定位"
     },
     "magnet_breaker": {
       "name": "磁吸拆解器",
@@ -168,7 +194,9 @@
       "weapon_sprite_asset_id": "player_tool_magnet_breaker",
       "attack_vfx_id": "magnet_pulse",
       "sfx_id": "interact",
-      "shake_strength": 0.04
+      "shake_strength": 0.04,
+      "progression": "guild_reward",
+      "obtain_hint": "公會任務獎勵：排水站救援訊號"
     }
   },
   "resources": {
