@@ -532,7 +532,7 @@ func _update_animation() -> void:
 		PlayerState.SWAP_TOOL:
 			action_name = "swap_tool"
 		PlayerState.INTERACT:
-			action_name = "interact"
+			action_name = "idle"
 		PlayerState.HIT:
 			action_name = "hit"
 		PlayerState.DEAD:
