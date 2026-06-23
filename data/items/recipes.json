@@ -22,6 +22,41 @@
       "result": { "breaker_hammer": 1 }
     },
     {
+      "id": "light_reinforced_armor",
+      "name": "初階改良護甲",
+      "station": "craft",
+      "cost": { "scrap": 18, "bio_crystal": 1 },
+      "result": { "light_reinforced_armor": 1 }
+    },
+    {
+      "id": "crystal_guard",
+      "name": "中階護甲",
+      "station": "craft",
+      "cost": { "scrap": 26, "bio_crystal": 2 },
+      "result": { "crystal_guard": 1 }
+    },
+    {
+      "id": "hazard_armor",
+      "name": "中階防護甲",
+      "station": "craft",
+      "cost": { "scrap": 34, "mutant_core": 1, "bio_crystal": 1 },
+      "result": { "hazard_armor": 1 }
+    },
+    {
+      "id": "industrial_exoshell",
+      "name": "高階外骨架",
+      "station": "craft",
+      "cost": { "scrap": 46, "mutant_core": 2 },
+      "result": { "industrial_exoshell": 1 }
+    },
+    {
+      "id": "core_power_armor",
+      "name": "高階核心裝甲",
+      "station": "craft",
+      "cost": { "scrap": 60, "mutant_core": 3, "bio_crystal": 2 },
+      "result": { "core_power_armor": 1 }
+    },
+    {
       "id": "coil_launcher",
       "name": "線圈步槍",
       "station": "mod",
