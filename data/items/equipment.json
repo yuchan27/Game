@@ -79,7 +79,7 @@
       "shake_strength": 0.08
     },
     "patched_armor": {
-      "name": "補丁護甲",
+      "name": "初階護甲",
       "slot": "armor",
       "attack_mode": "passive",
       "cooldown": 0.0,
@@ -89,25 +89,58 @@
       "sfx_id": "ui",
       "shake_strength": 0.0
     },
+    "light_reinforced_armor": {
+      "name": "初階改良護甲",
+      "slot": "armor",
+      "attack_mode": "passive",
+      "cooldown": 0.0,
+      "icon_asset_id": "item_light_reinforced_armor",
+      "stats": { "attack": 0, "defense": 5, "speed": -4 },
+      "world_drop_asset_id": "item_light_reinforced_armor",
+      "sfx_id": "ui",
+      "shake_strength": 0.0
+    },
     "crystal_guard": {
-      "name": "晶核護盾",
+      "name": "中階護甲",
       "slot": "armor",
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_crystal_guard",
-      "stats": { "attack": 0, "defense": 7, "speed": -3 },
+      "stats": { "attack": 0, "defense": 7, "speed": -5 },
       "world_drop_asset_id": "item_crystal_guard",
       "sfx_id": "ui",
       "shake_strength": 0.0
     },
+    "hazard_armor": {
+      "name": "中階防護甲",
+      "slot": "armor",
+      "attack_mode": "passive",
+      "cooldown": 0.0,
+      "icon_asset_id": "item_hazard_armor",
+      "stats": { "attack": 1, "defense": 9, "speed": -6 },
+      "world_drop_asset_id": "item_hazard_armor",
+      "sfx_id": "ui",
+      "shake_strength": 0.0
+    },
     "industrial_exoshell": {
-      "name": "工業外骨架",
+      "name": "高階外骨架",
       "slot": "armor",
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_industrial_exoshell",
-      "stats": { "attack": 3, "defense": 10, "speed": -8 },
+      "stats": { "attack": 3, "defense": 12, "speed": -8 },
       "world_drop_asset_id": "item_industrial_exoshell",
+      "sfx_id": "ui",
+      "shake_strength": 0.0
+    },
+    "core_power_armor": {
+      "name": "高階核心裝甲",
+      "slot": "armor",
+      "attack_mode": "passive",
+      "cooldown": 0.0,
+      "icon_asset_id": "item_core_power_armor",
+      "stats": { "attack": 5, "defense": 16, "speed": -10 },
+      "world_drop_asset_id": "item_core_power_armor",
       "sfx_id": "ui",
       "shake_strength": 0.0
     },
