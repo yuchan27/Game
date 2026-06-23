@@ -9,6 +9,7 @@ const PLAYER_FRAME_DIR := "res://assets/sprites/player/frames"
 const PREFER_SPLIT_FRAME_FILES := false
 const SPRINT_SPEED_MULTIPLIER := 1.4
 const SPRINT_EP_PER_SECOND := 10.0
+const EP_REGEN_PER_SECOND := 4.0
 
 @export var move_speed: float = 180.0
 
@@ -29,6 +30,7 @@ var shake_strength := 0.0
 var weapon_sprite: Sprite2D
 var current_weapon_asset_id := ""
 var sprint_ep_accumulator := 0.0
+var ep_regen_accumulator := 0.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -90,8 +92,11 @@ func _physics_process(delta: float) -> void:
 
 	var speed_bonus: int = GameState.get_stat_bonus("speed")
 	var current_speed: float = max(80.0, move_speed + float(speed_bonus))
-	if _consume_sprint_energy(input_direction, delta):
+	var is_sprinting: bool = _consume_sprint_energy(input_direction, delta)
+	if is_sprinting:
 		current_speed *= SPRINT_SPEED_MULTIPLIER
+	else:
+		_regenerate_ep(delta)
 	velocity = input_direction * current_speed
 	move_and_slide()
 
@@ -372,6 +377,7 @@ func _consume_sprint_energy(input_direction: Vector2, delta: float) -> bool:
 		sprint_ep_accumulator = 0.0
 		return false
 
+	ep_regen_accumulator = 0.0
 	sprint_ep_accumulator += SPRINT_EP_PER_SECOND * delta
 	var drain_amount: int = int(floor(sprint_ep_accumulator))
 	if drain_amount > 0:
@@ -381,6 +387,27 @@ func _consume_sprint_energy(input_direction: Vector2, delta: float) -> bool:
 		GameState.stats_changed.emit()
 
 	return GameState.ep > 0
+
+
+func _regenerate_ep(delta: float) -> void:
+	var max_ep: int = GameState.get_max_ep()
+	if GameState.ep >= max_ep:
+		ep_regen_accumulator = 0.0
+		if GameState.ep > max_ep:
+			GameState.ep = max_ep
+			GameState.stats_changed.emit()
+		return
+
+	ep_regen_accumulator += EP_REGEN_PER_SECOND * delta
+	var recover_amount: int = int(floor(ep_regen_accumulator))
+	if recover_amount <= 0:
+		return
+
+	var old_ep: int = GameState.ep
+	GameState.ep = min(max_ep, GameState.ep + recover_amount)
+	ep_regen_accumulator -= float(recover_amount)
+	if GameState.ep != old_ep:
+		GameState.stats_changed.emit()
 
 
 func _set_timed_state(next_state: int, duration: float) -> void:
