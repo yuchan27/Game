@@ -39,8 +39,8 @@ func _ready() -> void:
 
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
-	# Kept for compatibility with equipment_changed, but no longer used as a runtime overlay.
-	# Missing weapon pixels are baked into generated SpriteFrames in _patched_attack_frame().
+	# Kept for compatibility with equipment_changed, but runtime weapon overlays are disabled.
+	# Combat visuals should come from the player source art, not generated line effects.
 	weapon_sprite = Sprite2D.new()
 	weapon_sprite.name = "WeaponOverlay"
 	weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -170,11 +170,9 @@ func _melee_attack(use_mouse_aim := false) -> void:
 	attack_timer = float(weapon.get("cooldown", 0.32))
 
 	var sfx_id := String(weapon.get("sfx_id", "melee"))
-	var vfx_id := String(weapon.get("attack_vfx_id", "slash_rust"))
 	var shake := float(weapon.get("shake_strength", 0.08))
 
 	AudioManager.play_sfx(sfx_id)
-	_spawn_attack_flash(vfx_id, max(0.7, shake * 9.0))
 	GameState.request_feedback("attack", shake)
 
 	var damage := 12 + GameState.get_stat_bonus("attack")
@@ -219,11 +217,9 @@ func _ranged_attack() -> void:
 	_set_timed_state(PlayerState.SHOOT, 0.22)
 
 	var sfx_id := String(ranged.get("sfx_id", "shoot"))
-	var vfx_id := String(ranged.get("attack_vfx_id", "muzzle_pipe"))
 	var shake := float(ranged.get("shake_strength", 0.06))
 
 	AudioManager.play_sfx(sfx_id)
-	_spawn_attack_flash(vfx_id, max(0.55, shake * 8.0))
 	GameState.request_feedback("attack", shake)
 
 	ranged_timer = float(ranged.get("cooldown", 0.25))
@@ -275,9 +271,6 @@ func _direction_index() -> int:
 func _build_sprite_frames() -> void:
 	var frames := SpriteFrames.new()
 	var atlas: Texture2D = ASSET_LOADER.load_png(PLAYER_ATLAS_PATH)
-	var atlas_image: Image = null
-	if atlas != null:
-		atlas_image = atlas.get_image()
 
 	for action_index in range(PixelArtFactory.PLAYER_ACTIONS.size()):
 		var action_name := String(PixelArtFactory.PLAYER_ACTIONS[action_index])
@@ -298,8 +291,6 @@ func _build_sprite_frames() -> void:
 
 				if tex != null:
 					frames.add_frame(animation_name, tex)
-				elif atlas != null and atlas_image != null and _should_patch_attack_frame(action_name, source_direction_index):
-					frames.add_frame(animation_name, _patched_attack_frame(atlas_image, action_name, action_index, source_direction_index, frame_index))
 				elif atlas != null:
 					frames.add_frame(animation_name, _atlas_frame(atlas, action_index, source_direction_index, frame_index))
 				else:
@@ -314,11 +305,6 @@ func _source_direction_index(_action_name: String, direction_index: int) -> int:
 	return direction_index
 
 
-func _should_patch_attack_frame(action_name: String, direction_index: int) -> bool:
-	# The current source atlas already has visible left/right weapons. Patch only up/down/diagonal rows.
-	return action_name in ["shoot", "draw_sword", "slash"] and not direction_index in [0, 4]
-
-
 func _split_frame_texture(action_name: String, direction_index: int, frame_index: int) -> Texture2D:
 	var path := "%s/%s/dir_%d/frame_%d.png" % [PLAYER_FRAME_DIR, action_name, direction_index, frame_index]
 	return ASSET_LOADER.load_png(path)
@@ -330,84 +316,6 @@ func _atlas_frame(atlas: Texture2D, action_index: int, direction_index: int, fra
 	texture.atlas = atlas
 	texture.region = Rect2((action_index * PixelArtFactory.PLAYER_FRAMES_PER_ACTION + frame_index) * frame_size.x, direction_index * frame_size.y, frame_size.x, frame_size.y)
 	return texture
-
-
-func _patched_attack_frame(atlas_image: Image, action_name: String, action_index: int, direction_index: int, frame_index: int) -> Texture2D:
-	var frame_size := PixelArtFactory.PLAYER_FRAME_SIZE
-	var source_rect := Rect2i(
-		(action_index * PixelArtFactory.PLAYER_FRAMES_PER_ACTION + frame_index) * frame_size.x,
-		direction_index * frame_size.y,
-		frame_size.x,
-		frame_size.y
-	)
-	var frame_image := atlas_image.get_region(source_rect)
-	_draw_weapon_pixels_into_frame(frame_image, action_name, direction_index, frame_index)
-	return ImageTexture.create_from_image(frame_image)
-
-
-func _draw_weapon_pixels_into_frame(frame_image: Image, action_name: String, direction_index: int, frame_index: int) -> void:
-	var direction := _direction_vector_from_index(direction_index)
-	var perpendicular := Vector2(-direction.y, direction.x)
-	var anchor := Vector2(56, 70)
-
-	if action_name == "shoot":
-		var recoil := -4.0 if frame_index % 2 == 0 else 0.0
-		var stock := anchor - direction * 6.0 - perpendicular * 5.0 + direction * recoil
-		var muzzle := anchor + direction * 40.0 + direction * recoil
-		_draw_frame_line(frame_image, stock, muzzle, Color8(74, 47, 30), 3)
-		_draw_frame_line(frame_image, anchor + direction * 8.0 - perpendicular * 5.0, anchor + direction * 37.0 - perpendicular * 5.0, Color8(52, 198, 220), 2)
-		_draw_frame_line(frame_image, stock - perpendicular * 7.0, stock + perpendicular * 7.0, Color8(157, 98, 47), 2)
-	elif action_name == "draw_sword" or action_name == "slash":
-		var swing_offset := perpendicular * float((frame_index % 3) - 1) * 3.0
-		var hilt := anchor + direction * 5.0 - perpendicular * 2.0
-		var tip := anchor + direction * 42.0 + swing_offset
-		_draw_frame_line(frame_image, hilt, tip, Color8(235, 222, 168), 2)
-		_draw_frame_line(frame_image, hilt - perpendicular * 8.0, hilt + perpendicular * 8.0, Color8(132, 79, 38), 2)
-
-
-func _direction_vector_from_index(direction_index: int) -> Vector2:
-	match direction_index & 7:
-		0:
-			return Vector2.RIGHT
-		1:
-			return Vector2(1, 1).normalized()
-		2:
-			return Vector2.DOWN
-		3:
-			return Vector2(-1, 1).normalized()
-		4:
-			return Vector2.LEFT
-		5:
-			return Vector2(-1, -1).normalized()
-		6:
-			return Vector2.UP
-		7:
-			return Vector2(1, -1).normalized()
-		_:
-			return Vector2.RIGHT
-
-
-func _draw_frame_line(image: Image, from_pos: Vector2, to_pos: Vector2, color: Color, radius: int) -> void:
-	var delta := to_pos - from_pos
-	var steps := int(max(abs(delta.x), abs(delta.y)))
-	if steps <= 0:
-		return
-
-	for i in range(steps + 1):
-		var t := float(i) / float(steps)
-		var p := from_pos.lerp(to_pos, t)
-		var px := int(round(p.x))
-		var py := int(round(p.y))
-		for oy in range(-radius, radius + 1):
-			for ox in range(-radius, radius + 1):
-				if Vector2(ox, oy).length() <= float(radius):
-					_set_frame_pixel(image, px + ox, py + oy, color)
-
-
-func _set_frame_pixel(image: Image, x: int, y: int, color: Color) -> void:
-	if x < 0 or y < 0 or x >= image.get_width() or y >= image.get_height():
-		return
-	image.set_pixel(x, y, color)
 
 
 func _update_animation() -> void:
@@ -458,7 +366,9 @@ func _is_action_state_locked() -> bool:
 
 
 func _spawn_attack_flash(effect_id: String, strength: float) -> void:
-	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
+	# Combat weapon beams and generated slash/muzzle columns are disabled.
+	# Only keep non-combat utility feedback, such as the scanner pulse.
+	if effect_id != "scan_pulse":
 		return
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
 	flash.setup(effect_id, last_direction, strength)
@@ -500,8 +410,7 @@ func _projectile_spawn_global() -> Vector2:
 
 
 func _update_weapon_overlay() -> void:
-	# Runtime weapon overlays are disabled. The attack weapon pixels are generated inside SpriteFrames,
-	# so they do not draw on top of the player as a separate object.
+	# Runtime weapon overlays are disabled. Attack visuals must come from the source player art.
 	if weapon_sprite != null:
 		weapon_sprite.visible = false
 	current_weapon_asset_id = ""
