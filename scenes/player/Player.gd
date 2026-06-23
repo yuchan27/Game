@@ -503,8 +503,6 @@ func _is_action_state_locked() -> bool:
 
 
 func _spawn_attack_flash(effect_id: String, strength: float) -> void:
-	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
-		return
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
 	flash.setup(effect_id, last_direction, strength)
 	flash.global_position = _attack_anchor_global() + last_direction * 8.0

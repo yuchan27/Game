@@ -1,12 +1,16 @@
 extends Node2D
 class_name AttackFlash
 
+const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
+const SWORD_BEAM_PATH := "res://assets/sprites/effects/sword_beam.png"
+
 var effect_id := "slash_rust"
 var direction := Vector2.RIGHT
 var color_primary := Color8(255, 178, 58)
 var color_secondary := Color8(54, 230, 238)
 var lifetime := 0.18
 var age := 0.0
+var beam_sprite: Sprite2D
 
 func setup(new_effect_id: String, new_direction: Vector2, strength := 1.0) -> void:
 	effect_id = new_effect_id
@@ -14,6 +18,8 @@ func setup(new_effect_id: String, new_direction: Vector2, strength := 1.0) -> vo
 	if direction.length() < 0.1:
 		direction = Vector2.RIGHT
 	lifetime = 0.22 if effect_id.begins_with("slash") or effect_id.begins_with("slam") else 0.16
+	if effect_id.begins_with("slash"):
+		_setup_sword_beam()
 	if effect_id.contains("acid"):
 		color_primary = Color8(110, 240, 82)
 		color_secondary = Color8(208, 255, 125)
@@ -32,9 +38,12 @@ func _process(delta: float) -> void:
 	if age >= lifetime:
 		queue_free()
 		return
+	_update_sword_beam()
 	queue_redraw()
 
 func _draw() -> void:
+	if beam_sprite != null:
+		return
 	var t := clampf(age / max(lifetime, 0.01), 0.0, 1.0)
 	var alpha := 1.0 - t
 	if effect_id.begins_with("muzzle"):
@@ -46,6 +55,31 @@ func _draw() -> void:
 		_draw_tool_pulse(t, alpha * 0.55)
 	else:
 		_draw_slash(t, alpha)
+
+
+func _setup_sword_beam() -> void:
+	var texture := ASSET_LOADER.load_png(SWORD_BEAM_PATH)
+	if texture == null:
+		return
+	beam_sprite = Sprite2D.new()
+	beam_sprite.texture = texture
+	beam_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	beam_sprite.centered = true
+	beam_sprite.position = direction * 36.0 + Vector2(0, -8)
+	beam_sprite.rotation = direction.angle()
+	beam_sprite.scale = Vector2.ONE * 1.65
+	beam_sprite.z_index = 20
+	add_child(beam_sprite)
+	_update_sword_beam()
+
+
+func _update_sword_beam() -> void:
+	if beam_sprite == null:
+		return
+	var t := clampf(age / max(lifetime, 0.01), 0.0, 1.0)
+	beam_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0 - t)
+	beam_sprite.scale = Vector2.ONE * lerpf(1.45, 1.95, t)
+	beam_sprite.position = direction * lerpf(28.0, 54.0, t) + Vector2(0, -8)
 
 func _draw_slash(t: float, alpha: float) -> void:
 	var center := direction * 26.0 + Vector2(0, -8)
