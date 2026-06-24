@@ -42,6 +42,7 @@ func _ready() -> void:
 	GameState.dialogue_requested.connect(_show_dialogue)
 	GameState.dialogue_closed.connect(_hide_dialogue)
 	_refresh()
+	_refresh_hotbar()
 	_refresh_inventory()
 	_refresh_overlay_visibility()
 	_layout()
@@ -86,11 +87,13 @@ func _layout() -> void:
 		quest_panel.size = quest_size
 	if quick_bar_panel != null:
 		quick_bar_panel.position = Vector2(max(16.0, (size.x - 520.0) * 0.5), size.y - 82.0)
+		quick_bar_panel.custom_minimum_size = Vector2(520, 64)
 		quick_bar_panel.size = Vector2(520, 64)
 	if controls_hint != null:
 		controls_hint.position = Vector2(max(16.0, (size.x - controls_hint.size.x) * 0.5), size.y - 116.0)
 	if dialogue_panel != null:
 		dialogue_panel.position = Vector2(max(24.0, (size.x - 920.0) * 0.5), size.y - 308.0)
+		dialogue_panel.custom_minimum_size = Vector2(min(920.0, size.x - 48.0), 248)
 		dialogue_panel.size = Vector2(min(920.0, size.x - 48.0), 248)
 	if minimap_panel != null:
 		if map_fullscreen:
@@ -107,8 +110,8 @@ func _layout() -> void:
 		inventory_panel.custom_minimum_size = inventory_size
 		inventory_panel.size = inventory_size
 	if tutorial_panel != null:
-		var tutorial_size: Vector2 = Vector2(min(560.0, size.x - 44.0), 380)
-		tutorial_panel.position = Vector2(22, max(118.0, size.y - 520.0))
+		var tutorial_size: Vector2 = Vector2(min(620.0, size.x - 44.0), 410)
+		tutorial_panel.position = Vector2(22, max(118.0, size.y - 540.0))
 		tutorial_panel.custom_minimum_size = tutorial_size
 		tutorial_panel.size = tutorial_size
 	if pause_panel != null:
@@ -122,6 +125,7 @@ func _build_hud() -> void:
 	root = Control.new()
 	root.name = "HudRoot"
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
 	_build_status_panel()
 	_build_quest_panel()
@@ -137,6 +141,7 @@ func _build_hud() -> void:
 func _build_status_panel() -> void:
 	status_panel = PanelContainer.new()
 	status_panel.name = "StatusPanel"
+	status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.04, 0.035, 0.025, 0.88), Color(0.90, 0.48, 0.26, 1.0), 2))
 	root.add_child(status_panel)
 	var stack: VBoxContainer = VBoxContainer.new()
@@ -153,6 +158,7 @@ func _build_status_panel() -> void:
 func _build_quest_panel() -> void:
 	quest_panel = PanelContainer.new()
 	quest_panel.name = "QuestPanel"
+	quest_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quest_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.04, 0.035, 0.025, 0.82), Color(0.30, 0.32, 0.30, 0.88), 1))
 	root.add_child(quest_panel)
 	quest_label = Label.new()
@@ -165,9 +171,11 @@ func _build_inventory_panel() -> void:
 	inventory_panel.name = "InventoryPanel"
 	inventory_panel.z_index = 60
 	inventory_panel.visible = false
+	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	inventory_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.025, 0.025, 0.91), Color(0.86, 0.64, 0.26, 0.98), 2))
 	root.add_child(inventory_panel)
 	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.clip_contents = true
 	inventory_panel.add_child(scroll)
 	inventory_list = VBoxContainer.new()
 	inventory_list.add_theme_constant_override("separation", 10)
@@ -176,6 +184,7 @@ func _build_inventory_panel() -> void:
 func _add_quick_bar() -> void:
 	quick_bar_panel = PanelContainer.new()
 	quick_bar_panel.name = "QuickBar"
+	quick_bar_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	quick_bar_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.03, 0.026, 0.018, 0.90), Color(0.45, 0.38, 0.22, 0.82), 1))
 	root.add_child(quick_bar_panel)
 	quick_bar = HBoxContainer.new()
@@ -185,6 +194,7 @@ func _add_quick_bar() -> void:
 func _add_minimap() -> void:
 	minimap_panel = PanelContainer.new()
 	minimap_panel.name = "MinimapPanel"
+	minimap_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	minimap_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.024, 0.022, 0.90), Color(0.30, 0.42, 0.42, 0.9), 1))
 	root.add_child(minimap_panel)
 	var stack: VBoxContainer = VBoxContainer.new()
@@ -201,17 +211,19 @@ func _add_tutorial() -> void:
 	tutorial_panel = PanelContainer.new()
 	tutorial_panel.name = "TutorialPanel"
 	tutorial_panel.visible = false
+	tutorial_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	tutorial_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.025, 0.022, 0.94), Color(0.86, 0.64, 0.26, 0.95), 2))
 	root.add_child(tutorial_panel)
 	var text: Label = Label.new()
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.add_theme_font_size_override("font_size", 14)
-	text.text = "遊戲說明\n\n基本操作\nWASD / 方向鍵：移動｜Shift：奔跑，消耗 EP，停止後每秒回復\n滑鼠左鍵：使用目前快捷欄裝備｜E：互動 / 拾取 / 對話\nTab：人物裝備與背包｜1~4：切換快捷欄｜M：地圖｜ESC：關閉面板 / 暫停\n\n裝備系統\n近戰武器：清空間、節省彈藥；遠程武器：安全輸出但消耗彈藥；護甲：提高防禦但可能降低速度；工具：掃描、拾荒與特殊互動。\n\n成長規則\n村莊可合成：二階武器、前三階護甲、彈藥補給。\n公會任務取得：三階武器、後三階護甲、特殊工具。\n流程：探索 → 戰鬥 → 回收材料 → 回村補給 / 合成 → 接公會任務 → 解鎖高階裝備。"
+	text.text = "遊戲說明\n\n基本操作\nWASD / 方向鍵：移動｜Shift：奔跑，消耗 EP；停止奔跑會回復 EP\n滑鼠左鍵：使用目前快捷欄裝備｜E：互動 / 拾取 / 對話\nTab：人物裝備與背包｜1~4：切換快捷欄｜M：地圖｜Esc：關閉面板 / 暫停\n\n裝備系統\n近戰武器：清空間、節省彈藥；遠程武器：安全輸出但消耗彈藥。\n護甲：提高防禦，但高階裝甲會降低速度；工具：掃描、拾荒與特殊互動。\n\n成長規則\n村莊可合成：二階武器、前三階護甲、彈藥補給。\n公會任務取得：三階武器、後三階護甲、特殊工具。\n核心流程：探索 → 戰鬥 → 回收材料 → 回村補給 / 合成 → 接公會任務 → 解鎖高階裝備。"
 	tutorial_panel.add_child(text)
 
 func _add_controls_hint() -> void:
 	controls_hint = Label.new()
 	controls_hint.text = "Tab 人物裝備｜H 教學｜M 地圖｜E 互動"
+	controls_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	controls_hint.add_theme_font_size_override("font_size", 14)
 	controls_hint.add_theme_color_override("font_color", Color(0.95, 0.95, 0.88))
 	root.add_child(controls_hint)
@@ -223,6 +235,7 @@ func _add_dialogue_box() -> void:
 	dialogue_panel.custom_minimum_size = Vector2(920, 248)
 	dialogue_panel.z_index = 90
 	dialogue_panel.visible = false
+	dialogue_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	dialogue_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.018, 0.020, 0.020, 0.92), Color(0.86, 0.64, 0.26, 0.98), 2))
 	root.add_child(dialogue_panel)
 	var row: HBoxContainer = HBoxContainer.new()
@@ -231,6 +244,7 @@ func _add_dialogue_box() -> void:
 	dialogue_portrait = TextureRect.new()
 	dialogue_portrait.custom_minimum_size = Vector2(122, 202)
 	dialogue_portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	dialogue_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	dialogue_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(dialogue_portrait)
 	var stack: VBoxContainer = VBoxContainer.new()
@@ -250,7 +264,7 @@ func _add_dialogue_box() -> void:
 	dialogue_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stack.add_child(dialogue_body)
 	var hint: Label = Label.new()
-	hint.text = "E 繼續互動｜Esc 關閉｜離開 NPC 範圍會自動關閉"
+	hint.text = "E 再次對話｜Esc 關閉｜離開 NPC 範圍會自動關閉"
 	hint.add_theme_font_size_override("font_size", 12)
 	hint.add_theme_color_override("font_color", Color(0.72, 0.72, 0.68))
 	stack.add_child(hint)
@@ -264,6 +278,7 @@ func _add_pause_menu() -> void:
 	pause_panel.name = "PausePanel"
 	pause_panel.z_index = 100
 	pause_panel.visible = false
+	pause_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	pause_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.015, 0.018, 0.018, 0.94), Color(0.82, 0.58, 0.24, 0.98), 2))
 	root.add_child(pause_panel)
 	var stack: VBoxContainer = VBoxContainer.new()
@@ -285,6 +300,7 @@ func _add_notice_label() -> void:
 	notice_label.name = "NoticeLabel"
 	notice_label.z_index = 120
 	notice_label.visible = false
+	notice_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	notice_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notice_label.add_theme_font_size_override("font_size", 18)
 	notice_label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.68))
@@ -319,17 +335,13 @@ func _toggle_map() -> void:
 		map_fullscreen = false
 	_refresh_overlay_visibility()
 
-func _open_full_map() -> void:
-	if map_open and not inventory_panel.visible and not tutorial_panel.visible and not pause_panel.visible:
-		map_fullscreen = true
-		_refresh_overlay_visibility()
-
 func _set_inventory_visible(is_visible: bool) -> void:
 	inventory_panel.visible = is_visible
 	if is_visible:
 		map_fullscreen = false
 		tutorial_panel.visible = false
 		pause_panel.visible = false
+		_hide_dialogue()
 		_refresh_inventory()
 	_refresh_overlay_visibility()
 
@@ -356,26 +368,19 @@ func _refresh_overlay_visibility() -> void:
 func _refresh() -> void:
 	var route: Dictionary = DataRegistry.get_wasteland_route(GameState.current_route_id)
 	var route_name: String = String(route.get("name", "村莊"))
-	var max_hp: int = GameState.get_max_hp() if GameState.has_method("get_max_hp") else GameState.MAX_HP
-	var max_ep: int = GameState.get_max_ep() if GameState.has_method("get_max_ep") else GameState.MAX_EP
+	var max_hp: int = GameState.get_max_hp()
+	var max_ep: int = GameState.get_max_ep()
 	hp_bar.max_value = max_hp
 	hp_bar.value = GameState.hp
 	ep_bar.max_value = max_ep
 	ep_bar.value = GameState.ep
-	stats_label.text = "R-17 Lv.%d  XP %d/%d  彈藥 %d  廢鐵 %d  核心 %d" % [
-		GameState.level,
-		GameState.xp,
-		GameState.xp_to_next_level(),
-		GameState.ammo,
-		GameState.scrap,
-		GameState.cores
-	]
+	stats_label.text = "R-17 Lv.%d  XP %d/%d  彈藥 %d  廢鐵 %d  核心 %d" % [GameState.level, GameState.xp, GameState.xp_to_next_level(), GameState.ammo, GameState.scrap, GameState.cores]
 	quest_label.text = "場景：%s｜路線：%s\n委託：%s" % [GameState.current_scene_id, route_name, GameState.active_quest_summary()]
 
 func _refresh_hotbar() -> void:
-	for child in quick_bar.get_children():
+	for child: Node in quick_bar.get_children():
 		child.queue_free()
-	for i in range(GameState.quick_slots.size()):
+	for i: int in range(GameState.quick_slots.size()):
 		var item_id: String = String(GameState.quick_slots[i])
 		var button: Button = Button.new()
 		button.custom_minimum_size = Vector2(120, 48)
@@ -392,7 +397,7 @@ func _refresh_hotbar() -> void:
 func _refresh_inventory() -> void:
 	if inventory_list == null:
 		return
-	for child in inventory_list.get_children():
+	for child: Node in inventory_list.get_children():
 		child.queue_free()
 	var title: Label = Label.new()
 	title.text = "人物裝備：R-17 回收機器人"
@@ -410,9 +415,7 @@ func _refresh_inventory() -> void:
 	var top: HBoxContainer = HBoxContainer.new()
 	top.add_theme_constant_override("separation", 18)
 	inventory_list.add_child(top)
-
-	var profile_panel: PanelContainer = _build_profile_card()
-	top.add_child(profile_panel)
+	top.add_child(_build_profile_card())
 
 	var equip_list: VBoxContainer = VBoxContainer.new()
 	equip_list.custom_minimum_size = Vector2(660, 420)
@@ -458,22 +461,11 @@ func _build_profile_card() -> PanelContainer:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 20)
 	profile_stack.add_child(name_label)
-	var portrait: TextureRect = TextureRect.new()
-	portrait.custom_minimum_size = Vector2(188, 188)
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var portrait: TextureRect = _fit_texture_rect(_player_preview_texture(), Vector2(188, 188))
 	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	portrait.texture = _player_preview_texture()
 	profile_stack.add_child(portrait)
 	var stat: Label = Label.new()
-	stat.text = "HP %d/%d\nEP %d/%d\n攻擊 %+d  防禦 %+d  速度 %+d" % [
-		GameState.hp,
-		GameState.get_max_hp(),
-		GameState.ep,
-		GameState.get_max_ep(),
-		GameState.get_stat_bonus("attack"),
-		GameState.get_stat_bonus("defense"),
-		GameState.get_stat_bonus("speed")
-	]
+	stat.text = "HP %d/%d\nEP %d/%d\n攻擊 %+d  防禦 %+d  速度 %+d" % [GameState.hp, GameState.get_max_hp(), GameState.ep, GameState.get_max_ep(), GameState.get_stat_bonus("attack"), GameState.get_stat_bonus("defense"), GameState.get_stat_bonus("speed")]
 	stat.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stat.add_theme_font_size_override("font_size", 19)
 	profile_stack.add_child(stat)
@@ -485,6 +477,7 @@ func _add_equipment_card(container: VBoxContainer, slot: String, label: String) 
 	var button: Button = Button.new()
 	button.custom_minimum_size = Vector2(660, 96)
 	button.text = ""
+	button.clip_contents = true
 	button.add_theme_stylebox_override("normal", _panel_style(Color(0.045, 0.045, 0.040, 0.76), Color(0.20, 0.32, 0.34, 0.96), 1))
 	button.add_theme_stylebox_override("hover", _panel_style(Color(0.070, 0.070, 0.058, 0.86), Color(0.86, 0.64, 0.26, 0.98), 1))
 	button.pressed.connect(func() -> void:
@@ -497,18 +490,17 @@ func _add_equipment_card(container: VBoxContainer, slot: String, label: String) 
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.position = Vector2(14, 8)
 	row.size = Vector2(632, 80)
-	row.add_theme_constant_override("separation", 14)
+	row.add_theme_constant_override("separation", 16)
 	button.add_child(row)
 
 	var icon_box: PanelContainer = PanelContainer.new()
-	icon_box.custom_minimum_size = Vector2(116, 80)
-	icon_box.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.02, 0.018, 0.18), Color(0.12, 0.18, 0.18, 0.25), 0))
+	icon_box.custom_minimum_size = Vector2(150, 80)
+	icon_box.size = Vector2(150, 80)
+	icon_box.clip_contents = true
+	icon_box.add_theme_stylebox_override("panel", _panel_style(Color(0.02, 0.02, 0.018, 0.22), Color(0.12, 0.18, 0.18, 0.35), 0))
 	row.add_child(icon_box)
-	var icon: TextureRect = TextureRect.new()
-	icon.custom_minimum_size = Vector2(104, 76)
-	icon.texture = _item_icon(item_id)
-	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var icon: TextureRect = _fit_texture_rect(_item_icon(item_id), Vector2(132, 74))
+	icon.position = Vector2(9, 3)
 	icon_box.add_child(icon)
 
 	var divider: VSeparator = VSeparator.new()
@@ -517,7 +509,7 @@ func _add_equipment_card(container: VBoxContainer, slot: String, label: String) 
 
 	var text_stack: VBoxContainer = VBoxContainer.new()
 	text_stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	text_stack.custom_minimum_size = Vector2(470, 80)
+	text_stack.custom_minimum_size = Vector2(430, 80)
 	text_stack.add_theme_constant_override("separation", 2)
 	row.add_child(text_stack)
 
@@ -544,6 +536,17 @@ func _add_equipment_card(container: VBoxContainer, slot: String, label: String) 
 
 	button.tooltip_text = String(equipment.get("obtain_hint", ""))
 	container.add_child(button)
+
+func _fit_texture_rect(texture: Texture2D, box_size: Vector2) -> TextureRect:
+	var rect: TextureRect = TextureRect.new()
+	rect.custom_minimum_size = box_size
+	rect.size = box_size
+	rect.texture = texture
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return rect
 
 func _equipment_stats_text(equipment: Dictionary) -> String:
 	var stats: Dictionary = equipment.get("stats", {})
@@ -594,57 +597,30 @@ func _item_icon(item_id: String) -> Texture2D:
 	return PIXEL.new().item_texture(item_id)
 
 func _player_preview_texture() -> Texture2D:
-	var preview_path := "res://assets/sprites/player/frames/idle/dir_2/frame_0.png"
-	if ResourceLoader.exists(preview_path):
-		var frame: Texture2D = ASSET_LOADER.load_png(preview_path)
-		if frame != null:
-			return frame
-	return PIXEL.new().player_texture(2, 0, 1)
+	var frame_path: String = "res://assets/sprites/player/frames/idle/dir_2/frame_0.png"
+	if ResourceLoader.exists(frame_path):
+		var frame_texture: Texture2D = ASSET_LOADER.load_png(frame_path)
+		if frame_texture != null:
+			return frame_texture
+	return PIXEL.new().player_texture(2, 0, 0)
 
 func _equip_from_inventory(item_id: String) -> void:
-	if not DataRegistry.get_equipment(item_id).is_empty():
-		GameState.equip_item(item_id)
-		_refresh_inventory()
-
-func _attack_mode_label(mode: String) -> String:
-	match mode:
-		"ranged":
-			return "遠程"
-		"melee":
-			return "近戰"
-		"tool":
-			return "工具"
-		_:
-			return "資源"
-
-func _show_notice(message: String) -> void:
-	if notice_label == null or notice_timer == null:
+	if DataRegistry.get_equipment(item_id).is_empty():
+		GameState.notify("%s 是材料，無法直接裝備。" % GameState.item_display_name(item_id))
 		return
-	notice_label.text = message
-	notice_label.visible = true
-	notice_timer.start(2.4)
-	_layout()
+	GameState.equip_item(item_id)
+	_refresh_inventory()
+	_refresh_hotbar()
 
 func _show_dialogue(speaker: String, role: String, message: String) -> void:
 	dialogue_speaker.text = speaker
 	dialogue_role.text = role
 	dialogue_body.text = message
-	dialogue_portrait.texture = _portrait_for_speaker(speaker)
+	dialogue_portrait.texture = _npc_portrait_texture(speaker)
 	dialogue_panel.visible = true
-	dialogue_timer.start(14.0)
+	if dialogue_timer != null:
+		dialogue_timer.start(14.0)
 	_refresh_overlay_visibility()
-	_layout()
-
-func _portrait_for_speaker(speaker: String) -> Texture2D:
-	for npc: Dictionary in DataRegistry.npcs:
-		if String(npc.get("name", "")) == speaker:
-			var asset_id: String = String(npc.get("portrait_asset_id", npc.get("sprite_asset_id", "")))
-			var path: String = DataRegistry.asset_portrait_path(asset_id, DataRegistry.asset_path(asset_id))
-			if not path.is_empty() and ResourceLoader.exists(path):
-				var texture: Texture2D = ASSET_LOADER.load_png(path)
-				if texture != null:
-					return texture
-	return _player_preview_texture()
 
 func _hide_dialogue() -> void:
 	if dialogue_panel == null:
@@ -654,26 +630,66 @@ func _hide_dialogue() -> void:
 		dialogue_timer.stop()
 	_refresh_overlay_visibility()
 
-func _make_bar(fill_color: Color, bg_color: Color) -> ProgressBar:
+func _npc_portrait_texture(speaker: String) -> Texture2D:
+	for npc: Dictionary in DataRegistry.npcs_for_scene(GameState.current_scene_id):
+		if String(npc.get("name", "")) == speaker:
+			var portrait_id: String = String(npc.get("portrait_asset_id", npc.get("sprite_asset_id", "")))
+			var path: String = DataRegistry.asset_path(portrait_id)
+			if not path.is_empty() and ResourceLoader.exists(path):
+				var texture: Texture2D = ASSET_LOADER.load_png(path)
+				if texture != null:
+					return texture
+	return PIXEL.new().make_texture(Vector2i(72, 96), [Color8(49, 58, 56), Color8(104, 132, 126), Color8(178, 216, 204)], speaker.length())
+
+func _show_notice(message: String) -> void:
+	if notice_label == null:
+		return
+	notice_label.text = message
+	notice_label.visible = true
+	if notice_timer != null:
+		notice_timer.start(3.0)
+	_layout()
+
+func _attack_mode_label(mode: String) -> String:
+	match mode:
+		"ranged":
+			return "遠程"
+		"tool":
+			return "工具"
+		_:
+			return "近戰"
+
+func _make_bar(fill: Color, background: Color) -> ProgressBar:
 	var bar: ProgressBar = ProgressBar.new()
-	bar.custom_minimum_size = Vector2(330, 16)
 	bar.show_percentage = false
-	bar.add_theme_stylebox_override("background", _panel_style(bg_color, Color(0.10, 0.10, 0.10, 0.85), 1))
-	bar.add_theme_stylebox_override("fill", _panel_style(fill_color, fill_color.lightened(0.25), 1))
+	bar.custom_minimum_size = Vector2(340, 18)
+	var fill_style: StyleBoxFlat = StyleBoxFlat.new()
+	fill_style.bg_color = fill
+	fill_style.corner_radius_top_left = 4
+	fill_style.corner_radius_top_right = 4
+	fill_style.corner_radius_bottom_left = 4
+	fill_style.corner_radius_bottom_right = 4
+	var bg_style: StyleBoxFlat = StyleBoxFlat.new()
+	bg_style.bg_color = background
+	bg_style.corner_radius_top_left = 4
+	bg_style.corner_radius_top_right = 4
+	bg_style.corner_radius_bottom_left = 4
+	bg_style.corner_radius_bottom_right = 4
+	bar.add_theme_stylebox_override("fill", fill_style)
+	bar.add_theme_stylebox_override("background", bg_style)
 	return bar
 
-func _bar_row(label_text: String, bar: ProgressBar) -> HBoxContainer:
+func _bar_row(label: String, bar: ProgressBar) -> HBoxContainer:
 	var row: HBoxContainer = HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	var label: Label = Label.new()
-	label.text = label_text
-	label.custom_minimum_size = Vector2(34, 18)
-	label.add_theme_font_size_override("font_size", 13)
-	row.add_child(label)
+	row.add_theme_constant_override("separation", 10)
+	var name: Label = Label.new()
+	name.text = label
+	name.custom_minimum_size = Vector2(42, 18)
+	row.add_child(name)
 	row.add_child(bar)
 	return row
 
-func _panel_style(bg: Color, border: Color, border_width := 1) -> StyleBoxFlat:
+func _panel_style(bg: Color, border: Color, border_width: int) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = bg
 	style.border_color = border
@@ -681,17 +697,17 @@ func _panel_style(bg: Color, border: Color, border_width := 1) -> StyleBoxFlat:
 	style.border_width_right = border_width
 	style.border_width_top = border_width
 	style.border_width_bottom = border_width
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
-	style.content_margin_left = 8
-	style.content_margin_right = 8
+	style.corner_radius_top_left = 5
+	style.corner_radius_top_right = 5
+	style.corner_radius_bottom_left = 5
+	style.corner_radius_bottom_right = 5
+	style.content_margin_left = 10
+	style.content_margin_right = 10
 	style.content_margin_top = 8
 	style.content_margin_bottom = 8
 	return style
 
-func _button_style(selected: bool) -> StyleBoxFlat:
-	if selected:
-		return _panel_style(Color(0.18, 0.18, 0.14, 0.92), Color(1.0, 0.72, 0.28, 1.0), 2)
-	return _panel_style(Color(0.05, 0.05, 0.048, 0.82), Color(0.30, 0.28, 0.24, 0.88), 1)
+func _button_style(active: bool) -> StyleBoxFlat:
+	var bg: Color = Color(0.06, 0.055, 0.045, 0.94) if active else Color(0.025, 0.025, 0.023, 0.90)
+	var border: Color = Color(0.95, 0.67, 0.20, 1.0) if active else Color(0.38, 0.36, 0.30, 1.0)
+	return _panel_style(bg, border, 2 if active else 1)
