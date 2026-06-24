@@ -1,11 +1,40 @@
 extends RefCounted
 class_name InventorySystem
 
+const CRAFT_STATION_ORDER: Array[String] = [
+	"spark_cutter",
+	"patched_armor",
+	"light_reinforced_armor",
+	"crystal_guard"
+]
+
+const MOD_STATION_ORDER: Array[String] = [
+	"coil_launcher"
+]
+
 static func craft_basic_upgrade() -> bool:
-	return craft_recipe("spark_cutter")
+	return craft_next_from_order(CRAFT_STATION_ORDER, "合成台目前只開放二階武器與前三階護甲。高階裝備請完成公會任務取得。")
+
+static func craft_mod_upgrade() -> bool:
+	return craft_next_from_order(MOD_STATION_ORDER, "改裝站目前只開放二階遠程武器。三階武器請完成公會任務取得。")
 
 static func forge_ammo_pack() -> bool:
 	return craft_recipe("ammo_pack")
+
+static func craft_next_from_order(recipe_ids: Array[String], done_message: String) -> bool:
+	for recipe_id: String in recipe_ids:
+		var recipe: Dictionary = DataRegistry.get_recipe(recipe_id)
+		if recipe.is_empty():
+			continue
+		var result: Dictionary = recipe.get("result", {})
+		var already_has_all := true
+		for item_id in result.keys():
+			if int(GameState.inventory.get(String(item_id), 0)) < int(result[item_id]):
+				already_has_all = false
+		if not already_has_all:
+			return craft_recipe(recipe_id)
+	GameState.notify(done_message)
+	return false
 
 static func craft_recipe(recipe_id: String) -> bool:
 	var recipe := DataRegistry.get_recipe(recipe_id)

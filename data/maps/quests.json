@@ -15,7 +15,7 @@
       "reward": {
         "ammo": 12,
         "mutant_core": 1,
-        "breaker_hammer": 1
+        "scrap": 10
       }
     },
     {
@@ -32,7 +32,7 @@
       ],
       "reward": {
         "scrap": 24,
-        "coil_launcher": 1
+        "bio_crystal": 1
       }
     },
     {
@@ -49,7 +49,7 @@
       ],
       "reward": {
         "scrap": 18,
-        "crystal_guard": 1
+        "hazard_armor": 1
       }
     },
     {
@@ -58,7 +58,7 @@
       "mode": "Boss 前哨",
       "recommended_level": 4,
       "story_step": "舊工廠仍在無人指令下運轉，污染核心把附近機械改造成敵人。",
-      "description": "東門工廠外圍有精英與 Boss 反應。擊敗污染核心，帶回可改裝的工業外骨架。",
+      "description": "東門工廠外圍有精英與 Boss 反應。擊敗污染核心，帶回重型拆解槌與工業外骨架。",
       "route": "old_factory",
       "objectives": [
         { "type": "defeat", "counter": "defeat_enemy", "amount": 8 },
@@ -66,8 +66,8 @@
       ],
       "reward": {
         "ammo": 18,
-        "industrial_exoshell": 1,
-        "acid_sprayer": 1
+        "breaker_hammer": 1,
+        "industrial_exoshell": 1
       }
     },
     {
@@ -101,7 +101,8 @@
       ],
       "reward": {
         "scrap": 36,
-        "spark_cutter": 1,
+        "acid_sprayer": 1,
+        "core_power_armor": 1,
         "ammo": 16
       }
     }

@@ -7,6 +7,9 @@ const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
 const PLAYER_ATLAS_PATH := "res://docs/recycler_player_multiaction_8dir_preview.png"
 const PLAYER_FRAME_DIR := "res://assets/sprites/player/frames"
 const PREFER_SPLIT_FRAME_FILES := false
+const SPRINT_SPEED_MULTIPLIER := 1.4
+const SPRINT_EP_PER_SECOND := 10.0
+const EP_REGEN_PER_SECOND := 4.0
 
 @export var move_speed: float = 180.0
 
@@ -26,6 +29,8 @@ var shake_timer := 0.0
 var shake_strength := 0.0
 var weapon_sprite: Sprite2D
 var current_weapon_asset_id := ""
+var sprint_ep_accumulator := 0.0
+var ep_regen_accumulator := 0.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -39,6 +44,8 @@ func _ready() -> void:
 
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
+	# Kept for compatibility with equipment_changed, but runtime weapon overlays are disabled.
+	# Combat visuals should come from the player source art, not generated line effects.
 	weapon_sprite = Sprite2D.new()
 	weapon_sprite.name = "WeaponOverlay"
 	weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -83,8 +90,14 @@ func _physics_process(delta: float) -> void:
 	elif input_direction.length() > 0.05 and state != PlayerState.SHOOT:
 		last_direction = input_direction.normalized()
 
-	var speed_bonus := GameState.get_stat_bonus("speed")
-	velocity = input_direction * max(80.0, move_speed + speed_bonus)
+	var speed_bonus: int = GameState.get_stat_bonus("speed")
+	var current_speed: float = max(80.0, move_speed + float(speed_bonus))
+	var is_sprinting: bool = _consume_sprint_energy(input_direction, delta)
+	if is_sprinting:
+		current_speed *= SPRINT_SPEED_MULTIPLIER
+	else:
+		_regenerate_ep(delta)
+	velocity = input_direction * current_speed
 	move_and_slide()
 
 	if has_world_bounds:
@@ -168,11 +181,9 @@ func _melee_attack(use_mouse_aim := false) -> void:
 	attack_timer = float(weapon.get("cooldown", 0.32))
 
 	var sfx_id := String(weapon.get("sfx_id", "melee"))
-	var vfx_id := String(weapon.get("attack_vfx_id", "slash_rust"))
 	var shake := float(weapon.get("shake_strength", 0.08))
 
 	AudioManager.play_sfx(sfx_id)
-	_spawn_attack_flash(vfx_id, max(0.7, shake * 9.0))
 	GameState.request_feedback("attack", shake)
 
 	var damage := 12 + GameState.get_stat_bonus("attack")
@@ -217,11 +228,9 @@ func _ranged_attack() -> void:
 	_set_timed_state(PlayerState.SHOOT, 0.22)
 
 	var sfx_id := String(ranged.get("sfx_id", "shoot"))
-	var vfx_id := String(ranged.get("attack_vfx_id", "muzzle_pipe"))
 	var shake := float(ranged.get("shake_strength", 0.06))
 
 	AudioManager.play_sfx(sfx_id)
-	_spawn_attack_flash(vfx_id, max(0.55, shake * 8.0))
 	GameState.request_feedback("attack", shake)
 
 	ranged_timer = float(ranged.get("cooldown", 0.25))
@@ -301,14 +310,9 @@ func _build_sprite_frames() -> void:
 	sprite.sprite_frames = frames
 
 
-func _source_direction_index(action_name: String, direction_index: int) -> int:
-	# 只修走路斜上動畫太不明顯的問題；射擊/揮砍不交換方向，避免攻擊方向反掉。
-	if action_name == "walk":
-		match direction_index:
-			5:
-				return 4
-			7:
-				return 0
+func _source_direction_index(_action_name: String, direction_index: int) -> int:
+	# The atlas row order is the single source of truth.
+	# Do not swap rows here; swapping rows caused right-down to display as left-down.
 	return direction_index
 
 
@@ -362,6 +366,50 @@ func _update_locomotion_state(input_direction: Vector2) -> void:
 		state = PlayerState.IDLE
 
 
+func _consume_sprint_energy(input_direction: Vector2, delta: float) -> bool:
+	if input_direction.length() <= 0.05:
+		sprint_ep_accumulator = 0.0
+		return false
+	if not Input.is_action_pressed("dash"):
+		sprint_ep_accumulator = 0.0
+		return false
+	if GameState.ep <= 0:
+		sprint_ep_accumulator = 0.0
+		return false
+
+	ep_regen_accumulator = 0.0
+	sprint_ep_accumulator += SPRINT_EP_PER_SECOND * delta
+	var drain_amount: int = int(floor(sprint_ep_accumulator))
+	if drain_amount > 0:
+		drain_amount = min(drain_amount, GameState.ep)
+		GameState.ep = max(0, GameState.ep - drain_amount)
+		sprint_ep_accumulator -= float(drain_amount)
+		GameState.stats_changed.emit()
+
+	return GameState.ep > 0
+
+
+func _regenerate_ep(delta: float) -> void:
+	var max_ep: int = GameState.get_max_ep()
+	if GameState.ep >= max_ep:
+		ep_regen_accumulator = 0.0
+		if GameState.ep > max_ep:
+			GameState.ep = max_ep
+			GameState.stats_changed.emit()
+		return
+
+	ep_regen_accumulator += EP_REGEN_PER_SECOND * delta
+	var recover_amount: int = int(floor(ep_regen_accumulator))
+	if recover_amount <= 0:
+		return
+
+	var old_ep: int = GameState.ep
+	GameState.ep = min(max_ep, GameState.ep + recover_amount)
+	ep_regen_accumulator -= float(recover_amount)
+	if GameState.ep != old_ep:
+		GameState.stats_changed.emit()
+
+
 func _set_timed_state(next_state: int, duration: float) -> void:
 	state = next_state
 	action_state_timer = max(action_state_timer, duration)
@@ -373,7 +421,9 @@ func _is_action_state_locked() -> bool:
 
 
 func _spawn_attack_flash(effect_id: String, strength: float) -> void:
-	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
+	# Combat weapon beams and generated slash/muzzle columns are disabled.
+	# Only keep non-combat utility feedback, such as the scanner pulse.
+	if effect_id != "scan_pulse":
 		return
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
 	flash.setup(effect_id, last_direction, strength)
@@ -415,49 +465,10 @@ func _projectile_spawn_global() -> Vector2:
 
 
 func _update_weapon_overlay() -> void:
-	if weapon_sprite == null:
-		return
-
-	var direction_index := _direction_index()
-	var needs_overlay := state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH] and direction_index not in [0, 4]
-	if not needs_overlay:
+	# Runtime weapon overlays are disabled. Attack visuals must come from the source player art.
+	if weapon_sprite != null:
 		weapon_sprite.visible = false
-		return
-
-	var item_id := _weapon_overlay_item_id()
-	var equipment := DataRegistry.get_equipment(item_id)
-	var asset_id := String(equipment.get("weapon_sprite_asset_id", ""))
-	if asset_id.is_empty():
-		weapon_sprite.visible = false
-		return
-
-	if current_weapon_asset_id != asset_id:
-		current_weapon_asset_id = asset_id
-		var path := DataRegistry.asset_path(asset_id)
-		weapon_sprite.texture = ASSET_LOADER.load_png(path) if not path.is_empty() else null
-
-	if weapon_sprite.texture == null:
-		weapon_sprite.visible = false
-		return
-
-	var direction := last_direction.normalized()
-	if direction.length() < 0.1:
-		direction = Vector2.RIGHT
-
-	weapon_sprite.visible = true
-	weapon_sprite.position = Vector2(0, -62) + direction * 34.0
-	weapon_sprite.rotation = direction.angle()
-	weapon_sprite.flip_v = abs(direction.angle()) > PI * 0.5
-
-
-func _weapon_overlay_item_id() -> String:
-	match state:
-		PlayerState.SHOOT:
-			return String(GameState.equipment.get("ranged", "pipe_rifle"))
-		PlayerState.DRAW_SWORD, PlayerState.SLASH:
-			return String(GameState.equipment.get("weapon", "rust_blade"))
-		_:
-			return String(GameState.active_attack_item_id())
+	current_weapon_asset_id = ""
 
 
 func _on_feedback_requested(kind: String, strength: float) -> void:

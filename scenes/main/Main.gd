@@ -22,13 +22,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		_skip_title_voice()
 
 func _build_title_screen() -> void:
-	# 第一個畫面：主選單。這裡可以播放主選單說明，但不會自動進序章。
+	# 第一個畫面：主選單。這裡只播放世界觀說明，不播放序章內容。
 	AudioManager.play_music("intro")
-	AudioManager.play_voice("intro_story")
-	title_voice_active = true
+	title_voice_active = AudioManager.play_voice("title_story")
 	intro_active = false
 
-	if AudioManager.voice_player != null and not AudioManager.voice_player.finished.is_connected(_on_title_voice_finished):
+	if title_voice_active and AudioManager.voice_player != null and not AudioManager.voice_player.finished.is_connected(_on_title_voice_finished):
 		AudioManager.voice_player.finished.connect(_on_title_voice_finished)
 
 	if title_layer == null or not is_instance_valid(title_layer):
@@ -83,11 +82,13 @@ func _build_title_screen() -> void:
 
 	var skip_button := Button.new()
 	skip_button.text = "跳過說明"
+	skip_button.disabled = not title_voice_active
 	skip_button.pressed.connect(_skip_title_voice)
 	stack.add_child(skip_button)
 
 	var help := Label.new()
-	help.text = "WASD 移動｜滑鼠左鍵依裝備攻擊｜E 互動｜Tab 人物裝備｜M 地圖｜Esc 暫停\n主選單說明播放中；按 Enter 或點擊跳過說明。"
+	var voice_hint := "主選單說明播放中；按 Enter 或點擊跳過說明。" if title_voice_active else "主選單說明文字已顯示；按開始遊戲會進入序章。"
+	help.text = "WASD 移動｜滑鼠左鍵依裝備攻擊｜E 互動｜Tab 人物裝備｜M 地圖｜Esc 暫停\n%s" % voice_hint
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	help.add_theme_font_size_override("font_size", 14)
 	stack.add_child(help)
@@ -118,13 +119,13 @@ func _new_game() -> void:
 	_show_intro()
 
 func _show_intro() -> void:
-	# 第二個畫面：序章。開始遊戲後才進入；旁白結束或按 Enter/跳過後正式進入村莊。
+	# 第二個畫面：序章。開始遊戲後才進入；這裡才播放序章旁白。
 	intro_active = true
 	title_voice_active = false
 	AudioManager.play_music("intro")
-	AudioManager.play_voice("intro_story")
+	var intro_voice_started := AudioManager.play_voice("intro_story")
 
-	if AudioManager.voice_player != null and not AudioManager.voice_player.finished.is_connected(_finish_intro_to_game):
+	if intro_voice_started and AudioManager.voice_player != null and not AudioManager.voice_player.finished.is_connected(_finish_intro_to_game):
 		AudioManager.voice_player.finished.connect(_finish_intro_to_game)
 
 	if title_layer == null or not is_instance_valid(title_layer):
@@ -170,12 +171,12 @@ func _show_intro() -> void:
 	stack.add_child(skip_button)
 
 	var skip := Label.new()
-	skip.text = "旁白播放中；按 Enter 或點擊跳過序章可直接進入遊戲。"
+	skip.text = "旁白播放中；按 Enter 或點擊跳過序章可直接進入遊戲。" if intro_voice_started else "序章文字已顯示；按 Enter 或點擊跳過序章可直接進入遊戲。"
 	skip.add_theme_font_size_override("font_size", 13)
 	stack.add_child(skip)
 
-	if AudioManager.voice_player == null or not AudioManager.voice_player.playing:
-		call_deferred("_finish_intro_to_game")
+	if not intro_voice_started:
+		return
 
 func _finish_intro_to_game() -> void:
 	if not intro_active:
