@@ -3,6 +3,7 @@ class_name RecyclerPickup
 
 const PIXEL := preload("res://scripts/utils/PixelArtFactory.gd")
 const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
+const PICKUP_COLLISION_RADIUS := 30.0
 
 @export var item_id := "scrap"
 @export var amount := 1
@@ -25,13 +26,15 @@ func _ready() -> void:
 	float_phase = randf_range(0.0, TAU)
 	var collision := CollisionShape2D.new()
 	var shape := CircleShape2D.new()
-	shape.radius = 18
+	# 60x60 左右的拾取範圍：玩家碰到掉落物邊緣就能撿起。
+	shape.radius = PICKUP_COLLISION_RADIUS
 	collision.shape = shape
 	add_child(collision)
 	sprite = Sprite2D.new()
 	sprite.texture = _item_texture(item_id)
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.scale = Vector2(0.78, 0.78)
+	# 掉落物圖示本體已預先處理成 64x64，不再額外放大。
+	sprite.scale = Vector2.ONE
 	add_child(sprite)
 	set_process(true)
 
