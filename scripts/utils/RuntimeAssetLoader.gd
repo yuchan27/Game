@@ -5,6 +5,8 @@ const PLAYER_FRAME_SIZE := Vector2i(112, 128)
 const LEGACY_PLAYER_ATLAS_PATH := "res://assets/sprites/player/recycler_player_multiaction_8dir.png"
 const ARMOR_ICON_DIR := "res://assets/sprites/items/armor/"
 const ARMOR_ICON_CANVAS_SIZE := Vector2i(256, 256)
+const DROP_ITEM_ICON_DIR := "res://assets/sprites/items/掉落物/"
+const DROP_ITEM_ICON_CANVAS_SIZE := Vector2i(128, 128)
 const PLAYER_PREVIEW_FRAME_PATHS := [
 	"res://assets/sprites/player/frames/idle/dir_2/frame_0.png",
 	"res://assets/sprites/player/frames/idle/dir_2/frame_1.png",
@@ -25,6 +27,8 @@ static func load_png(path: String) -> Texture2D:
 	if path == LEGACY_PLAYER_ATLAS_PATH:
 		# 舊版 player atlas 在目前分支不存在時，不再嘗試讀取缺檔，避免 Godot 一直輸出 .ctex 錯誤。
 		texture = _build_player_preview_atlas()
+	elif _is_drop_item_icon_path(path):
+		texture = _load_transparent_drop_item_icon(path)
 	elif _is_armor_icon_path(path):
 		texture = _load_transparent_armor_icon(path)
 	else:
@@ -109,6 +113,15 @@ static func _load_transparent_armor_icon(path: String) -> Texture2D:
 	return ImageTexture.create_from_image(fitted)
 
 
+static func _load_transparent_drop_item_icon(path: String) -> Texture2D:
+	var image: Image = _load_image_from_path(path)
+	if image == null:
+		return null
+	_strip_connected_light_background(image)
+	var fitted: Image = _fit_image_to_canvas(image, DROP_ITEM_ICON_CANVAS_SIZE, 9)
+	return ImageTexture.create_from_image(fitted)
+
+
 static func _load_image_from_path(path: String) -> Image:
 	var absolute_path: String = ProjectSettings.globalize_path(path)
 	if not FileAccess.file_exists(absolute_path):
@@ -151,6 +164,10 @@ static func _blit_centered(source: Image, target: Image, target_rect: Rect2i) ->
 
 static func _is_armor_icon_path(path: String) -> bool:
 	return path.begins_with(ARMOR_ICON_DIR) and path.get_extension().to_lower() == "png"
+
+
+static func _is_drop_item_icon_path(path: String) -> bool:
+	return path.begins_with(DROP_ITEM_ICON_DIR) and path.get_extension().to_lower() == "png"
 
 
 static func _strip_connected_light_background(image: Image) -> void:
