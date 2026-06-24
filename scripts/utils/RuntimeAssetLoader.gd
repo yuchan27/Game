@@ -40,16 +40,52 @@ static func load_wav(path: String) -> AudioStream:
 		return null
 
 	# 音樂檔在 Git 切換或手動覆蓋後，Godot 可能還會沿用 .godot/imported 裡的舊匯入快取。
-	# 這裡優先直接讀取原始 wav，確保執行遊戲時聽到的是目前工作目錄裡最新的音樂檔。
+	# 這裡優先直接讀取目前工作目錄的原始檔，並依檔頭判斷實際格式。
+	# 有些音樂副檔名是 .wav，但內容其實是 MP3；直接丟給 WAV parser 會出現「Not a WAV file」。
 	var absolute_path: String = ProjectSettings.globalize_path(path)
 	if FileAccess.file_exists(absolute_path):
-		var stream: AudioStreamWAV = AudioStreamWAV.load_from_file(absolute_path)
-		if stream != null:
-			return stream
+		var bytes: PackedByteArray = FileAccess.get_file_as_bytes(absolute_path)
+		var direct_stream: AudioStream = _audio_stream_from_bytes(bytes, path)
+		if direct_stream != null:
+			return direct_stream
 
 	if ResourceLoader.exists(path):
 		return load(path) as AudioStream
 	return null
+
+
+static func _audio_stream_from_bytes(bytes: PackedByteArray, path: String) -> AudioStream:
+	if bytes.size() < 4:
+		return null
+	if _has_ascii_header(bytes, "RIFF"):
+		var wav_stream: AudioStreamWAV = AudioStreamWAV.load_from_buffer(bytes)
+		return wav_stream
+	if _looks_like_mp3(bytes) or path.get_extension().to_lower() == "mp3":
+		var mp3_stream: AudioStreamMP3 = AudioStreamMP3.new()
+		mp3_stream.data = bytes
+		return mp3_stream
+	return null
+
+
+static func _has_ascii_header(bytes: PackedByteArray, header: String) -> bool:
+	if bytes.size() < header.length():
+		return false
+	for index: int in range(header.length()):
+		if int(bytes[index]) != header.unicode_at(index):
+			return false
+	return true
+
+
+static func _looks_like_mp3(bytes: PackedByteArray) -> bool:
+	if bytes.size() >= 3:
+		var has_id3_header: bool = int(bytes[0]) == 0x49 and int(bytes[1]) == 0x44 and int(bytes[2]) == 0x33
+		if has_id3_header:
+			return true
+	if bytes.size() >= 2:
+		var first_byte: int = int(bytes[0])
+		var second_byte: int = int(bytes[1])
+		return first_byte == 0xFF and (second_byte & 0xE0) == 0xE0
+	return false
 
 
 static func _load_texture_from_file(path: String) -> Texture2D:
