@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f58vh0nltxv5"
-path="res://.godot/imported/player_split_frame_diagnostic.png-684c0afbb88bcdc3b0751de89c231a78.ctex"
+uid="uid://slqkmli7ss4w"
+path="res://.godot/imported/中階.png-4a0abc6d16e0f80811aa03923267630c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/player_split_frame_diagnostic.png"
-dest_files=["res://.godot/imported/player_split_frame_diagnostic.png-684c0afbb88bcdc3b0751de89c231a78.ctex"]
+source_file="res://assets/sprites/items/armor/中階.png"
+dest_files=["res://.godot/imported/中階.png-4a0abc6d16e0f80811aa03923267630c.ctex"]
 
 [params]
 

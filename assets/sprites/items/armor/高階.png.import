@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4sq734liwle0"
-path="res://.godot/imported/art_extraction_preview_v3.png-1d11591462552fa799d0d8c9cd9ef39f.ctex"
+uid="uid://dqv0ow8omvehy"
+path="res://.godot/imported/高階.png-413575fd7ea0212ee699ba8633cd9e56.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/art_extraction_preview_v3.png"
-dest_files=["res://.godot/imported/art_extraction_preview_v3.png-1d11591462552fa799d0d8c9cd9ef39f.ctex"]
+source_file="res://assets/sprites/items/armor/高階.png"
+dest_files=["res://.godot/imported/高階.png-413575fd7ea0212ee699ba8633cd9e56.ctex"]
 
 [params]
 
