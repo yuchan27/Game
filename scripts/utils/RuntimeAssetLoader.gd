@@ -36,13 +36,20 @@ static func load_png(path: String) -> Texture2D:
 
 
 static func load_wav(path: String) -> AudioStream:
+	if path.is_empty():
+		return null
+
+	# 音樂檔在 Git 切換或手動覆蓋後，Godot 可能還會沿用 .godot/imported 裡的舊匯入快取。
+	# 這裡優先直接讀取原始 wav，確保執行遊戲時聽到的是目前工作目錄裡最新的音樂檔。
+	var absolute_path: String = ProjectSettings.globalize_path(path)
+	if FileAccess.file_exists(absolute_path):
+		var stream: AudioStreamWAV = AudioStreamWAV.load_from_file(absolute_path)
+		if stream != null:
+			return stream
+
 	if ResourceLoader.exists(path):
 		return load(path) as AudioStream
-	var absolute_path: String = ProjectSettings.globalize_path(path)
-	if not FileAccess.file_exists(absolute_path):
-		return null
-	var stream: AudioStreamWAV = AudioStreamWAV.load_from_file(absolute_path)
-	return stream
+	return null
 
 
 static func _load_texture_from_file(path: String) -> Texture2D:
