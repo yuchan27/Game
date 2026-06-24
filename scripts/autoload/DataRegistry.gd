@@ -3,19 +3,19 @@ extends Node
 const ITEM_ICON_PATH_OVERRIDES: Dictionary = {
 	"item_scrap": {
 		"path": "res://assets/sprites/items/掉落物/1.png",
-		"size": [48, 48]
+		"size": [64, 64]
 	},
 	"item_ammo": {
 		"path": "res://assets/sprites/items/掉落物/2.png",
-		"size": [48, 48]
+		"size": [64, 64]
 	},
 	"item_bio_crystal": {
 		"path": "res://assets/sprites/items/掉落物/3.png",
-		"size": [48, 48]
+		"size": [64, 64]
 	},
 	"item_mutant_core": {
 		"path": "res://assets/sprites/items/掉落物/4.png",
-		"size": [48, 48]
+		"size": [64, 64]
 	},
 	"item_patched_armor": {
 		"path": "res://assets/sprites/items/armor/初階.png",
