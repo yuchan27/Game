@@ -3,19 +3,19 @@ extends Node
 const ITEM_ICON_PATH_OVERRIDES: Dictionary = {
 	"item_scrap": {
 		"path": "res://assets/sprites/items/掉落物/1.png",
-		"size": [88, 72]
+		"size": [48, 48]
 	},
 	"item_ammo": {
 		"path": "res://assets/sprites/items/掉落物/2.png",
-		"size": [88, 72]
+		"size": [48, 48]
 	},
 	"item_bio_crystal": {
 		"path": "res://assets/sprites/items/掉落物/3.png",
-		"size": [88, 72]
+		"size": [48, 48]
 	},
 	"item_mutant_core": {
 		"path": "res://assets/sprites/items/掉落物/4.png",
-		"size": [88, 72]
+		"size": [48, 48]
 	},
 	"item_patched_armor": {
 		"path": "res://assets/sprites/items/armor/初階.png",
@@ -116,7 +116,7 @@ func get_visual_asset(asset_id: String) -> Dictionary:
 		return {
 			"type": "item",
 			"path": String(override.get("path", "")),
-			"size": override.get("size", [88, 72]),
+			"size": override.get("size", [48, 48]),
 			"map_marker": "pickup",
 			"asset_id": key,
 			"usage_id": key,
