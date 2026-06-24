@@ -17,6 +17,7 @@ var _sprite: Sprite2D
 var _base_sprite_y := 0.0
 var _phase := 0.0
 var _talk_timer := 0.0
+var _interact_radius := 96.0
 
 func setup(data: Dictionary) -> void:
 	npc_id = String(data.get("id", ""))
@@ -43,6 +44,7 @@ func _ready() -> void:
 	_add_labels()
 
 func _process(delta: float) -> void:
+	_update_player_near_from_distance()
 	_phase += delta * (5.2 if _player_near else 2.4)
 	_talk_timer = max(0.0, _talk_timer - delta)
 	if _sprite != null:
@@ -50,24 +52,54 @@ func _process(delta: float) -> void:
 		_sprite.rotation = sin(_phase * 0.55) * (0.025 if _talk_timer <= 0.0 else 0.055)
 		_sprite.modulate = Color(1.08, 1.08, 1.08) if _talk_timer > 0.0 else Color.WHITE
 	if _player_near and Input.is_action_just_pressed("interact"):
-		AudioManager.play_sfx("interact")
-		_talk_timer = 0.45
-		GameState.talk_to_npc(npc_id)
+		_talk()
+
+func _talk() -> void:
+	AudioManager.play_sfx("interact")
+	_talk_timer = 0.45
+	GameState.talk_to_npc(npc_id)
+
+func _update_player_near_from_distance() -> void:
+	var player: Node2D = _nearest_player()
+	var near: bool = false
+	if player != null:
+		near = global_position.distance_to(player.global_position) <= _interact_radius
+	if near == _player_near:
+		return
+	_player_near = near
+	if _name_label != null:
+		_name_label.visible = _player_near
+	if _prompt != null:
+		_prompt.visible = _player_near
+	if not _player_near:
+		GameState.close_dialogue()
+
+func _nearest_player() -> Node2D:
+	var best: Node2D = null
+	var best_distance: float = INF
+	for node: Node in get_tree().get_nodes_in_group("player"):
+		if node is Node2D:
+			var candidate: Node2D = node as Node2D
+			var distance: float = global_position.distance_to(candidate.global_position)
+			if distance < best_distance:
+				best_distance = distance
+				best = candidate
+	return best
 
 func _add_collision() -> void:
-	var collision := CollisionShape2D.new()
-	var shape := CircleShape2D.new()
-	shape.radius = 48
+	var collision: CollisionShape2D = CollisionShape2D.new()
+	var shape: CircleShape2D = CircleShape2D.new()
+	shape.radius = _interact_radius
 	collision.shape = shape
 	add_child(collision)
 
 func _add_sprite() -> void:
 	_sprite = Sprite2D.new()
-	var npc_texture := _npc_texture()
+	var npc_texture: Texture2D = _npc_texture()
 	_sprite.texture = npc_texture if npc_texture != null else PIXEL.new().make_texture(Vector2i(56, 72), [color.darkened(0.35), color, color.lightened(0.25)], npc_id.length())
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_sprite.centered = false
-	var texture_size := _sprite.texture.get_size()
+	var texture_size: Vector2 = _sprite.texture.get_size()
 	_sprite.position = Vector2(-texture_size.x * 0.5, -texture_size.y)
 	_base_sprite_y = _sprite.position.y
 	add_child(_sprite)
@@ -88,19 +120,20 @@ func _add_labels() -> void:
 	add_child(_prompt)
 
 func _npc_texture() -> Texture2D:
-	var asset := DataRegistry.get_visual_asset(sprite_asset_id)
-	var path := String(asset.get("path", "res://assets/sprites/npcs/%s.png" % npc_id))
-	return ASSET_LOADER.load_png(path)
+	var asset: Dictionary = DataRegistry.get_visual_asset(sprite_asset_id)
+	var path: String = String(asset.get("path", "res://assets/sprites/npcs/%s.png" % npc_id))
+	if not path.is_empty() and ResourceLoader.exists(path):
+		return ASSET_LOADER.load_png(path)
+	return null
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		_player_near = true
-		_name_label.visible = true
-		_prompt.visible = true
+		if _name_label != null:
+			_name_label.visible = true
+		if _prompt != null:
+			_prompt.visible = true
 
 func _on_body_exited(body: Node) -> void:
 	if body.is_in_group("player"):
-		_player_near = false
-		_name_label.visible = false
-		_prompt.visible = false
-		GameState.close_dialogue()
+		_update_player_near_from_distance()
