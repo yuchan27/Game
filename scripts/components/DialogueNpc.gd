@@ -18,6 +18,7 @@ var _base_sprite_y := 0.0
 var _phase := 0.0
 var _talk_timer := 0.0
 var _interact_radius := 96.0
+var _dialogue_page := 0
 
 func setup(data: Dictionary) -> void:
 	npc_id = String(data.get("id", ""))
@@ -55,9 +56,31 @@ func _process(delta: float) -> void:
 		_talk()
 
 func _talk() -> void:
+	var npc: Dictionary = DataRegistry.get_npc(npc_id)
+	if npc.is_empty():
+		GameState.notify("未知的 NPC：%s" % npc_id)
+		return
+
 	AudioManager.play_sfx("interact")
 	_talk_timer = 0.45
-	GameState.talk_to_npc(npc_id)
+
+	var first_time: bool = not GameState.talked_npcs.has(npc_id)
+	if first_time:
+		GameState.talked_npcs.append(npc_id)
+		var reward: Dictionary = npc.get("reward", {})
+		for item_id in reward.keys():
+			GameState.add_item(String(item_id), int(reward[item_id]))
+
+	var first_line: String = String(npc.get("line", ""))
+	var second_line: String = String(npc.get("repeat_line", first_line))
+	var message: String = first_line if _dialogue_page <= 0 else second_line
+	GameState.dialogue_requested.emit(String(npc.get("name", npc_id)), String(npc.get("role", "倖存者")), message)
+	GameState.inventory_changed.emit()
+	GameState.stats_changed.emit()
+
+	if _dialogue_page <= 0 and not second_line.is_empty() and second_line != first_line:
+		_dialogue_page = 1
+	_update_prompt_text()
 
 func _update_player_near_from_distance() -> void:
 	var player: Node2D = _nearest_player()
@@ -72,7 +95,9 @@ func _update_player_near_from_distance() -> void:
 	if _prompt != null:
 		_prompt.visible = _player_near
 	if not _player_near:
+		_dialogue_page = 0
 		GameState.close_dialogue()
+	_update_prompt_text()
 
 func _nearest_player() -> Node2D:
 	var best: Node2D = null
@@ -113,11 +138,16 @@ func _add_labels() -> void:
 	add_child(_name_label)
 
 	_prompt = Label.new()
-	_prompt.text = "E：交談"
 	_prompt.position = Vector2(-36, -128)
 	_prompt.visible = false
 	_prompt.add_theme_font_size_override("font_size", 14)
 	add_child(_prompt)
+	_update_prompt_text()
+
+func _update_prompt_text() -> void:
+	if _prompt == null:
+		return
+	_prompt.text = "E：下一段" if _dialogue_page == 1 else "E：交談"
 
 func _npc_texture() -> Texture2D:
 	var asset: Dictionary = DataRegistry.get_visual_asset(sprite_asset_id)
@@ -133,6 +163,7 @@ func _on_body_entered(body: Node) -> void:
 			_name_label.visible = true
 		if _prompt != null:
 			_prompt.visible = true
+		_update_prompt_text()
 
 func _on_body_exited(body: Node) -> void:
 	if body.is_in_group("player"):
