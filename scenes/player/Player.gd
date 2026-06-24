@@ -6,14 +6,29 @@ const ATTACK_FLASH_SCRIPT := preload("res://scripts/components/AttackFlash.gd")
 const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
 const PLAYER_ATLAS_PATH := "res://docs/recycler_player_multiaction_8dir_preview.png"
 const PLAYER_FRAME_DIR := "res://assets/sprites/player/frames"
-const PREFER_SPLIT_FRAME_FILES := false
-const SPRINT_SPEED_MULTIPLIER := 1.4
-const SPRINT_EP_PER_SECOND := 10.0
-const EP_REGEN_PER_SECOND := 4.0
+const PREFER_SPLIT_FRAME_FILES := true
+const SPRINT_MULTIPLIER := 1.55
+const SPRINT_EP_DRAIN_PER_SECOND := 10.0
+const SPRINT_REENABLE_EP_RATIO := 0.5
+const EP_REGEN_PER_SECOND := 20.0
+const EP_REGEN_DELAY_AFTER_COMBAT := 1.0
+const SLASH_FRAME_COUNT := 13
+const SLASH_QUEUE_FRAME_INDEX := 5
+const SLASH_FIRST_HIT_FRAME_INDEX := 7
+const SLASH_SECOND_HIT_FRAME_INDEX := 10
+const SLASH_LAST_FRAME_INDEX := 12
+const SLASH_ANIMATION_SPEED := 10.125
+const SLASH_STATE_DURATION := 1.29
+const PROJECTILE_RIGHT_HAND_OFFSET := Vector2(22, 20)
+const PROJECTILE_LEFT_HAND_OFFSET := Vector2(-22, 20)
+const SLASH_FLASH_OFFSET := Vector2(0, 8)
+const SHADOW_OFFSET := Vector2(0, 52)
+const SHADOW_RADIUS := Vector2(26, 8)
+const HIT_FLASH_DURATION := 0.16
 
 @export var move_speed: float = 180.0
 
-enum PlayerState { IDLE, WALK, SHOOT, DRAW_SWORD, SLASH, SWAP_TOOL, INTERACT, HIT, DEAD }
+enum PlayerState { IDLE, WALK, RUN, SHOOT, DRAW_SWORD, SLASH, SWAP_TOOL, INTERACT, HIT, DEAD }
 
 var state := PlayerState.IDLE
 var last_direction := Vector2.RIGHT
@@ -27,10 +42,21 @@ var world_bounds := Rect2()
 var camera_base_offset := Vector2.ZERO
 var shake_timer := 0.0
 var shake_strength := 0.0
-var weapon_sprite: Sprite2D
-var current_weapon_asset_id := ""
-var sprint_ep_accumulator := 0.0
-var ep_regen_accumulator := 0.0
+var ep_change_carry: float = 0.0
+var ep_regen_delay: float = 0.0
+var is_sprinting: bool = false
+var sprint_exhausted: bool = false
+var slash_followup_queued: bool = false
+var slash_first_hit_done: bool = false
+var slash_second_hit_done: bool = false
+var slash_damage: int = 0
+var slash_reach: float = 0.0
+var slash_vfx_id: String = "slash_rust"
+var slash_shake_strength: float = 0.08
+var slash_direction: Vector2 = Vector2.RIGHT
+var hit_flash_timer: float = 0.0
+var hit_flash_material: ShaderMaterial
+var shadow_polygon: Polygon2D
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: Camera2D = $Camera2D
@@ -43,16 +69,8 @@ func _ready() -> void:
 	set_meta("map_marker", "player")
 
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-
-	# Kept for compatibility with equipment_changed, but runtime weapon overlays are disabled.
-	# Combat visuals should come from the player source art, not generated line effects.
-	weapon_sprite = Sprite2D.new()
-	weapon_sprite.name = "WeaponOverlay"
-	weapon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	weapon_sprite.z_index = 5
-	weapon_sprite.centered = true
-	weapon_sprite.visible = false
-	add_child(weapon_sprite)
+	_create_shadow()
+	_setup_hit_flash_material()
 
 	camera_base_offset = camera.offset
 
@@ -71,12 +89,15 @@ func _physics_process(delta: float) -> void:
 	attack_timer = max(0.0, attack_timer - delta)
 	ranged_timer = max(0.0, ranged_timer - delta)
 	action_state_timer = max(0.0, action_state_timer - delta)
+	_update_hit_flash(delta)
 
 	if pending_slash and action_state_timer <= 0.0:
 		pending_slash = false
-		_set_timed_state(PlayerState.SLASH, 0.24)
+		_set_timed_state(PlayerState.SLASH, SLASH_STATE_DURATION)
 
-	var input_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var input_direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var wants_sprint: bool = Input.is_action_pressed("dash") and input_direction.length() > 0.05 and not _is_action_state_locked()
+	is_sprinting = wants_sprint and _can_sprint()
 
 	if state == PlayerState.DEAD:
 		velocity = Vector2.ZERO
@@ -87,17 +108,13 @@ func _physics_process(delta: float) -> void:
 
 	if not _is_action_state_locked():
 		_update_locomotion_state(input_direction)
-	elif input_direction.length() > 0.05 and state != PlayerState.SHOOT:
+	elif input_direction.length() > 0.05 and state not in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH]:
 		last_direction = input_direction.normalized()
 
 	var speed_bonus: int = GameState.get_stat_bonus("speed")
-	var current_speed: float = max(80.0, move_speed + float(speed_bonus))
-	var is_sprinting: bool = _consume_sprint_energy(input_direction, delta)
-	if is_sprinting:
-		current_speed *= SPRINT_SPEED_MULTIPLIER
-	else:
-		_regenerate_ep(delta)
-	velocity = input_direction * current_speed
+	var base_speed: float = max(80.0, move_speed + float(speed_bonus))
+	var speed_multiplier: float = SPRINT_MULTIPLIER if is_sprinting else 1.0
+	velocity = input_direction * base_speed * speed_multiplier
 	move_and_slide()
 
 	if has_world_bounds:
@@ -105,26 +122,32 @@ func _physics_process(delta: float) -> void:
 
 	GameState.player_position = global_position
 
-	if Input.is_action_just_pressed("primary_attack"):
+	var primary_attack_pressed: bool = Input.is_action_just_pressed("primary_attack")
+	var melee_attack_pressed: bool = Input.is_action_just_pressed("attack_melee")
+
+	if primary_attack_pressed or melee_attack_pressed:
+		if _try_queue_slash_followup():
+			primary_attack_pressed = false
+			melee_attack_pressed = false
+
+	if primary_attack_pressed:
 		_primary_attack_pressed()
 
 	if Input.is_action_pressed("primary_attack") and GameState.active_attack_mode() == "ranged":
 		_ranged_attack()
 
-	if Input.is_action_just_pressed("attack_melee"):
+	if melee_attack_pressed:
 		_melee_attack()
 
 	if Input.is_action_just_pressed("attack_ranged") or Input.is_action_pressed("attack_ranged"):
 		_ranged_attack()
 
 	if Input.is_action_just_pressed("swap_weapon"):
-		_set_timed_state(PlayerState.SWAP_TOOL, 0.22)
 		AudioManager.play_sfx("ui")
 		GameState.use_next_quick_slot()
 
 	for slot_index in range(4):
 		if Input.is_action_just_pressed("quick_slot_%d" % [slot_index + 1]):
-			_set_timed_state(PlayerState.SWAP_TOOL, 0.22)
 			GameState.use_quick_slot(slot_index)
 
 	if Input.is_action_just_pressed("interact"):
@@ -136,9 +159,11 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("load_game"):
 		SaveManager.load_game()
 
+	_update_ep(delta)
 	_update_weapon_overlay()
 	_update_camera_shake(delta)
 	_update_animation()
+	_update_slash_sequence()
 
 
 func set_world_bounds(bounds: Rect2) -> void:
@@ -159,18 +184,19 @@ func _primary_attack_pressed() -> void:
 		"tool":
 			_use_tool_action()
 		_:
-			_melee_attack(true)
+			_melee_attack()
 
 
-func _melee_attack(use_mouse_aim := false) -> void:
+func _melee_attack() -> void:
 	if attack_timer > 0.0:
 		return
+	_mark_combat_activity()
 
-	if use_mouse_aim:
-		last_direction = _aim_direction()
+	last_direction = _aim_direction()
+	slash_direction = last_direction
 
-	var weapon_id := GameState.active_attack_item_id()
-	var weapon := DataRegistry.get_equipment(weapon_id)
+	var weapon_id: String = GameState.active_attack_item_id()
+	var weapon: Dictionary = DataRegistry.get_equipment(weapon_id)
 
 	if String(weapon.get("attack_mode", "melee")) != "melee":
 		weapon_id = String(GameState.equipment.get("weapon", "rust_blade"))
@@ -180,41 +206,91 @@ func _melee_attack(use_mouse_aim := false) -> void:
 	pending_slash = true
 	attack_timer = float(weapon.get("cooldown", 0.32))
 
-	var sfx_id := String(weapon.get("sfx_id", "melee"))
-	var shake := float(weapon.get("shake_strength", 0.08))
+	var sfx_id: String = String(weapon.get("sfx_id", "melee"))
+	var vfx_id: String = String(weapon.get("attack_vfx_id", "slash_rust"))
+	var shake: float = float(weapon.get("shake_strength", 0.08))
 
 	AudioManager.play_sfx(sfx_id)
-	GameState.request_feedback("attack", shake)
 
-	var damage := 12 + GameState.get_stat_bonus("attack")
-	var reach := 92.0 if weapon_id == "breaker_hammer" else 82.0
-	var attack_origin := _attack_anchor_global()
-	var attack_direction := last_direction.normalized()
+	slash_followup_queued = false
+	slash_first_hit_done = false
+	slash_second_hit_done = false
+	slash_damage = 12 + GameState.get_stat_bonus("attack")
+	slash_reach = 112.0 if weapon_id == "breaker_hammer" else 104.0
+	slash_vfx_id = vfx_id
+	slash_shake_strength = shake
+
+
+func _try_queue_slash_followup() -> bool:
+	if state != PlayerState.SLASH:
+		return false
+	if not current_animation.begins_with("slash_"):
+		return false
+	if sprite.frame < SLASH_QUEUE_FRAME_INDEX:
+		return true
+	last_direction = _aim_direction()
+	slash_direction = last_direction
+	slash_followup_queued = true
+	action_state_timer = max(action_state_timer, SLASH_STATE_DURATION)
+	return true
+
+
+func _update_slash_sequence() -> void:
+	if state != PlayerState.SLASH:
+		return
+	if not current_animation.begins_with("slash_"):
+		return
+
+	var frame_index: int = sprite.frame
+	if frame_index >= SLASH_FIRST_HIT_FRAME_INDEX and not slash_first_hit_done:
+		slash_first_hit_done = true
+		_perform_slash_hit()
+
+	if frame_index >= SLASH_FIRST_HIT_FRAME_INDEX and not slash_followup_queued:
+		sprite.pause()
+		action_state_timer = 0.0
+		return
+
+	if frame_index >= SLASH_SECOND_HIT_FRAME_INDEX and slash_followup_queued and not slash_second_hit_done:
+		slash_second_hit_done = true
+		_perform_slash_hit()
+
+	if frame_index >= SLASH_LAST_FRAME_INDEX:
+		action_state_timer = 0.0
+
+
+func _perform_slash_hit() -> void:
+	_spawn_attack_flash(slash_vfx_id, max(0.7, slash_shake_strength * 9.0), slash_direction)
+	GameState.request_feedback("attack", slash_shake_strength)
+
+	var attack_origin: Vector2 = _attack_anchor_global()
+	var attack_direction: Vector2 = slash_direction.normalized()
 	if attack_direction.length() < 0.1:
 		attack_direction = Vector2.RIGHT
 
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if not (enemy is Node2D):
 			continue
-		var enemy_center := _enemy_hit_center(enemy)
-		var enemy_radius := _enemy_hit_radius(enemy)
-		var to_enemy := enemy_center - attack_origin
-		var distance := to_enemy.length()
-		if distance > reach + enemy_radius:
+		var enemy_center: Vector2 = _enemy_hit_center(enemy)
+		var enemy_radius: float = _enemy_hit_radius(enemy)
+		var to_enemy: Vector2 = enemy_center - attack_origin
+		var distance: float = to_enemy.length()
+		if distance > slash_reach + enemy_radius:
 			continue
-		var facing := attack_direction
+		var facing: Vector2 = attack_direction
 		if distance > 0.01:
 			facing = to_enemy.normalized()
 		if attack_direction.dot(facing) > -0.35 and enemy.has_method("take_damage"):
-			enemy.take_damage(damage, true)
+			enemy.take_damage(slash_damage, true)
 
 
 func _ranged_attack() -> void:
 	if ranged_timer > 0.0:
 		return
+	_mark_combat_activity()
 
-	var ranged_id := GameState.active_attack_item_id()
-	var ranged := DataRegistry.get_equipment(ranged_id)
+	var ranged_id: String = GameState.active_attack_item_id()
+	var ranged: Dictionary = DataRegistry.get_equipment(ranged_id)
 
 	if String(ranged.get("attack_mode", "ranged")) != "ranged":
 		ranged_id = String(GameState.equipment.get("ranged", "pipe_rifle"))
@@ -224,20 +300,25 @@ func _ranged_attack() -> void:
 		GameState.notify("彈藥不足：先用近戰清出空間，或回村補給。")
 		return
 
-	last_direction = _aim_direction()
+	var aim_target: Vector2 = get_global_mouse_position()
+	last_direction = _aim_direction_from_global_target(aim_target)
+	var projectile_start: Vector2 = _projectile_spawn_global()
+	last_direction = _aim_direction_from_origin(aim_target, projectile_start)
 	_set_timed_state(PlayerState.SHOOT, 0.22)
 
-	var sfx_id := String(ranged.get("sfx_id", "shoot"))
-	var shake := float(ranged.get("shake_strength", 0.06))
+	var sfx_id: String = String(ranged.get("sfx_id", "shoot"))
+	var vfx_id: String = String(ranged.get("attack_vfx_id", "muzzle_pipe"))
+	var shake: float = float(ranged.get("shake_strength", 0.06))
 
 	AudioManager.play_sfx(sfx_id)
+	if not vfx_id.begins_with("muzzle"):
+		_spawn_attack_flash(vfx_id, max(0.55, shake * 8.0))
 	GameState.request_feedback("attack", shake)
 
 	ranged_timer = float(ranged.get("cooldown", 0.25))
 
-	var projectile_damage := 10 + GameState.get_stat_bonus("attack")
-	var projectile_start := _projectile_spawn_global()
-	var pools := get_tree().get_nodes_in_group("projectile_pool")
+	var projectile_damage: int = 10 + GameState.get_stat_bonus("attack")
+	var pools: Array[Node] = get_tree().get_nodes_in_group("projectile_pool")
 
 	if not pools.is_empty() and pools[0].has_method("fire_projectile"):
 		if not pools[0].fire_projectile(projectile_start, last_direction, projectile_damage):
@@ -250,8 +331,9 @@ func _ranged_attack() -> void:
 
 func _use_tool_action() -> void:
 	_set_timed_state(PlayerState.INTERACT, 0.20)
+	_mark_combat_activity()
 
-	var tool := DataRegistry.get_equipment(GameState.active_attack_item_id())
+	var tool: Dictionary = DataRegistry.get_equipment(GameState.active_attack_item_id())
 
 	AudioManager.play_sfx(String(tool.get("sfx_id", "interact")))
 	_spawn_attack_flash(String(tool.get("attack_vfx_id", "scan_pulse")), 0.8)
@@ -263,7 +345,11 @@ func _aim_direction() -> Vector2:
 
 
 func _aim_direction_from_global_target(target: Vector2) -> Vector2:
-	var aim := target - _attack_anchor_global()
+	return _aim_direction_from_origin(target, _attack_anchor_global())
+
+
+func _aim_direction_from_origin(target: Vector2, origin: Vector2) -> Vector2:
+	var aim: Vector2 = target - origin
 
 	if aim.length() < 8.0:
 		aim = last_direction
@@ -275,50 +361,149 @@ func _aim_direction_from_global_target(target: Vector2) -> Vector2:
 
 
 func _direction_index() -> int:
-	var angle := last_direction.angle()
+	var angle: float = last_direction.angle()
 	return int(round(angle / (PI / 4.0))) & 7
+
+
+func _update_ep(delta: float) -> void:
+	_update_sprint_exhaustion_lock()
+
+	if is_sprinting:
+		_apply_ep_delta(-SPRINT_EP_DRAIN_PER_SECOND * delta)
+		return
+
+	if ep_regen_delay > 0.0:
+		ep_regen_delay = max(0.0, ep_regen_delay - delta)
+		return
+
+	if GameState.ep < GameState.get_max_ep():
+		_apply_ep_delta(EP_REGEN_PER_SECOND * delta)
+		_update_sprint_exhaustion_lock()
+
+
+func _mark_combat_activity() -> void:
+	ep_regen_delay = EP_REGEN_DELAY_AFTER_COMBAT
+
+
+func _can_sprint() -> bool:
+	_update_sprint_exhaustion_lock()
+	return not sprint_exhausted and GameState.ep > 0
+
+
+func _update_sprint_exhaustion_lock() -> void:
+	if sprint_exhausted and GameState.ep >= _sprint_reenable_ep():
+		sprint_exhausted = false
+
+
+func _sprint_reenable_ep() -> int:
+	return int(ceil(float(GameState.get_max_ep()) * SPRINT_REENABLE_EP_RATIO))
+
+
+func _apply_ep_delta(amount: float) -> void:
+	ep_change_carry += amount
+	var whole_amount: int = int(ep_change_carry)
+	if whole_amount == 0:
+		return
+
+	var previous_ep: int = GameState.ep
+	GameState.ep = clampi(GameState.ep + whole_amount, 0, GameState.get_max_ep())
+	ep_change_carry -= float(whole_amount)
+
+	if GameState.ep == 0 and amount < 0.0:
+		ep_change_carry = 0.0
+		sprint_exhausted = true
+	if GameState.ep == GameState.get_max_ep() and amount > 0.0:
+		ep_change_carry = 0.0
+	_update_sprint_exhaustion_lock()
+
+	if GameState.ep != previous_ep:
+		GameState.stats_changed.emit()
 
 
 func _build_sprite_frames() -> void:
 	var frames := SpriteFrames.new()
 	var atlas: Texture2D = ASSET_LOADER.load_png(PLAYER_ATLAS_PATH)
+	var player_actions: Array[String] = _player_action_names()
 
-	for action_index in range(PixelArtFactory.PLAYER_ACTIONS.size()):
-		var action_name := String(PixelArtFactory.PLAYER_ACTIONS[action_index])
+	for action_name: String in player_actions:
+		var action_index: int = _fallback_action_index(action_name)
 
 		for direction_index in range(8):
-			var animation_name := "%s_%d" % [action_name, direction_index]
-			var source_direction_index := _source_direction_index(action_name, direction_index)
+			var animation_name: String = "%s_%d" % [action_name, direction_index]
+			var source_direction_index: int = _source_direction_index(action_name, direction_index)
+			var frame_count: int = _frame_count_for_animation(action_name, direction_index)
 
 			frames.add_animation(animation_name)
-			frames.set_animation_speed(animation_name, 10.0 if action_name == "walk" else (8.0 if action_name == "idle" else 14.0))
-			frames.set_animation_loop(animation_name, action_name in ["idle", "walk"])
+			frames.set_animation_speed(animation_name, _animation_speed_for_action(action_name))
+			frames.set_animation_loop(animation_name, action_name in ["idle", "walk", "run"])
 
-			for frame_index in range(PixelArtFactory.PLAYER_FRAMES_PER_ACTION):
+			for frame_index in range(frame_count):
 				var tex: Texture2D = null
 
 				if PREFER_SPLIT_FRAME_FILES:
-					tex = _split_frame_texture(action_name, source_direction_index, frame_index)
+					tex = _split_frame_texture(action_name, direction_index, frame_index)
 
 				if tex != null:
 					frames.add_frame(animation_name, tex)
 				elif atlas != null:
-					frames.add_frame(animation_name, _atlas_frame(atlas, action_index, source_direction_index, frame_index))
+					frames.add_frame(animation_name, _atlas_frame(atlas, action_index, source_direction_index, frame_index % PixelArtFactory.PLAYER_FRAMES_PER_ACTION))
 				else:
-					frames.add_frame(animation_name, PIXEL.new().player_texture(source_direction_index, action_index, frame_index))
+					frames.add_frame(animation_name, PIXEL.new().player_texture(source_direction_index, action_index, frame_index % PixelArtFactory.PLAYER_FRAMES_PER_ACTION))
 
 	sprite.sprite_frames = frames
 
 
+func _player_action_names() -> Array[String]:
+	var actions: Array[String] = []
+	for action in PixelArtFactory.PLAYER_ACTIONS:
+		actions.append(String(action))
+	if not actions.has("run"):
+		var walk_index: int = actions.find("walk")
+		actions.insert(max(0, walk_index + 1), "run")
+	return actions
+
+
+func _fallback_action_index(action_name: String) -> int:
+	var action_index: int = PixelArtFactory.PLAYER_ACTIONS.find(action_name)
+	if action_index >= 0:
+		return action_index
+	return PixelArtFactory.PLAYER_ACTIONS.find("walk")
+
+
+func _animation_speed_for_action(action_name: String) -> float:
+	match action_name:
+		"run":
+			return 12.0
+		"walk":
+			return 10.0
+		"idle":
+			return 8.0
+		"slash":
+			return SLASH_ANIMATION_SPEED
+		_:
+			return 18.0
+
+
 func _source_direction_index(_action_name: String, direction_index: int) -> int:
-	# The atlas row order is the single source of truth.
-	# Do not swap rows here; swapping rows caused right-down to display as left-down.
 	return direction_index
 
 
 func _split_frame_texture(action_name: String, direction_index: int, frame_index: int) -> Texture2D:
-	var path := "%s/%s/dir_%d/frame_%d.png" % [PLAYER_FRAME_DIR, action_name, direction_index, frame_index]
+	var path: String = "%s/%s/dir_%d/frame_%d.png" % [PLAYER_FRAME_DIR, action_name, direction_index, frame_index]
 	return ASSET_LOADER.load_png(path)
+
+
+func _frame_count_for_animation(action_name: String, direction_index: int) -> int:
+	if PREFER_SPLIT_FRAME_FILES:
+		var count: int = 0
+		while FileAccess.file_exists(ProjectSettings.globalize_path("%s/%s/dir_%d/frame_%d.png" % [PLAYER_FRAME_DIR, action_name, direction_index, count])):
+			count += 1
+		if count > 0:
+			if action_name == "slash":
+				return mini(count, SLASH_FRAME_COUNT)
+			return count
+
+	return PixelArtFactory.PLAYER_FRAMES_PER_ACTION
 
 
 func _atlas_frame(atlas: Texture2D, action_index: int, direction_index: int, frame_index: int) -> AtlasTexture:
@@ -330,10 +515,12 @@ func _atlas_frame(atlas: Texture2D, action_index: int, direction_index: int, fra
 
 
 func _update_animation() -> void:
-	var direction_index := _direction_index()
+	var direction_index: int = _direction_index()
 	var action_name := "idle"
 
 	match state:
+		PlayerState.RUN:
+			action_name = "run"
 		PlayerState.WALK:
 			action_name = "walk"
 		PlayerState.SHOOT:
@@ -345,13 +532,13 @@ func _update_animation() -> void:
 		PlayerState.SWAP_TOOL:
 			action_name = "swap_tool"
 		PlayerState.INTERACT:
-			action_name = "interact"
+			action_name = "idle"
 		PlayerState.HIT:
 			action_name = "hit"
 		PlayerState.DEAD:
 			action_name = "dead"
 
-	var next_animation := "%s_%d" % [action_name, direction_index]
+	var next_animation: String = "%s_%d" % [action_name, direction_index]
 
 	if current_animation != next_animation:
 		current_animation = next_animation
@@ -361,53 +548,9 @@ func _update_animation() -> void:
 func _update_locomotion_state(input_direction: Vector2) -> void:
 	if input_direction.length() > 0.05:
 		last_direction = input_direction.normalized()
-		state = PlayerState.WALK
+		state = PlayerState.RUN if is_sprinting else PlayerState.WALK
 	else:
 		state = PlayerState.IDLE
-
-
-func _consume_sprint_energy(input_direction: Vector2, delta: float) -> bool:
-	if input_direction.length() <= 0.05:
-		sprint_ep_accumulator = 0.0
-		return false
-	if not Input.is_action_pressed("dash"):
-		sprint_ep_accumulator = 0.0
-		return false
-	if GameState.ep <= 0:
-		sprint_ep_accumulator = 0.0
-		return false
-
-	ep_regen_accumulator = 0.0
-	sprint_ep_accumulator += SPRINT_EP_PER_SECOND * delta
-	var drain_amount: int = int(floor(sprint_ep_accumulator))
-	if drain_amount > 0:
-		drain_amount = min(drain_amount, GameState.ep)
-		GameState.ep = max(0, GameState.ep - drain_amount)
-		sprint_ep_accumulator -= float(drain_amount)
-		GameState.stats_changed.emit()
-
-	return GameState.ep > 0
-
-
-func _regenerate_ep(delta: float) -> void:
-	var max_ep: int = GameState.get_max_ep()
-	if GameState.ep >= max_ep:
-		ep_regen_accumulator = 0.0
-		if GameState.ep > max_ep:
-			GameState.ep = max_ep
-			GameState.stats_changed.emit()
-		return
-
-	ep_regen_accumulator += EP_REGEN_PER_SECOND * delta
-	var recover_amount: int = int(floor(ep_regen_accumulator))
-	if recover_amount <= 0:
-		return
-
-	var old_ep: int = GameState.ep
-	GameState.ep = min(max_ep, GameState.ep + recover_amount)
-	ep_regen_accumulator -= float(recover_amount)
-	if GameState.ep != old_ep:
-		GameState.stats_changed.emit()
 
 
 func _set_timed_state(next_state: int, duration: float) -> void:
@@ -420,14 +563,16 @@ func _is_action_state_locked() -> bool:
 	return action_state_timer > 0.0 and state in [PlayerState.SHOOT, PlayerState.DRAW_SWORD, PlayerState.SLASH, PlayerState.SWAP_TOOL, PlayerState.INTERACT, PlayerState.HIT, PlayerState.DEAD]
 
 
-func _spawn_attack_flash(effect_id: String, strength: float) -> void:
-	# Combat weapon beams and generated slash/muzzle columns are disabled.
-	# Only keep non-combat utility feedback, such as the scanner pulse.
-	if effect_id != "scan_pulse":
-		return
+func _spawn_attack_flash(effect_id: String, strength: float, flash_direction: Vector2 = Vector2.ZERO) -> void:
+	var direction: Vector2 = flash_direction.normalized()
+	if direction.length() < 0.1:
+		direction = last_direction
 	var flash: Node2D = ATTACK_FLASH_SCRIPT.new()
-	flash.setup(effect_id, last_direction, strength)
-	flash.global_position = _attack_anchor_global() + last_direction * 8.0
+	flash.setup(effect_id, direction, strength)
+	if effect_id.begins_with("slash") or effect_id.begins_with("slam"):
+		flash.global_position = _sprite_frame_center_global() + _hand_offset_for_direction(direction) + SLASH_FLASH_OFFSET
+	else:
+		flash.global_position = _attack_anchor_global() + direction * 8.0
 	get_tree().current_scene.add_child(flash)
 
 
@@ -458,24 +603,91 @@ func _enemy_hit_radius(enemy: Node) -> float:
 
 
 func _projectile_spawn_global() -> Vector2:
-	var direction := last_direction.normalized()
-	if direction.length() < 0.1:
-		direction = Vector2.RIGHT
-	return _attack_anchor_global() + direction * 46.0
+	return _sprite_frame_center_global() + _projectile_hand_offset()
+
+
+func _sprite_frame_center_global() -> Vector2:
+	return sprite.global_position if sprite != null else global_position
+
+
+func _projectile_hand_offset() -> Vector2:
+	return _hand_offset_for_direction(last_direction)
+
+
+func _hand_offset_for_direction(direction: Vector2) -> Vector2:
+	var direction_index := int(round(direction.angle() / (PI / 4.0))) & 7
+	match direction_index:
+		3, 4, 5:
+			return PROJECTILE_LEFT_HAND_OFFSET
+		_:
+			return PROJECTILE_RIGHT_HAND_OFFSET
 
 
 func _update_weapon_overlay() -> void:
-	# Runtime weapon overlays are disabled. Attack visuals must come from the source player art.
-	if weapon_sprite != null:
-		weapon_sprite.visible = false
-	current_weapon_asset_id = ""
+	# Safeguard 分支的武器與射擊動作已經畫進角色幀內；不要再疊額外武器圖，避免重影。
+	pass
+
+
+func _create_shadow() -> void:
+	shadow_polygon = Polygon2D.new()
+	shadow_polygon.name = "PlayerShadow"
+	shadow_polygon.color = Color(0.0, 0.0, 0.0, 0.38)
+	shadow_polygon.position = sprite.position + SHADOW_OFFSET
+	shadow_polygon.z_index = -10
+	var points := PackedVector2Array()
+	for i in range(24):
+		var angle := TAU * float(i) / 24.0
+		points.append(Vector2(cos(angle) * SHADOW_RADIUS.x, sin(angle) * SHADOW_RADIUS.y))
+	shadow_polygon.polygon = points
+	add_child(shadow_polygon)
+
+
+func _setup_hit_flash_material() -> void:
+	var shader := Shader.new()
+	shader.code = """
+shader_type canvas_item;
+
+uniform float flash_amount : hint_range(0.0, 1.0) = 0.0;
+
+void fragment() {
+	vec4 src = texture(TEXTURE, UV) * COLOR;
+	float dark_red = max(src.r - 0.20, 0.0);
+	vec4 hit_color = vec4(dark_red, 0.0, 0.0, src.a);
+	COLOR = mix(src, hit_color, flash_amount);
+}
+"""
+	hit_flash_material = ShaderMaterial.new()
+	hit_flash_material.shader = shader
+	hit_flash_material.set_shader_parameter("flash_amount", 0.0)
+
+
+func _start_hit_flash() -> void:
+	hit_flash_timer = HIT_FLASH_DURATION
+	if hit_flash_material != null:
+		sprite.material = hit_flash_material
+		hit_flash_material.set_shader_parameter("flash_amount", 1.0)
+
+
+func _update_hit_flash(delta: float) -> void:
+	if hit_flash_timer <= 0.0:
+		if hit_flash_material != null:
+			hit_flash_material.set_shader_parameter("flash_amount", 0.0)
+		if sprite != null and sprite.material == hit_flash_material:
+			sprite.material = null
+		return
+	hit_flash_timer = max(0.0, hit_flash_timer - delta)
+	if hit_flash_material != null:
+		var amount: float = hit_flash_timer / HIT_FLASH_DURATION
+		hit_flash_material.set_shader_parameter("flash_amount", amount)
 
 
 func _on_feedback_requested(kind: String, strength: float) -> void:
 	match kind:
 		"player_hit":
-			_set_timed_state(PlayerState.HIT, 0.28)
+			_mark_combat_activity()
+			_start_hit_flash()
 		"player_dead":
+			_mark_combat_activity()
 			_set_timed_state(PlayerState.DEAD, 1.20)
 	_start_camera_shake(strength)
 
