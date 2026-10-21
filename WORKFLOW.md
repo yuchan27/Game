@@ -1,81 +1,72 @@
-# Workflow
+# Development lifecycle
 
-## Task Completion Policy
+Inspect → Understand → Plan → Implement → Validate → Review → Commit → Handoff.
+`AGENTS.md` is canonical project policy; this document describes execution.
 
-Planning alone is not completion. For implementation tasks, the AI must inspect, plan, execute, validate, fix obvious issues, commit, and report results.
+## Inspect and understand
 
-## Standard Start
+Verify Git root/status/branch/recent commits and installed Godot version. Read the
+handoff, relevant scenes/scripts/data and current diff. Trace observable behavior
+to the shared owner and callers. Distinguish a product defect, stale test,
+environment problem and unverified hypothesis.
 
-Run these before editing:
+## Plan and implement
 
-```powershell
-git status --short
-git branch --show-current
-git log --oneline --decorate -10
-git show --stat HEAD
-```
+State intended player behavior, acceptance criteria, affected files, invariants
+and required evidence. Use small reversible slices; demonstrate a defect before
+fixing it when practical. Reuse current scenes, runners, signals and JSON. Avoid
+speculative abstraction, asset regeneration and unrelated cleanup. Give parallel
+writers separate file ownership; one lead coordinates APIs and integrated checks.
 
-Read these before broad changes:
+## Validate proportionately
 
-- `AI_HANDOFF.md`
-- `docs/IMPLEMENTATION_PLAN.md`
-- `docs/PLAYTEST_CHECKLIST.md`
-- `docs/SRS_TRACEABILITY.md`
-- `project.godot`
-
-## Implementation Rules
-
-- Keep PC-first controls unless the user explicitly requests mobile work.
-- Keep all player-facing text in Traditional Chinese.
-- Prefer existing Godot scenes, autoloads, and data-driven JSON patterns.
-- Use route/data additions instead of duplicating scene files when one scene can be parameterized safely.
-- Keep `ValidationRunner`, `AutomatedPlaytestRunner`, and `VisualReviewRunner` working.
-
-## Validation
-
-Minimum validation after code/data changes:
+Use a matching Skill for details. From the project root, prepare dependencies if
+needed. Pass a discovered executable with `--godot` or `GODOT_BIN`; verify 4.6.3.
 
 ```powershell
-node -e "for (const f of ['data/maps/npcs.json','data/maps/events.json','data/maps/quests.json','data/maps/wasteland_routes.json','data/items/equipment.json','data/items/recipes.json','data/enemies/enemies.json','data/maps/wasteland_params.json']) { JSON.parse(require('fs').readFileSync(f,'utf8')); } console.log('JSON OK')"
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --quit
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/ValidationRunner.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/AutomatedPlaytestRunner.tscn'
+python -m venv .godot/qa-venv
+& .godot/qa-venv/Scripts/python.exe -m pip install -r requirements-qa.txt
+& .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile core
 ```
 
-After player art, equipment icon, NPC, prop, or map art changes:
+The launcher isolates project/user data and keeps per-check logs outside the source
+checkout. It reuses existing runners without rebuilding art. Do not run a writing
+test against real `user://save_game.json`, authored assets or historical reports.
+
+| Change | Required evidence |
+| --- | --- |
+| Documentation only | Diff, references and terminology; Skill YAML if changed. No full game run. |
+| Script/gameplay/save | Import/parse, affected regression, core runners and data references. |
+| JSON | Parse, types/ranges/ids and cross-file references; affected gameplay. |
+| UI/map/art references | Relevant core, asset checks, rendered captures and actual PNG inspection. |
+| Performance-sensitive code | Equivalent representative baseline/after workload and environment. |
+| Release candidate | Core, rendered visual, performance, export/build/runtime capability and manual checklist disposition. |
 
 ```powershell
-python scripts\tools\build_release_candidate_assets.py
-python scripts\tools\verify_visual_assets.py
+& .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile visual
+& .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile performance
 ```
 
-Run visual review after visual/UI changes:
+Inspect logs even for exit 0. Headless visual output is not a pass. Synthetic
+physics cadence is not rendered FPS. Compare equivalent timing definitions and
+avoid speed claims from one noisy sample. Export presets do not prove templates
+exist or that an exported package runs.
 
-```powershell
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/VisualReviewRunner.tscn'
-```
+## Review and commit
 
-## Git
+Review combined diff; rerun checks affected by later edits. Confirm acceptance,
+save compatibility, Traditional Chinese text, preserved art and no staged cache or
+secrets. Required validation failures block committing that implementation. Fix
+them or leave the affected change uncommitted with evidence. An independently
+verified documentation stage may be committed without claiming the game baseline
+is fixed. When authorized, stage exact reviewed paths, inspect staged diff and
+whitespace, and use an English message. Do not alter remotes, rewrite history or
+push without explicit authorization.
 
-Commit only after validation or after clearly documenting a blocker.
+## Handoff
 
-```powershell
-git add <changed files>
-git commit -m "Clear English message"
-if (git remote get-url origin 2>$null) { git remote set-url origin https://github.com/yuchan27/Game.git } else { git remote add origin https://github.com/yuchan27/Game.git }
-git push -u origin HEAD
-```
-
-Do not force push.
-
-## Forbidden
-
-Do not bulk delete files or directories. Never use:
-
-- `del /s`
-- `rd /s`
-- `rmdir /s`
-- `Remove-Item -Recurse`
-- `rm -rf`
-
-If multiple files need deletion, stop and ask the user to handle the deletion manually.
+Replace the bounded current snapshot in `AI_HANDOFF.md`: status, latest verified
+changes, known issues, decisions, evidence and next action. Detailed results go in
+`docs/RELEASE_READINESS.md`; future priorities in `docs/GAMEPLAY_ROADMAP.md`. Do not
+append an endless historical log or label unexecuted checks passed. Summarize
+changed files, behavior, failures and limitations at each stage boundary.

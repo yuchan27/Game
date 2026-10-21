@@ -1,107 +1,73 @@
-# AI 協作規則
+# Wasteland Recycler — agent entrypoint
 
-## 專案目標
+Godot 4.6.3, PC-first single-player pixel-art pseudo-3D roguelike. Preserve the
+playable loop: village → guild contract → equipment → four wasteland routes →
+combat/events/loot → return → rewards/upgrades/save.
 
-本專案是 Godot 4.6.3 製作的像素風偽 3D 單機 Roguelike vertical slice。核心目標是讓玩家能在村莊整備、前往冒險公會接委託、進入四個不同廢土區探索與戰鬥、撿取資源、切換裝備、回村強化並存讀檔。
+## Navigate
 
-## 語言政策
+This directory is both the Git and Godot root. Verify root/status/branch before
+editing; preserve unrelated changes. Read `AI_HANDOFF.md`, `WORKFLOW.md`,
+`project.godot` and the files relevant to the task; discover actual paths.
 
-- 技術規劃、命令推理、commit message 與內部實作註記使用英文。
-- 所有玩家可見內容與交付給使用者閱讀的文件使用繁體中文：NPC 對話、UI 文字、任務文字、測試清單、SRS 對照、素材與動作設計說明。
+- `scenes/main/`, `scenes/player/`, `scenes/ui/`: application, player and HUD.
+- `scenes/levels/{village,guild,wasteland}/`: shared gameplay loop.
+- `scripts/autoload/`: state, JSON registry, persistence, routing and audio.
+- `scripts/components/`, `scripts/systems/`, `scripts/ui/`: reusable behavior.
+- `data/`: gameplay/art contracts; `assets/`: authored art/audio.
+- `scripts/tests/`, `scenes/tests/`: runners; `scripts/tools/run_qa.py`: safe QA.
 
-## 必讀檔案
+## Engineering and architectural invariants
 
-- `project.godot`
-- `AI_HANDOFF.md`
-- `WORKFLOW.md`
-- `docs/IMPLEMENTATION_PLAN.md`
-- `docs/PLAYTEST_CHECKLIST.md`
-- `docs/SRS_TRACEABILITY.md`
-- `data/maps/npcs.json`
-- `data/maps/quests.json`
-- `data/maps/wasteland_routes.json`
-- `data/items/equipment.json`
-- `data/items/recipes.json`
-- `data/enemies/enemies.json`
-- `scenes/main/Main.gd`
-- `scenes/player/Player.gd`
-- `scenes/ui/HUD.gd`
-- `scenes/levels/village/Village.gd`
-- `scenes/levels/guild/Guild.gd`
-- `scenes/levels/wasteland/Wasteland.gd`
-- `scripts/tests/VerticalSliceVerifier.gd`
-- `scripts/tests/AutomatedPlaytestRunner.gd`
-- `scripts/tests/VisualReviewRunner.gd`
+- Use Ponytail: reuse existing code, native Godot features and standard libraries;
+  deliver the smallest complete fix. No speculative refactor or scene rewrite.
+- Preserve the five autoloads, signals and data-driven route/scene architecture.
+- Keep runtime art under `assets/`, preserve R-17 and current authored animation.
+  Art generation is an explicit production operation, not routine QA.
+- Retain save Base64/SHA-256 wrapping and legacy compatibility. Validate before
+  applying state; distinguish a saved position from a scene entrance.
+- One active quest; objective progress belongs to that contract and route;
+  rewards are granted once. Resource counters mirror inventory.
+- Keep PC keyboard/mouse controls. All player-visible text uses Traditional Chinese.
+- Canonical technical instructions/specifications and commit messages use English.
+  Traditional Chinese explanations translate them; never create two rule sources.
 
-## 開發流程
+## Skills and delegation
 
-Planning alone is not completion. For implementation tasks, the AI must inspect, plan, execute, validate, fix obvious issues, commit, and report results.
+Read `.agents/skills/<name>/SKILL.md` when its trigger applies. Invoke explicitly
+with `$godot-testing`, etc. Skills describe procedures; this file owns policy.
 
-每次實作前先執行或檢查：
+| Skill | Trigger |
+| --- | --- |
+| `godot-development` | Implement gameplay, UI, scene or data behavior. |
+| `godot-testing` | Diagnose failures and produce fresh validation evidence. |
+| `godot-visual-review` | Review art/animation, rendered UI, maps or screenshots. |
+| `godot-safe-refactor` | Change structure while preserving characterized behavior. |
 
-```powershell
-git status
-git branch --show-current
-git log --oneline --decorate -10
-git show --stat HEAD
-```
+For structural exploration use the installed `codebase-memory` skill; if there is
+no current index, inspect source and disclose the coverage limit. Delegate useful
+independent tasks with exclusive file ownership; integrate and test the combined
+state. All subagents use `gpt-6-luna` with `max` reasoning. Do not create additional
+user chats or change global Codex configuration.
 
-修改時遵守既有 Godot 場景樹、autoload、Signal、JSON 資料驅動架構。不要為了小改動重建專案、搬移主場景、改掉 Godot 版本或改掉既有驗證入口。
+## Validation, safety and Definition of Done
 
-## 驗證流程
+Follow risk-based validation in `WORKFLOW.md`. Discover the installed executable
+and verify `--version`. Isolate QA saves/output; never run writing tests against
+player progress. Headless rendering cannot prove visual correctness. Record
+commands, exit statuses, runtime errors, failures and skipped checks honestly.
 
-Godot console 固定使用：
+Never discard dirty work, expose/commit secrets, rewrite history, force push,
+regenerate/overwrite authored assets without authorization, modify other projects,
+or recursively delete directories/bulk-delete files. Delete at most one confirmed
+absolute file path at a time. Do not push without explicit user instruction and
+never rewrite remotes as routine setup. Commit only authorized, verified scoped
+changes; required validation failures block committing the affected change.
 
-```powershell
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --quit
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/ValidationRunner.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/AutomatedPlaytestRunner.tscn'
-```
+Done means acceptance criteria satisfied, integrated behavior exercised, relevant
+checks executed, no known critical regression, and concise evidence/limitations
+in `AI_HANDOFF.md`. A plan or generated code alone is incomplete.
 
-若修改 JSON，至少執行：
-
-```powershell
-node -e "for (const f of ['data/maps/npcs.json','data/maps/events.json','data/maps/quests.json','data/maps/wasteland_routes.json','data/items/equipment.json','data/items/recipes.json','data/enemies/enemies.json','data/maps/wasteland_params.json']) { JSON.parse(require('fs').readFileSync(f,'utf8')); } console.log('JSON OK')"
-```
-
-若修改玩家動作 atlas，先執行：
-
-```powershell
-python scripts\tools\build_robot_player_atlas.py
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/PixelAssetBaker.tscn'
-```
-
-## Git 流程
-
-- 每次完成可驗證更新後都要 commit。
-- commit message 使用英文。
-- 不提交 `.env`、token、credentials、cache、匯出成品或 build artifacts。
-- 不 force push。
-
-安全設定 remote：
-
-```powershell
-if (git remote get-url origin 2>$null) { git remote set-url origin https://github.com/yuchan27/Game.git } else { git remote add origin https://github.com/yuchan27/Game.git }
-git push -u origin HEAD
-```
-
-## 禁止事項
-
-禁止批量刪除文件或目錄。不要使用：
-
-- `del /s`
-- `rd /s`
-- `rmdir /s`
-- `Remove-Item -Recurse`
-- `rm -rf`
-
-需要刪除文件時，只能一次刪除一個明確路徑的文件。若需要批量刪除，停止操作並請使用者手動處理。
-
-未經明確要求，不要改掉：
-
-- Godot 執行檔路徑。
-- `project.godot` 的 autoload 結構。
-- `ValidationRunner.tscn`、`AutomatedPlaytestRunner.tscn`、`VisualReviewRunner.tscn` 的驗證用途。
-- 存檔格式的 Base64/checksum 安全設計。
-- 村莊、公會、廢土三場景的核心流程。
-- 繁體中文玩家可見文字政策。
+References: `WORKFLOW.md` (lifecycle), `docs/PROJECT_AUDIT.md` (starting evidence),
+`docs/GAMEPLAY_ROADMAP.md` (priorities), `docs/RELEASE_READINESS.md` (fresh results),
+`docs/DEVELOPER_GUIDE.zh-TW.md` (human guide), `docs/PLAYTEST_CHECKLIST.md` (manual QA).

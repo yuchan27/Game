@@ -4,9 +4,9 @@
 | --- | --- |
 | Godot 4.x 2D Roguelike vertical slice | `project.godot` 使用 Godot 4.6.3，流程包含標題、村莊、公會、四方向廢土、戰鬥、掉落、任務、裝備、地圖與存檔。 |
 | 像素風偽 3D / 2.5D | `WorldBackdrop.gd`、Y-sort、建築 / props PNG、底部碰撞與道路地形色彩提供偽 3D 層次。 |
-| 主角為回收機器人 | `recycler_player_multiaction_8dir.png` 由 `docs/art_direction_reference_r17_full_body.png` 建立全身原創 R-17，不再使用人類角色疊機器人外殼。 |
-| 主角 8 方向 | `Player.gd` 與 player atlas 使用 8 方向 row：下、右下、右、右上、上、左上、左、左下。 |
-| 主角多動作 | Atlas 支援 `idle`、`walk`、`shoot`、`draw_sword`、`slash`、`swap_tool`、`interact`、`hit`、`dead`，單格 `112x128`、每動作 4 幀、總尺寸 `4032x1024`。 |
+| 主角為回收機器人 | `recycler_player_multiaction_8dir_preview.png` 由 `docs/art_direction_reference_r17_full_body.png` 建立全身原創 R-17，不再使用人類角色疊機器人外殼。 |
+| 主角 8 方向 | `Player.gd` 與 player atlas 使用 8 方向 row：右、右下、下、左下、左、左上、上、右上。 |
+| 主角多動作 | Atlas 支援 `idle`、`walk`、`shoot`、`draw_sword`、`slash`、`swap_tool`、`interact`、`hit`、`dead`，單格 `112x128`、每動作 8 幀、總尺寸 `8064x1024`。 |
 | PC 操作 | `GameState._ensure_input_actions()` 設定 WASD、滑鼠左鍵、右鍵、空白鍵、Tab/I、H、M、F5/F9、1-4、Q。 |
 | 左鍵依裝備決定動作 | `GameState.active_attack_mode()` 與 `Player._primary_attack_pressed()` 依目前快捷裝備切換近戰或射擊。 |
 | 滑鼠瞄準射擊 | `Player._aim_direction()` 讀取滑鼠方向，遠程武器播放射擊動畫並建立 projectile。 |
@@ -21,7 +21,7 @@
 | 小地圖 / 全屏地圖 | `WorldMapView.gd` 掃描 `map_player`、`map_npc`、`map_station`、`map_gate`、`map_pickup`、`map_enemy`、`map_boss`、`map_prop`、`map_event`，支援小地圖與全屏地圖。 |
 | 裝備與資源資料驅動 | `equipment.json`、`recipes.json`、`InventorySystem.gd`、`GameState.gd` 管理武器、護甲、工具、資源、合成與裝備。 |
 | 獨立正式素材 | `data/art/visual_assets.json` 統一宣告 player、NPC、structures、items、props、enemies、Boss 的正式 PNG 與 minimap marker。 |
-| 掉落物樣式 | `Pickup.gd` 使用 `icon_asset_id` 載入對應 icon，並提供彈跳與亮度提示。 |
+| 掉落物樣式 | `Pickup.gd` 使用 `icon_asset_id` 載入對應 icon，使用現有 64px 圖示與碰撞回收，保持靜態掉落表現。 |
 | 敵人與 Boss | `enemies.json` 定義近戰、快速、遠程、重型、飛行、混合型與 Boss；`Enemy.gd` 提供 AI、受擊、血條、傷害數字、死亡與掉落。 |
 | 戰鬥回饋 | `DamagePopup.gd`、`EnemyHealthBar.gd`、`HitEffect.gd` 與 `Enemy.gd` 顯示傷害、血條、污染液 / 火花與死亡淡出。 |
 | 任務 | `quests.json` 提供擊殺、收集、路線探索與 Boss / 精英相關獎勵。 |

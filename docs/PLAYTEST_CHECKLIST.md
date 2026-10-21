@@ -3,22 +3,20 @@
 ## 自動驗證
 
 ```powershell
-node -e "for (const f of ['data/maps/npcs.json','data/maps/events.json','data/maps/quests.json','data/maps/wasteland_routes.json','data/items/equipment.json','data/items/recipes.json','data/enemies/enemies.json','data/art/visual_assets.json','data/art/player_animation_manifest.json']) { JSON.parse(require('fs').readFileSync(f,'utf8')); } console.log('JSON OK')"
-python scripts\tools\build_release_candidate_assets.py
-python scripts\tools\verify_visual_assets.py
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --quit
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/PixelAssetBaker.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/ValidationRunner.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/AutomatedPlaytestRunner.tscn'
+# 從專案根目錄，以已確認的 Godot 4.6.3 執行；詳見 README 環境設定
+& .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile core
 ```
+
+素材生成／PixelAssetBaker 會修改素材，不能當作例行測試。QA 應使用隔離副本與存檔。
+
 
 ## 主角拆分幀驗收
 
-- 確認 `assets/sprites/player/frames/` 內每個動作都有 `dir_0` 到 `dir_7`，每個方向都有 `frame_0.png` 到 `frame_3.png`。
+- 確認 `assets/sprites/player/frames/` 內每個動作都有 `dir_0` 到 `dir_7`，每個方向都有 `frame_0.png` 到 `frame_7.png`。
 - 查看 `docs/player_split_frame_diagnostic.png`，確認 R-17 沒有被切掉、沒有額外手臂、左右方向沒有反。
 - `A` 移動時角色朝左，`D` 移動時角色朝右。
-- 近戰時刀刃與揮擊弧線要從 R-17 手部延伸，不可像獨立漂浮手臂。
-- 射擊時槍身要與手臂連接，槍口火光方向要跟滑鼠瞄準方向一致。
+- 近戰與射擊動作應沿用目前角色圖像；若未啟用武器 overlay，不應出現浮空肢體或額外武器。
+- 射擊方向、彈丸起點與滑鼠瞄準一致；以實際啟用的動作圖集驗收。
 
 ## 武器與掉落驗收
 
@@ -52,10 +50,10 @@ python scripts\tools\verify_visual_assets.py
 ## 手動視覺 Review
 
 ```powershell
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/VisualReviewRunner.tscn'
+& .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile visual
 ```
 
-檢查 `docs/visual_review_*.png`：
+檢查 QA 輸出目錄中的 `visual_review_*.png`：
 
 - 村莊畫面。
 - 四個廢土路線。
