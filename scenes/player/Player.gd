@@ -112,7 +112,6 @@ func _physics_process(delta: float) -> void:
 	if slash_combo_reset_timer <= 0.0:
 		slash_combo_step = 0
 
-
 	var input_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var gameplay_input_blocked := _is_gameplay_input_blocked()
 	if gameplay_input_blocked:
@@ -290,8 +289,8 @@ func _melee_attack(use_mouse_aim := true) -> void:
 	slash_combo_reset_timer = 0.85
 
 	var attack_state: int = PlayerState.SLASH if (slash_combo_step == 0) else PlayerState.DRAW_SWORD
-	_set_timed_state(attack_state, 0.28)
-	attack_timer = float(weapon.get("cooldown", 0.30)) * GameState.get_weapon_cooldown_multiplier(weapon_id)
+	_set_timed_state(attack_state, 0.42)
+	attack_timer = float(weapon.get("cooldown", 0.35)) * GameState.get_weapon_cooldown_multiplier(weapon_id)
 
 	var sfx_id := String(weapon.get("sfx_id", "melee"))
 	var shake := float(weapon.get("shake_strength", 0.08))
@@ -363,7 +362,7 @@ func _ranged_attack() -> void:
 		return
 
 	last_direction = _aim_direction()
-	_set_timed_state(PlayerState.SHOOT, 0.22)
+	_set_timed_state(PlayerState.SHOOT, 0.45)
 
 	var sfx_id := String(ranged.get("sfx_id", "shoot"))
 	var shake := float(ranged.get("shake_strength", 0.06))
@@ -373,7 +372,7 @@ func _ranged_attack() -> void:
 	GameState.request_feedback("attack", shake)
 	_spawn_attack_flash(vfx_id, 0.92)
 
-	ranged_timer = float(ranged.get("cooldown", 0.25)) * GameState.get_weapon_cooldown_multiplier(ranged_id)
+	ranged_timer = float(ranged.get("cooldown", 0.35)) * GameState.get_weapon_cooldown_multiplier(ranged_id)
 
 	var projectile_damage := 10 + GameState.get_stat_bonus("attack")
 	var projectile_count := clampi(int(ranged.get("projectile_count", 1)), 1, 6)
@@ -448,6 +447,42 @@ func _get_or_build_loadout_frames(loadout_key: String) -> SpriteFrames:
 		return _loadout_frames_cache[loadout_key] as SpriteFrames
 
 	var frames := SpriteFrames.new()
+	var frame_size := PixelArtFactory.PLAYER_FRAME_SIZE
+	var has_anim30 := true
+
+	for action_index in range(PixelArtFactory.PLAYER_ACTIONS.size()):
+		var action_name := String(PixelArtFactory.PLAYER_ACTIONS[action_index])
+		var anim30_path := "res://assets/sprites/player/anim30/%s/%s.png" % [loadout_key, action_name]
+		var action_sheet: Texture2D = ASSET_LOADER.load_png(anim30_path)
+
+		if action_sheet == null:
+			has_anim30 = false
+			break
+
+		for direction_index in range(8):
+			var animation_name := "%s_%d" % [action_name, direction_index]
+			frames.add_animation(animation_name)
+			var anim_fps := 30.0
+			if action_name in ["slash", "draw_sword"]:
+				anim_fps = 36.0
+			frames.set_animation_speed(animation_name, anim_fps)
+			frames.set_animation_loop(animation_name, action_name in ["idle", "walk"])
+
+			for frame_index in range(30):
+				var atlas_tex := AtlasTexture.new()
+				atlas_tex.atlas = action_sheet
+				atlas_tex.region = Rect2(frame_index * frame_size.x, direction_index * frame_size.y, frame_size.x, frame_size.y)
+				frames.add_frame(animation_name, atlas_tex)
+
+	if not has_anim30:
+		frames = _build_legacy_8frame_loadout(loadout_key)
+
+	_loadout_frames_cache[loadout_key] = frames
+	return frames
+
+
+func _build_legacy_8frame_loadout(loadout_key: String) -> SpriteFrames:
+	var frames := SpriteFrames.new()
 	var atlas_path := _loadout_atlas_path(loadout_key)
 	var atlas: Texture2D = ASSET_LOADER.load_png(atlas_path)
 
@@ -484,7 +519,6 @@ func _get_or_build_loadout_frames(loadout_key: String) -> SpriteFrames:
 				else:
 					frames.add_frame(animation_name, PIXEL.new().player_texture(source_direction_index, action_index, frame_index))
 
-	_loadout_frames_cache[loadout_key] = frames
 	return frames
 
 
