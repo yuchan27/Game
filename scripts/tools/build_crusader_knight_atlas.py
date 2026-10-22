@@ -50,7 +50,7 @@ DIR_TO_ROW0_INDEX = {0: 2, 1: 1, 2: 0, 3: 7, 4: 6, 5: 5, 6: 4, 7: 3}
 
 
 def extract_and_clean_source_sheet(source_path: Path) -> Image.Image:
-    """Loads source sheet, removes exterior dark background via BFS flood-fill, and scrubs watermark artifacts."""
+    """Loads source sheet, removes exterior dark background via BFS flood-fill without altering character pixels."""
     img = Image.open(source_path).convert("RGB")
     arr = np.array(img, dtype=np.int32)
     h, w = arr.shape[:2]
@@ -61,7 +61,13 @@ def extract_and_clean_source_sheet(source_path: Path) -> Image.Image:
 
     # BFS from all four outer image borders
     visited = np.zeros((h, w), dtype=bool)
-    q = deque([(0, 0), (0, w - 1), (h - 1, 0), (h - 1, w - 1)])
+    q = deque()
+    for x in range(w):
+        q.append((0, x))
+        q.append((h - 1, x))
+    for y in range(h):
+        q.append((y, 0))
+        q.append((y, w - 1))
     for y, x in q:
         visited[y, x] = True
 
@@ -70,7 +76,7 @@ def extract_and_clean_source_sheet(source_path: Path) -> Image.Image:
         for dy, dx in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             ny, nx = cy + dy, cx + dx
             if 0 <= ny < h and 0 <= nx < w and not visited[ny, nx]:
-                if diff[ny, nx] <= 24:
+                if diff[ny, nx] <= 20:
                     visited[ny, nx] = True
                     q.append((ny, nx))
 
@@ -78,19 +84,6 @@ def extract_and_clean_source_sheet(source_path: Path) -> Image.Image:
     rgba[:, :, :3] = img
     rgba[:, :, 3] = 255
     rgba[visited, 3] = 0
-
-    # Clean stray watermark text and isolated edge artifacts
-    for y in range(h):
-        for x in range(w):
-            if rgba[y, x, 3] > 0:
-                r, g, b = int(rgba[y, x, 0]), int(rgba[y, x, 1]), int(rgba[y, x, 2])
-                # Bright white watermark lettering
-                if r > 210 and g > 210 and b > 210:
-                    rgba[y, x, 3] = 0
-                # Light grey box / ground watermark near feet of row 0 / row 1 / row 3
-                elif 85 < r < 145 and 95 < g < 145 and 110 < b < 155:
-                    if (178 <= y <= 200) or (365 <= y <= 380) or (730 <= y <= 750):
-                        rgba[y, x, 3] = 0
 
     return Image.fromarray(rgba, "RGBA")
 

@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageOps
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_crusader_knight_atlas as legacy  # noqa: E402
@@ -579,78 +579,248 @@ def compose(body: Image.Image, weapon: Image.Image, behind: bool) -> Image.Image
     return out
 
 
-def render_dead(assets, direction: int, f: int, loadout: str) -> Image.Image:
-    theta = THETA[direction]
-    d = (math.cos(math.radians(theta)), math.sin(math.radians(theta)))
-    right = (d[1], -d[0])
-    base_sprite = get_clean_body_canvas(assets, direction)
-    kind = KIND_OF[loadout]
-    side = -1.0 if d[0] >= 0 else 1.0
-    lean = kf(f, [(0, 0), (3, -16), (9, -11), (17, -22), (29, -22)])
-    squash = kf(f, [(0, 1), (9, 1), (17, 0.82), (29, 0.82)])
-    lunge = kf(f, [(0, 0), (3, -5), (9, -4), (17, -2), (29, -2)])
-    flash = kf(f, [(0, 0), (1, 0.55), (4, 0.3), (8, 0), (29, 0)])
-    canvas = base_sprite.copy()
-    chest = CHEST
-    if f <= 17:
-        body, chest = render_body(base_sprite, d[0] * lunge, d[1] * lunge * FLAT, lean * d[0], squash, 0, 0, flash)
+def rotate_on_feet(img: Image.Image, angle: float) -> Image.Image:
+    if abs(angle) < 0.1:
+        return img
+    w, h = img.size
+    pad = 50
+    big = Image.new("RGBA", (w + pad * 2, h + pad * 2), (0, 0, 0, 0))
+    ax, ay = int(w * 0.45), h
+    big.paste(img, (pad, pad))
+    center = (pad + ax, pad + ay)
+    rot = big.rotate(angle, resample=Image.BICUBIC, center=center)
+    bbox = rot.getbbox()
+    if not bbox:
+        return img
+    return rot.crop(bbox)
+
+
+def render_dead(assets, direction: int, f: int, loadout: str = "blade") -> Image.Image:
+    is_left = direction in (3, 4, 5)
+    hurt_s = ImageOps.mirror(assets.hurt_sprite) if is_left else assets.hurt_sprite
+    dead_s = ImageOps.mirror(assets.dead_sprite) if is_left else assets.dead_sprite
+
+    if f <= 6:
+        ox = -4 if not is_left else 4
+        return legacy.place_in_frame(hurt_s, target_h=83, offset_x=ox, offset_y=-1)
+    elif f <= 14:
+        prog = (f - 6) / 8.0
+        ox = int(round((-4 if not is_left else 4) * (1.0 - prog)))
+        oy = int(round(prog * 8))
+        return legacy.place_in_frame(hurt_s, target_h=81, offset_x=ox, offset_y=oy)
     else:
-        w = smooth((f - 17) / 9.0)
-        ang = side * -88.0 * w
-        scale = lerp(1.0, 0.66, w)
-        co, _ = affine_coeffs(ang, (56.0, FEET_Y), 0.82, FEET_Y, 0, 0, scale)
-        tmp = crisp(canvas.transform((W, H), Image.AFFINE, co, resample=Image.BICUBIC))
-        bbox = tmp.getbbox()
-        body = tmp
-        if bbox:
-            cx = (bbox[0] + bbox[2]) / 2
-            sx = int(round((56 - cx) * w))
-            sy = int(round((111 - bbox[3]) * w))
-            body = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-            body.alpha_composite(tmp, (sx, sy))
-    out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    # weapon: in hand until 10, then drops and rests on the ground
-    p = new_pose(kind)
-    p["phi"] += kf(f, [(0, 0), (3, 24), (10, 10)])
-    drop = smooth((f - 10) / 8.0)
-    if f < 10:
-        wl, ydir = draw_weapon_layer(p, theta, d, right, chest)
-        out = compose(body, wl, ydir < -0.25)
+        # Fallen defeated knight resting on the ground
+        dw = 100
+        dh = int(round(dw / float(dead_s.width) * dead_s.height))
+        scaled_dead = dead_s.resize((dw, dh), Image.NEAREST)
+        frame = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ox = (W - dw) // 2
+        oy = int(FEET_Y - dh)
+        frame.alpha_composite(scaled_dead, (ox, oy))
+        return frame
+
+
+# --------------------------------------------------------------------------- authentic action renderers
+ANGLES_SHOOT = {0: 0, 1: -8, 2: -15, 3: 15, 4: 0, 5: -8, 6: 12, 7: 8}
+
+
+def render_shoot(assets, direction: int, f: int) -> Image.Image:
+    is_left = direction in (3, 4, 5)
+    ang = ANGLES_SHOOT[direction]
+    cb = assets.crossbow_sprite
+    base = ImageOps.mirror(cb) if is_left else cb
+
+    # Scale to target knight height (76px keeps comfortable margins on 112px cell)
+    aspect = base.width / float(base.height)
+    th = 76
+    tw = int(round(th * aspect))
+    scaled = base.resize((tw, th), Image.NEAREST)
+
+    aimed = rotate_on_feet(scaled, ang)
+
+    # 30-frame timing:
+    # f 0..2: Fire! Golden/cyan muzzle burst flash, bolt release!
+    # f 3..8: Peak recoil impulse absorption (slight backward kickback)
+    # f 9..18: Winch crank & reload
+    # f 19..29: Aimed ready stance
+    t = f / float(N)
+    if f <= 2:
+        rx = -1.0
+        ry = 0.0
+    elif f <= 8:
+        w_rec = math.sin((f - 2) / 6.0 * math.pi)
+        rx = -2.5 * w_rec
+        ry = -0.8 * w_rec
+    elif f <= 18:
+        prog = (f - 8) / 10.0
+        rx = -2.5 * (1.0 - prog)
+        ry = 0.6 * math.sin(prog * math.pi)
     else:
-        rest_theta = 0.0 if side < 0 else 180.0
-        gp = (56 + d[0] * 6 - side * 26 * drop, 102 - 2 * (1 - drop))
-        cpos = (lerp(chest[0], gp[0], drop), lerp(chest[1], gp[1], drop))
-        p["e"] = lerp(p["e"], 0.0, drop)
-        p["phi"] = lerp(p["phi"], 0.0, drop)
-        th = lerp(theta, rest_theta + 90.0 * 0, drop) if abs(theta - rest_theta) < 180 else rest_theta
-        wl, _ = draw_weapon_layer(p, th, (math.cos(math.radians(th)), math.sin(math.radians(th))), (math.sin(math.radians(th)), -math.cos(math.radians(th))), cpos, arms_ok=False)
-        out = compose(body, wl, drop > 0.5)
-    return out
+        rx = 0.0
+        ry = math.sin(t * math.tau * 2) * 0.3
+
+    sign_x = -1.0 if is_left else 1.0
+    ox = (W - aimed.width) // 2 + int(round(sign_x * rx))
+    oy = int(FEET_Y - aimed.height + round(ry))
+
+    frame = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    frame.alpha_composite(aimed, (ox, oy))
+
+    # Brilliant muzzle burst flash on frame 0 and 1
+    if f in (0, 1):
+        dr = ImageDraw.Draw(frame, "RGBA")
+        if not is_left:
+            mx = ox + aimed.width - 2
+            my = oy + int(round(aimed.height * 0.38))
+        else:
+            mx = ox + 2
+            my = oy + int(round(aimed.height * 0.38))
+
+        r = 4 if f == 0 else 3
+        dr.ellipse((mx - r, my - r * 0.7, mx + r, my + r * 0.7), fill=(255, 255, 225, 255))
+        dr.line((mx - r * 1.5, my, mx + r * 1.5, my), fill=(255, 215, 65, 240), width=2)
+        dr.line((mx, my - r * 1.5, mx, my + r * 1.5), fill=(255, 215, 65, 240), width=2)
+        dr.line((mx - r * 1.1, my - r * 0.9, mx + r * 1.1, my + r * 0.9), fill=(255, 240, 150, 200), width=1)
+        dr.line((mx - r * 1.1, my + r * 0.9, mx + r * 1.1, my - r * 0.9), fill=(255, 240, 150, 200), width=1)
+
+    return frame
+
+
+def render_slash(assets, action: str, direction: int, f: int, loadout: str) -> Image.Image:
+    combo2 = action == "draw_sword"
+    is_left = direction in (3, 4, 5)
+
+    if loadout == "heavy":
+        if f <= 6:
+            img = legacy.place_in_frame(assets.hammer_sprite, target_h=88, offset_y=-2)
+        elif f <= 14:
+            img = legacy.place_in_frame(assets.hammer_sprite, target_h=90, offset_y=-4)
+        elif f <= 22:
+            base_s = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
+            img = legacy.place_in_frame(base_s, target_h=82, offset_y=4)
+            dr = ImageDraw.Draw(img, "RGBA")
+            dr.ellipse((34, 100, 78, 114), outline=(245, 180, 50, 200), width=2)
+            dr.ellipse((26, 96, 86, 118), outline=(255, 215, 80, 120), width=1)
+        else:
+            base_s = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
+            img = legacy.place_in_frame(base_s, target_h=84)
+        if is_left:
+            img = ImageOps.mirror(img)
+        return img
+
+    if not combo2:
+        if f <= 5:
+            pose_idx = 0
+            ox = -2 if not is_left else 2
+        elif f <= 14:
+            pose_idx = 1
+            ox = 1 if not is_left else -1
+        elif f <= 22:
+            pose_idx = 2
+            ox = 1 if not is_left else -1
+        else:
+            pose_idx = 3
+            ox = 0
+    else:
+        if f <= 5:
+            pose_idx = 3
+            ox = -2 if not is_left else 2
+        elif f <= 14:
+            pose_idx = 1
+            ox = 0
+        elif f <= 22:
+            pose_idx = 2
+            ox = 0
+        else:
+            pose_idx = 0
+            ox = -1 if not is_left else 1
+
+    sprite = assets.slash_sprites[pose_idx]
+    placed = legacy.place_tight_slash(sprite, None, 84, is_left, offset_x=ox)
+    return placed
+
+
+def render_walk(assets, direction: int, f: int) -> Image.Image:
+    is_left = direction in (3, 4, 5)
+    cycle = (f / float(N)) * 2.0 * math.pi * 2.0
+    walk_sprites = assets.walk_sprites
+    step = int((f * 4.0 / float(N))) % len(walk_sprites)
+    w_sprite = walk_sprites[step]
+    if is_left:
+        w_sprite = ImageOps.mirror(w_sprite)
+    bob_y = int(round(math.sin(cycle) * 1.5))
+    stride_x = int(round(math.cos(cycle) * 1.0))
+    img = legacy.place_in_frame(w_sprite, target_h=84, offset_x=stride_x, offset_y=bob_y)
+    if f in (1, 8, 16, 23):
+        fx = 44 if is_left else 68
+        legacy.draw_footstep_dust(img, fx, 108, 1.0)
+    return img
+
+
+def render_idle(assets, direction: int, f: int) -> Image.Image:
+    base_s = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
+    cycle = (f / float(N)) * math.tau
+    bob_y = int(round(math.sin(cycle) * 1.2))
+    return legacy.place_in_frame(base_s, target_h=84, offset_y=bob_y)
+
+
+def render_hit(assets, direction: int, f: int) -> Image.Image:
+    base_s = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
+    is_left = direction in (3, 4, 5)
+    hurt_s = ImageOps.mirror(assets.hurt_sprite) if is_left else assets.hurt_sprite
+    if f <= 3:
+        return legacy.place_in_frame(hurt_s, target_h=84, offset_x=-3 if not is_left else 3, offset_y=-1)
+    elif f <= 10:
+        return legacy.place_in_frame(hurt_s, target_h=83, offset_x=-4 if not is_left else 4, offset_y=1)
+    elif f <= 18:
+        return legacy.place_in_frame(base_s, target_h=83, offset_x=-1 if not is_left else 1)
+    else:
+        return legacy.place_in_frame(base_s, target_h=84)
+
+
+def render_swap_tool(assets, direction: int, f: int) -> Image.Image:
+    base_s = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
+    if f <= 6:
+        return legacy.place_in_frame(base_s, target_h=84, offset_x=1)
+    elif f <= 18:
+        shield_block = legacy.place_in_frame(base_s, target_h=85, offset_x=-1)
+        dr = ImageDraw.Draw(shield_block, "RGBA")
+        dr.arc((66, 52, 94, 92), -60, 60, fill=(240, 190, 60, 180), width=2)
+        return shield_block
+    else:
+        return legacy.place_in_frame(base_s, target_h=84)
+
+
+def render_interact(assets, direction: int, f: int) -> Image.Image:
+    base_s = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
+    if f <= 6:
+        return legacy.place_in_frame(base_s, target_h=84)
+    elif f <= 18:
+        inter_img = legacy.place_in_frame(base_s, target_h=84, offset_x=2, offset_y=1)
+        dr = ImageDraw.Draw(inter_img, "RGBA")
+        dr.ellipse((72, 68, 78, 74), fill=(60, 230, 240, 210))
+        dr.arc((68, 64, 82, 78), 0, 360, fill=(40, 200, 230, 140), width=1)
+        return inter_img
+    else:
+        return legacy.place_in_frame(base_s, target_h=84)
 
 
 def render_frame(assets, action: str, direction: int, f: int, loadout: str) -> Image.Image:
     if action == "dead":
         return render_dead(assets, direction, f, loadout)
-    theta = THETA[direction]
-    d = (math.cos(math.radians(theta)), math.sin(math.radians(theta)))
-    right = (d[1], -d[0])
-    base_sprite = get_clean_body_canvas(assets, direction)
-    p = pose_for(action, loadout, f)
-    lean_rot = p["lean"] * d[0]
-    dx = p["sway"] + d[0] * p["lunge"]
-    dy = p["bob"] + d[1] * p["lunge"] * FLAT + p["lean"] * d[1] * 0.25
-    body, chest = render_body(base_sprite, dx, dy, lean_rot, p["squash"], p["l"], p["r"], p["flash"])
-    wl, ydir = draw_weapon_layer(p, theta, d, right, chest)
-    out = compose(body, wl, ydir < -0.25)
-    if p["dust"]:
-        add_dust(out, f, d)
+    if action == "shoot":
+        return render_shoot(assets, direction, f)
+    if action in ("slash", "draw_sword"):
+        return render_slash(assets, action, direction, f, loadout)
+    if action == "walk":
+        return render_walk(assets, direction, f)
     if action == "hit":
-        add_sparks(out, chest[0] + d[0] * 6, chest[1] - 2, f - 1)
+        return render_hit(assets, direction, f)
+    if action == "swap_tool":
+        return render_swap_tool(assets, direction, f)
     if action == "interact":
-        add_scan_ring(out, d, f)
-    if action == "shoot" and f in (0, 1):
-        add_muzzle_flash(out, chest, theta, f)
-    return out
+        return render_interact(assets, direction, f)
+    return render_idle(assets, direction, f)
 
 
 # --------------------------------------------------------------------------- build
