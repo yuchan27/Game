@@ -189,34 +189,65 @@ def draw_sword_south(canvas: Image.Image, frame: int) -> Image.Image:
 
 def place_tight_slash(
     sprite: Image.Image,
-    crop_box: Tuple[int, int, int, int],
+    crop_box: Optional[Tuple[int, int, int, int]],
     target_h: int,
     is_left: bool,
     offset_x: int = 0,
+    pose_idx: int = -1,
 ) -> Image.Image:
-    """Tightly crops to knight and greatsword, scaling so the entire blade and tip fit inside the 112px canvas with zero cut off."""
+    """Tightly positions knight and greatsword slash animations, ensuring knight body height is ALWAYS strictly maintained at target_h with zero shrinking."""
     cropped = sprite.crop(crop_box) if crop_box is not None else sprite
+
+    # Identify pose from dimensions if not explicitly passed
+    if pose_idx < 0:
+        if cropped.size == (188, 160):
+            pose_idx = 0
+        elif cropped.size == (341, 154):
+            pose_idx = 1
+        elif cropped.size == (264, 160):
+            pose_idx = 2
+        elif cropped.size == (199, 160):
+            pose_idx = 3
+
+    # Lock scale strictly based on character height so knight NEVER shrinks
     scale = target_h / float(max(1, cropped.height))
-    new_w = int(cropped.width * scale)
+    new_w = int(round(cropped.width * scale))
     new_h = target_h
-
-    # Ensure width never exceeds 108px so margins are always >= 2px
-    if new_w > 108:
-        scale_w = 108.0 / new_w
-        new_w = 108
-        new_h = max(1, int(new_h * scale_w))
-
     scaled = cropped.resize((new_w, new_h), Image.LANCZOS)
+
+    # Calculate optimal horizontal placement based on the knight's body center
+    if pose_idx == 1:
+        # Raw center ~ 180, place knight body at frame x = 50 so golden slash arc extends to right edge
+        paste_x = 50 - int(round(180.0 * scale)) + offset_x
+    elif pose_idx == 2:
+        # Raw center ~ 110, place knight body at frame x = 52
+        paste_x = 52 - int(round(110.0 * scale)) + offset_x
+    else:
+        paste_x = (FRAME_W - new_w) // 2 + offset_x
+
+    paste_y = 108 - new_h
     canvas = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
 
-    # Center cleanly within 112px canvas so margins on both sides are >= 2px
-    paste_x = (FRAME_W - new_w) // 2 + (offset_x if not is_left else -offset_x)
-    paste_y = 108 - new_h
+    if paste_x < 0:
+        src_crop_x = -paste_x
+        src_w = min(new_w - src_crop_x, FRAME_W)
+        if src_w > 0:
+            sub = scaled.crop((src_crop_x, 0, src_crop_x + src_w, new_h))
+            canvas.paste(sub, (0, paste_y), sub)
+    else:
+        dst_w = min(new_w, FRAME_W - paste_x)
+        if dst_w > 0:
+            sub = scaled.crop((0, 0, dst_w, new_h))
+            canvas.paste(sub, (paste_x, paste_y), sub)
 
-    # Clamp safely inside canvas with guaranteed margin
-    paste_x = max(2, min(FRAME_W - new_w - 2, paste_x))
+    # Strictly guarantee >= 2px margins and smooth alpha fade at boundaries
+    arr = np.array(canvas)
+    arr[:, :2, 3] = 0
+    arr[:, 110:, 3] = 0
+    arr[:, 2, 3] = (arr[:, 2, 3].astype(float) * 0.5).astype(np.uint8)
+    arr[:, 109, 3] = (arr[:, 109, 3].astype(float) * 0.5).astype(np.uint8)
+    canvas = Image.fromarray(arr)
 
-    canvas.paste(scaled, (paste_x, paste_y), scaled)
     if is_left:
         canvas = ImageOps.mirror(canvas)
     return canvas
@@ -375,19 +406,19 @@ def generate_frame(
                 # Broadsword sweeping slash: strictly faces attacking direction with zero 180-degree flip
                 is_left = direction in (3, 4, 5)
                 if frame == 0:
-                    return place_tight_slash(assets.slash_sprites[0], None, 84, is_left, offset_x=-2)
+                    return place_tight_slash(assets.slash_sprites[0], None, 84, is_left, offset_x=-2, pose_idx=0)
                 elif frame == 1:  # Deep coiled windup facing target
-                    return place_tight_slash(assets.slash_sprites[0], None, 85, is_left, offset_x=-4)
+                    return place_tight_slash(assets.slash_sprites[0], None, 84, is_left, offset_x=-3, pose_idx=0)
                 elif frame in (2, 3):  # Explosive forward slash with fully intact greatsword blade and tip
-                    return place_tight_slash(assets.slash_sprites[1], None, 82, is_left, offset_x=1)
+                    return place_tight_slash(assets.slash_sprites[1], None, 84, is_left, offset_x=1, pose_idx=1)
                 elif frame == 4:  # Follow-through
-                    return place_tight_slash(assets.slash_sprites[2], None, 84, is_left, offset_x=1)
+                    return place_tight_slash(assets.slash_sprites[2], None, 84, is_left, offset_x=1, pose_idx=2)
                 elif frame == 5:
-                    return place_tight_slash(assets.slash_sprites[2], None, 84, is_left, offset_x=0)
+                    return place_tight_slash(assets.slash_sprites[2], None, 84, is_left, offset_x=0, pose_idx=2)
                 elif frame == 6:  # Forward low recovery holding sword
-                    return place_tight_slash(assets.slash_sprites[3], None, 84, is_left, offset_x=-1)
+                    return place_tight_slash(assets.slash_sprites[3], None, 84, is_left, offset_x=-1, pose_idx=3)
                 else:  # Reset to guard holding sword
-                    return place_tight_slash(assets.slash_sprites[3], None, 84, is_left, offset_x=0)
+                    return place_tight_slash(assets.slash_sprites[3], None, 84, is_left, offset_x=0, pose_idx=3)
 
     elif action == "draw_sword":
         # Combo hit 2: rising backhand cleave - strictly faces aiming direction with zero 180-degree flip
@@ -402,13 +433,13 @@ def generate_frame(
         else:
             is_left = direction in (3, 4, 5)
             if frame in (0, 1):  # Low forward stance windup
-                return place_tight_slash(assets.slash_sprites[3], None, 83, is_left, offset_x=-2)
+                return place_tight_slash(assets.slash_sprites[3], None, 84, is_left, offset_x=-2, pose_idx=3)
             elif frame in (2, 3):  # Rising slash cleave with intact sword
-                return place_tight_slash(assets.slash_sprites[1], None, 82, is_left, offset_x=0)
+                return place_tight_slash(assets.slash_sprites[1], None, 84, is_left, offset_x=0, pose_idx=1)
             elif frame in (4, 5):  # Apex follow-through
-                return place_tight_slash(assets.slash_sprites[2], None, 84, is_left, offset_x=0)
+                return place_tight_slash(assets.slash_sprites[2], None, 84, is_left, offset_x=0, pose_idx=2)
             else:  # Return to guard
-                return place_tight_slash(assets.slash_sprites[0], None, 84, is_left, offset_x=-1)
+                return place_tight_slash(assets.slash_sprites[0], None, 84, is_left, offset_x=-1, pose_idx=0)
 
     elif action == "shoot":
         # Mechanical crossbow / arbalest with directional 8-way aiming

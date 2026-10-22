@@ -736,7 +736,7 @@ def render_slash(assets, action: str, direction: int, f: int, loadout: str) -> I
             ox = -1 if not is_left else 1
 
     sprite = assets.slash_sprites[pose_idx]
-    placed = legacy.place_tight_slash(sprite, None, 84, is_left, offset_x=ox)
+    placed = legacy.place_tight_slash(sprite, None, 84, is_left, offset_x=ox, pose_idx=pose_idx)
     return placed
 
 

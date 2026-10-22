@@ -14,7 +14,7 @@
       "minimap_marker": "player",
       "source_ref": "res://assets/sprites/player/source/r17_reference.png",
       "animation_manifest": "res://data/art/player_animation_manifest.json",
-      "source_sha256": "a9aef6e8dfcba35dfda3d6baa07803b38284c15661f7f09f88f82e19158c6ea4",
+      "source_sha256": "6f14aa3ab68ec9bfcb3721a2aeddf1dac88673095158d20f8535ca5cd5d3826f",
       "source_dimensions": [
         8064,
         1024
