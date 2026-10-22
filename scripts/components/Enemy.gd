@@ -33,6 +33,8 @@ var _sprite: Sprite2D
 var _health_bar: Node2D
 var _base_sprite_pos := Vector2.ZERO
 var _base_scale := Vector2.ONE
+var knockback_velocity := Vector2.ZERO
+var stagger_timer := 0.0
 
 func setup(id: String, data: Dictionary, player_ref: Node2D) -> void:
 	enemy_id = id
@@ -61,6 +63,19 @@ func _ready() -> void:
 	shape.radius = 32 if enemy_type == "boss" else 18
 	collision.shape = shape
 	add_child(collision)
+	var shadow := Polygon2D.new()
+	shadow.name = "GroundShadow"
+	shadow.z_index = -1
+	var rx := 42.0 if enemy_type == "boss" else 22.0
+	var ry := 14.0 if enemy_type == "boss" else 7.5
+	var sy := 24.0 if enemy_type == "boss" else 18.0
+	var s_pts := PackedVector2Array()
+	for i in range(18):
+		var a := float(i) / 18.0 * TAU
+		s_pts.append(Vector2(cos(a) * rx, sin(a) * ry + sy))
+	shadow.polygon = s_pts
+	shadow.color = Color(0.03, 0.02, 0.04, 0.44)
+	add_child(shadow)
 	_sprite = Sprite2D.new()
 	_sprite.texture = _enemy_texture(enemy_type)
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -90,7 +105,10 @@ func _physics_process(delta: float) -> void:
 	var desired := _desired_direction(offset, distance)
 	if _sprite != null and abs(offset.x) > 4.0:
 		_sprite.flip_h = offset.x < 0.0
-	velocity = desired * _current_speed()
+	stagger_timer = max(0.0, stagger_timer - delta)
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 880.0 * delta)
+	var move_mult := 0.25 if stagger_timer > 0.0 else 1.0
+	velocity = desired * _current_speed() * move_mult + knockback_velocity
 	move_and_slide()
 	attack_cooldown = max(0.0, attack_cooldown - delta)
 	ranged_cooldown = max(0.0, ranged_cooldown - delta)
@@ -101,6 +119,13 @@ func _physics_process(delta: float) -> void:
 	if distance < contact_range and attack_cooldown <= 0.0:
 		attack_cooldown = _contact_cooldown()
 		GameState.take_damage(damage)
+
+func apply_knockback(impulse: Vector2) -> void:
+	if is_dead:
+		return
+	var resist := 0.30 if enemy_type == "boss" else (0.58 if enemy_type == "heavy" else 1.0)
+	knockback_velocity = impulse * resist
+	stagger_timer = max(stagger_timer, 0.12 * resist)
 
 func take_damage(amount: int, melee := false) -> void:
 	if is_dead:
@@ -136,7 +161,7 @@ func _die(_melee: bool) -> void:
 		return
 	is_dead = true
 	AudioManager.play_sfx("death")
-	GameState.record_enemy_defeated()
+	GameState.record_enemy_defeated(enemy_type == "boss")
 	if enemy_type == "boss":
 		GameState.notify("Boss 已被擊破，污染核心掉落。")
 	for child in get_children():

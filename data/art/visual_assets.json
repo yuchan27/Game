@@ -2,7 +2,7 @@
   "assets": {
     "player_r17": {
       "type": "player",
-      "path": "res://assets/sprites/player/recycler_player_multiaction_8dir.png",
+      "path": "res://assets/sprites/player/recycler_player_multiaction_8dir_preview.png",
       "size": [
         112,
         128
@@ -12,7 +12,7 @@
       "usage_id": "player_r17",
       "unique_required": true,
       "minimap_marker": "player",
-      "source_ref": "res://docs/art_direction_reference_r17_full_body.png",
+      "source_ref": "res://assets/sprites/player/source/r17_reference.png",
       "animation_manifest": "res://data/art/player_animation_manifest.json"
     },
     "npc_forge_master": {
@@ -495,63 +495,63 @@
     },
     "item_scrap": {
       "type": "item",
-      "path": "res://assets/sprites/items/scrap_bundle.png",
+      "path": "res://assets/sprites/items/掉落物/1.png",
       "size": [
-        88,
-        72
+        64,
+        64
       ],
       "map_marker": "pickup",
       "asset_id": "item_scrap",
       "usage_id": "item_scrap",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_ammo": {
       "type": "item",
-      "path": "res://assets/sprites/items/ammo_crate.png",
+      "path": "res://assets/sprites/items/掉落物/2.png",
       "size": [
-        88,
-        72
+        64,
+        64
       ],
       "map_marker": "pickup",
       "asset_id": "item_ammo",
       "usage_id": "item_ammo",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_mutant_core": {
       "type": "item",
-      "path": "res://assets/sprites/items/mutant_core.png",
+      "path": "res://assets/sprites/items/掉落物/4.png",
       "size": [
-        88,
-        72
+        64,
+        64
       ],
       "map_marker": "pickup",
       "asset_id": "item_mutant_core",
       "usage_id": "item_mutant_core",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_bio_crystal": {
       "type": "item",
-      "path": "res://assets/sprites/items/bio_crystal.png",
+      "path": "res://assets/sprites/items/掉落物/3.png",
       "size": [
-        88,
-        72
+        64,
+        64
       ],
       "map_marker": "pickup",
       "asset_id": "item_bio_crystal",
       "usage_id": "item_bio_crystal",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_rust_blade": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/rust_blade.png",
+      "path": "res://assets/sprites/items/weapons/rust_blade_icon.png",
       "size": [
         88,
         72
@@ -565,7 +565,7 @@
     },
     "item_spark_cutter": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/spark_cutter.png",
+      "path": "res://assets/sprites/items/weapons/spark_cutter_icon.png",
       "size": [
         88,
         72
@@ -579,7 +579,7 @@
     },
     "item_breaker_hammer": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/breaker_hammer.png",
+      "path": "res://assets/sprites/items/weapons/breaker_hammer_icon.png",
       "size": [
         88,
         72
@@ -593,7 +593,7 @@
     },
     "item_pipe_rifle": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/pipe_rifle.png",
+      "path": "res://assets/sprites/items/weapons/pipe_rifle_icon.png",
       "size": [
         88,
         72
@@ -607,7 +607,7 @@
     },
     "item_coil_launcher": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/coil_launcher.png",
+      "path": "res://assets/sprites/items/weapons/coil_launcher_icon.png",
       "size": [
         88,
         72
@@ -621,7 +621,7 @@
     },
     "item_acid_sprayer": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/acid_sprayer.png",
+      "path": "res://assets/sprites/items/weapons/acid_sprayer_icon.png",
       "size": [
         88,
         72
@@ -635,7 +635,7 @@
     },
     "item_patched_armor": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/patched_armor.png",
+      "path": "res://assets/sprites/items/armor/初階.png",
       "size": [
         88,
         72
@@ -645,11 +645,11 @@
       "usage_id": "item_patched_armor",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_crystal_guard": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/crystal_guard.png",
+      "path": "res://assets/sprites/items/armor/中階.png",
       "size": [
         88,
         72
@@ -659,11 +659,11 @@
       "usage_id": "item_crystal_guard",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_industrial_exoshell": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/industrial_exoshell.png",
+      "path": "res://assets/sprites/items/armor/高階.png",
       "size": [
         88,
         72
@@ -673,11 +673,11 @@
       "usage_id": "item_industrial_exoshell",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "authored_replacement"
     },
     "item_recycler_glove": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/recycler_glove.png",
+      "path": "res://assets/sprites/items/weapons/recycler_glove_icon.png",
       "size": [
         88,
         72
@@ -691,7 +691,7 @@
     },
     "item_magnet_breaker": {
       "type": "equipment",
-      "path": "res://assets/sprites/items/magnet_breaker.png",
+      "path": "res://assets/sprites/items/weapons/magnet_breaker_icon.png",
       "size": [
         88,
         72
@@ -806,6 +806,563 @@
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
       "minimap_marker": "none"
+    },
+    "item_light_reinforced_armor": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/armor/初階2.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_light_reinforced_armor",
+      "usage_id": "item_light_reinforced_armor",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "authored_replacement"
+    },
+    "item_hazard_armor": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/armor/中階2.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_hazard_armor",
+      "usage_id": "item_hazard_armor",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "authored_replacement"
+    },
+    "item_core_power_armor": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/armor/高階2.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_core_power_armor",
+      "usage_id": "item_core_power_armor",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "authored_replacement"
+    },
+    "prop_highway_bus": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/expanded/highway_bus.png",
+      "size": [
+        208,
+        139
+      ],
+      "collision_footprint": [
+        0.05,
+        0.62,
+        0.91,
+        0.28
+      ],
+      "display_name": "廢棄公路巴士",
+      "blocks_movement": true,
+      "map_marker": "prop",
+      "asset_id": "prop_highway_bus",
+      "usage_id": "prop_highway_bus",
+      "unique_required": true,
+      "minimap_marker": "prop",
+      "source_ref": "imagegen:2026-10-21",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "source_sha256": "f64cdca6fd79dff1b0a8d89be902b74aa2b9e818aef2a7c7f84fc6c3372fbcf9"
+    },
+    "prop_marsh_pump": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/expanded/marsh_pump.png",
+      "size": [
+        160,
+        146
+      ],
+      "collision_footprint": [
+        0.12,
+        0.7,
+        0.82,
+        0.16
+      ],
+      "display_name": "污染排水泵",
+      "blocks_movement": true,
+      "map_marker": "prop",
+      "asset_id": "prop_marsh_pump",
+      "usage_id": "prop_marsh_pump",
+      "unique_required": true,
+      "minimap_marker": "prop",
+      "source_ref": "imagegen:2026-10-21",
+      "source_dimensions": [
+        1322,
+        1190
+      ],
+      "source_sha256": "4d4084434527a57a481ebc1aeb74f667d542c83345075410bdeb7c1be0b597d7"
+    },
+    "prop_crystal_spire": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/expanded/crystal_spire.png",
+      "size": [
+        214,
+        193
+      ],
+      "collision_footprint": [
+        0.26,
+        0.77,
+        0.54,
+        0.18
+      ],
+      "display_name": "紫晶裂隙尖塔",
+      "blocks_movement": true,
+      "map_marker": "prop",
+      "asset_id": "prop_crystal_spire",
+      "usage_id": "prop_crystal_spire",
+      "unique_required": true,
+      "minimap_marker": "prop",
+      "source_ref": "imagegen:2026-10-21",
+      "source_dimensions": [
+        1322,
+        1190
+      ],
+      "source_sha256": "ef5c4eac2ab7351862dbeb23f68fa9a2baec1c6d2019ac4d80b1cd59b3fab1db"
+    },
+    "prop_factory_turbine": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/expanded/factory_turbine.png",
+      "size": [
+        168,
+        151
+      ],
+      "collision_footprint": [
+        0.08,
+        0.66,
+        0.87,
+        0.2
+      ],
+      "display_name": "廢棄渦輪機組",
+      "blocks_movement": true,
+      "map_marker": "prop",
+      "asset_id": "prop_factory_turbine",
+      "usage_id": "prop_factory_turbine",
+      "unique_required": true,
+      "minimap_marker": "prop",
+      "source_ref": "imagegen:2026-10-21",
+      "source_dimensions": [
+        1322,
+        1190
+      ],
+      "source_sha256": "ed4b27e149fe6c9d367d10a98423b598c29e1bef7cfaf29ed54cb8ce7a53db61"
+    },
+    "item_melee_sword": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/melee_sword_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_melee_sword",
+      "usage_id": "item_melee_sword",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_melee_sword": {
+      "asset_id": "player_weapon_melee_sword",
+      "usage_id": "player_weapon_melee_sword",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/melee_sword_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_melee_axe": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/melee_axe_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_melee_axe",
+      "usage_id": "item_melee_axe",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_melee_axe": {
+      "asset_id": "player_weapon_melee_axe",
+      "usage_id": "player_weapon_melee_axe",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/melee_axe_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_ranged_pistol": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/ranged_pistol_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_ranged_pistol",
+      "usage_id": "item_ranged_pistol",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_ranged_pistol": {
+      "asset_id": "player_weapon_ranged_pistol",
+      "usage_id": "player_weapon_ranged_pistol",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/ranged_pistol_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_ranged_revolver": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/ranged_revolver_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_ranged_revolver",
+      "usage_id": "item_ranged_revolver",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_ranged_revolver": {
+      "asset_id": "player_weapon_ranged_revolver",
+      "usage_id": "player_weapon_ranged_revolver",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/ranged_revolver_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_ranged_smg": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/ranged_smg_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_ranged_smg",
+      "usage_id": "item_ranged_smg",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_ranged_smg": {
+      "asset_id": "player_weapon_ranged_smg",
+      "usage_id": "player_weapon_ranged_smg",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/ranged_smg_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_ranged_shotgun": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/ranged_shotgun_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_ranged_shotgun",
+      "usage_id": "item_ranged_shotgun",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_ranged_shotgun": {
+      "asset_id": "player_weapon_ranged_shotgun",
+      "usage_id": "player_weapon_ranged_shotgun",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/ranged_shotgun_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_ranged_crossbow": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/ranged_crossbow_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_ranged_crossbow",
+      "usage_id": "item_ranged_crossbow",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_ranged_crossbow": {
+      "asset_id": "player_weapon_ranged_crossbow",
+      "usage_id": "player_weapon_ranged_crossbow",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/ranged_crossbow_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "item_ranged_explosive": {
+      "type": "equipment",
+      "path": "res://assets/sprites/items/weapons/ranged_explosive_icon.png",
+      "size": [
+        88,
+        72
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_ranged_explosive",
+      "usage_id": "item_ranged_explosive",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "imagegen_wasteland_arsenal_sheet"
+    },
+    "player_weapon_ranged_explosive": {
+      "asset_id": "player_weapon_ranged_explosive",
+      "usage_id": "player_weapon_ranged_explosive",
+      "type": "weapon_overlay",
+      "path": "res://assets/sprites/player/weapons/ranged_explosive_overlay.png",
+      "size": [
+        96,
+        64
+      ],
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "unique_required": true,
+      "minimap_marker": "none"
+    },
+    "prop_crystal_node": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/crystal_node.png",
+      "size": [
+        96,
+        80
+      ],
+      "map_marker": "resource",
+      "asset_id": "prop_crystal_node",
+      "usage_id": "prop_crystal_node",
+      "unique_required": false,
+      "minimap_marker": "resource",
+      "source_ref": "props_expansion"
+    },
+    "prop_ore_node": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/ore_node.png",
+      "size": [
+        96,
+        80
+      ],
+      "map_marker": "resource",
+      "asset_id": "prop_ore_node",
+      "usage_id": "prop_ore_node",
+      "unique_required": false,
+      "minimap_marker": "resource",
+      "source_ref": "props_expansion"
+    },
+    "prop_herb_patch": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/herb_patch.png",
+      "size": [
+        96,
+        80
+      ],
+      "map_marker": "resource",
+      "asset_id": "prop_herb_patch",
+      "usage_id": "prop_herb_patch",
+      "unique_required": false,
+      "minimap_marker": "resource",
+      "source_ref": "props_expansion"
+    },
+    "prop_barrel_stack": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/barrel_stack.png",
+      "size": [
+        96,
+        80
+      ],
+      "map_marker": "resource",
+      "asset_id": "prop_barrel_stack",
+      "usage_id": "prop_barrel_stack",
+      "unique_required": false,
+      "minimap_marker": "resource",
+      "source_ref": "props_expansion"
+    },
+    "prop_scrap_pile": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/scrap_pile.png",
+      "size": [
+        96,
+        80
+      ],
+      "map_marker": "resource",
+      "asset_id": "prop_scrap_pile",
+      "usage_id": "prop_scrap_pile",
+      "unique_required": false,
+      "minimap_marker": "resource",
+      "source_ref": "props_expansion"
+    },
+    "prop_ruin_wall": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/ruin_wall.png",
+      "size": [
+        96,
+        80
+      ],
+      "map_marker": "prop",
+      "asset_id": "prop_ruin_wall",
+      "usage_id": "prop_ruin_wall",
+      "unique_required": false,
+      "minimap_marker": "prop",
+      "source_ref": "props_expansion"
+    },
+    "item_alloy_plate": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/alloy_plate.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_alloy_plate",
+      "usage_id": "item_alloy_plate",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_broken_coil": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/broken_coil.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_broken_coil",
+      "usage_id": "item_broken_coil",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_mutant_herb": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/mutant_herb.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_mutant_herb",
+      "usage_id": "item_mutant_herb",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_acid_sac": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/acid_sac.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_acid_sac",
+      "usage_id": "item_acid_sac",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_amethyst_gem": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/amethyst_gem.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_amethyst_gem",
+      "usage_id": "item_amethyst_gem",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_precision_chip": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/precision_chip.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_precision_chip",
+      "usage_id": "item_precision_chip",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_dynamo_core": {
+      "type": "item",
+      "path": "res://assets/sprites/items/materials/dynamo_core.png",
+      "size": [
+        64,
+        64
+      ],
+      "map_marker": "pickup",
+      "asset_id": "item_dynamo_core",
+      "usage_id": "item_dynamo_core",
+      "unique_required": true,
+      "minimap_marker": "pickup",
+      "source_ref": "regional_material"
+    },
+    "item_terminal_controller": {
+      "path": "res://assets/sprites/items/terminal_controller.png",
+      "size": [
+        64,
+        64
+      ],
+      "type": "item",
+      "description": "終端操作器"
     }
   }
 }

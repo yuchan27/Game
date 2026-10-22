@@ -4,44 +4,119 @@
       "name": "鏽蝕回收刀",
       "slot": "weapon",
       "attack_mode": "melee",
-      "cooldown": 0.32,
+      "archetype": "knife",
+      "cooldown": 0.3,
+      "range": 74.0,
+      "arc_deg": 75.0,
+      "knockback": 110.0,
+      "crit_chance": 0.12,
       "icon_asset_id": "player_weapon_rust_blade",
-      "stats": { "attack": 8, "defense": 0, "speed": 0 },
+      "stats": {
+        "attack": 8,
+        "defense": 0,
+        "speed": 4
+      },
       "world_drop_asset_id": "player_weapon_rust_blade",
       "weapon_sprite_asset_id": "player_weapon_rust_blade",
       "attack_vfx_id": "slash_rust",
-      "sfx_id": "sfx_melee_heavy",
+      "sfx_id": "sfx_melee_slash",
       "shake_strength": 0.08,
       "progression": "base",
-      "obtain_hint": "初始裝備"
+      "obtain_hint": "初始裝備（輕快短刃，高攻速與閃避機動）"
     },
     "spark_cutter": {
       "name": "火花切割斧",
       "slot": "weapon",
       "attack_mode": "melee",
-      "cooldown": 0.42,
+      "archetype": "machete",
+      "cooldown": 0.4,
+      "range": 84.0,
+      "arc_deg": 105.0,
+      "knockback": 155.0,
+      "crit_chance": 0.15,
       "icon_asset_id": "player_weapon_spark_cutter",
-      "stats": { "attack": 15, "defense": 0, "speed": -2 },
+      "stats": {
+        "attack": 15,
+        "defense": 0,
+        "speed": -2
+      },
       "world_drop_asset_id": "player_weapon_spark_cutter",
       "weapon_sprite_asset_id": "player_weapon_spark_cutter",
       "attack_vfx_id": "slash_spark",
-      "sfx_id": "sfx_melee_heavy",
+      "sfx_id": "sfx_melee_slash",
       "shake_strength": 0.12,
       "progression": "craftable",
       "obtain_hint": "合成台製作：廢鐵 x20 + 污染晶核 x1"
+    },
+    "melee_sword": {
+      "name": "高頻振刀",
+      "slot": "weapon",
+      "attack_mode": "melee",
+      "archetype": "sword",
+      "cooldown": 0.34,
+      "range": 92.0,
+      "arc_deg": 95.0,
+      "knockback": 135.0,
+      "crit_chance": 0.24,
+      "icon_asset_id": "item_melee_sword",
+      "stats": {
+        "attack": 19,
+        "defense": 1,
+        "speed": 6
+      },
+      "world_drop_asset_id": "item_melee_sword",
+      "weapon_sprite_asset_id": "player_weapon_melee_sword",
+      "attack_vfx_id": "slash_blade",
+      "sfx_id": "sfx_melee_slash",
+      "shake_strength": 0.11,
+      "progression": "craftable",
+      "obtain_hint": "合成台製作：廢鐵 x24 + 異變核心 x1 + 污染晶核 x1"
+    },
+    "melee_axe": {
+      "name": "破甲戰斧",
+      "slot": "weapon",
+      "attack_mode": "melee",
+      "archetype": "axe",
+      "cooldown": 0.5,
+      "range": 90.0,
+      "arc_deg": 125.0,
+      "knockback": 210.0,
+      "crit_chance": 0.18,
+      "icon_asset_id": "item_melee_axe",
+      "stats": {
+        "attack": 22,
+        "defense": 2,
+        "speed": -4
+      },
+      "world_drop_asset_id": "item_melee_axe",
+      "weapon_sprite_asset_id": "player_weapon_melee_axe",
+      "attack_vfx_id": "slash_heavy",
+      "sfx_id": "sfx_melee_heavy",
+      "shake_strength": 0.16,
+      "progression": "craftable",
+      "obtain_hint": "合成台製作：廢鐵 x28 + 異變核心 x2"
     },
     "breaker_hammer": {
       "name": "重型拆解槌",
       "slot": "weapon",
       "attack_mode": "melee",
-      "cooldown": 0.62,
+      "archetype": "hammer",
+      "cooldown": 0.6,
+      "range": 96.0,
+      "arc_deg": 145.0,
+      "knockback": 260.0,
+      "crit_chance": 0.2,
       "icon_asset_id": "player_weapon_breaker_hammer",
-      "stats": { "attack": 24, "defense": 2, "speed": -8 },
+      "stats": {
+        "attack": 26,
+        "defense": 3,
+        "speed": -8
+      },
       "world_drop_asset_id": "player_weapon_breaker_hammer",
       "weapon_sprite_asset_id": "player_weapon_breaker_hammer",
       "attack_vfx_id": "slam_spark",
       "sfx_id": "sfx_melee_heavy",
-      "shake_strength": 0.2,
+      "shake_strength": 0.22,
       "progression": "guild_reward",
       "obtain_hint": "公會任務獎勵：舊工廠核心討伐"
     },
@@ -49,29 +124,174 @@
       "name": "管線釘槍",
       "slot": "ranged",
       "attack_mode": "ranged",
+      "archetype": "rifle",
       "cooldown": 0.22,
+      "projectile_count": 1,
+      "spread_deg": 3.0,
+      "projectile_speed": 620.0,
+      "knockback": 65.0,
+      "crit_chance": 0.1,
       "icon_asset_id": "player_weapon_pipe_rifle",
-      "stats": { "attack": 6, "defense": 0, "speed": 0 },
+      "stats": {
+        "attack": 6,
+        "defense": 0,
+        "speed": 0
+      },
       "world_drop_asset_id": "player_weapon_pipe_rifle",
       "weapon_sprite_asset_id": "player_weapon_pipe_rifle",
       "attack_vfx_id": "muzzle_pipe",
       "sfx_id": "shoot",
       "shake_strength": 0.06,
       "progression": "base",
-      "obtain_hint": "初始裝備"
+      "obtain_hint": "初始裝備（穩定中距離連射）"
+    },
+    "ranged_pistol": {
+      "name": "廢土制式手槍",
+      "slot": "ranged",
+      "attack_mode": "ranged",
+      "archetype": "pistol",
+      "cooldown": 0.24,
+      "projectile_count": 1,
+      "spread_deg": 1.8,
+      "projectile_speed": 660.0,
+      "knockback": 75.0,
+      "crit_chance": 0.16,
+      "icon_asset_id": "item_ranged_pistol",
+      "stats": {
+        "attack": 9,
+        "defense": 0,
+        "speed": 6
+      },
+      "world_drop_asset_id": "item_ranged_pistol",
+      "weapon_sprite_asset_id": "player_weapon_ranged_pistol",
+      "attack_vfx_id": "muzzle_pipe",
+      "sfx_id": "sfx_shoot_pistol",
+      "shake_strength": 0.06,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x16 + 異變核心 x1"
+    },
+    "ranged_smg": {
+      "name": "廢鐵衝鋒槍",
+      "slot": "ranged",
+      "attack_mode": "ranged",
+      "archetype": "smg",
+      "cooldown": 0.13,
+      "projectile_count": 1,
+      "spread_deg": 7.5,
+      "projectile_speed": 600.0,
+      "knockback": 45.0,
+      "crit_chance": 0.09,
+      "icon_asset_id": "item_ranged_smg",
+      "stats": {
+        "attack": 7,
+        "defense": 0,
+        "speed": 8
+      },
+      "world_drop_asset_id": "item_ranged_smg",
+      "weapon_sprite_asset_id": "player_weapon_ranged_smg",
+      "attack_vfx_id": "muzzle_pipe",
+      "sfx_id": "sfx_shoot_smg",
+      "shake_strength": 0.05,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x22 + 污染晶核 x1"
+    },
+    "ranged_shotgun": {
+      "name": "雙管散彈槍",
+      "slot": "ranged",
+      "attack_mode": "ranged",
+      "archetype": "shotgun",
+      "cooldown": 0.48,
+      "projectile_count": 5,
+      "spread_deg": 22.0,
+      "projectile_speed": 560.0,
+      "knockback": 180.0,
+      "crit_chance": 0.12,
+      "icon_asset_id": "item_ranged_shotgun",
+      "stats": {
+        "attack": 14,
+        "defense": 1,
+        "speed": -2
+      },
+      "world_drop_asset_id": "item_ranged_shotgun",
+      "weapon_sprite_asset_id": "player_weapon_ranged_shotgun",
+      "attack_vfx_id": "muzzle_shotgun",
+      "sfx_id": "sfx_shoot_shotgun",
+      "shake_strength": 0.16,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x24 + 異變核心 x1 + 污染晶核 x1"
+    },
+    "ranged_revolver": {
+      "name": "荒原重型左輪",
+      "slot": "ranged",
+      "attack_mode": "ranged",
+      "archetype": "revolver",
+      "cooldown": 0.42,
+      "projectile_count": 1,
+      "spread_deg": 0.8,
+      "projectile_speed": 740.0,
+      "knockback": 160.0,
+      "crit_chance": 0.28,
+      "icon_asset_id": "item_ranged_revolver",
+      "stats": {
+        "attack": 16,
+        "defense": 0,
+        "speed": 2
+      },
+      "world_drop_asset_id": "item_ranged_revolver",
+      "weapon_sprite_asset_id": "player_weapon_ranged_revolver",
+      "attack_vfx_id": "muzzle_heavy",
+      "sfx_id": "sfx_shoot_pistol",
+      "shake_strength": 0.13,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x26 + 異變核心 x2"
+    },
+    "ranged_crossbow": {
+      "name": "穿甲連弩",
+      "slot": "ranged",
+      "attack_mode": "ranged",
+      "archetype": "crossbow",
+      "cooldown": 0.38,
+      "projectile_count": 1,
+      "spread_deg": 0.5,
+      "projectile_speed": 780.0,
+      "knockback": 140.0,
+      "crit_chance": 0.25,
+      "icon_asset_id": "item_ranged_crossbow",
+      "stats": {
+        "attack": 17,
+        "defense": 0,
+        "speed": 4
+      },
+      "world_drop_asset_id": "item_ranged_crossbow",
+      "weapon_sprite_asset_id": "player_weapon_ranged_crossbow",
+      "attack_vfx_id": "muzzle_coil",
+      "sfx_id": "sfx_shoot_coil",
+      "shake_strength": 0.08,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x24 + 污染晶核 x2"
     },
     "coil_launcher": {
       "name": "線圈步槍",
       "slot": "ranged",
       "attack_mode": "ranged",
-      "cooldown": 0.55,
+      "archetype": "sniper",
+      "cooldown": 0.52,
+      "projectile_count": 1,
+      "spread_deg": 0.2,
+      "projectile_speed": 840.0,
+      "knockback": 195.0,
+      "crit_chance": 0.3,
       "icon_asset_id": "player_weapon_coil_launcher",
-      "stats": { "attack": 18, "defense": 0, "speed": -6 },
+      "stats": {
+        "attack": 20,
+        "defense": 0,
+        "speed": -4
+      },
       "world_drop_asset_id": "player_weapon_coil_launcher",
       "weapon_sprite_asset_id": "player_weapon_coil_launcher",
       "attack_vfx_id": "muzzle_coil",
       "sfx_id": "sfx_shoot_coil",
-      "shake_strength": 0.1,
+      "shake_strength": 0.12,
       "progression": "craftable",
       "obtain_hint": "改裝站製作：廢鐵 x28 + 異變核心 x2"
     },
@@ -79,16 +299,51 @@
       "name": "酸蝕噴射器",
       "slot": "ranged",
       "attack_mode": "ranged",
-      "cooldown": 0.36,
+      "archetype": "chemical",
+      "cooldown": 0.32,
+      "projectile_count": 3,
+      "spread_deg": 14.0,
+      "projectile_speed": 520.0,
+      "knockback": 90.0,
+      "crit_chance": 0.14,
       "icon_asset_id": "player_weapon_acid_sprayer",
-      "stats": { "attack": 12, "defense": 0, "speed": -1 },
+      "stats": {
+        "attack": 13,
+        "defense": 0,
+        "speed": -1
+      },
       "world_drop_asset_id": "player_weapon_acid_sprayer",
       "weapon_sprite_asset_id": "player_weapon_acid_sprayer",
       "attack_vfx_id": "acid_spray",
       "sfx_id": "sfx_shoot_coil",
-      "shake_strength": 0.08,
+      "shake_strength": 0.09,
       "progression": "guild_reward",
       "obtain_hint": "公會任務獎勵：工廠外圍破壞任務"
+    },
+    "ranged_explosive": {
+      "name": "榴彈發射器",
+      "slot": "ranged",
+      "attack_mode": "ranged",
+      "archetype": "explosive",
+      "cooldown": 0.64,
+      "projectile_count": 1,
+      "spread_deg": 2.0,
+      "projectile_speed": 540.0,
+      "knockback": 240.0,
+      "crit_chance": 0.2,
+      "icon_asset_id": "item_ranged_explosive",
+      "stats": {
+        "attack": 25,
+        "defense": 1,
+        "speed": -6
+      },
+      "world_drop_asset_id": "item_ranged_explosive",
+      "weapon_sprite_asset_id": "player_weapon_ranged_explosive",
+      "attack_vfx_id": "muzzle_explosive",
+      "sfx_id": "sfx_shoot_shotgun",
+      "shake_strength": 0.22,
+      "progression": "craftable",
+      "obtain_hint": "改裝站製作：廢鐵 x34 + 異變核心 x2 + 污染晶核 x2"
     },
     "patched_armor": {
       "name": "初階護甲",
@@ -96,7 +351,11 @@
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_patched_armor",
-      "stats": { "attack": 0, "defense": 3, "speed": -4 },
+      "stats": {
+        "attack": 0,
+        "defense": 3,
+        "speed": -4
+      },
       "world_drop_asset_id": "item_patched_armor",
       "sfx_id": "ui",
       "shake_strength": 0.0,
@@ -109,7 +368,11 @@
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_light_reinforced_armor",
-      "stats": { "attack": 0, "defense": 5, "speed": -4 },
+      "stats": {
+        "attack": 0,
+        "defense": 5,
+        "speed": -4
+      },
       "world_drop_asset_id": "item_light_reinforced_armor",
       "sfx_id": "ui",
       "shake_strength": 0.0,
@@ -122,7 +385,11 @@
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_crystal_guard",
-      "stats": { "attack": 0, "defense": 7, "speed": -5 },
+      "stats": {
+        "attack": 0,
+        "defense": 7,
+        "speed": -5
+      },
       "world_drop_asset_id": "item_crystal_guard",
       "sfx_id": "ui",
       "shake_strength": 0.0,
@@ -135,7 +402,11 @@
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_hazard_armor",
-      "stats": { "attack": 1, "defense": 9, "speed": -6 },
+      "stats": {
+        "attack": 1,
+        "defense": 9,
+        "speed": -6
+      },
       "world_drop_asset_id": "item_hazard_armor",
       "sfx_id": "ui",
       "shake_strength": 0.0,
@@ -148,7 +419,11 @@
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_industrial_exoshell",
-      "stats": { "attack": 3, "defense": 12, "speed": -8 },
+      "stats": {
+        "attack": 3,
+        "defense": 12,
+        "speed": -8
+      },
       "world_drop_asset_id": "item_industrial_exoshell",
       "sfx_id": "ui",
       "shake_strength": 0.0,
@@ -161,7 +436,11 @@
       "attack_mode": "passive",
       "cooldown": 0.0,
       "icon_asset_id": "item_core_power_armor",
-      "stats": { "attack": 5, "defense": 16, "speed": -10 },
+      "stats": {
+        "attack": 5,
+        "defense": 16,
+        "speed": -10
+      },
       "world_drop_asset_id": "item_core_power_armor",
       "sfx_id": "ui",
       "shake_strength": 0.0,
@@ -174,7 +453,11 @@
       "attack_mode": "tool",
       "cooldown": 0.0,
       "icon_asset_id": "player_tool_recycler_glove",
-      "stats": { "attack": 1, "defense": 0, "speed": 8 },
+      "stats": {
+        "attack": 1,
+        "defense": 0,
+        "speed": 8
+      },
       "world_drop_asset_id": "player_tool_recycler_glove",
       "weapon_sprite_asset_id": "player_tool_recycler_glove",
       "attack_vfx_id": "scan_pulse",
@@ -189,7 +472,11 @@
       "attack_mode": "tool",
       "cooldown": 0.0,
       "icon_asset_id": "player_tool_magnet_breaker",
-      "stats": { "attack": 4, "defense": 1, "speed": 5 },
+      "stats": {
+        "attack": 4,
+        "defense": 1,
+        "speed": 5
+      },
       "world_drop_asset_id": "player_tool_magnet_breaker",
       "weapon_sprite_asset_id": "player_tool_magnet_breaker",
       "attack_vfx_id": "magnet_pulse",
@@ -197,6 +484,25 @@
       "shake_strength": 0.04,
       "progression": "guild_reward",
       "obtain_hint": "公會任務獎勵：排水站救援訊號"
+    },
+    "terminal_controller": {
+      "name": "終端操作器",
+      "slot": "tool",
+      "attack_mode": "tool",
+      "cooldown": 0.0,
+      "icon_asset_id": "item_terminal_controller",
+      "stats": {
+        "attack": 2,
+        "defense": 4,
+        "speed": 6
+      },
+      "world_drop_asset_id": "item_terminal_controller",
+      "weapon_sprite_asset_id": "item_terminal_controller",
+      "attack_vfx_id": "scan_pulse",
+      "sfx_id": "interact",
+      "shake_strength": 0.02,
+      "progression": "core",
+      "obtain_hint": "在工坊合成，解鎖方舟終端遠程操控與機密檔案解密"
     }
   },
   "resources": {
@@ -223,6 +529,48 @@
       "stack": 99,
       "icon_asset_id": "item_bio_crystal",
       "world_drop_asset_id": "item_bio_crystal"
+    },
+    "alloy_plate": {
+      "name": "高密合金板",
+      "stack": 99,
+      "icon_asset_id": "item_alloy_plate",
+      "world_drop_asset_id": "item_alloy_plate"
+    },
+    "broken_coil": {
+      "name": "超導線圈",
+      "stack": 99,
+      "icon_asset_id": "item_broken_coil",
+      "world_drop_asset_id": "item_broken_coil"
+    },
+    "mutant_herb": {
+      "name": "變異藥草",
+      "stack": 99,
+      "icon_asset_id": "item_mutant_herb",
+      "world_drop_asset_id": "item_mutant_herb"
+    },
+    "acid_sac": {
+      "name": "腐蝕酸液囊",
+      "stack": 99,
+      "icon_asset_id": "item_acid_sac",
+      "world_drop_asset_id": "item_acid_sac"
+    },
+    "amethyst_gem": {
+      "name": "共鳴紫晶原石",
+      "stack": 99,
+      "icon_asset_id": "item_amethyst_gem",
+      "world_drop_asset_id": "item_amethyst_gem"
+    },
+    "precision_chip": {
+      "name": "軍用精密晶片",
+      "stack": 99,
+      "icon_asset_id": "item_precision_chip",
+      "world_drop_asset_id": "item_precision_chip"
+    },
+    "dynamo_core": {
+      "name": "重型動力核心",
+      "stack": 99,
+      "icon_asset_id": "item_dynamo_core",
+      "world_drop_asset_id": "item_dynamo_core"
     }
   }
 }

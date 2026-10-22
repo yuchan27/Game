@@ -9,13 +9,23 @@
       "description": "南門外的廢鐵公路被污染體占住。清出道路、回收廢鐵，讓村莊能再次運送材料。",
       "route": "scrap_highway",
       "objectives": [
-        { "type": "defeat", "counter": "defeat_enemy", "amount": 5 },
-        { "type": "collect", "item": "scrap", "amount": 12 }
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 5
+        },
+        {
+          "type": "collect",
+          "item": "scrap",
+          "amount": 12
+        }
       ],
       "reward": {
-        "ammo": 12,
+        "ammo": 16,
         "mutant_core": 1,
-        "scrap": 10
+        "scrap": 20,
+        "alloy_plate": 3,
+        "broken_coil": 2
       }
     },
     {
@@ -27,12 +37,22 @@
       "description": "西門排水區滲出綠色污染液。採回污染晶核並擊退靠近的飛行體。",
       "route": "toxic_marsh",
       "objectives": [
-        { "type": "collect", "item": "bio_crystal", "amount": 2 },
-        { "type": "defeat", "counter": "defeat_enemy", "amount": 3 }
+        {
+          "type": "collect",
+          "item": "bio_crystal",
+          "amount": 2
+        },
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 3
+        }
       ],
       "reward": {
-        "scrap": 24,
-        "bio_crystal": 1
+        "scrap": 30,
+        "bio_crystal": 2,
+        "mutant_herb": 4,
+        "acid_sac": 2
       }
     },
     {
@@ -44,12 +64,22 @@
       "description": "北門裂隙出現遠程污染體。沿晶脈調查、收集污染晶核並帶回紀錄。",
       "route": "crystal_scar",
       "objectives": [
-        { "type": "defeat", "counter": "defeat_enemy", "amount": 6 },
-        { "type": "collect", "item": "bio_crystal", "amount": 3 }
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 6
+        },
+        {
+          "type": "collect",
+          "item": "bio_crystal",
+          "amount": 3
+        }
       ],
       "reward": {
-        "scrap": 18,
-        "hazard_armor": 1
+        "scrap": 28,
+        "hazard_armor": 1,
+        "amethyst_gem": 3,
+        "bio_crystal": 2
       }
     },
     {
@@ -61,13 +91,28 @@
       "description": "東門工廠外圍有精英與 Boss 反應。擊敗污染核心，帶回重型拆解槌與工業外骨架。",
       "route": "old_factory",
       "objectives": [
-        { "type": "defeat", "counter": "defeat_enemy", "amount": 8 },
-        { "type": "collect", "item": "mutant_core", "amount": 2 }
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 8
+        },
+        {
+          "type": "defeat",
+          "counter": "defeat_boss",
+          "amount": 1
+        },
+        {
+          "type": "collect",
+          "item": "mutant_core",
+          "amount": 2
+        }
       ],
       "reward": {
-        "ammo": 18,
+        "ammo": 24,
         "breaker_hammer": 1,
-        "industrial_exoshell": 1
+        "industrial_exoshell": 1,
+        "precision_chip": 3,
+        "dynamo_core": 2
       }
     },
     {
@@ -79,12 +124,23 @@
       "description": "進入西門毒沼，清出訊號站周邊敵人並回收足夠資源修復中繼器。",
       "route": "toxic_marsh",
       "objectives": [
-        { "type": "defeat", "counter": "defeat_enemy", "amount": 5 },
-        { "type": "collect", "item": "scrap", "amount": 18 }
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 5
+        },
+        {
+          "type": "collect",
+          "item": "scrap",
+          "amount": 18
+        }
       ],
       "reward": {
-        "ammo": 10,
-        "magnet_breaker": 1
+        "ammo": 18,
+        "magnet_breaker": 1,
+        "mutant_herb": 5,
+        "acid_sac": 2,
+        "scrap": 25
       }
     },
     {
@@ -96,14 +152,23 @@
       "description": "前往東門舊工廠，擊敗機械敵人並帶回異變核心，讓改裝站能研究反制裝置。",
       "route": "old_factory",
       "objectives": [
-        { "type": "defeat", "counter": "defeat_enemy", "amount": 10 },
-        { "type": "collect", "item": "mutant_core", "amount": 3 }
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 10
+        },
+        {
+          "type": "collect",
+          "item": "mutant_core",
+          "amount": 3
+        }
       ],
       "reward": {
-        "scrap": 36,
-        "acid_sprayer": 1,
         "core_power_armor": 1,
-        "ammo": 16
+        "scrap": 35,
+        "precision_chip": 4,
+        "dynamo_core": 2,
+        "ammo": 20
       }
     }
   ]

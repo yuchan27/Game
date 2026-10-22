@@ -6,11 +6,33 @@
       "seed_offset": 1100,
       "music": "wasteland",
       "tile_theme": "road",
-      "notice": "進入南門廢鐵公路。沿破柏油主路推進，回收車骸與彈藥箱。",
-      "enemy_mix": ["scrap_biter", "rust_brute", "mech_husk"],
-      "prop_mix": ["wreck", "road_marker", "scrap_barricade", "scrap_wall", "rust_rock"],
-      "resource_mix": ["scrap", "ammo", "scrap", "mutant_core"],
-      "boss_enabled": false
+      "hazard_type": "scorched_zone",
+      "weather": "dust_wind",
+      "notice": "進入南門廢鐵公路。沿破柏油雙向主幹道推進，回收車骸與彈藥箱。",
+      "enemy_mix": [
+        "scrap_biter",
+        "rust_brute",
+        "mech_husk"
+      ],
+      "prop_mix": [
+        "highway_bus",
+        "wreck",
+        "road_marker",
+        "scrap_barricade",
+        "scrap_wall",
+        "rust_rock",
+        "scrap_pile",
+        "barrel_stack"
+      ],
+      "resource_mix": [
+        "scrap",
+        "ammo",
+        "alloy_plate",
+        "broken_coil",
+        "scrap"
+      ],
+      "boss_enabled": false,
+      "landmark_prop": "highway_bus"
     },
     "toxic_marsh": {
       "name": "西門：毒沼排水區",
@@ -18,11 +40,33 @@
       "seed_offset": 2200,
       "music": "wasteland",
       "tile_theme": "toxic",
-      "notice": "進入毒沼排水區。避開綠色毒泥，沿管線棧道採集污染晶核。",
-      "enemy_mix": ["toxic_runner", "spore_gunner", "rot_wing", "scrap_biter"],
-      "prop_mix": ["toxic_pool", "signal_pylon", "dead_tree", "scrap_wall", "rust_rock"],
-      "resource_mix": ["bio_crystal", "scrap", "ammo", "bio_crystal"],
-      "boss_enabled": false
+      "hazard_type": "acid_pool",
+      "weather": "spore_mist",
+      "notice": "進入毒沼排水區。避開腐蝕毒泥水道，沿金屬格柵棧道採集污染晶核。",
+      "enemy_mix": [
+        "toxic_runner",
+        "spore_gunner",
+        "rot_wing",
+        "scrap_biter"
+      ],
+      "prop_mix": [
+        "marsh_pump",
+        "toxic_pool",
+        "signal_pylon",
+        "dead_tree",
+        "scrap_wall",
+        "rust_rock",
+        "herb_patch"
+      ],
+      "resource_mix": [
+        "bio_crystal",
+        "mutant_herb",
+        "acid_sac",
+        "scrap",
+        "bio_crystal"
+      ],
+      "boss_enabled": false,
+      "landmark_prop": "marsh_pump"
     },
     "crystal_scar": {
       "name": "北門：紫晶裂隙",
@@ -30,11 +74,33 @@
       "seed_offset": 3300,
       "music": "wasteland",
       "tile_theme": "crystal",
-      "notice": "進入紫晶裂隙。遠程污染體會守住礦脈，Boss 前哨在道路盡頭。",
-      "enemy_mix": ["spore_gunner", "rot_wing", "toxic_runner", "waste_titan"],
-      "prop_mix": ["signal_pylon", "toxic_pool", "dead_tree", "rust_rock", "scrap_wall"],
-      "resource_mix": ["bio_crystal", "mutant_core", "ammo", "bio_crystal"],
-      "boss_enabled": true
+      "hazard_type": "crystal_pulse",
+      "weather": "crystal_aurora",
+      "notice": "進入紫晶裂隙。遠程污染體守住高能礦脈，裂隙深處有 Boss 吞噬核心前哨。",
+      "enemy_mix": [
+        "spore_gunner",
+        "rot_wing",
+        "toxic_runner",
+        "waste_titan"
+      ],
+      "prop_mix": [
+        "crystal_spire",
+        "signal_pylon",
+        "dead_tree",
+        "rust_rock",
+        "scrap_wall",
+        "crystal_node",
+        "ore_node"
+      ],
+      "resource_mix": [
+        "bio_crystal",
+        "amethyst_gem",
+        "mutant_core",
+        "ammo",
+        "amethyst_gem"
+      ],
+      "boss_enabled": true,
+      "landmark_prop": "crystal_spire"
     },
     "old_factory": {
       "name": "東門：舊工廠外圍",
@@ -42,11 +108,102 @@
       "seed_offset": 4400,
       "music": "wasteland",
       "tile_theme": "factory",
-      "notice": "進入舊工廠外圍。鏽橘鐵板與警戒線後方有機械敵人與 Boss 殘骸。",
-      "enemy_mix": ["mech_husk", "rust_brute", "spore_gunner", "waste_titan"],
-      "prop_mix": ["scrap_wall", "scrap_barricade", "signal_pylon", "wreck", "road_marker"],
-      "resource_mix": ["scrap", "ammo", "mutant_core", "scrap"],
-      "boss_enabled": true
+      "hazard_type": "steam_vent",
+      "weather": "industrial_smog",
+      "notice": "進入舊工廠外圍。工業鋼板與黃黑警戒線後方有重裝機械與 Boss 殘骸。",
+      "enemy_mix": [
+        "mech_husk",
+        "rust_brute",
+        "spore_gunner",
+        "waste_titan"
+      ],
+      "prop_mix": [
+        "factory_turbine",
+        "scrap_wall",
+        "scrap_barricade",
+        "signal_pylon",
+        "wreck",
+        "road_marker",
+        "scrap_pile",
+        "barrel_stack"
+      ],
+      "resource_mix": [
+        "scrap",
+        "precision_chip",
+        "dynamo_core",
+        "mutant_core",
+        "ammo"
+      ],
+      "boss_enabled": true,
+      "landmark_prop": "factory_turbine"
+    },
+    "ruined_metropolis": {
+      "name": "東南：崩塌都心區",
+      "direction": "southeast",
+      "seed_offset": 5500,
+      "music": "wasteland",
+      "tile_theme": "metropolis",
+      "hazard_type": "radiation_zone",
+      "weather": "ash_fall",
+      "notice": "進入崩塌都心區。穿梭於廢棄十字街廓與大樓斷垣之間，搜尋高價值核心。",
+      "enemy_mix": [
+        "mech_husk",
+        "spore_gunner",
+        "rust_brute",
+        "rot_wing"
+      ],
+      "prop_mix": [
+        "wreck",
+        "scrap_barricade",
+        "scrap_wall",
+        "road_marker",
+        "signal_pylon",
+        "ruin_wall",
+        "scrap_pile"
+      ],
+      "resource_mix": [
+        "alloy_plate",
+        "precision_chip",
+        "scrap",
+        "mutant_core",
+        "ammo"
+      ],
+      "boss_enabled": false,
+      "landmark_prop": "wreck"
+    },
+    "underground_facility": {
+      "name": "西北：地底研究設施",
+      "direction": "northwest",
+      "seed_offset": 6600,
+      "music": "wasteland",
+      "tile_theme": "facility",
+      "hazard_type": "shock_grid",
+      "weather": "cryo_haze",
+      "notice": "進入地底研究設施。沿高壓電漿導管推進，提防失控機兵與深層吞噬核心。",
+      "enemy_mix": [
+        "mech_husk",
+        "toxic_runner",
+        "spore_gunner",
+        "waste_titan"
+      ],
+      "prop_mix": [
+        "signal_pylon",
+        "scrap_wall",
+        "toxic_pool",
+        "scrap_barricade",
+        "rust_rock",
+        "crystal_node",
+        "barrel_stack"
+      ],
+      "resource_mix": [
+        "amethyst_gem",
+        "dynamo_core",
+        "acid_sac",
+        "bio_crystal",
+        "mutant_core"
+      ],
+      "boss_enabled": true,
+      "landmark_prop": "signal_pylon"
     }
   }
 }

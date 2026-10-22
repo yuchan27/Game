@@ -19,6 +19,7 @@ var _phase := 0.0
 var _talk_timer := 0.0
 var _interact_radius := 96.0
 var _dialogue_page := 0
+var _dialogue_active := false
 
 func setup(data: Dictionary) -> void:
 	npc_id = String(data.get("id", ""))
@@ -33,6 +34,7 @@ func setup(data: Dictionary) -> void:
 func _ready() -> void:
 	add_to_group("npc")
 	add_to_group("interactable")
+	add_to_group("dialogue_npc")
 	add_to_group("map_npc")
 	set_meta("map_label", npc_name)
 	set_meta("map_marker", "npc")
@@ -46,14 +48,22 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_update_player_near_from_distance()
-	_phase += delta * (5.2 if _player_near else 2.4)
+	_phase += delta * (5.2 if _player_near else 2.2)
 	_talk_timer = max(0.0, _talk_timer - delta)
 	if _sprite != null:
-		_sprite.position.y = _base_sprite_y + sin(_phase) * (2.0 if _player_near else 1.0)
-		_sprite.rotation = sin(_phase * 0.55) * (0.025 if _talk_timer <= 0.0 else 0.055)
+		_sprite.position.y = _base_sprite_y
+		_sprite.rotation = sin(_phase * 0.55) * (0.012 if _talk_timer <= 0.0 else 0.032)
 		_sprite.modulate = Color(1.08, 1.08, 1.08) if _talk_timer > 0.0 else Color.WHITE
-	if _player_near and Input.is_action_just_pressed("interact"):
+
+func can_interact() -> bool:
+	return _player_near
+
+func interact() -> void:
+	if can_interact():
 		_talk()
+
+func is_dialogue_active() -> bool:
+	return _dialogue_active
 
 func _talk() -> void:
 	var npc: Dictionary = DataRegistry.get_npc(npc_id)
@@ -62,6 +72,8 @@ func _talk() -> void:
 		return
 
 	AudioManager.play_sfx("interact")
+	AudioManager.play_voice("npc_" + npc_id)
+	_dialogue_active = true
 	_talk_timer = 0.45
 
 	var first_time: bool = not GameState.talked_npcs.has(npc_id)
@@ -92,10 +104,13 @@ func _update_player_near_from_distance() -> void:
 	_player_near = near
 	if _name_label != null:
 		_name_label.visible = _player_near
+		_name_label.add_theme_color_override("font_color", Color(1.0, 0.86, 0.36) if _player_near else Color(0.96, 0.94, 0.82))
 	if _prompt != null:
 		_prompt.visible = _player_near
 	if not _player_near:
+		_dialogue_active = false
 		_dialogue_page = 0
+		AudioManager.stop_voice()
 		GameState.close_dialogue()
 	_update_prompt_text()
 
@@ -119,9 +134,20 @@ func _add_collision() -> void:
 	add_child(collision)
 
 func _add_sprite() -> void:
+	var shadow := Polygon2D.new()
+	shadow.name = "GroundShadow"
+	shadow.z_index = -1
+	var s_pts := PackedVector2Array()
+	for i in range(18):
+		var a := float(i) / 18.0 * TAU
+		s_pts.append(Vector2(cos(a) * 24.0, sin(a) * 8.0 - 4.0))
+	shadow.polygon = s_pts
+	shadow.color = Color(0.03, 0.02, 0.04, 0.44)
+	add_child(shadow)
+
 	_sprite = Sprite2D.new()
 	var npc_texture: Texture2D = _npc_texture()
-	_sprite.texture = npc_texture if npc_texture != null else PIXEL.new().make_texture(Vector2i(56, 72), [color.darkened(0.35), color, color.lightened(0.25)], npc_id.length())
+	_sprite.texture = npc_texture if npc_texture != null else PIXEL.new().make_texture(Vector2i(84, 98), [color.darkened(0.35), color, color.lightened(0.25)], npc_id.length())
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_sprite.centered = false
 	var texture_size: Vector2 = _sprite.texture.get_size()
@@ -132,13 +158,19 @@ func _add_sprite() -> void:
 func _add_labels() -> void:
 	_name_label = Label.new()
 	_name_label.text = "%s｜%s" % [npc_name, role]
-	_name_label.position = Vector2(-72, -104)
+	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_name_label.custom_minimum_size = Vector2(152, 20)
+	_name_label.position = Vector2(-76, -114)
 	_name_label.visible = false
-	_name_label.add_theme_font_size_override("font_size", 14)
+	_name_label.add_theme_font_size_override("font_size", 13)
+	_name_label.add_theme_color_override("font_color", Color(0.98, 0.94, 0.76))
+	_name_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.92))
+	_name_label.add_theme_constant_override("shadow_offset_x", 1)
+	_name_label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(_name_label)
 
 	_prompt = Label.new()
-	_prompt.position = Vector2(-36, -128)
+	_prompt.position = Vector2(-36, -134)
 	_prompt.visible = false
 	_prompt.add_theme_font_size_override("font_size", 14)
 	add_child(_prompt)
@@ -167,4 +199,9 @@ func _on_body_entered(body: Node) -> void:
 
 func _on_body_exited(body: Node) -> void:
 	if body.is_in_group("player"):
+		_player_near = false
+		if _name_label != null:
+			_name_label.visible = false
+		if _prompt != null:
+			_prompt.visible = false
 		_update_player_near_from_distance()

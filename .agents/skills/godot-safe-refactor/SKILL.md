@@ -1,27 +1,18 @@
 ---
 name: godot-safe-refactor
-description: Refactor a bounded Godot subsystem while preserving scene paths, signals, collision behavior, saved data and characterized player behavior.
+description: Refactor a bounded Godot subsystem while preserving scene paths, node groups, signals, collision footprints, saved data compatibility, and characterized player behavior.
 ---
 
-# Godot safe refactor
+# Godot Safe Refactor Skill
 
-Trigger: a specific structural repair or duplicated behavior. Inputs: bounded
-symbols/files, motivation, consumers and baseline. Output: incremental compatible
-diff and before/after evidence.
+Trigger: structural cleanup, deduplication, or subsystem modularization in a Godot 4 project.
+Inputs: target scripts/scenes, consumer list, and baseline regression status.
+Output: reversible, behavior-preserving diff verified by characterization tests.
 
-1. State the maintenance problem; skip speculative abstraction. Inspect status,
-   preserve other work, and trace scene/signal/JSON/save consumers. Use graph tools
-   only with verified coverage; otherwise read/search source and disclose the limit.
-2. Characterize public behavior with existing runners or a focused regression.
-   Record paths/UIDs, classes, input actions, node paths, signals, collision masks
-   and serialized fields that consumers rely on.
-3. Choose the smallest shared seam. Separate structural and behavior changes.
-   Agree shared APIs and exclusive file ownership before parallel work.
-4. Change one reversible slice; update consumers/references. Retain legacy defaults
-   or provide an explicit save migration before applying a new format.
-5. Run characterization and the project's QA. Here: `python scripts/tools/run_qa.py
-   --godot <engine> --profile core`; add rendered checks if presentation can change.
-
-Validation: characterized behavior and compatibility execute after the refactor;
-every replaced reference has a consumer check. Failure: stop broadening, localize
-and repair the regression without discarding others' work or weakening tests.
+## Workflow
+1. **Map All Consumers First**:
+   - Grep for `preload(`, `load(`, group names (`get_nodes_in_group`), signal names, `.tscn` script attachments, and `get(` / `call(` reflection sites (especially in `scripts/tests/*.gd`).
+2. **Preserve Contracts**:
+   - Keep node names, group memberships (`player`, `enemy`, `boss`, `interactable`, `dialogue_npc`, `equipment_panel`, `tutorial_panel`, `minimap_panel`, `gameplay_input_blocker`), signal signatures, and `SaveManager` JSON keys backward-compatible.
+3. **Incremental Verification**:
+   - Apply one bounded refactor step at a time and run `python scripts/tools/run_qa.py --godot <engine> --profile core` after each step.

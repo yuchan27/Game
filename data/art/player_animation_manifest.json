@@ -5,7 +5,7 @@
   ],
   "directions": 8,
   "frames_per_action": 8,
-  "atlas_path": "res://assets/sprites/player/recycler_player_multiaction_8dir.png",
+  "atlas_path": "res://assets/sprites/player/recycler_player_multiaction_8dir_preview.png",
   "split_frame_dir": "res://assets/sprites/player/frames",
   "action_sheet_dir": "res://assets/sprites/player/actions",
   "reference_path": "res://assets/sprites/player/source/r17_reference.png",
@@ -74,5 +74,8 @@
       "loop": false,
       "fps": 14
     }
-  ]
+  ],
+  "runtime_source": "atlas",
+  "action_sheets_usage": "reference_only",
+  "split_frames_usage": "reference_only"
 }

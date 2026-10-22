@@ -1,27 +1,27 @@
 ---
 name: godot-development
-description: Implement a Godot gameplay, UI, scene or data feature through existing architecture, with a playable acceptance slice and focused validation.
+description: Implement a Godot gameplay, multi-interface UI, scene, combat, or data feature through clean architecture, with a playable acceptance slice, cache refresh, and automated QA verification.
 ---
 
-# Godot development
+# Godot Development Skill
 
-Trigger: requested feature or confirmed gameplay/UI defect. Inputs: project root,
-intended player behavior and constraints. Output: integrated behavior, reviewed
-diff and executed acceptance evidence.
+Trigger: requested feature, multi-interface UI expansion, or confirmed gameplay/combat defect.
+Inputs: project root, intended player behavior, resolution targets (`1280×720` and `1024×768`), and constraints.
+Output: integrated behavior, reviewed diff, cache-cleared import, and executed QA evidence.
 
-1. Find `project.godot`, read applicable AGENTS/handoff, inspect Git status and
-   verify the actual engine with `--version`. Discover runners and dependencies.
-2. Trace input → scene/component → state/data → feedback. Check callers, signals,
-   collision layers, resource ids and persistent data at that seam.
-3. Define one playable acceptance slice and a focused reproduction. Preserve
-   scene/autoload ownership; use JSON for route variants where possible.
-4. Implement the smallest complete slice. Separate restored coordinates from
-   scene entrances; preserve equipment ownership and single-grant rewards.
-5. Execute affected regressions and the project's safe QA entrypoint. Here:
-   `python scripts/tools/run_qa.py --godot <engine> --profile core`. Add `visual`
-   profile and inspect PNGs for UI/art changes. Read current `--help` first.
-6. Review integrated diff and report exact evidence/limitations; update handoff.
-
-Validation: observable input-to-feedback path executes and saves/scenes remain
-usable. Failure: classify environment, stale-test and product faults; fix the
-cause. Do not regenerate art, disable valid assertions or call a partial slice done.
+## Workflow
+1. **Discover & Inspect**:
+   - Locate `project.godot`, inspect `scripts/autoload/` (`GameState.gd`, `DataRegistry.gd`, `SceneRouter.gd`, `SaveManager.gd`, `AudioManager.gd`), and check `data/` JSON schemas.
+   - Verify the Godot binary with `--version` and Python QA venv dependencies.
+2. **Trace the Full Seam**:
+   - Trace `Input` → `Scene / Entity (Player, NPC, Station, Enemy)` → `Autoload State / DataRegistry` → `HUD / Audio / VFX Feedback`.
+   - Preserve existing group contracts (`player`, `enemy`, `boss`, `interactable`, `dialogue_npc`, `equipment_panel`, `tutorial_panel`, `minimap_panel`, `gameplay_input_blocker`, `hotbar_slot`).
+3. **Multi-Interface UI & Responsive Layout Rules**:
+   - Every modal panel (`InventoryPanel`, `WorkshopPanel`, `ContractPanel`, `CodexPanel`, `TutorialPanel`, `DialoguePanel`, `PausePanel`) must:
+     - Register in group `"gameplay_input_blocker"` and update `set_meta("gameplay_input_blocked", visible)` in `_refresh_overlay_visibility()`.
+     - Suppress global floating notices (`NoticeLabel`) while open so text never overlaps.
+     - Fit cleanly inside both `1280×720` and `1024×768` viewports in `_layout()`.
+     - Include a unified top tab switcher (`_build_modal_switcher`) and `Esc` close handling.
+4. **Clear Import Cache & Validate**:
+   - When assets or scenes change, clear `.godot/imported/` and run `--headless --import`.
+   - Execute `python scripts/tools/run_qa.py --godot <engine> --profile core` (and `--profile visual` when UI, sprites, or tiles change).

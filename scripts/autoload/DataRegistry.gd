@@ -1,48 +1,5 @@
 extends Node
 
-const ITEM_ICON_PATH_OVERRIDES: Dictionary = {
-	"item_scrap": {
-		"path": "res://assets/sprites/items/掉落物/1.png",
-		"size": [64, 64]
-	},
-	"item_ammo": {
-		"path": "res://assets/sprites/items/掉落物/2.png",
-		"size": [64, 64]
-	},
-	"item_bio_crystal": {
-		"path": "res://assets/sprites/items/掉落物/3.png",
-		"size": [64, 64]
-	},
-	"item_mutant_core": {
-		"path": "res://assets/sprites/items/掉落物/4.png",
-		"size": [64, 64]
-	},
-	"item_patched_armor": {
-		"path": "res://assets/sprites/items/armor/初階.png",
-		"size": [88, 72]
-	},
-	"item_light_reinforced_armor": {
-		"path": "res://assets/sprites/items/armor/初階2.png",
-		"size": [88, 72]
-	},
-	"item_crystal_guard": {
-		"path": "res://assets/sprites/items/armor/中階.png",
-		"size": [88, 72]
-	},
-	"item_hazard_armor": {
-		"path": "res://assets/sprites/items/armor/中階2.png",
-		"size": [88, 72]
-	},
-	"item_industrial_exoshell": {
-		"path": "res://assets/sprites/items/armor/高階.png",
-		"size": [88, 72]
-	},
-	"item_core_power_armor": {
-		"path": "res://assets/sprites/items/armor/高階2.png",
-		"size": [88, 72]
-	}
-}
-
 var equipment: Dictionary = {}
 var resources: Dictionary = {}
 var enemies: Dictionary = {}
@@ -110,21 +67,7 @@ func get_wasteland_route(route_id: String) -> Dictionary:
 	return wasteland_routes.get(route_id, {})
 
 func get_visual_asset(asset_id: String) -> Dictionary:
-	var key := String(asset_id)
-	if ITEM_ICON_PATH_OVERRIDES.has(key):
-		var override: Dictionary = ITEM_ICON_PATH_OVERRIDES[key]
-		return {
-			"type": "item",
-			"path": String(override.get("path", "")),
-			"size": override.get("size", [48, 48]),
-			"map_marker": "pickup",
-			"asset_id": key,
-			"usage_id": key,
-			"unique_required": true,
-			"minimap_marker": "pickup",
-			"source_ref": "manual_icon_override"
-		}
-	return visual_assets.get(key, {})
+	return visual_assets.get(asset_id, {})
 
 func asset_path(asset_id: String, fallback := "") -> String:
 	return String(get_visual_asset(asset_id).get("path", fallback))

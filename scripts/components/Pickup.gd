@@ -61,8 +61,30 @@ func _on_body_entered(body: Node) -> void:
 		return
 	collected = true
 	set_deferred("monitoring", false)
-	GameState.add_item(item_id, amount)
+	var final_amount := amount
+	if item_id == "scrap" and GameState.has_perk("scavenger_savant"):
+		final_amount = int(round(float(amount) * (1.0 + float(GameState.get_perk_level("scavenger_savant")) * 0.40)))
+		final_amount = maxi(amount, final_amount)
+	GameState.add_item(item_id, final_amount)
 	AudioManager.play_sfx("pickup")
-	GameState.notify("拾取：%s x%d" % [GameState.item_display_name(item_id), amount])
+	GameState.notify("拾取：%s x%d" % [GameState.item_display_name(item_id), final_amount])
+
+	if GameState.has_perk("nano_salvage"):
+		var heal_amt := 4 + GameState.get_perk_level("nano_salvage") * 3
+		GameState.hp = mini(GameState.get_max_hp(), GameState.hp + heal_amt)
+		GameState.ep = mini(GameState.get_max_ep(), GameState.ep + heal_amt)
+		GameState.stats_changed.emit()
+		_trigger_salvage_blast(body.global_position)
+
 	visible = false
 	call_deferred("queue_free")
+
+func _trigger_salvage_blast(center: Vector2) -> void:
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy is Node2D:
+			var enemy_node := enemy as Node2D
+			var dist := center.distance_to(enemy_node.global_position)
+			if dist <= 120.0 and dist > 1.0:
+				var push: Vector2 = (enemy_node.global_position - center).normalized() * 140.0
+				if enemy.has_method("apply_knockback"):
+					enemy.apply_knockback(push)

@@ -4,57 +4,268 @@
       "id": "ammo_pack",
       "name": "彈藥包",
       "station": "forge",
-      "cost": { "scrap": 8 },
-      "result": { "ammo": 12 }
+      "cost": {
+        "scrap": 8
+      },
+      "result": {
+        "ammo": 12
+      }
     },
     {
       "id": "patched_armor",
       "name": "初階護甲",
       "station": "craft",
-      "cost": { "scrap": 12 },
-      "result": { "patched_armor": 1 }
+      "cost": {
+        "scrap": 12
+      },
+      "result": {
+        "patched_armor": 1
+      }
     },
     {
       "id": "spark_cutter",
       "name": "火花切割斧",
       "station": "craft",
-      "cost": { "scrap": 20, "bio_crystal": 1 },
-      "result": { "spark_cutter": 1 }
+      "cost": {
+        "scrap": 20,
+        "bio_crystal": 1
+      },
+      "result": {
+        "spark_cutter": 1
+      }
     },
     {
       "id": "light_reinforced_armor",
       "name": "初階改良護甲",
       "station": "craft",
-      "cost": { "scrap": 18, "bio_crystal": 1 },
-      "result": { "light_reinforced_armor": 1 }
+      "cost": {
+        "scrap": 18,
+        "bio_crystal": 1
+      },
+      "result": {
+        "light_reinforced_armor": 1
+      }
     },
     {
       "id": "crystal_guard",
       "name": "中階護甲",
       "station": "craft",
-      "cost": { "scrap": 26, "bio_crystal": 2 },
-      "result": { "crystal_guard": 1 }
+      "cost": {
+        "scrap": 26,
+        "bio_crystal": 2
+      },
+      "result": {
+        "crystal_guard": 1
+      }
+    },
+    {
+      "id": "melee_sword",
+      "name": "高頻振刀",
+      "station": "craft",
+      "cost": {
+        "scrap": 24,
+        "mutant_core": 1,
+        "bio_crystal": 1
+      },
+      "result": {
+        "melee_sword": 1
+      }
+    },
+    {
+      "id": "melee_axe",
+      "name": "破甲戰斧",
+      "station": "craft",
+      "cost": {
+        "scrap": 28,
+        "mutant_core": 2
+      },
+      "result": {
+        "melee_axe": 1
+      }
     },
     {
       "id": "coil_launcher",
       "name": "線圈步槍",
       "station": "mod",
-      "cost": { "scrap": 28, "mutant_core": 2 },
-      "result": { "coil_launcher": 1 }
+      "cost": {
+        "scrap": 28,
+        "mutant_core": 2
+      },
+      "result": {
+        "coil_launcher": 1
+      }
+    },
+    {
+      "id": "ranged_pistol",
+      "name": "廢土制式手槍",
+      "station": "mod",
+      "cost": {
+        "scrap": 16,
+        "mutant_core": 1
+      },
+      "result": {
+        "ranged_pistol": 1
+      }
+    },
+    {
+      "id": "ranged_smg",
+      "name": "廢鐵衝鋒槍",
+      "station": "mod",
+      "cost": {
+        "scrap": 22,
+        "bio_crystal": 1
+      },
+      "result": {
+        "ranged_smg": 1
+      }
+    },
+    {
+      "id": "ranged_shotgun",
+      "name": "雙管散彈槍",
+      "station": "mod",
+      "cost": {
+        "scrap": 24,
+        "mutant_core": 1,
+        "bio_crystal": 1
+      },
+      "result": {
+        "ranged_shotgun": 1
+      }
+    },
+    {
+      "id": "ranged_revolver",
+      "name": "荒原重型左輪",
+      "station": "mod",
+      "cost": {
+        "scrap": 26,
+        "mutant_core": 2
+      },
+      "result": {
+        "ranged_revolver": 1
+      }
+    },
+    {
+      "id": "ranged_crossbow",
+      "name": "穿甲連弩",
+      "station": "mod",
+      "cost": {
+        "scrap": 24,
+        "bio_crystal": 2
+      },
+      "result": {
+        "ranged_crossbow": 1
+      }
+    },
+    {
+      "id": "ranged_explosive",
+      "name": "榴彈發射器",
+      "station": "mod",
+      "cost": {
+        "scrap": 34,
+        "mutant_core": 2,
+        "bio_crystal": 2
+      },
+      "result": {
+        "ranged_explosive": 1
+      }
     },
     {
       "id": "shop_ammo",
       "name": "補給彈藥",
       "station": "shop",
-      "cost": { "scrap": 4 },
-      "result": { "ammo": 8 }
+      "cost": {
+        "scrap": 4
+      },
+      "result": {
+        "ammo": 8
+      }
     },
     {
       "id": "recycle_core",
       "name": "核心拆解",
       "station": "recycle",
-      "cost": { "mutant_core": 1 },
-      "result": { "scrap": 14, "bio_crystal": 1 }
+      "cost": {
+        "mutant_core": 1
+      },
+      "result": {
+        "scrap": 14,
+        "bio_crystal": 1
+      }
+    },
+    {
+      "id": "heavy_ammo_crate",
+      "name": "重裝穿甲彈箱",
+      "station": "forge",
+      "cost": {
+        "scrap": 14,
+        "alloy_plate": 1
+      },
+      "result": {
+        "ammo": 24
+      }
+    },
+    {
+      "id": "alloy_reinforced_armor",
+      "name": "合金複合中階護甲",
+      "station": "craft",
+      "cost": {
+        "scrap": 20,
+        "alloy_plate": 2
+      },
+      "result": {
+        "crystal_guard": 1
+      }
+    },
+    {
+      "id": "superconductor_coil_launcher",
+      "name": "超導線圈步槍",
+      "station": "mod",
+      "cost": {
+        "scrap": 24,
+        "broken_coil": 2,
+        "precision_chip": 1
+      },
+      "result": {
+        "coil_launcher": 1
+      }
+    },
+    {
+      "id": "crystal_transmutation",
+      "name": "紫晶精煉轉化",
+      "station": "craft",
+      "cost": {
+        "scrap": 16,
+        "amethyst_gem": 1
+      },
+      "result": {
+        "bio_crystal": 3
+      }
+    },
+    {
+      "id": "purified_core_synthesis",
+      "name": "工業重能核心合成",
+      "station": "craft",
+      "cost": {
+        "scrap": 30,
+        "amethyst_gem": 2,
+        "dynamo_core": 1
+      },
+      "result": {
+        "mutant_core": 2
+      }
+    },
+    {
+      "id": "craft_terminal_controller",
+      "name": "終端操作器",
+      "station": "craft",
+      "cost": {
+        "alloy_plate": 2,
+        "broken_coil": 2,
+        "scrap": 15
+      },
+      "result": {
+        "terminal_controller": 1
+      }
     }
   ]
 }
