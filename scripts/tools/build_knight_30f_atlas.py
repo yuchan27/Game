@@ -55,16 +55,21 @@ THETA = [0, 45, 90, 135, 180, 225, 270, 315]
 LEGACY_SAMPLE = [round(i * (N - 1) / 7) for i in range(8)]
 
 OUT = (16, 20, 28, 255)
+STEEL_L = (245, 250, 255, 255)
 STEEL = (200, 216, 232, 255)
-STEEL_M = (140, 160, 184, 255)
-STEEL_D = (86, 102, 126, 255)
+STEEL_M = (126, 148, 174, 255)
+STEEL_D = (56, 72, 92, 255)
+GOLD_L = (255, 236, 136, 255)
 GOLD = (244, 192, 54, 255)
-GOLD_D = (176, 126, 30, 255)
-WOOD = (132, 88, 52, 255)
-WOOD_D = (76, 50, 30, 255)
+GOLD_D = (164, 116, 26, 255)
+WOOD_L = (176, 124, 72, 255)
+WOOD = (122, 80, 46, 255)
+WOOD_D = (62, 40, 22, 255)
 ARM = (112, 134, 158, 255)
+BOLT_FLETCH = (215, 52, 48, 255)
+STRING_COL = (242, 238, 222, 255)
 
-GUARD = {"sword": (42.0, 60.0), "hammer": (30.0, 66.0), "crossbow": (8.0, -38.0)}
+GUARD = {"sword": (42.0, 60.0), "hammer": (30.0, 66.0), "crossbow": (6.0, -14.0)}
 
 
 # --------------------------------------------------------------------------- math helpers
@@ -237,36 +242,89 @@ def draw_crossbow(layer: Layer, c, theta, phi, pitch, d, right, string_f, bolt_v
     ang = theta + phi
     A = vec_dir(ang, pitch)
     Rg = (-math.sin(math.radians(ang)), math.cos(math.radians(ang)), 0.0)
-    p0 = add3((d[0] * 7.0, d[1] * 7.0, -1.0), mul3(Rg, 3.0))
+    Up = (0.0, 0.0, 1.0)
+    p0 = add3((d[0] * 7.0, d[1] * 7.0, -1.0), mul3(Rg, 2.2))
 
-    def P(f, s):
-        return add3(add3(p0, mul3(A, f * 1.15)), mul3(Rg, s * 1.15))
+    def P(f, s, u=0.0):
+        return add3(add3(add3(p0, mul3(A, f * 1.15)), mul3(Rg, s * 1.15)), mul3(Up, u))
 
-    stock0, stock1 = proj(c, P(-7, 0)), proj(c, P(25, 0))
-    layer.line(stock0, stock1, 2.8, WOOD)
-    layer.line(stock0, stock1, 1.0, (176, 126, 80, 255), outline=False)
-    layer.line(proj(c, P(8, 0)), proj(c, P(22, 0)), 1.6, STEEL_D, outline=False)
-    # prod (limbs) bending forward at the tips
-    pts = [proj(c, P(21 + 5.5 * (s / 13.0) ** 2, s)) for s in range(-13, 14, 2)]
-    for a, b in zip(pts, pts[1:]):
-        layer.line(a, b, 2.3, STEEL_M)
-    tip_l, tip_r = P(26.5, -13), P(26.5, 13)
-    string_mid = P(string_f, 0)
-    layer.line(proj(c, tip_l), proj(c, string_mid), 0.9, (236, 230, 205, 255), outline=False)
-    layer.line(proj(c, tip_r), proj(c, string_mid), 0.9, (236, 230, 205, 255), outline=False)
-    layer.circle(proj(c, P(19, 0)), 1.4, GOLD, outline=False)
+    # 1. Contoured dark walnut tiller / stock
+    butt = proj(c, P(-10, 0, -1.2))
+    nose = proj(c, P(23, 0, 0.0))
+    layer.line(butt, nose, 5.0, WOOD_D)
+    layer.line(proj(c, P(-9, 0, -0.8)), proj(c, P(22, 0, 0.0)), 3.8, WOOD)
+    layer.line(proj(c, P(-2, 0, 0.6)), proj(c, P(21, 0, 0.6)), 2.2, WOOD_L, outline=False)
+    layer.line(proj(c, P(3, 0, 0.8)), proj(c, P(20, 0, 0.8)), 1.3, STEEL_D, outline=False)
+
+    # Brass trigger lock fittings
+    layer.circle(proj(c, P(0, 0.8, -0.2)), 2.0, GOLD)
+    layer.circle(proj(c, P(0, 0.8, -0.2)), 1.0, GOLD_L, outline=False)
+
+    # 2. Front Stirrup (Forged steel cocking D-ring foot-loop)
+    st0 = proj(c, P(22.5, -4.2, -0.5))
+    st1 = proj(c, P(29.0, -3.5, -1.0))
+    st2 = proj(c, P(30.0, 0.0, -1.2))
+    st3 = proj(c, P(29.0, 3.5, -1.0))
+    st4 = proj(c, P(22.5, 4.2, -0.5))
+    layer.poly([st0, st1, st2, st3, st4, proj(c, P(23.5, 0, -0.5))], STEEL_D)
+    layer.line(st1, st2, 2.0, STEEL_M, outline=False)
+    layer.line(st2, st3, 2.0, STEEL, outline=False)
+
+    # 3. Forged Recurve Steel Prod (Bow limbs with thickness, bevels and flared tips)
+    limb_steps = range(-15, 16, 2)
+    pts_front = []
+    pts_back = []
+    for s in limb_steps:
+        u_s = abs(s) / 15.0
+        curv_f = 21.0 + 5.5 * (1.0 - (1.0 - u_s) ** 2) - 1.2 * (u_s ** 4)
+        thickness = 4.4 * (1.0 - 0.35 * u_s)
+        pts_front.append(proj(c, P(curv_f + thickness * 0.45, s, 0.3)))
+        pts_back.append(proj(c, P(curv_f - thickness * 0.45, s, -0.1)))
+
+    layer.poly(pts_front + list(reversed(pts_back)), STEEL_M)
+    for i in range(len(pts_front) - 1):
+        layer.line(pts_front[i], pts_front[i + 1], 1.8, STEEL_L, outline=False)
+        layer.line(pts_back[i], pts_back[i + 1], 1.4, STEEL_D, outline=False)
+
+    # Heavy brass nose bridle clamp
+    layer.line(proj(c, P(20.5, -3.2, 0.4)), proj(c, P(20.5, 3.2, 0.4)), 3.8, GOLD)
+    layer.line(proj(c, P(20.8, -2.6, 0.5)), proj(c, P(20.8, 2.6, 0.5)), 1.8, GOLD_L, outline=False)
+
+    # Gold reinforced limb tip nocks
+    tip_l = P(24.5, -15.5, 0.2)
+    tip_r = P(24.5, 15.5, 0.2)
+    layer.circle(proj(c, tip_l), 2.2, GOLD)
+    layer.circle(proj(c, tip_r), 2.2, GOLD)
+
+    # 4. Heavy twisted sinew/steel bowstring
+    string_mid = P(string_f, 0, 0.8)
+    layer.line(proj(c, tip_l), proj(c, string_mid), 1.6, STRING_COL)
+    layer.line(proj(c, tip_r), proj(c, string_mid), 1.6, STRING_COL)
+
+    # 5. Heavy armor-piercing bodkin bolt (quarrel)
     if bolt_visible:
-        b_tail = proj(c, P(string_f + 1.0, 0))
-        b_head = proj(c, P(33, 0))
-        layer.line(b_tail, b_head, 1.7, (214, 220, 230, 255))
-        layer.circle(b_head, 1.5, (250, 250, 255, 255), outline=False)
-        layer.line(b_tail, proj(c, P(string_f + 4, 1.6)), 0.9, (210, 70, 60, 255), outline=False)
-        layer.line(b_tail, proj(c, P(string_f + 4, -1.6)), 0.9, (210, 70, 60, 255), outline=False)
+        b_tail = proj(c, P(string_f + 0.8, 0, 0.8))
+        b_head_base = proj(c, P(30.0, 0, 0.8))
+        b_tip = proj(c, P(35.5, 0, 0.8))
+        layer.line(b_tail, b_head_base, 2.4, WOOD_L)
+        layer.poly([proj(c, P(29.5, -2.0, 0.8)), b_tip, proj(c, P(29.5, 2.0, 0.8)), b_head_base], STEEL_L)
+        fletch_tail = P(string_f + 1.2, 0, 0.8)
+        layer.line(proj(c, fletch_tail), proj(c, P(string_f + 4.5, -2.4, 1.0)), 1.8, BOLT_FLETCH, outline=False)
+        layer.line(proj(c, fletch_tail), proj(c, P(string_f + 4.5, 2.4, 1.0)), 1.8, BOLT_FLETCH, outline=False)
+
+    # 6. Armored knight gauntlets holding the tiller & bracing the fore-end
     if arms:
         rs = add3(mul3((right[0], right[1], 0.0), 9.0), (0, 0, 6.0))
         ls = add3(mul3((right[0], right[1], 0.0), -9.0), (0, 0, 6.0))
-        draw_arm(layer, c, rs, P(0, 0))
-        draw_arm(layer, c, ls, P(15, 0))
+        r_hand = P(0.5, 0.8, -0.4)
+        layer.line(proj(c, rs), proj(c, r_hand), 5.0, ARM)
+        layer.circle(proj(c, r_hand), 3.4, STEEL_M)
+        layer.circle(proj(c, add3(r_hand, (0.4, 0, 0))), 1.4, GOLD, outline=False)
+        l_hand = P(12.5, -0.8, -0.6)
+        layer.line(proj(c, ls), proj(c, l_hand), 5.0, ARM)
+        layer.circle(proj(c, l_hand), 3.4, STEEL_M)
+        layer.circle(proj(c, add3(l_hand, (-0.4, 0, 0))), 1.4, GOLD, outline=False)
+
     return A[1]
 
 
@@ -318,14 +376,17 @@ def render_body(base_sprite: Image.Image, dx, dy, lean_rot, squash, l_lift, r_li
         canvas = legacy.place_in_frame(base_sprite, target_h=84)
     arr = np.array(canvas)
     upper = np.zeros_like(arr)
-    upper[:HIP_Y] = arr[:HIP_Y]
+    upper[:HIP_Y + 4] = arr[:HIP_Y + 4]
     lower = np.zeros_like(arr)
-    lower[HIP_Y:] = arr[HIP_Y:]
-    ll, lr = lower.copy(), lower.copy()
-    ll[:, 56:] = 0
-    lr[:, :56] = 0
-    ll, lr = shift_rows_up(ll, l_lift), shift_rows_up(lr, r_lift)
-    lower_img = Image.alpha_composite(Image.fromarray(ll, "RGBA"), Image.fromarray(lr, "RGBA"))
+    lower[HIP_Y - 2:] = arr[HIP_Y - 2:]
+    if l_lift == 0 and r_lift == 0:
+        lower_img = Image.fromarray(lower, "RGBA")
+    else:
+        ll, lr = lower.copy(), lower.copy()
+        ll[:, 56:] = 0
+        lr[:, :56] = 0
+        ll, lr = shift_rows_up(ll, l_lift), shift_rows_up(lr, r_lift)
+        lower_img = Image.alpha_composite(Image.fromarray(ll, "RGBA"), Image.fromarray(lr, "RGBA"))
     pivot = (56.0, float(HIP_Y))
     cu, m_up = affine_coeffs(lean_rot, pivot, squash, FEET_Y, dx, dy)
     cl, _ = affine_coeffs(0.0, pivot, squash, FEET_Y, dx * 0.6, 0.0)
@@ -375,10 +436,22 @@ def add_scan_ring(img: Image.Image, d, f: int) -> None:
     dr.ellipse((cx - rx * 0.55, cy - rx * 0.22, cx + rx * 0.55, cy + rx * 0.22), outline=(255, 200, 80, int(a * 0.8)), width=1)
 
 
+def add_muzzle_flash(img: Image.Image, chest, theta: float, f: int) -> None:
+    dr = ImageDraw.Draw(img, "RGBA")
+    rad = math.radians(theta)
+    mx = chest[0] + math.cos(rad) * 35.0
+    my = chest[1] + math.sin(rad) * 35.0 * FLAT - 1.0
+    r = 5.0 if f == 0 else 3.2
+    al = 255 if f == 0 else 190
+    dr.ellipse((mx - r, my - r * 0.7, mx + r, my + r * 0.7), fill=(255, 252, 225, al))
+    dr.line((mx - r * 2.2, my, mx + r * 2.2, my), fill=(255, 214, 70, al), width=1)
+    dr.line((mx, my - r * 1.8, mx, my + r * 1.8), fill=(255, 214, 70, al), width=1)
+
+
 # --------------------------------------------------------------------------- poses
 def new_pose(kind: str) -> Dict:
     phi, e = GUARD[kind]
-    return dict(lean=0.0, lunge=0.0, bob=0.0, sway=0.0, squash=1.0, l=0.0, r=0.0, flash=0.0, kind=kind, phi=phi, e=e, fs=6.0, bolt=True, arms=True, dust=False)
+    return dict(lean=0.0, lunge=0.0, bob=0.0, sway=0.0, squash=1.0, l=0.0, r=0.0, flash=0.0, kind=kind, phi=phi, e=e, fs=4.0, bolt=True, arms=True, dust=False)
 
 
 def pose_for(action: str, loadout: str, f: int) -> Dict:
@@ -440,13 +513,13 @@ def pose_for(action: str, loadout: str, f: int) -> Dict:
         p["lunge"] = kf(f, [(0, -3), (3, -3.5), (8, -1), (18, 0.5), (29, 0)])
         p["bob"] = kf(f, [(0, 1.2), (4, 1.5), (12, 0.4), (20, -0.4), (29, 0)])
         if f <= 5:
-            p["fs"] = 26.0
+            p["fs"] = 23.5
             p["bolt"] = False
         elif f <= 18:
-            p["fs"] = lerp(26.0, 6.0, smooth((f - 5) / 13.0))
+            p["fs"] = lerp(23.5, 4.0, smooth((f - 5) / 13.0))
             p["bolt"] = f >= 14
         else:
-            p["fs"] = 6.0
+            p["fs"] = 4.0
             p["bolt"] = True
     elif action == "swap_tool":
         p["phi"] = GUARD[kind][0] + 360.0 * smooth(t * 1.05)
@@ -472,15 +545,7 @@ def pose_for(action: str, loadout: str, f: int) -> Dict:
 # --------------------------------------------------------------------------- frame rendering
 def get_clean_body_canvas(assets, direction: int) -> Image.Image:
     sprite = assets.row0_sprites[legacy.DIR_TO_ROW0_INDEX[direction]]
-    canvas = legacy.place_in_frame(sprite, target_h=84)
-    arr = np.array(canvas)
-    if direction in (0, 1, 2, 3):
-        arr[56:108, 72:] = 0
-    elif direction in (4, 5):
-        arr[52:98, :38] = 0
-    elif direction == 7:
-        arr[56:98, 74:] = 0
-    return Image.fromarray(arr, "RGBA")
+    return legacy.place_in_frame(sprite, target_h=84)
 
 
 def draw_weapon_layer(p: Dict, theta, d, right, chest, arms_ok=True) -> Tuple[Image.Image, float]:
@@ -576,13 +641,15 @@ def render_frame(assets, action: str, direction: int, f: int, loadout: str) -> I
     dy = p["bob"] + d[1] * p["lunge"] * FLAT + p["lean"] * d[1] * 0.25
     body, chest = render_body(base_sprite, dx, dy, lean_rot, p["squash"], p["l"], p["r"], p["flash"])
     wl, ydir = draw_weapon_layer(p, theta, d, right, chest)
-    out = compose(body, wl, ydir < -0.25 and p["kind"] != "crossbow")
+    out = compose(body, wl, ydir < -0.25)
     if p["dust"]:
         add_dust(out, f, d)
     if action == "hit":
         add_sparks(out, chest[0] + d[0] * 6, chest[1] - 2, f - 1)
     if action == "interact":
         add_scan_ring(out, d, f)
+    if action == "shoot" and f in (0, 1):
+        add_muzzle_flash(out, chest, theta, f)
     return out
 
 
