@@ -13,7 +13,12 @@
       "unique_required": true,
       "minimap_marker": "player",
       "source_ref": "res://assets/sprites/player/source/r17_reference.png",
-      "animation_manifest": "res://data/art/player_animation_manifest.json"
+      "animation_manifest": "res://data/art/player_animation_manifest.json",
+      "source_sha256": "a9aef6e8dfcba35dfda3d6baa07803b38284c15661f7f09f88f82e19158c6ea4",
+      "source_dimensions": [
+        8064,
+        1024
+      ]
     },
     "npc_forge_master": {
       "type": "npc",
@@ -28,7 +33,12 @@
       "usage_id": "npc_forge_master",
       "unique_required": true,
       "minimap_marker": "npc",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "a7814b2e990668ed2f7844532c1b4b22bf93c612ffd3420c4d640ea208d3356f",
+      "source_dimensions": [
+        84,
+        98
+      ]
     },
     "npc_scrap_merchant": {
       "type": "npc",
@@ -43,7 +53,12 @@
       "usage_id": "npc_scrap_merchant",
       "unique_required": true,
       "minimap_marker": "npc",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "432a23c3477cc42ba8de83ba265ac9a2f3a9afe8747135c8a12b742de98d8600",
+      "source_dimensions": [
+        84,
+        98
+      ]
     },
     "npc_repair_robot": {
       "type": "npc",
@@ -58,7 +73,12 @@
       "usage_id": "npc_repair_robot",
       "unique_required": true,
       "minimap_marker": "npc",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "1fc9f09452aa3db70cf1c0c4282441b9105231e633ca14065168a3a2f0a6ac26",
+      "source_dimensions": [
+        84,
+        98
+      ]
     },
     "npc_wasteland_survivor": {
       "type": "npc",
@@ -73,7 +93,12 @@
       "usage_id": "npc_wasteland_survivor",
       "unique_required": true,
       "minimap_marker": "npc",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "301c555697f2e31f57e4b1fe53e2b3a0d41521b99364a97f8b5373ab4a974a59",
+      "source_dimensions": [
+        84,
+        98
+      ]
     },
     "npc_guild_clerk": {
       "type": "npc",
@@ -88,7 +113,12 @@
       "usage_id": "npc_guild_clerk",
       "unique_required": true,
       "minimap_marker": "npc",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "16cb77a822c31113a7681bd1bdff6976df04afdfa046c7c99024fcdf270062db",
+      "source_dimensions": [
+        84,
+        98
+      ]
     },
     "npc_route_scout": {
       "type": "npc",
@@ -103,7 +133,12 @@
       "usage_id": "npc_route_scout",
       "unique_required": true,
       "minimap_marker": "npc",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "1b9c41deb580e1892236af9c5650480ef9a36acfe0af91ce3e9d443cad682305",
+      "source_dimensions": [
+        84,
+        98
+      ]
     },
     "enemy_scrap_biter": {
       "type": "enemy",
@@ -117,7 +152,12 @@
       "usage_id": "enemy_scrap_biter",
       "unique_required": true,
       "minimap_marker": "enemy",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "63f50f1696ccfcc7f8cd02c4ae1eaade8d94919bab544f14ccb0c903873cc6c2",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "enemy_toxic_runner": {
       "type": "enemy",
@@ -131,7 +171,12 @@
       "usage_id": "enemy_toxic_runner",
       "unique_required": true,
       "minimap_marker": "enemy",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "95b151c30db413f175e9f969cc86a926f92662e6cbb5db2fccf03d28ba71e37c",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "enemy_spore_gunner": {
       "type": "enemy",
@@ -145,7 +190,12 @@
       "usage_id": "enemy_spore_gunner",
       "unique_required": true,
       "minimap_marker": "enemy",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "4d6df046c538250dd8257b60d4ef72411ccea337db36e1d7311b3ee571dcc516",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "enemy_rust_brute": {
       "type": "enemy",
@@ -159,7 +209,12 @@
       "usage_id": "enemy_rust_brute",
       "unique_required": true,
       "minimap_marker": "enemy",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "8b8adcfb902986e7eca6db005da69beda99795d32782ed3e620ace25ab7e05ea",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "enemy_rot_wing": {
       "type": "enemy",
@@ -173,7 +228,12 @@
       "usage_id": "enemy_rot_wing",
       "unique_required": true,
       "minimap_marker": "enemy",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "65298cbf2d030c68ad73d7318a8b8495baa42794f421576892d9c8930d434ed4",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "enemy_mech_husk": {
       "type": "enemy",
@@ -187,7 +247,12 @@
       "usage_id": "enemy_mech_husk",
       "unique_required": true,
       "minimap_marker": "enemy",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "734d94f52f56d85d3e0ee4aa40d457a3248e43e87644a53fc2d66a6b21426c21",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "boss_waste_titan": {
       "type": "boss",
@@ -201,7 +266,12 @@
       "usage_id": "boss_waste_titan",
       "unique_required": true,
       "minimap_marker": "boss",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "09bfb4c6bbbfc4e13c33fa9fd68a3214bbb2f414d9e18ac4e67e6ad20f178870",
+      "source_dimensions": [
+        96,
+        72
+      ]
     },
     "structure_forge": {
       "type": "structure",
@@ -219,7 +289,12 @@
       "usage_id": "structure_forge",
       "unique_required": true,
       "minimap_marker": "station",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "f78469341f2e59fc14a6e8bc31ed21e47539858a2a84e13e20fee3686a7f958b",
+      "source_dimensions": [
+        192,
+        150
+      ]
     },
     "structure_craft": {
       "type": "structure",
@@ -237,7 +312,12 @@
       "usage_id": "structure_craft",
       "unique_required": true,
       "minimap_marker": "station",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "03a2cad12a1df31617ee4f58de8edf320f5a10a429e6761757e362e630ecc310",
+      "source_dimensions": [
+        176,
+        140
+      ]
     },
     "structure_shop": {
       "type": "structure",
@@ -255,7 +335,12 @@
       "usage_id": "structure_shop",
       "unique_required": true,
       "minimap_marker": "station",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "44328ef47a1741119033f22c26bea9969e157cab918852e0c5ddd6bef313545e",
+      "source_dimensions": [
+        184,
+        132
+      ]
     },
     "structure_mod_station": {
       "type": "structure",
@@ -273,7 +358,12 @@
       "usage_id": "structure_mod_station",
       "unique_required": true,
       "minimap_marker": "station",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "a0890dfd804cee904f69d9b7b995643d7018bcbaeca6b0135a807b0c50dc1709",
+      "source_dimensions": [
+        196,
+        146
+      ]
     },
     "structure_recycle_machine": {
       "type": "structure",
@@ -291,7 +381,12 @@
       "usage_id": "structure_recycle_machine",
       "unique_required": true,
       "minimap_marker": "station",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "a2ff1a9b94ef672cd38da6be6b209e5deebb033bb283897c65fee0ee23494b8c",
+      "source_dimensions": [
+        184,
+        132
+      ]
     },
     "structure_save_station": {
       "type": "structure",
@@ -309,7 +404,12 @@
       "usage_id": "structure_save_station",
       "unique_required": true,
       "minimap_marker": "station",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "3ca7c7c463ecf01f76013c03c36ca0c9a5aa2faf6c97ceae018f8ab2f3ab733c",
+      "source_dimensions": [
+        168,
+        132
+      ]
     },
     "structure_guild_gate": {
       "type": "structure",
@@ -327,7 +427,12 @@
       "usage_id": "structure_guild_gate",
       "unique_required": true,
       "minimap_marker": "gate",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "e9f05b3e54140152ea349c93d8fa9257ddca7bf50547c9b706cd15db4e1d6277",
+      "source_dimensions": [
+        190,
+        128
+      ]
     },
     "structure_wasteland_gate": {
       "type": "structure",
@@ -345,7 +450,12 @@
       "usage_id": "structure_wasteland_gate",
       "unique_required": true,
       "minimap_marker": "gate",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "f59c256f35d048ca23a879d2e4ba61873dbd0bdb844905a6bd42e3e90932aa24",
+      "source_dimensions": [
+        184,
+        128
+      ]
     },
     "structure_village_return_gate": {
       "type": "structure",
@@ -363,7 +473,12 @@
       "usage_id": "structure_village_return_gate",
       "unique_required": true,
       "minimap_marker": "gate",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "59445a1dcde10d9b4155c888e5d8e9b98381273b12cc62b3698129e13f4304f2",
+      "source_dimensions": [
+        184,
+        128
+      ]
     },
     "prop_rust_rock": {
       "type": "prop",
@@ -379,7 +494,12 @@
       "usage_id": "prop_rust_rock",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "fe9a219cd13f836d096d4a592b5076811c0ab51618424c416a4dea135af3563a",
+      "source_dimensions": [
+        72,
+        62
+      ]
     },
     "prop_dead_tree": {
       "type": "prop",
@@ -395,7 +515,12 @@
       "usage_id": "prop_dead_tree",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "a9564c1fa2eb6d75bea3c02ee38012d0aea5b70e72e1943e0f3eb3eb5e0f1f6c",
+      "source_dimensions": [
+        72,
+        110
+      ]
     },
     "prop_scrap_wall": {
       "type": "prop",
@@ -411,7 +536,12 @@
       "usage_id": "prop_scrap_wall",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "a04e9df8037d2fc6a6d71a01f7ef58baaceeb0e6f7c997ee39f20f5e039a3ae0",
+      "source_dimensions": [
+        96,
+        66
+      ]
     },
     "prop_toxic_pool": {
       "type": "prop",
@@ -427,7 +557,12 @@
       "usage_id": "prop_toxic_pool",
       "unique_required": false,
       "minimap_marker": "resource",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "1acbfba946ed5ae7676e79f0bd8b746a3acf41fec5f56a77216767595ff178f4",
+      "source_dimensions": [
+        88,
+        54
+      ]
     },
     "prop_wreck": {
       "type": "prop",
@@ -443,7 +578,12 @@
       "usage_id": "prop_wreck",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "d506f3993990b4a3c1a9e84ed77416a2b0de7dacbb24edd6ef01b03fb6a7c2e6",
+      "source_dimensions": [
+        104,
+        78
+      ]
     },
     "prop_signal_pylon": {
       "type": "prop",
@@ -459,7 +599,12 @@
       "usage_id": "prop_signal_pylon",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "b78032a453546b4f67299aeb1c81a50dce07489b358850f8b0ac3c79da405e24",
+      "source_dimensions": [
+        72,
+        128
+      ]
     },
     "prop_road_marker": {
       "type": "prop",
@@ -475,7 +620,12 @@
       "usage_id": "prop_road_marker",
       "unique_required": false,
       "minimap_marker": "event",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "9eb736f2ffa2b68fbb993de3c5ef7dde196cd3b95211ca73cd02c0aba1c7aacc",
+      "source_dimensions": [
+        42,
+        58
+      ]
     },
     "prop_scrap_barricade": {
       "type": "prop",
@@ -491,7 +641,12 @@
       "usage_id": "prop_scrap_barricade",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "reference_sheet_v3_or_generated_variant"
+      "source_ref": "reference_sheet_v3_or_generated_variant",
+      "source_sha256": "83b983bd1536b982988530386ad2fb90271f4b0a52d08cd03e188393e02b5ef3",
+      "source_dimensions": [
+        104,
+        70
+      ]
     },
     "item_scrap": {
       "type": "item",
@@ -505,7 +660,12 @@
       "usage_id": "item_scrap",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "cdcd8675cd3c793a912be62e213a71f984a4e27421fa95e81d3a81601a63cd6f",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_ammo": {
       "type": "item",
@@ -519,7 +679,12 @@
       "usage_id": "item_ammo",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "2826bdac149613fe9ffe61e671c6f44082b6919741aa5d03877ed5234b7f340f",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_mutant_core": {
       "type": "item",
@@ -533,7 +698,12 @@
       "usage_id": "item_mutant_core",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "cd79900033bdc721c98d45516f425e053cb5092084caaae85e99996ed3645e59",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_bio_crystal": {
       "type": "item",
@@ -547,7 +717,12 @@
       "usage_id": "item_bio_crystal",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "b69da3ae94e7b6c0122ba0dca59495ca61092902a5b2e290942db67e857c7233",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_rust_blade": {
       "type": "equipment",
@@ -561,7 +736,12 @@
       "usage_id": "item_rust_blade",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "39c0b833b4a6c12814daaf33c35ccbca00a3db951657b38c12e4f0e0ecad3bd5",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_spark_cutter": {
       "type": "equipment",
@@ -575,7 +755,12 @@
       "usage_id": "item_spark_cutter",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "989f522bb1f6cd5e8e2500fe3e4d83db82b39dd2d4b963218f07fcfc4edf62de",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_breaker_hammer": {
       "type": "equipment",
@@ -589,7 +774,12 @@
       "usage_id": "item_breaker_hammer",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "89b04f7d979dcd95ef33de62f4dcb18dc986257abed49d8592bcafb8b0bd6080",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_pipe_rifle": {
       "type": "equipment",
@@ -603,7 +793,12 @@
       "usage_id": "item_pipe_rifle",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "e8941dce886d338111a2521b5bbd664672d1cfe2e0337bec4be81de9c2fbab5f",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_coil_launcher": {
       "type": "equipment",
@@ -617,7 +812,12 @@
       "usage_id": "item_coil_launcher",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "4165e9a1db16e3011d03decc50ea7e7fe1b324038b88635edbedd85d0e447a1a",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_acid_sprayer": {
       "type": "equipment",
@@ -631,7 +831,12 @@
       "usage_id": "item_acid_sprayer",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "c265d78ac702750a8e09cc86066a04524d2d8653bf61c2094cfe89b879529234",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_patched_armor": {
       "type": "equipment",
@@ -645,7 +850,12 @@
       "usage_id": "item_patched_armor",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "4e79d6c3ce50fe3192bd1a6b744f5842d9a50a7261a71ed5e97a05dfad34198f",
+      "source_dimensions": [
+        128,
+        128
+      ]
     },
     "item_crystal_guard": {
       "type": "equipment",
@@ -659,7 +869,12 @@
       "usage_id": "item_crystal_guard",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "2c51ec3efddea2d55ba661c7230611770ebe6b9eb1b08b3bdcdd6e04ebe373a2",
+      "source_dimensions": [
+        128,
+        128
+      ]
     },
     "item_industrial_exoshell": {
       "type": "equipment",
@@ -673,7 +888,12 @@
       "usage_id": "item_industrial_exoshell",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "bf176ee6ff6decebd3eae6cf0f3488ca22454dcdd4b8187a5afdc7bec7d5ce03",
+      "source_dimensions": [
+        128,
+        128
+      ]
     },
     "item_recycler_glove": {
       "type": "equipment",
@@ -687,7 +907,12 @@
       "usage_id": "item_recycler_glove",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "6ae532bde0f93ba440a0523dfba256a406088dc6f04f7ee854520b5fde6556a0",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "item_magnet_breaker": {
       "type": "equipment",
@@ -701,7 +926,12 @@
       "usage_id": "item_magnet_breaker",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "procedural_release_candidate"
+      "source_ref": "procedural_release_candidate",
+      "source_sha256": "ea983c2f0a4f478c76fcc2c561e1d8b207d79a5577dbc0bdb2223271daba34e9",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_rust_blade": {
       "asset_id": "player_weapon_rust_blade",
@@ -714,7 +944,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "316fb3519acad7984d55a6984ce8b26d62daa8c3c6622d7449cca38ffc8fd792",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_weapon_spark_cutter": {
       "asset_id": "player_weapon_spark_cutter",
@@ -727,7 +962,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "1ce027c1007107af01d4e45b7b59b627eaa82ab0e615a93c0b7358234fffa6bf",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_weapon_breaker_hammer": {
       "asset_id": "player_weapon_breaker_hammer",
@@ -740,7 +980,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "5f6410f93aa8f021784dd71bfb6dc0a078789d2d818f61d1b37aacc6915d1b02",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_weapon_pipe_rifle": {
       "asset_id": "player_weapon_pipe_rifle",
@@ -753,7 +998,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "b319e24dbd8c94b9a12013b36ee38faf52582f0ac22a860149dba0e86785a0a7",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_weapon_coil_launcher": {
       "asset_id": "player_weapon_coil_launcher",
@@ -766,7 +1016,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "084079dddfc37d94f28845445eeb1b97cd18a02ff83094b148a3b579e1c3f1d3",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_weapon_acid_sprayer": {
       "asset_id": "player_weapon_acid_sprayer",
@@ -779,7 +1034,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "fded8b175bbae52bd6c5b7d2d6714ac0857436eddd4d4ba3829a66d82e67ee0a",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_tool_recycler_glove": {
       "asset_id": "player_tool_recycler_glove",
@@ -792,7 +1052,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "078bdc3a508cf764d71979501f8d8f359f926945629617c6f3f2d0f1c4b775f4",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "player_tool_magnet_breaker": {
       "asset_id": "player_tool_magnet_breaker",
@@ -805,7 +1070,12 @@
       ],
       "source_ref": "procedural_release_candidate",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "2d8277cd745d016d27fb804f56a8e88cc447819ff407901f7567d08de1fbf9ed",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_light_reinforced_armor": {
       "type": "equipment",
@@ -819,7 +1089,12 @@
       "usage_id": "item_light_reinforced_armor",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "14be0a9b9444c8518ee3b06deadd29d86e328e2fbe582cdb7168d2710a960305",
+      "source_dimensions": [
+        128,
+        128
+      ]
     },
     "item_hazard_armor": {
       "type": "equipment",
@@ -833,7 +1108,12 @@
       "usage_id": "item_hazard_armor",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "0fef656d35c300529b81c03c8c7903310270998d0bd74b6683d04a7e775d0e01",
+      "source_dimensions": [
+        128,
+        128
+      ]
     },
     "item_core_power_armor": {
       "type": "equipment",
@@ -847,7 +1127,12 @@
       "usage_id": "item_core_power_armor",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "authored_replacement"
+      "source_ref": "authored_replacement",
+      "source_sha256": "5bdc4ddce6f7ecdfac20644452db51046be70d34f61e2e508f524893b743a270",
+      "source_dimensions": [
+        128,
+        128
+      ]
     },
     "prop_highway_bus": {
       "type": "prop",
@@ -969,7 +1254,12 @@
       "usage_id": "item_melee_sword",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "a9728edb61bdd50c99348ab827332f865a0a0c7bfc1274d23de412cf5c254d00",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_melee_sword": {
       "asset_id": "player_weapon_melee_sword",
@@ -982,7 +1272,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "6fd11b0d4b3ea8ea296e10a5f7e4689c8f8fb4d21eb724fe458f29a1d44d6be4",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_melee_axe": {
       "type": "equipment",
@@ -996,7 +1291,12 @@
       "usage_id": "item_melee_axe",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "f1ce0c077b8755924e2fd7b3825ce927b5053c813a7026c0110f28597e165e5a",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_melee_axe": {
       "asset_id": "player_weapon_melee_axe",
@@ -1009,7 +1309,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "35d6e3cdb73d0b2d1699947333b7133673b9df2d2c3acbfe3c478e0ada776170",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_ranged_pistol": {
       "type": "equipment",
@@ -1023,7 +1328,12 @@
       "usage_id": "item_ranged_pistol",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "8e360a73c62f3e4906dca87efe98a430a645096a29ce9017d056b37c432bc47c",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_ranged_pistol": {
       "asset_id": "player_weapon_ranged_pistol",
@@ -1036,7 +1346,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "ed96bf1c6015a57810400c2c672cc7e5f84981b5b8a3f4ae69b1522d04f7f674",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_ranged_revolver": {
       "type": "equipment",
@@ -1050,7 +1365,12 @@
       "usage_id": "item_ranged_revolver",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "a8d44697b458587562aa964eacdf6f6f1c69d896a97b7eed7f36f6338ce46e05",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_ranged_revolver": {
       "asset_id": "player_weapon_ranged_revolver",
@@ -1063,7 +1383,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "1b2232d616782f73e3502bd639da0e89682d1147bf00348bbba943043d8d86ea",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_ranged_smg": {
       "type": "equipment",
@@ -1077,7 +1402,12 @@
       "usage_id": "item_ranged_smg",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "c5ed3b67547cf43edf0c1dc925a39c82e4302b79b8d5a2c521d4d29e34628778",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_ranged_smg": {
       "asset_id": "player_weapon_ranged_smg",
@@ -1090,7 +1420,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "b5988e91224dbfe43b2f721d17a0382840dc4892c2c92164e2913505e927d720",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_ranged_shotgun": {
       "type": "equipment",
@@ -1104,7 +1439,12 @@
       "usage_id": "item_ranged_shotgun",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "60fc19cf565dd47e48207fb6b23184c36b10e6a593bdb795f84e55b783f2e214",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_ranged_shotgun": {
       "asset_id": "player_weapon_ranged_shotgun",
@@ -1117,7 +1457,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "725b53e9e14ba2547587a6b5fe036bca5a5676db35665851f33dde52b079f7e0",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_ranged_crossbow": {
       "type": "equipment",
@@ -1131,7 +1476,12 @@
       "usage_id": "item_ranged_crossbow",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "6b86fa5b4dc6576033525d113a58b42304213d3eb7cbb61d5f5cae7212194df4",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_ranged_crossbow": {
       "asset_id": "player_weapon_ranged_crossbow",
@@ -1144,7 +1494,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "81096ca1c28bb289100f20a1e016ade9eb3590cc996243281925a76d2ef7896e",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "item_ranged_explosive": {
       "type": "equipment",
@@ -1158,7 +1513,12 @@
       "usage_id": "item_ranged_explosive",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "imagegen_wasteland_arsenal_sheet"
+      "source_ref": "imagegen_wasteland_arsenal_sheet",
+      "source_sha256": "7208f8ab2581e84ad2393022a9a5446e8df21db94c8aa68c7d392d22b42ba037",
+      "source_dimensions": [
+        88,
+        72
+      ]
     },
     "player_weapon_ranged_explosive": {
       "asset_id": "player_weapon_ranged_explosive",
@@ -1171,7 +1531,12 @@
       ],
       "source_ref": "imagegen_wasteland_arsenal_sheet",
       "unique_required": true,
-      "minimap_marker": "none"
+      "minimap_marker": "none",
+      "source_sha256": "3b3eda337f4353d4eaf889a681a1dcaa9b283ea19fbea23e933d495f31eacb9a",
+      "source_dimensions": [
+        96,
+        64
+      ]
     },
     "prop_crystal_node": {
       "type": "prop",
@@ -1185,7 +1550,12 @@
       "usage_id": "prop_crystal_node",
       "unique_required": false,
       "minimap_marker": "resource",
-      "source_ref": "props_expansion"
+      "source_ref": "props_expansion",
+      "source_sha256": "8bfa54952a0eb1d32e5e8b0819e617ab90c1d405ed7913a8990471be124c70ce",
+      "source_dimensions": [
+        96,
+        80
+      ]
     },
     "prop_ore_node": {
       "type": "prop",
@@ -1199,7 +1569,12 @@
       "usage_id": "prop_ore_node",
       "unique_required": false,
       "minimap_marker": "resource",
-      "source_ref": "props_expansion"
+      "source_ref": "props_expansion",
+      "source_sha256": "6030a85ebbad128b6d14470f014f5f7003a7d42070c1d410ad3ed5c97d7fa185",
+      "source_dimensions": [
+        96,
+        80
+      ]
     },
     "prop_herb_patch": {
       "type": "prop",
@@ -1213,7 +1588,12 @@
       "usage_id": "prop_herb_patch",
       "unique_required": false,
       "minimap_marker": "resource",
-      "source_ref": "props_expansion"
+      "source_ref": "props_expansion",
+      "source_sha256": "a5f9d8326851010281f420f64fa03b3a0e3adae5274a69182db71e1576b227e3",
+      "source_dimensions": [
+        96,
+        80
+      ]
     },
     "prop_barrel_stack": {
       "type": "prop",
@@ -1227,7 +1607,12 @@
       "usage_id": "prop_barrel_stack",
       "unique_required": false,
       "minimap_marker": "resource",
-      "source_ref": "props_expansion"
+      "source_ref": "props_expansion",
+      "source_sha256": "279d984092da15fa95511c41ed620f291f55557f54d16cdfe4f2aa07395c0df0",
+      "source_dimensions": [
+        96,
+        80
+      ]
     },
     "prop_scrap_pile": {
       "type": "prop",
@@ -1241,7 +1626,12 @@
       "usage_id": "prop_scrap_pile",
       "unique_required": false,
       "minimap_marker": "resource",
-      "source_ref": "props_expansion"
+      "source_ref": "props_expansion",
+      "source_sha256": "22bc0272fd314db9fafbbf14e1159d5fcbbcd24f8ab5fd4e18c62dff0f949aeb",
+      "source_dimensions": [
+        96,
+        80
+      ]
     },
     "prop_ruin_wall": {
       "type": "prop",
@@ -1255,7 +1645,12 @@
       "usage_id": "prop_ruin_wall",
       "unique_required": false,
       "minimap_marker": "prop",
-      "source_ref": "props_expansion"
+      "source_ref": "props_expansion",
+      "source_sha256": "9973cf376a542f8f6f9ab492dfd3923e78de1cd6702a1d1ac0835641dcff6e7d",
+      "source_dimensions": [
+        96,
+        80
+      ]
     },
     "item_alloy_plate": {
       "type": "item",
@@ -1269,7 +1664,12 @@
       "usage_id": "item_alloy_plate",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "b41fa5d70352d0ddd2279a1625412074755062a0348069c1113b77f98bd5e28a",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_broken_coil": {
       "type": "item",
@@ -1283,7 +1683,12 @@
       "usage_id": "item_broken_coil",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_mutant_herb": {
       "type": "item",
@@ -1297,7 +1702,12 @@
       "usage_id": "item_mutant_herb",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "761b44d7647363d5858e0665de98aeaa6fa08626758011e86ef63bd327c7e9b6",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_acid_sac": {
       "type": "item",
@@ -1311,7 +1721,12 @@
       "usage_id": "item_acid_sac",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "fc2527b7323ebd41c372955e446760ea6bb66e4b08964ac241cb8d9c442b2e4a",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_amethyst_gem": {
       "type": "item",
@@ -1325,7 +1740,12 @@
       "usage_id": "item_amethyst_gem",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "13ae871160e1173c6eab1608d8da4b8757faf80a5324d5658fbf5342fe849f09",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_precision_chip": {
       "type": "item",
@@ -1339,7 +1759,12 @@
       "usage_id": "item_precision_chip",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_dynamo_core": {
       "type": "item",
@@ -1353,7 +1778,12 @@
       "usage_id": "item_dynamo_core",
       "unique_required": true,
       "minimap_marker": "pickup",
-      "source_ref": "regional_material"
+      "source_ref": "regional_material",
+      "source_sha256": "6aabd5c08c7889f50daa462021638b064304a0e8dcd7398ea19f359bb02bd711",
+      "source_dimensions": [
+        64,
+        64
+      ]
     },
     "item_terminal_controller": {
       "path": "res://assets/sprites/items/terminal_controller.png",
@@ -1362,7 +1792,12 @@
         64
       ],
       "type": "item",
-      "description": "終端操作器"
+      "description": "終端操作器",
+      "source_sha256": "e9dba55f7fac2893e0a72f66e6de2e280d9bf6d22cc44e6c4b7028090dcffc88",
+      "source_dimensions": [
+        64,
+        64
+      ]
     }
   }
 }
