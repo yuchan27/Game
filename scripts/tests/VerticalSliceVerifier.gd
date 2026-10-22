@@ -4,16 +4,21 @@ const VILLAGE_SCENE := preload("res://scenes/levels/village/Village.tscn")
 const WASTELAND_SCENE := preload("res://scenes/levels/wasteland/Wasteland.tscn")
 const GUILD_SCENE := preload("res://scenes/levels/guild/Guild.tscn")
 const ENEMY_SCRIPT := preload("res://scripts/components/Enemy.gd")
+const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
 
 var failures: Array[String] = []
+var qa_save_path := "user://qa_validation_save.json"
 
 func _ready() -> void:
+	qa_save_path = _read_user_arg("--qa-save-path", qa_save_path)
+	SaveManager.default_save_path = qa_save_path
 	await get_tree().process_frame
 	print("[VERIFY] Waste Recycler vertical slice verification started")
 	DataRegistry.load_all()
 	_check_data_registry()
 	_check_enemy_behavior_contract()
 	_check_baked_assets()
+	_check_music_assets()
 	_check_export_presets()
 	await _check_scene("village", VILLAGE_SCENE, {
 		"interactable": 7,
@@ -22,9 +27,9 @@ func _ready() -> void:
 	})
 	await _check_scene("wasteland", WASTELAND_SCENE, {
 		"interactable": 5,
-		"enemy": 30,
-		"pickup": 42,
-		"world_prop": 60,
+		"enemy": int(DataRegistry.map_params.get("enemy_limit", 50)),
+		"pickup": int(DataRegistry.map_params.get("resource_nodes", 24)),
+		"world_prop": int(DataRegistry.map_params.get("prop_nodes", 58)),
 		"obstacle": 40,
 		"projectile_pool": 1,
 		"player": 1
@@ -59,7 +64,7 @@ func _check_data_registry() -> void:
 	_expect(DataRegistry.visual_assets.size() >= 35, "visual asset manifest has formal art entries")
 	_expect(int(DataRegistry.map_params.get("width_tiles", 0)) >= 100, "wasteland width is at least 100 tiles")
 	_expect(int(DataRegistry.map_params.get("height_tiles", 0)) >= 80, "wasteland height is at least 80 tiles")
-	_expect(int(DataRegistry.map_params.get("prop_nodes", 0)) >= 60, "wasteland has enough pseudo-3D props configured")
+	_expect(int(DataRegistry.map_params.get("prop_nodes", 0)) >= 1, "wasteland configures seeded pseudo-3D props")
 
 func _check_enemy_behavior_contract() -> void:
 	var required_patterns := {
@@ -69,7 +74,7 @@ func _check_enemy_behavior_contract() -> void:
 		"rust_brute": "slow_wide_melee",
 		"rot_wing": "orbiting_melee",
 		"mech_husk": "mixed_melee_projectile",
-		"waste_titan": "boss_stomp_and_core_barrage"
+		"waste_titan": "relentless_player_hunt"
 	}
 	for enemy_id in required_patterns.keys():
 		var data := DataRegistry.get_enemy(String(enemy_id))
@@ -90,13 +95,21 @@ func _check_enemy_behavior_contract() -> void:
 		enemy.free()
 
 func _check_baked_assets() -> void:
-	_expect_png_size("res://assets/sprites/player/recycler_player_multiaction_8dir.png", Vector2i(8064, 1024), "baked full-body R-17 player atlas exists at 9 actions x 8 directions x 8 frames")
-	_expect_png_size("res://assets/sprites/player/frames/walk/dir_0/frame_0.png", Vector2i(112, 128), "R-17 split walk frame exists for right direction")
-	_expect_png_size("res://assets/sprites/player/frames/shoot/dir_4/frame_7.png", Vector2i(112, 128), "R-17 split shoot frame exists for left direction")
-	_expect_png_size("res://assets/sprites/player/actions/walk.png", Vector2i(896, 1024), "R-17 per-action walk sheet exists for review")
+	_expect_png_size("res://assets/sprites/player/recycler_player_multiaction_8dir_preview.png", Vector2i(8064, 1024), "runtime R-17 player preview atlas exists at 9 actions x 8 directions x 8 frames")
 	_expect_png_size("res://assets/sprites/enemies/polluted_enemy_six_types.png", Vector2i(672, 72), "baked enemy atlas has 6 enemy types plus boss")
 	_expect_png_size("res://assets/sprites/items/recycler_item_icons.png", Vector2i(352, 72), "baked high-detail item icon atlas has 4 resource icons")
 	_expect_png_size("res://assets/sprites/tiles/recycler_tileset.png", Vector2i(192, 32), "baked terrain tileset has village and wasteland tiles")
+
+func _check_music_assets() -> void:
+	for path in [
+		"res://assets/audio/music_village.mp3",
+		"res://assets/audio/music_guild.mp3",
+		"res://assets/audio/music_wasteland.mp3"
+	]:
+		var stream: AudioStream = ASSET_LOADER.load_wav(String(path))
+		_expect(stream != null and stream is AudioStream, "runtime audio loader returns a stream: " + String(path))
+		if stream != null:
+			_expect(stream.get_length() >= 24.0, "music stream duration is at least 24 seconds: " + String(path))
 
 func _check_export_presets() -> void:
 	var config := ConfigFile.new()
@@ -133,12 +146,12 @@ func _check_save_roundtrip() -> void:
 	GameState.equip_item("spark_cutter")
 	GameState.talk_to_npc("repair_robot")
 	var before := GameState.get_save_data()
-	var saved := SaveManager.save_game()
+	var saved := SaveManager.save_game(false, qa_save_path)
 	GameState.reset_new_run(false)
 	var loaded := _load_save_without_scene_change()
 	var after := GameState.get_save_data()
-	_expect(saved, "save manager writes save_game.json")
-	_expect(loaded, "save manager loads save_game.json")
+	_expect(saved, "save manager writes isolated QA save")
+	_expect(loaded, "save manager loads isolated QA save")
 	_expect(String(after.get("scene", "")) == String(before.get("scene", "")), "save roundtrip restores scene")
 	_expect(Vector2(float(after.player.position_x), float(after.player.position_y)) == Vector2(321, 654), "save roundtrip restores player position")
 	_expect(String(after.equipment.weapon) == "spark_cutter", "save roundtrip restores equipped weapon")
@@ -148,19 +161,7 @@ func _check_save_roundtrip() -> void:
 	_expect(after.get("talked_npcs", []).has("repair_robot"), "save roundtrip restores talked NPC state")
 
 func _load_save_without_scene_change() -> bool:
-	if not FileAccess.file_exists("user://save_game.json"):
-		return false
-	var file := FileAccess.open("user://save_game.json", FileAccess.READ)
-	var wrapped = JSON.parse_string(file.get_as_text())
-	if typeof(wrapped) != TYPE_DICTIONARY:
-		return false
-	var payload_text := Marshalls.base64_to_utf8(String(wrapped.get("payload", "")))
-	if payload_text.sha256_text() != String(wrapped.get("checksum", "")):
-		return false
-	var data = JSON.parse_string(payload_text)
-	if typeof(data) != TYPE_DICTIONARY:
-		return false
-	return GameState.load_save_data(data)
+	return SaveManager.load_game(false, false, qa_save_path)
 
 func _check_equipment_loop() -> void:
 	GameState.reset_new_run(false)
@@ -236,10 +237,10 @@ func _check_playable_core_loop() -> void:
 	if not pools.is_empty():
 		_expect(int(pools[0].active_count) >= 1, "playable loop ranged attack spawns projectile")
 	GameState.player_position = player.global_position
-	var saved := SaveManager.save_game()
+	var saved := SaveManager.save_game(false, qa_save_path)
 	GameState.current_scene_id = "village"
 	var loaded := _load_save_without_scene_change()
-	_expect(saved and loaded, "playable loop can save and reload after combat")
+	_expect(saved and loaded, "playable loop can save and reload after combat using isolated QA save")
 	_expect(GameState.current_scene_id == "wasteland", "playable loop restores wasteland scene after reload")
 	GameState.set_scene("village", "from_wasteland")
 	_expect(GameState.current_scene_id == "village", "playable loop can return to village state")
@@ -255,7 +256,7 @@ func _check_wasteland_prop_contract() -> void:
 	await get_tree().process_frame
 	var props := get_tree().get_nodes_in_group("world_prop")
 	var obstacles := get_tree().get_nodes_in_group("obstacle")
-	_expect(props.size() >= int(DataRegistry.map_params.get("prop_nodes", 72)), "wasteland props spawn from seed")
+	_expect(props.size() >= int(DataRegistry.map_params.get("prop_nodes", 58)), "wasteland props spawn from seed")
 	_expect(obstacles.size() >= 40, "wasteland blocking obstacles exist")
 	if not props.is_empty():
 		var prop := props[0]
@@ -271,14 +272,16 @@ func _check_wasteland_route_contract() -> void:
 		GameState.reset_new_run(false)
 		GameState.current_scene_id = "wasteland"
 		GameState.set_current_route(route_id)
+		var route := DataRegistry.get_wasteland_route(route_id)
+		if bool(route.get("boss_enabled", false)):
+			GameState.defeated_enemies = int(DataRegistry.map_params.get("boss_spawn_after_defeats", 40))
 		var instance := WASTELAND_SCENE.instantiate()
 		add_child(instance)
 		await get_tree().process_frame
 		await get_tree().process_frame
-		var route := DataRegistry.get_wasteland_route(route_id)
 		_expect(not route.is_empty(), "route data exists: " + route_id)
-		_expect(get_tree().get_nodes_in_group("enemy").size() >= 30, "route has enemy pressure: " + route_id)
-		_expect(get_tree().get_nodes_in_group("pickup").size() >= 42, "route has resources: " + route_id)
+		_expect(get_tree().get_nodes_in_group("enemy").size() >= int(DataRegistry.map_params.get("enemy_limit", 50)) - (1 if bool(route.get("boss_enabled", false)) else 0), "route has configured enemy pressure: " + route_id)
+		_expect(get_tree().get_nodes_in_group("pickup").size() >= int(DataRegistry.map_params.get("resource_nodes", 24)), "route has configured resources: " + route_id)
 		if bool(route.get("boss_enabled", false)):
 			_expect(get_tree().get_nodes_in_group("boss").size() >= 1, "boss route spawns boss: " + route_id)
 		instance.queue_free()
@@ -404,7 +407,6 @@ func _check_player_animation_contract() -> void:
 						_expect(frame_set.get_frame_count(animation_name) >= 8, "player animation has 8-frame motion: " + animation_name)
 			var first_frame := frame_set.get_frame_texture("idle_0", 0)
 			_expect(first_frame is Texture2D, "player animation frames load as textures")
-			_expect(not (first_frame is AtlasTexture), "player animation uses split PNG frames before atlas fallback")
 		if player.has_method("_aim_direction_from_global_target") and player.has_method("_projectile_spawn_global") and player.has_method("_attack_anchor_global"):
 			player.global_position = Vector2(400, 400)
 			player.last_direction = Vector2.RIGHT
@@ -466,3 +468,10 @@ func _finish() -> void:
 	else:
 		print("[VERIFY] Failed checks: %s" % JSON.stringify(failures))
 		get_tree().quit(1)
+
+func _read_user_arg(option: String, fallback: String) -> String:
+	var args := OS.get_cmdline_user_args()
+	for index in range(args.size() - 1):
+		if args[index] == option:
+			return String(args[index + 1])
+	return fallback

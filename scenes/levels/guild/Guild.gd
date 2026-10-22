@@ -51,6 +51,33 @@ func _add_projectile_pool(limit: int) -> void:
 	pool.max_projectiles = limit
 	add_child(pool)
 
+class GuildFoundation extends Node2D:
+	var base_size: Vector2
+
+	func _init(sz: Vector2) -> void:
+		base_size = sz
+		z_index = -1
+
+	func _draw() -> void:
+		var hw := base_size.x * 0.50
+		var hh := maxf(10.0, base_size.y * 0.15)
+		# Ambient occlusion shadow
+		for i in range(3):
+			var factor: float = 1.0 + float(i) * 0.12
+			var alpha: float = 0.22 - float(i) * 0.05
+			draw_set_transform(Vector2(4.0, -hh * 0.2), 0.0, Vector2(hw * factor, hh * factor))
+			draw_circle(Vector2.ZERO, 1.0, Color(0.02, 0.02, 0.03, alpha))
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		# Polished bunker brass-trimmed foundation plate
+		var plate_rect := Rect2(-hw * 0.92, -hh * 1.4, hw * 1.84, hh * 1.8)
+		draw_rect(plate_rect, Color(0.12, 0.14, 0.18, 0.95))
+		draw_rect(plate_rect, Color(0.48, 0.42, 0.25, 0.85), false, 1.8)
+		# Corner rivets
+		for sx in [-hw * 0.82, hw * 0.82]:
+			for sy in [-hh * 1.1, hh * 0.2]:
+				draw_circle(Vector2(sx, sy), 2.2, Color(0.65, 0.58, 0.35, 1.0))
+
+
 func _add_counter(id: String, label: String, pos: Vector2, color: Color, map_label: String) -> void:
 	var node := Node2D.new()
 	node.position = pos
@@ -58,6 +85,8 @@ func _add_counter(id: String, label: String, pos: Vector2, color: Color, map_lab
 	node.add_to_group("map_station")
 	node.set_meta("map_label", map_label)
 	node.set_meta("map_marker", "station")
+	var asset_id: String = String(COUNTER_ASSETS.get(id, ""))
+	node.set_meta("structure_asset_id", asset_id)
 	add_child(node)
 
 	var sprite := Sprite2D.new()
@@ -65,10 +94,25 @@ func _add_counter(id: String, label: String, pos: Vector2, color: Color, map_lab
 	sprite.texture = texture if texture != null else PIXEL.new().make_texture(Vector2i(200, 104), [color.darkened(0.3), color, color.lightened(0.22)], id.length())
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var texture_size := sprite.texture.get_size()
+	var foundation := GuildFoundation.new(texture_size)
+	foundation.name = "GuildFoundation"
+	node.add_child(foundation)
 	sprite.centered = false
 	sprite.position = Vector2(-texture_size.x * 0.5, -texture_size.y)
 	node.add_child(sprite)
-	_add_counter_collision(node, texture_size)
+	var badge := Label.new()
+	badge.text = "【%s】" % map_label
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge.custom_minimum_size = Vector2(140, 20)
+	badge.position = Vector2(-70, -texture_size.y - 14.0)
+	badge.add_theme_font_size_override("font_size", 11)
+	badge.add_theme_color_override("font_color", Color(0.55, 0.85, 0.90, 0.75))
+	badge.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.92))
+	badge.add_theme_constant_override("shadow_offset_x", 1)
+	badge.add_theme_constant_override("shadow_offset_y", 1)
+	node.add_child(badge)
+
+	_add_counter_collision(node, texture_size, asset_id)
 
 	var interactable: Area2D = INTERACTABLE_SCRIPT.new()
 	interactable.interaction_id = id
@@ -81,12 +125,18 @@ func _counter_texture(id: String) -> Texture2D:
 	var asset_id := String(COUNTER_ASSETS.get(id, ""))
 	return ASSET_LOADER.load_png(DataRegistry.asset_path(asset_id)) if not asset_id.is_empty() else null
 
-func _add_counter_collision(node: Node2D, texture_size: Vector2) -> void:
+func _add_counter_collision(node: Node2D, texture_size: Vector2, asset_id: String) -> void:
 	var body := StaticBody2D.new()
+	body.name = "StructureCollider"
 	body.add_to_group("obstacle")
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(max(48.0, texture_size.x * 0.54), max(22.0, texture_size.y * 0.18))
+	var authored_collision: Variant = DataRegistry.get_visual_asset(asset_id).get("collision", [])
+	if authored_collision is Array and authored_collision.size() == 2:
+		shape.size = Vector2(max(24.0, float(authored_collision[0])), max(16.0, float(authored_collision[1])))
+	else:
+		shape.size = Vector2(max(48.0, texture_size.x * 0.54), max(22.0, texture_size.y * 0.18))
 	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
 	collision.shape = shape
 	collision.position = Vector2(0, -shape.size.y * 0.5)
 	body.add_child(collision)

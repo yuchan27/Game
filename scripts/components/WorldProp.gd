@@ -8,6 +8,10 @@ var prop_id := "rust_rock"
 var blocks_movement := true
 var visual_size := Vector2i(56, 56)
 var collision_size := Vector2(42, 24)
+var visual_asset: Dictionary = {}
+var _render_scale := Vector2.ONE
+var _sprite_origin := Vector2.ZERO
+var _visual_bounds_local := Rect2()
 
 func setup(id: String, blocking := true, size := Vector2i(56, 56)) -> void:
 	prop_id = id
@@ -18,44 +22,116 @@ func setup(id: String, blocking := true, size := Vector2i(56, 56)) -> void:
 func _ready() -> void:
 	add_to_group("world_prop")
 	add_to_group("map_prop")
-	set_meta("map_label", _prop_label())
 	set_meta("map_marker", "prop")
 	y_sort_enabled = true
+	var texture := _prop_texture()
+	set_meta("map_label", _prop_label())
+	_add_sprite(texture)
 	if blocks_movement:
 		add_to_group("obstacle")
-		_add_collision()
-	_add_sprite()
+		_add_collision(texture.get_size())
 
-func _add_collision() -> void:
+func _add_collision(texture_size: Vector2) -> void:
 	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
 	var shape := RectangleShape2D.new()
-	shape.size = collision_size
+	var footprint: Variant = visual_asset.get("collision_footprint", [])
+	var local_position := Vector2.ZERO
+	if footprint is Array and footprint.size() == 4 and texture_size.x > 0.0 and texture_size.y > 0.0:
+		var left := clampf(float(footprint[0]), 0.0, 1.0)
+		var top := clampf(float(footprint[1]), 0.0, 1.0)
+		var width := clampf(float(footprint[2]), 0.0, 1.0 - left)
+		var height := clampf(float(footprint[3]), 0.0, 1.0 - top)
+		if width > 0.0 and height > 0.0:
+			shape.size = Vector2(texture_size.x * width, texture_size.y * height) * _render_scale
+			local_position = Vector2((left + width * 0.5) * texture_size.x, (top + height * 0.5) * texture_size.y) * _render_scale
+			local_position += _sprite_origin
+		else:
+			shape.size = collision_size
+			local_position = Vector2(0.0, -shape.size.y * 0.5)
+	else:
+		shape.size = collision_size
+		local_position = Vector2(0.0, -shape.size.y * 0.5)
 	collision.shape = shape
-	collision.position = Vector2(0, -collision_size.y * 0.5)
+	collision.position = local_position
 	add_child(collision)
+	set_meta("collision_footprint_local", Rect2(local_position - shape.size * 0.5, shape.size))
 
-func _add_sprite() -> void:
+func get_collision_bounds() -> Rect2:
+	var local_rect: Rect2 = get_meta("collision_footprint_local", Rect2())
+	return Rect2(global_position + local_rect.position, local_rect.size)
+
+func get_visual_bounds() -> Rect2:
+	return Rect2(global_position + _visual_bounds_local.position, _visual_bounds_local.size)
+
+func _add_sprite(texture: Texture2D) -> void:
 	var sprite := Sprite2D.new()
-	sprite.texture = _prop_texture()
+	sprite.name = "Sprite2D"
+	sprite.texture = texture
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	sprite.centered = false
 	var texture_size := sprite.texture.get_size() if sprite.texture != null else Vector2(visual_size)
-	sprite.position = Vector2(-texture_size.x * 0.5, -texture_size.y)
-	sprite.scale = _deterministic_scale()
+	var content_rect := _opaque_bounds(sprite.texture)
+	var content_size := Vector2(content_rect.size)
+	if content_size.x <= 0.0 or content_size.y <= 0.0:
+		content_rect = Rect2i(Vector2i.ZERO, Vector2i(texture_size))
+		content_size = texture_size
+	var target_size: Vector2 = Vector2(visual_size)
+	var fit_scale: float = minf(target_size.x / maxf(1.0, content_size.x), target_size.y / maxf(1.0, content_size.y))
+	_render_scale = Vector2.ONE * fit_scale * _deterministic_scale().x
+	sprite.scale = _render_scale
+	sprite.position = _sprite_canvas_origin(texture_size, content_rect)
+	_sprite_origin = sprite.position
+	var rendered_size: Vector2 = content_size * _render_scale
+	_visual_bounds_local = Rect2(Vector2(-rendered_size.x * 0.5, -rendered_size.y), rendered_size)
+	if prop_id != "toxic_pool":
+		var shadow := Polygon2D.new()
+		shadow.name = "GroundShadow"
+		shadow.z_index = -1
+		var rx := maxf(14.0, rendered_size.x * 0.42)
+		var ry := maxf(5.0, minf(12.0, rendered_size.y * 0.12))
+		var s_pts := PackedVector2Array()
+		for i in range(16):
+			var a := float(i) / 16.0 * TAU
+			s_pts.append(Vector2(cos(a) * rx, sin(a) * ry - 3.0))
+		shadow.polygon = s_pts
+		shadow.color = Color(0.03, 0.02, 0.04, 0.38)
+		add_child(shadow)
 	sprite.modulate = _deterministic_tint()
 	add_child(sprite)
 
+func _sprite_canvas_origin(texture_size: Vector2, content_rect := Rect2i()) -> Vector2:
+	var origin := Vector2(-texture_size.x * 0.5, -texture_size.y)
+	if content_rect.size != Vector2i.ZERO:
+		var content_size := Vector2(content_rect.size)
+		origin = Vector2(-content_size.x * 0.5 - content_rect.position.x, -content_size.y - content_rect.position.y)
+	return origin * _render_scale
+
+func _opaque_bounds(texture: Texture2D) -> Rect2i:
+	if texture == null:
+		return Rect2i()
+	if texture.has_meta("world_prop_opaque_bounds"):
+		var cached_bounds: Variant = texture.get_meta("world_prop_opaque_bounds")
+		if cached_bounds is Rect2i:
+			return cached_bounds
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		return Rect2i(Vector2i.ZERO, Vector2i(texture.get_size()))
+	var opaque_bounds: Rect2i = image.get_used_rect()
+	texture.set_meta("world_prop_opaque_bounds", opaque_bounds)
+	return opaque_bounds
+
 func _prop_texture() -> Texture2D:
-	var asset := DataRegistry.get_visual_asset("prop_%s" % prop_id)
-	var variant_prefix := String(asset.get("variant_prefix", ""))
-	var variants := int(asset.get("variants", 0))
+	visual_asset = DataRegistry.get_visual_asset("prop_%s" % prop_id)
+	var variant_prefix := String(visual_asset.get("variant_prefix", ""))
+	var variants := int(visual_asset.get("variants", 0))
 	if not variant_prefix.is_empty() and variants > 0:
 		var index := int(abs(round(global_position.x * 0.17 + global_position.y * 0.31 + prop_id.length() * 13.0))) % variants
 		var variant_path := "%s%d.png" % [variant_prefix, index]
 		var variant_texture := ASSET_LOADER.load_png(variant_path)
 		if variant_texture != null:
 			return variant_texture
-	var path := String(asset.get("path", "res://assets/sprites/props/%s.png" % prop_id))
+	var path := String(visual_asset.get("path", "res://assets/sprites/props/%s.png" % prop_id))
 	var texture := ASSET_LOADER.load_png(path)
 	if texture != null:
 		return texture
@@ -72,6 +148,9 @@ func _deterministic_tint() -> Color:
 	return Color(light, light, light, 1.0)
 
 func _prop_label() -> String:
+	var display_name := String(visual_asset.get("display_name", ""))
+	if not display_name.is_empty():
+		return display_name
 	match prop_id:
 		"dead_tree":
 			return "枯樹"

@@ -9,15 +9,17 @@ const SCENES := {
 
 var _pending_scene_id := ""
 
-func change_to(scene_id: String, spawn_point := "default") -> void:
+func change_to(scene_id: String, spawn_point := "default", save_path := "") -> void:
 	if not SCENES.has(scene_id):
 		GameState.notify("找不到場景：%s" % scene_id)
 		return
+	if scene_id == "main" and GameState.death_pending:
+		GameState.cancel_death_recovery()
 	_pending_scene_id = scene_id
 	GameState.set_scene(scene_id, spawn_point)
 	AudioManager.play_sfx("transition")
 	if scene_id != "main":
-		SaveManager.save_game(false)
+		SaveManager.save_game(false, save_path, false)
 	call_deferred("_change_scene_deferred")
 
 func _change_scene_deferred() -> void:

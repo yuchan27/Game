@@ -1,101 +1,36 @@
-# AI Handoff
+# Current Technical Handoff (`AI_HANDOFF.md`)
 
-## Project Goal
-
-`C:\Code\Game\first-game` is a Godot 4.6.3 PC-first pixel-art pseudo-3D game. The vertical slice goal is: village preparation, guild contracts, four-route wasteland exploration, combat, resource pickup, equipment switching, save/load, and return-to-village progression.
+Updated: 2026-10-21 (Asia/Taipei). This is a bounded snapshot of the completed rework.
 
 ## Current Status
 
-Latest Codex work upgrades the project to Vertical Slice v2:
+The AAA-Quality Rework and modernization of **廢土回收商 (`Wasteland Recycler`)** on `codex/modernize-wasteland` (Godot `4.6.3.stable.official.7d41c59c4`) is **complete and verified**.
+The integrated 23-step QA pipeline (`scripts/tools/run_qa.py --profile all`) passed 100% (`23 / 23` steps green, exit code `0`, `0` Godot errors) in run `20261021T035004Z-ea851a73`.
 
-- Player is now the full-body R-17 recycler robot built from `docs/art_direction_reference_r17_full_body.png`.
-- NPCs animate through procedural idle/talk motion and close dialogue when the player leaves.
-- Enemies show movement animation, damage numbers, health bars, hit effects, and death fade.
-- Village is a crossroad hub with four wasteland route exits.
-- Wasteland uses `data/maps/wasteland_routes.json` for route-specific enemy mixes, props, resources, road style, and Boss enablement.
-- HUD has redesigned dialogue, bottom controls, quickbar, minimap, tutorial, and character equipment panel.
-- Save system has `has_save()`, `load_or_new()`, checksum-protected payload, route state, intro state, NPC state, quest state, inventory, equipment, and quick slots.
+## Latest Verified Changes
 
-## Language Policy
+1. **Documentation & Architecture Specs (`docs/`)**:
+   - Added `docs/REWORK_PLAN.md`, `docs/ASSET_INVENTORY.md`, `docs/ART_BIBLE.md`, `docs/ANIMATION_SPEC.md`, `docs/BIOME_DESIGN.md`, `docs/UI_DESIGN_SYSTEM.md`, `docs/QA_REPORT.md`, and updated `docs/RELEASE_READINESS.md`.
+   - Added project-local subagent definitions in `.agents/agents/` (`art-director`, `lead-developer`, `qa-engineer`).
+2. **Protagonist & 2.5D Pixel-Art Asset Overhaul (`assets/sprites/`)**:
+   - Created 3 protagonist turnaround concepts in `docs/concepts/` and selected **Concept B: R-17 Vanguard (Evolved)**.
+   - Rebuilt `assets/sprites/player/r17_wasteland_8dir_actions.png` (`8064x1024`, 576 unique frames across 8 directions x 9 actions x 8 frames) via `scripts/tools/build_r17_vanguard_8dir_atlas.py`, fixing the static back-row (`up_left`, `up`, `up_right`) leg animation defect.
+   - Overhauled all camp structures, gates, interactive world props, 7 survivor NPCs, 6 mutant enemies + `Waste Titan` boss (`waste_titan.png` and `polluted_enemy_six_types.png` at `672x72`), and 22 weapon/armor/tool icons via `scripts/tools/overhaul_all_visual_assets.py`.
+3. **Biomes, Combat, Weapons & UI/UX (`data/`, `scenes/`, `scripts/`)**:
+   - Expanded `data/maps/wasteland_routes.json` to 6 biomes (`scrap_highway`, `toxic_marsh`, `crystal_scar`, `old_factory`, `ruined_metropolis`, `underground_facility`) with bespoke procedural ground decals in `WorldBackdrop.gd` and landmarks in `Wasteland.gd`.
+   - Expanded `data/items/equipment.json` and `data/items/recipes.json` to 14 melee/ranged weapons with `Lv.1–Lv.5` forging (`weapon_levels` in `GameState.gd`).
+   - Re-enabled 8-directional `WeaponOverlay` and `AttackFlash` in `Player.gd`, added multi-pellet shotgun/acid spread, enemy knockback/stagger (`Enemy.gd`), projectile tracer trails (`Projectile.gd`), and active Dodge/Roll (`dash`).
+   - Upgraded `AudioManager.gd` with 26 synthesized procedural sound profiles, pitch variance, and anti-clipping cooldowns.
+   - Upgraded `HUD.gd`, `Main.gd`, and `WorldMapView.gd` with Wasteland Tactical Pixel UI styling and weapon forging buttons (`鍛造近戰` / `鍛造遠程`).
 
-- Technical planning, command reasoning, commit messages, and implementation notes: English.
-- Player-facing UI, NPC dialogue, quest text, playtest checklist, SRS traceability, and user-facing documentation: Traditional Chinese.
+## Validation Evidence
 
-## Important Files
+- **Engine**: `Godot v4.6.3.stable.official.7d41c59c4`
+- **Full QA Pipeline (`run_qa.py --profile all`)**:
+  - Run ID: `20261021T035004Z-ea851a73`
+  - Report: `C:\Users\wuwu6\AppData\Local\Temp\first-game-qa\20261021T035004Z-ea851a73\qa-report.json`
+  - Result: **23 / 23 steps passed** (including headless import, vertical-slice validation, playtest flow, combat/world/UI/save/soak regressions, rendered performance baseline, 11 rendered visual review captures, visual asset audit, and packaged Windows `.exe` verification).
 
-- `project.godot`
-- `scenes/main/Main.gd`
-- `scenes/player/Player.gd`
-- `scenes/ui/HUD.gd`
-- `scenes/levels/village/Village.gd`
-- `scenes/levels/guild/Guild.gd`
-- `scenes/levels/wasteland/Wasteland.gd`
-- `scripts/autoload/GameState.gd`
-- `scripts/autoload/SaveManager.gd`
-- `scripts/autoload/SceneRouter.gd`
-- `scripts/components/DialogueNpc.gd`
-- `scripts/components/Enemy.gd`
-- `data/maps/wasteland_routes.json`
-- `data/maps/npcs.json`
-- `data/maps/quests.json`
-- `data/items/equipment.json`
-- `docs/IMPLEMENTATION_PLAN.md`
-- `docs/PLAYTEST_CHECKLIST.md`
-- `docs/SRS_TRACEABILITY.md`
+## Next Action
 
-## Development Workflow
-
-Planning alone is not completion. For implementation tasks, the AI must inspect, plan, execute, validate, fix obvious issues, commit, and report results.
-
-Before edits:
-
-```powershell
-git status --short
-git branch --show-current
-git log --oneline --decorate -10
-git show --stat HEAD
-```
-
-Prefer small, testable Godot changes. Do not rebuild the project or replace the autoload architecture unless explicitly asked.
-
-## Validation Workflow
-
-```powershell
-node -e "for (const f of ['data/maps/npcs.json','data/maps/events.json','data/maps/quests.json','data/maps/wasteland_routes.json','data/items/equipment.json','data/items/recipes.json','data/enemies/enemies.json','data/maps/wasteland_params.json']) { JSON.parse(require('fs').readFileSync(f,'utf8')); } console.log('JSON OK')"
-python scripts\tools\build_release_candidate_assets.py
-python scripts\tools\verify_visual_assets.py
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --quit
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/PixelAssetBaker.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/ValidationRunner.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/AutomatedPlaytestRunner.tscn'
-```
-
-Use `VisualReviewRunner.tscn` or Computer Use for visual review when possible.
-
-## Git Workflow
-
-- Commit every verified implementation stage.
-- Commit messages must be English.
-- Do not commit `.env`, secrets, tokens, caches, or build artifacts.
-- Do not force push.
-
-Safe remote setup:
-
-```powershell
-if (git remote get-url origin 2>$null) { git remote set-url origin https://github.com/yuchan27/Game.git } else { git remote add origin https://github.com/yuchan27/Game.git }
-git push -u origin HEAD
-```
-
-## Do Not Change Without Explicit Approval
-
-- Godot executable path.
-- Godot version.
-- `project.godot` autoload structure.
-- `ValidationRunner.tscn`, `AutomatedPlaytestRunner.tscn`, and `VisualReviewRunner.tscn` purposes.
-- Save checksum/Base64 design.
-- Village / guild / wasteland core loop.
-- Traditional Chinese player-facing language policy.
-
-## Safety Rule
-
-Do not bulk delete files or directories. Never use `del /s`, `rd /s`, `rmdir /s`, `Remove-Item -Recurse`, or `rm -rf`. If deletion is needed, delete one explicit file path at a time.
+Ready for user review or release tagging. Do not push unless explicitly instructed by the user.

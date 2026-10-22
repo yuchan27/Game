@@ -3,9 +3,10 @@ extends Node
 const VILLAGE_SCENE := preload("res://scenes/levels/village/Village.tscn")
 const WASTELAND_SCENE := preload("res://scenes/levels/wasteland/Wasteland.tscn")
 const GUILD_SCENE := preload("res://scenes/levels/guild/Guild.tscn")
-const REPORT_PATH := "res://docs/automated_playtest_report.json"
 
 var failures: Array[String] = []
+var qa_save_path := "user://qa_playtest_save.json"
+var qa_output_dir := ""
 var report: Dictionary = {
 	"version": 1,
 	"runner": "AutomatedPlaytestRunner",
@@ -14,6 +15,9 @@ var report: Dictionary = {
 }
 
 func _ready() -> void:
+	qa_save_path = _read_user_arg("--qa-save-path", qa_save_path)
+	qa_output_dir = _read_user_arg("--qa-output", "")
+	SaveManager.default_save_path = qa_save_path
 	await get_tree().process_frame
 	print("[PLAYTEST] Automated playtest started")
 	DataRegistry.load_all()
@@ -100,7 +104,7 @@ func _play_wasteland_combat_flow() -> void:
 	var enemies := get_tree().get_nodes_in_group("enemy")
 	var pools := get_tree().get_nodes_in_group("projectile_pool")
 	_expect(player != null, "wasteland: player exists")
-	_expect(enemies.size() >= 30, "wasteland: 30 enemy pressure spawn exists")
+	_expect(enemies.size() >= int(DataRegistry.map_params.get("enemy_limit", 50)), "wasteland: configured enemy pressure spawn exists")
 	_expect(pools.size() == 1, "wasteland: projectile pool exists")
 	if player == null or enemies.is_empty():
 		wasteland.queue_free()
@@ -121,7 +125,7 @@ func _play_wasteland_combat_flow() -> void:
 	_expect(GameState.ammo == ammo_before - 1, "wasteland: ranged input consumes ammo")
 	if not pools.is_empty():
 		_expect(int(pools[0].active_count) >= 1, "wasteland: ranged input spawns projectile")
-	var saved := SaveManager.save_game()
+	var saved := SaveManager.save_game(false, qa_save_path)
 	var loaded := _load_save_without_scene_change()
 	_expect(saved and loaded, "wasteland: save/load works after combat input")
 	_record_snapshot("wasteland", {
@@ -134,19 +138,7 @@ func _play_wasteland_combat_flow() -> void:
 	await _settle_frames(2)
 
 func _load_save_without_scene_change() -> bool:
-	if not FileAccess.file_exists("user://save_game.json"):
-		return false
-	var file := FileAccess.open("user://save_game.json", FileAccess.READ)
-	var wrapped = JSON.parse_string(file.get_as_text())
-	if typeof(wrapped) != TYPE_DICTIONARY:
-		return false
-	var payload_text := Marshalls.base64_to_utf8(String(wrapped.get("payload", "")))
-	if payload_text.sha256_text() != String(wrapped.get("checksum", "")):
-		return false
-	var data = JSON.parse_string(payload_text)
-	if typeof(data) != TYPE_DICTIONARY:
-		return false
-	return GameState.load_save_data(data)
+	return SaveManager.load_game(false, false, qa_save_path)
 
 func _record_snapshot(id: String, data: Dictionary) -> void:
 	report.snapshots[id] = data
@@ -155,12 +147,33 @@ func _write_report() -> void:
 	report["passed"] = failures.is_empty()
 	report["failure_count"] = failures.size()
 	report["failures"] = failures.duplicate()
-	var file := FileAccess.open(REPORT_PATH, FileAccess.WRITE)
+	var report_path := "user://qa_reports/automated_playtest_report.json"
+	if not qa_output_dir.is_empty():
+		if not DirAccess.dir_exists_absolute(qa_output_dir):
+			var make_dir_error := DirAccess.make_dir_recursive_absolute(qa_output_dir)
+			if make_dir_error != OK:
+				_record_report_failure("playtest report output directory can be created: " + str(make_dir_error))
+				return
+		report_path = qa_output_dir.path_join("automated_playtest_report.json")
+	else:
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("user://qa_reports"))
+	var file := FileAccess.open(report_path, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(report, "\t"))
-		print("[PLAYTEST] Report written: " + REPORT_PATH)
+		file.flush()
+		if file.get_error() != OK:
+			_record_report_failure("playtest report can be written: " + str(file.get_error()))
+			return
+		print("[PLAYTEST] Report written: " + report_path)
 	else:
-		_expect(false, "playtest report can be written")
+		_record_report_failure("playtest report can be opened: " + report_path)
+
+func _record_report_failure(label: String) -> void:
+	failures.append(label)
+	report["passed"] = false
+	report["failure_count"] = failures.size()
+	report["failures"] = failures.duplicate()
+	push_error("[FAIL] " + label)
 
 func _expect(condition: bool, label: String) -> void:
 	report.checks.append({
@@ -215,3 +228,10 @@ func _finish() -> void:
 	else:
 		print("[PLAYTEST] Automated playtest failed: %s" % JSON.stringify(failures))
 		get_tree().quit(1)
+
+func _read_user_arg(option: String, fallback: String) -> String:
+	var args := OS.get_cmdline_user_args()
+	for index in range(args.size() - 1):
+		if args[index] == option:
+			return String(args[index + 1])
+	return fallback

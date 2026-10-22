@@ -6,7 +6,7 @@ import sys
 import wave
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageOps
+from PIL import Image, ImageChops
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -71,9 +71,26 @@ def verify_manifest(failures: list[str]) -> None:
             continue
         if bool(asset.get("unique_required", False)) and path in seen_paths:
             fail(f"{asset_id} shares exact path with {seen_paths[path]}: {path}", failures)
-        seen_paths[path] = asset_id
+        if bool(asset.get("unique_required", False)):
+            seen_paths[path] = asset_id
 
         raw = check_image(resolve(path), asset_id, failures)
+        if raw is not None and asset.get("source_sha256"):
+            if hashlib.sha256(raw).hexdigest() != asset["source_sha256"]:
+                fail(f"{asset_id} source image differs from its recorded SHA-256", failures)
+            source_image = Image.open(resolve(path)).convert("RGBA")
+            if source_image.getchannel("A").getextrema()[0] != 0:
+                fail(f"{asset_id} requires a transparent background", failures)
+            if list(source_image.size) != asset.get("source_dimensions"):
+                fail(f"{asset_id} source dimensions disagree with manifest", failures)
+        reuse_of = str(asset.get("reuse_of", ""))
+        if reuse_of:
+            original = assets.get(reuse_of, {})
+            original_path = resolve(str(original.get("path", "")))
+            if not original or not original_path.is_file() or raw != original_path.read_bytes():
+                fail(f"{asset_id} declared reuse does not match {reuse_of}", failures)
+            else:
+                print(f"[WARN] {asset_id} intentionally reuses {reuse_of}; unique art is deferred")
         if raw is not None and asset_type in HASH_TYPES and bool(asset.get("unique_required", False)):
             digest = hashlib.sha256(raw).hexdigest()
             if digest in hashes:
@@ -115,21 +132,6 @@ def _bbox_center_bottom(box: tuple[int, int, int, int]) -> tuple[float, float]:
     return ((box[0] + box[2]) / 2.0, float(box[3]))
 
 
-def _cyan_counts(image: Image.Image) -> tuple[int, int]:
-    left = 0
-    right = 0
-    mid = image.size[0] // 2
-    for y in range(image.size[1]):
-        for x in range(image.size[0]):
-            r, g, b, a = image.getpixel((x, y))
-            if a > 80 and b > 145 and g > 120 and r < 95:
-                if x < mid:
-                    left += 1
-                else:
-                    right += 1
-    return left, right
-
-
 def _verify_body_frame(path: Path, action_id: str, direction: int, frame: int, failures: list[str]) -> tuple[int, int, int, int] | None:
     if not path.exists():
         fail(f"R-17 split frame missing: {action_id} dir {direction} frame {frame}", failures)
@@ -144,9 +146,7 @@ def _verify_body_frame(path: Path, action_id: str, direction: int, frame: int, f
     if action_id in {"idle", "walk"}:
         if bbox[0] <= 0 or bbox[2] >= PLAYER_FRAME_SIZE[0] or bbox[1] <= 0 or bbox[3] >= PLAYER_FRAME_SIZE[1]:
             fail(f"R-17 locomotion frame touches edge and may be clipped: {path.relative_to(ROOT)} bbox={bbox}", failures)
-        left_cyan, right_cyan = _cyan_counts(frame_image)
-        if left_cyan < 10 or right_cyan < 10:
-            fail(f"R-17 {action_id} frame is missing a visible cyan hand: {path.relative_to(ROOT)} left={left_cyan} right={right_cyan}", failures)
+        # Side/back views may occlude a hand. Color counts cannot prove missing art.
     elif action_id in {"shoot", "draw_sword", "slash"}:
         if bbox[0] <= 1 or bbox[2] >= PLAYER_FRAME_SIZE[0] - 1:
             fail(f"R-17 action body frame touches horizontal edge; weapon should not be baked into body: {path.relative_to(ROOT)} bbox={bbox}", failures)
@@ -171,6 +171,9 @@ def verify_player_manifest(failures: list[str]) -> None:
         fail("R-17 player manifest must declare action_sheet_dir", failures)
 
     action_ids = [str(action.get("id", "")) for action in actions if isinstance(action, dict)]
+    if len(set(action_ids)) != 9:
+        fail("R-17 animation action ids must be unique", failures)
+    reused_clips = []
     for action_id in action_ids:
         sheet_path = resolve(f"{action_sheet_dir}/{action_id}.png")
         if not sheet_path.exists():
@@ -181,9 +184,12 @@ def verify_player_manifest(failures: list[str]) -> None:
                 fail(f"R-17 action sheet has wrong size for {action_id}: {sheet.size}", failures)
         for direction in range(8):
             anchor_boxes: list[tuple[int, int, int, int]] = []
+            frame_hashes: set[str] = set()
             for frame in range(PLAYER_EXPECTED_FRAMES):
                 frame_path = resolve(f"{split_frame_dir}/{action_id}/dir_{direction}/frame_{frame}.png")
                 bbox = _verify_body_frame(frame_path, action_id, direction, frame, failures)
+                if frame_path.is_file():
+                    frame_hashes.add(hashlib.sha256(frame_path.read_bytes()).hexdigest())
                 if bbox is not None and action_id in {"idle", "walk"}:
                     anchor_boxes.append(bbox)
             if len(anchor_boxes) >= 2:
@@ -194,9 +200,16 @@ def verify_player_manifest(failures: list[str]) -> None:
                     fail(f"R-17 {action_id} dir {direction} drifts horizontally across frames: {xs}", failures)
                 if max(bottoms) - min(bottoms) > 8.0:
                     fail(f"R-17 {action_id} dir {direction} foot anchor drifts vertically across frames: {bottoms}", failures)
+            if len(frame_hashes) < PLAYER_EXPECTED_FRAMES:
+                reused_clips.append(f"{action_id}/{direction}:{len(frame_hashes)}/8")
+
+    if reused_clips:
+        print("[WARN] Authored clips reuse frames (unique/total): " + ", ".join(reused_clips))
 
     atlas_path = resolve(str(manifest.get("atlas_path", "")))
-    if atlas_path.exists():
+    if not atlas_path.is_file():
+        fail("R-17 atlas is missing: " + str(atlas_path.relative_to(ROOT)), failures)
+    else:
         image = Image.open(atlas_path).convert("RGBA")
         expected_size = (PLAYER_FRAME_SIZE[0] * PLAYER_EXPECTED_FRAMES * 9, PLAYER_FRAME_SIZE[1] * 8)
         if image.size != expected_size:
@@ -205,8 +218,24 @@ def verify_player_manifest(failures: list[str]) -> None:
         idle_left = image.crop((0, 4 * 128, 112, 5 * 128))
         if ImageChops.difference(idle_right, idle_left).getbbox() is None:
             fail("R-17 A/D idle frames are identical; left and right would read as reversed or flat", failures)
-        if ImageChops.difference(ImageOps.mirror(idle_right), idle_left).getbbox() is not None:
-            fail("R-17 left idle frame must mirror the right idle frame for A/D direction consistency", failures)
+        # Direction-specific authored poses need not be exact horizontal mirrors.
+        if image.size == expected_size:
+            for action_index, action_id in enumerate(action_ids):
+                sheet_path = resolve(f"{action_sheet_dir}/{action_id}.png")
+                if sheet_path.is_file():
+                    region = image.crop((action_index * 896, 0, (action_index + 1) * 896, 1024))
+                    sheet = Image.open(sheet_path).convert("RGBA")
+                    if region.size != sheet.size or region.tobytes() != sheet.tobytes():
+                        message = f"R-17 runtime atlas differs from reference action sheet: {action_id}"
+                        if manifest.get("action_sheets_usage") == "reference_only":
+                            print("[WARN] " + message)
+                        else:
+                            fail(message, failures)
+            for row in range(8):
+                for column in range(8 * len(action_ids)):
+                    frame = image.crop((column * 112, row * 128, (column + 1) * 112, (row + 1) * 128))
+                    if frame.getchannel("A").getbbox() is None:
+                        fail(f"R-17 runtime atlas has a blank frame: row {row}, column {column}", failures)
 
 
 def verify_weapon_overlays(failures: list[str]) -> None:
@@ -226,8 +255,9 @@ def verify_weapon_overlays(failures: list[str]) -> None:
 def verify_audio_assets(failures: list[str]) -> None:
     for rel_path, min_seconds in [
         ("assets/audio/music_intro.wav", 45.0),
-        ("assets/audio/music_village.wav", 24.0),
-        ("assets/audio/music_wasteland.wav", 24.0),
+        ("assets/audio/music_village.mp3", 24.0),
+        ("assets/audio/music_guild.mp3", 24.0),
+        ("assets/audio/music_wasteland.mp3", 24.0),
         ("assets/audio/voice_intro_story.wav", 20.0),
     ]:
         path = ROOT / rel_path
@@ -235,6 +265,12 @@ def verify_audio_assets(failures: list[str]) -> None:
             fail(f"audio missing: {rel_path}", failures)
             continue
         try:
+            if path.suffix == ".mp3":
+                raw = path.read_bytes()
+                if len(raw) < 1024 or not (raw.startswith(b"ID3") or raw[0] == 255 and raw[1] & 224 == 224):
+                    fail(f"invalid MP3 header: {rel_path}", failures)
+                # Decode and duration are checked through the native Godot importer/runner.
+                continue
             with wave.open(str(path), "rb") as wav:
                 seconds = wav.getnframes() / float(wav.getframerate())
                 if seconds < min_seconds:

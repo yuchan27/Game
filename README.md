@@ -1,99 +1,44 @@
-# 廢土回收商
+# 廢土回收商 Wasteland Recycler
 
-這是 Godot 4.6.3 製作的像素風偽 3D 單機 Roguelike vertical slice。玩家操作原創回收機器人 R-17，在村莊整備、接取公會任務、前往四個廢土路線探索戰鬥、撿取資源、切換裝備、升級維修並存讀檔。
+Godot 4.6.3 製作的 PC 像素風偽 3D 單機 Roguelike 可玩片段。操作原創
+回收機器人 R-17，在村莊整備、公會接委託，前往四條廢土路線戰鬥與回收，
+返回村莊交付任務、合成、升級並保存進度。
 
-目前專案重點是 PC 版可玩試玩片段，不啟用手機觸控 UI。所有玩家可見文字、NPC 對話、任務、教學與測試清單以繁體中文撰寫。
-
-## 目前狀態
-
-- 主角使用 `docs/art_direction_reference_r17_full_body.png` 作為正式 R-17 方向參考。
-- 主角素材由 `scripts/tools/build_release_candidate_assets.py` 生成到拆分 PNG、action sheet 與整張 atlas。
-- R-17 已支援 8 方向、每動作 8 幀：待機、走路、射擊、拔刀、揮砍、切換工具、互動、受擊、死亡。
-- 左鍵會依目前裝備行動：近戰武器揮砍，遠程武器射擊。
-- 玩家 body frame 不再烘入刀、槍或大型揮砍弧光；武器統一由 `assets/sprites/player/weapons/` overlay 呈現，降低重複手臂與裁切跑位問題。
-- 武器 icon、世界掉落 icon 與玩家手持 overlay 已改為機械廢土風格。
-- 公會任務資料已包含清剿、採集、探索、Boss 前哨、救援事件與破壞任務。
-- 開場故事語音已加入 `assets/audio/voice_intro_story.wav`，背景音樂包含 intro、village、guild、wasteland；Edge TTS 男聲目前在本機測試會回傳 `NoAudioReceived`，不可覆蓋正式語音檔。
-- 小地圖、人物面板、對話框、存檔、死亡重生、升級與四向廢土路線已在 vertical slice 中串接。
-
-## 遊玩方式
-
-```powershell
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --path 'C:\Code\Game\first-game'
-```
-
-也可以用 Godot 開啟 `C:\Code\Game\first-game\project.godot` 後執行主場景。
+以 Godot 4.6.3 開啟此目錄的 `project.godot` 後執行。先用執行檔的
+`--version` 確認版本；命令列可用 `--path <此專案目錄>` 啟動。
+目前以 Windows 鍵盤滑鼠為主，沒有啟用手機觸控介面。
 
 ## 操作
 
-- `WASD`：移動。
-- 滑鼠：瞄準。
-- 滑鼠左鍵：依目前裝備執行近戰或射擊。
-- `1-4`：切換快捷裝備。
-- `Tab` / `I`：人物裝備面板。
-- `E`：互動 / 推進對話。
-- `M`：小地圖 / 全螢幕地圖。
-- `H`：教學。
-- `Esc`：暫停選單、存檔、讀檔、返回標題或退出。
+- WASD 移動；Shift 衝刺並消耗 EP。
+- 滑鼠瞄準；左鍵依目前裝備近戰或射擊。
+- 1–4 快捷裝備；Q 切換；Tab／I 開關人物裝備面板。
+- E 與附近目標互動／推進對話；M 地圖；H 教學。
+- Esc 關閉面板／暫停選單；F5 存檔、F9 讀檔。
 
-## 重要檔案
+R-17 使用現有 9 動作 × 8 方向 × 8 幀 atlas；保留目前正式角色圖像。
+四路線共用資料驅動場景；回到路線會重新生成遭遇，背包資源目前沒有容量上限。
 
-- `project.godot`：Godot 專案設定。
-- `scenes/player/Player.gd`：玩家控制、狀態機、攻擊、瞄準與裝備動作。
-- `scripts/tools/build_release_candidate_assets.py`：R-17、武器、物品、音效與音樂生成管線。
-- `scripts/tools/verify_visual_assets.py`：素材、拆圖、方向、漂移、重複與亂碼檢查。
-- `data/art/player_animation_manifest.json`：主角 atlas 與動作幀數契約。
-- `data/art/visual_assets.json`：正式美術資產 manifest。
-- `data/items/equipment.json`：裝備、武器 overlay、音效、掉落與屬性資料。
-- `data/maps/quests.json`：公會任務與故事路線資料。
-- `docs/player_split_frame_diagnostic.png`：主角方向與動作診斷圖。
-- `docs/PLAYTEST_CHECKLIST.md`：人工遊玩驗收清單。
-- `docs/SRS_TRACEABILITY.md`：SRS 對照表。
+## 開發與驗證
 
-## 重建素材
+[繁體中文開發導讀](docs/DEVELOPER_GUIDE.zh-TW.md) 說明環境、文件與驗證方式。
+[AGENTS.md](AGENTS.md) 是英文技術規範唯一入口；[WORKFLOW.md](WORKFLOW.md)
+定義開發流程；[AI_HANDOFF.md](AI_HANDOFF.md) 保存目前狀態。
 
 ```powershell
-python scripts\tools\build_release_candidate_assets.py
-python scripts\tools\verify_visual_assets.py
+python -m venv .godot/qa-venv
+& .godot/qa-venv/Scripts/python.exe -m pip install -r requirements-qa.txt
+# 將 GODOT_BIN 設成已確認的 Godot 4.6.3 console 執行檔完整路徑
+& .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile core
 ```
 
-輸出重點：
+`visual` 執行實際繪圖截圖；`performance` 蒐集效能樣本；`all` 執行整合驗證。
+QA 在隔離副本／存檔環境執行，輸出目錄由工具顯示；不重建素材、不覆寫玩家存檔。
+視覺檢查需要可用的桌面與繪圖驅動；headless 不能驗收畫面。
 
-- 拆分幀：`assets/sprites/player/frames/`
-- 每動作 sheet：`assets/sprites/player/actions/`
-- 主角 atlas：`assets/sprites/player/recycler_player_multiaction_8dir.png`
-- 裝備 icon：`assets/sprites/items/`
-- 武器 overlay：`assets/sprites/player/weapons/`
-- 診斷圖：`docs/player_split_frame_diagnostic.png`
-- 玩家動作 review 拼接圖：`docs/visual_review_action_montage.png`
+[專案稽核](docs/PROJECT_AUDIT.md)、[優先路線圖](docs/GAMEPLAY_ROADMAP.md)、
+[驗證與發行狀態](docs/RELEASE_READINESS.md)、[人工驗收](docs/PLAYTEST_CHECKLIST.md)
+提供證據與尚未完成項目。測試通過不等於已完成發行包或人工全流程驗收。
 
-## 驗證
-
-```powershell
-node -e "for (const f of ['data/maps/npcs.json','data/maps/events.json','data/maps/quests.json','data/maps/wasteland_routes.json','data/items/equipment.json','data/items/recipes.json','data/enemies/enemies.json','data/maps/wasteland_params.json','data/art/visual_assets.json','data/art/player_animation_manifest.json']) { JSON.parse(require('fs').readFileSync(f,'utf8')); } console.log('JSON OK')"
-python scripts\tools\verify_visual_assets.py
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --quit
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/PixelAssetBaker.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/ValidationRunner.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/AutomatedPlaytestRunner.tscn'
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/PerformanceRunner.tscn'
-```
-
-視覺截圖驗證：
-
-```powershell
-& 'C:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe' --headless --path 'C:\Code\Game\first-game' --scene 'res://scenes/tests/VisualReviewRunner.tscn'
-```
-
-視覺 runner 會更新 `docs/visual_review_*.png`。
-
-效能 runner 會更新 `docs/performance_report.json`，目前壓測內容是 30 個敵人節點與 200 顆池化子彈的 projectile pool 壓力樣本。
-
-## 協作規則
-
-- 不要批量刪除檔案或資料夾。
-- 不要提交 `.env`、token、credentials、cache、匯出成品或 build artifacts。
-- 每次完成可驗證更新後都要 commit。
-- commit message 使用英文。
-- 不要改掉 Godot 版本、autoload 架構、主流程場景與驗證 runner。
-- Planning alone is not completion. 實作任務必須檢查、規劃、執行、驗證、修正明顯問題、commit 並回報結果。
+素材生成腳本是有意修改美術的製作工具，不能當作例行驗證；目前核准的素材不應
+自動重建。提交前檢查實際 diff；禁止自動 push。

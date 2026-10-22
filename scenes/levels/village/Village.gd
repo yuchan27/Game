@@ -89,6 +89,74 @@ func _add_route_gates() -> void:
 	_add_route_gate("toxic_marsh", "西門：毒沼排水區", Vector2(230, 900))
 	_add_route_gate("old_factory", "東門：舊工廠外圍", Vector2(2260, 900))
 
+class StationFoundation extends Node2D:
+	var station_id: String
+	var base_size: Vector2
+
+	func _init(id: String, sz: Vector2) -> void:
+		station_id = id
+		base_size = sz
+		z_index = -1
+
+	func _draw() -> void:
+		var hw := base_size.x * 0.52
+		var hh := maxf(12.0, base_size.y * 0.16)
+
+		# 1. Broad soft ambient occlusion shadow (cast slightly bottom-right from 45° sun)
+		for i in range(4):
+			var factor: float = 1.0 + float(i) * 0.14
+			var alpha: float = 0.20 - float(i) * 0.04
+			draw_set_transform(Vector2(5.0, -hh * 0.2), 0.0, Vector2(hw * factor, hh * factor))
+			draw_circle(Vector2.ZERO, 1.0, Color(0.02, 0.02, 0.03, alpha))
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+		# 2. Structural foundation skid plate (ground-anchored steel plate)
+		var plate_hw := hw * 0.92
+		var plate_hh := hh * 0.82
+		var plate_rect := Rect2(-plate_hw, -plate_hh * 1.5, plate_hw * 2.0, plate_hh * 2.0)
+		draw_rect(plate_rect, Color(0.14, 0.16, 0.19, 0.92))
+		draw_rect(plate_rect, Color(0.26, 0.29, 0.34, 0.85), false, 2.0)
+
+		# Corner anchor bolts
+		var bolt_color := Color(0.55, 0.52, 0.45, 1.0)
+		var bolt_head := Color(0.08, 0.08, 0.10, 1.0)
+		var bolt_offset := Vector2(plate_hw - 6.0, plate_hh - 4.0)
+		for sign_x in [-1.0, 1.0]:
+			for sign_y in [-1.0, 1.0]:
+				var bp := Vector2(sign_x * bolt_offset.x, sign_y * bolt_offset.y - plate_hh * 0.5)
+				draw_circle(bp, 2.8, bolt_head)
+				draw_circle(bp, 1.6, bolt_color)
+
+		# 3. Station-specific ground decals & environmental integration
+		match station_id:
+			"forge":
+				draw_circle(Vector2(6.0, 4.0), hw * 0.45, Color(0.95, 0.42, 0.12, 0.38))
+				draw_circle(Vector2(4.0, 2.0), hw * 0.25, Color(1.0, 0.72, 0.28, 0.52))
+				draw_polyline(PackedVector2Array([Vector2(-plate_hw + 4, 0), Vector2(-plate_hw - 28, 12), Vector2(-plate_hw - 52, 22)]), Color(0.12, 0.11, 0.14, 1.0), 3.0)
+				draw_polyline(PackedVector2Array([Vector2(plate_hw - 4, 4), Vector2(plate_hw + 32, 16), Vector2(plate_hw + 60, 24)]), Color(0.12, 0.11, 0.14, 1.0), 3.0)
+			"mod":
+				draw_circle(Vector2(0.0, 0.0), hw * 0.42, Color(0.18, 0.82, 0.94, 0.28))
+				draw_polyline(PackedVector2Array([Vector2(-plate_hw - 36, 14), Vector2(-plate_hw, 2)]), Color(0.12, 0.35, 0.42, 1.0), 3.0)
+				draw_polyline(PackedVector2Array([Vector2(plate_hw, 2), Vector2(plate_hw + 36, 14)]), Color(0.12, 0.35, 0.42, 1.0), 3.0)
+			"save":
+				draw_arc(Vector2.ZERO, hw * 0.65, 0.0, TAU, 32, Color(0.2, 0.88, 0.95, 0.5), 2.0)
+				draw_circle(Vector2.ZERO, hw * 0.35, Color(0.15, 0.75, 0.85, 0.22))
+			"recycle":
+				draw_circle(Vector2(0.0, 2.0), hw * 0.5, Color(0.07, 0.06, 0.05, 0.65))
+				draw_polyline(PackedVector2Array([Vector2(-plate_hw, -2), Vector2(-plate_hw - 22, 10)]), Color(0.12, 0.11, 0.14, 1.0), 3.0)
+			"craft":
+				draw_polyline(PackedVector2Array([Vector2(plate_hw, 0), Vector2(plate_hw + 26, 14)]), Color(0.12, 0.11, 0.14, 1.0), 3.0)
+			"shop":
+				var rug_rect := Rect2(-plate_hw * 0.85, -plate_hh * 1.2, plate_hw * 1.7, plate_hh * 2.2)
+				draw_rect(rug_rect, Color(0.42, 0.32, 0.22, 0.82))
+				draw_rect(rug_rect, Color(0.55, 0.44, 0.28, 0.9), false, 1.5)
+			"to_guild", "route_gate", "wasteland_gate":
+				var sill_w := plate_hw * 0.9
+				draw_rect(Rect2(-sill_w, -4, sill_w * 2.0, 8), Color(0.16, 0.18, 0.2, 1.0))
+				for sx in range(int(-sill_w + 4), int(sill_w - 4), 14):
+					draw_line(Vector2(sx, 4), Vector2(sx + 6, -4), Color(0.9, 0.75, 0.2, 0.85), 2.5)
+
+
 func _add_station(id: String, label: String, pos: Vector2, color: Color, map_label: String) -> void:
 	var node := Node2D.new()
 	node.position = pos
@@ -96,29 +164,53 @@ func _add_station(id: String, label: String, pos: Vector2, color: Color, map_lab
 	node.add_to_group("map_station")
 	node.set_meta("map_label", map_label)
 	node.set_meta("map_marker", "station")
+	var asset_id: String = String(STATION_ASSETS.get(id, ""))
+	node.set_meta("structure_asset_id", asset_id)
 	add_child(node)
 	var sprite := Sprite2D.new()
 	var texture := _station_texture(id)
 	sprite.texture = texture if texture != null else PIXEL.new().make_texture(Vector2i(180, 110), [color.darkened(0.35), color, color.lightened(0.18)], id.length())
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var texture_size := sprite.texture.get_size()
+	var foundation := StationFoundation.new(id, texture_size)
+	foundation.name = "StationFoundation"
+	node.add_child(foundation)
 	sprite.centered = false
 	sprite.position = Vector2(-texture_size.x * 0.5, -texture_size.y)
 	node.add_child(sprite)
-	_add_station_collision(node, texture_size)
+	var badge := Label.new()
+	badge.text = "【%s】" % map_label
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge.custom_minimum_size = Vector2(140, 20)
+	badge.position = Vector2(-70, -texture_size.y - 14.0)
+	badge.add_theme_font_size_override("font_size", 11)
+	badge.add_theme_color_override("font_color", Color(0.88, 0.82, 0.72, 0.75))
+	badge.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.92))
+	badge.add_theme_constant_override("shadow_offset_x", 1)
+	badge.add_theme_constant_override("shadow_offset_y", 1)
+	node.add_child(badge)
+
+	_add_station_collision(node, texture_size, asset_id)
 	var interactable: Area2D = INTERACTABLE_SCRIPT.new()
 	interactable.interaction_id = id
 	interactable.prompt = label
 	interactable.radius = max(texture_size.x, texture_size.y) * 0.34
+	interactable.setup_box(Vector2(0, -texture_size.y * 0.5), Vector2(texture_size.x + 140.0, texture_size.y + 140.0))
 	interactable.interacted.connect(_on_station_interacted)
 	node.add_child(interactable)
 
-func _add_station_collision(node: Node2D, texture_size: Vector2) -> void:
+func _add_station_collision(node: Node2D, texture_size: Vector2, asset_id: String) -> void:
 	var body := StaticBody2D.new()
+	body.name = "StructureCollider"
 	body.add_to_group("obstacle")
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(max(52.0, texture_size.x * 0.58), max(22.0, texture_size.y * 0.18))
+	var authored_collision: Variant = DataRegistry.get_visual_asset(asset_id).get("collision", [])
+	if authored_collision is Array and authored_collision.size() == 2:
+		shape.size = Vector2(max(24.0, float(authored_collision[0])), max(16.0, float(authored_collision[1])))
+	else:
+		shape.size = Vector2(max(52.0, texture_size.x * 0.58), max(22.0, texture_size.y * 0.18))
 	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
 	collision.shape = shape
 	collision.position = Vector2(0, -shape.size.y * 0.5)
 	body.add_child(collision)
@@ -137,11 +229,27 @@ func _add_route_gate(route_id: String, label: String, pos: Vector2) -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if sprite.texture != null:
 		var texture_size := sprite.texture.get_size()
+		var foundation := StationFoundation.new("route_gate", texture_size)
+		foundation.name = "GateFoundation"
+		node.add_child(foundation)
 		sprite.centered = false
 		sprite.position = Vector2(-texture_size.x * 0.5, -texture_size.y)
+		var gate_badge := Label.new()
+		gate_badge.text = "▲ %s" % label
+		gate_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		gate_badge.custom_minimum_size = Vector2(180, 22)
+		gate_badge.position = Vector2(-90, -texture_size.y - 24.0)
+		gate_badge.add_theme_font_size_override("font_size", 14)
+		gate_badge.add_theme_color_override("font_color", Color(0.46, 0.94, 0.98))
+		gate_badge.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.92))
+		gate_badge.add_theme_constant_override("shadow_offset_x", 1)
+		gate_badge.add_theme_constant_override("shadow_offset_y", 1)
+		node.add_child(gate_badge)
 	node.add_child(sprite)
 	var gate := ROUTE_GATE_SCRIPT.new()
-	gate.setup_route(route_id, label, Vector2.ZERO, 76.0)
+	var gate_size := sprite.texture.get_size() if sprite.texture != null else Vector2(100, 100)
+	gate.setup_route(route_id, label, Vector2.ZERO, max(gate_size.x, gate_size.y) * 0.5 + 70.0)
+	gate.setup_box(Vector2(0, -gate_size.y * 0.5), Vector2(gate_size.x + 140.0, gate_size.y + 140.0))
 	gate.interacted.connect(_on_route_gate_interacted)
 	node.add_child(gate)
 
@@ -198,25 +306,42 @@ func _on_route_gate_interacted(interaction_id: String) -> void:
 	SceneRouter.change_to("wasteland", "from_village")
 
 func _on_station_interacted(id: String) -> void:
+	var hud_nodes := get_tree().get_nodes_in_group("hud")
+	var hud = hud_nodes[0] if not hud_nodes.is_empty() else null
 	match id:
 		"forge":
-			INVENTORY_SCRIPT.forge_ammo_pack()
+			if hud != null and hud.has_method("open_workshop"):
+				hud.open_workshop("forge")
+			else:
+				INVENTORY_SCRIPT.forge_ammo_pack()
 		"craft":
-			var crafted := INVENTORY_SCRIPT.craft_basic_upgrade()
-			if crafted:
-				_try_equip_best_new_craft()
+			if hud != null and hud.has_method("open_workshop"):
+				hud.open_workshop("craft")
+			else:
+				var crafted := INVENTORY_SCRIPT.craft_basic_upgrade()
+				if crafted:
+					_try_equip_best_new_craft()
 		"shop":
-			INVENTORY_SCRIPT.shop_buy_ammo()
+			if hud != null and hud.has_method("open_workshop"):
+				hud.open_workshop("forge")
+			else:
+				INVENTORY_SCRIPT.shop_buy_ammo()
 		"mod":
-			var crafted := INVENTORY_SCRIPT.craft_mod_upgrade()
-			if crafted and GameState.can_equip("coil_launcher"):
-				GameState.equip_item("coil_launcher")
+			if hud != null and hud.has_method("open_workshop"):
+				hud.open_workshop("mod")
+			else:
+				var crafted := INVENTORY_SCRIPT.craft_mod_upgrade()
+				if crafted and GameState.can_equip("coil_launcher"):
+					GameState.equip_item("coil_launcher")
 		"recycle":
-			INVENTORY_SCRIPT.recycle_core()
+			if hud != null and hud.has_method("open_workshop"):
+				hud.open_workshop("recycle")
+			else:
+				INVENTORY_SCRIPT.recycle_core()
 		"save":
 			GameState.heal_full()
 			SaveManager.save_game(true)
-			GameState.notify("維修完成。Tab 可使用升級點強化 R-17。")
+			GameState.notify("維修完成。可在工坊 [C] 裝載戰術晶片與強化裝備。")
 		"to_guild":
 			SceneRouter.change_to("guild", "from_village")
 

@@ -8,7 +8,7 @@ const ITEM_FRAME_SIZE := Vector2i(88, 72)
 const PLAYER_ACTIONS := ["idle", "walk", "shoot", "draw_sword", "slash", "swap_tool", "interact", "hit", "dead"]
 const ENEMY_TYPES := ["melee", "fast", "ranged", "heavy", "flying", "hybrid", "boss"]
 const ITEM_TYPES := ["scrap", "ammo", "mutant_core", "bio_crystal"]
-const PLAYER_ATLAS_PATH := "res://assets/sprites/player/recycler_player_multiaction_8dir.png"
+const PLAYER_ATLAS_PATH := "res://assets/sprites/player/recycler_player_multiaction_8dir_preview.png"
 const ENEMY_ATLAS_PATH := "res://assets/sprites/enemies/polluted_enemy_six_types.png"
 const ITEM_ATLAS_PATH := "res://assets/sprites/items/recycler_item_icons.png"
 
@@ -150,6 +150,44 @@ func enemy_image(enemy_type: String) -> Image:
 				_enemy_line(image, Vector2(28, 32), Vector2(28 + leg, 45), Color8(127, 70, 150), 2)
 			_enemy_line(image, Vector2(42, 26), Vector2(55, 22), Color8(69, 213, 119), 3)
 			_enemy_rect(image, 44, 22, 54, 25, Color8(38, 33, 29))
+		"alloy_plate":
+			_item_rect(image, 14, 16, 42, 38, Color8(70, 80, 92))
+			_item_rect(image, 16, 18, 40, 36, Color8(115, 130, 145))
+			_item_set(image, 18, 20, Color8(220, 235, 250))
+			_item_set(image, 38, 20, Color8(220, 235, 250))
+			_item_set(image, 18, 34, Color8(220, 235, 250))
+			_item_set(image, 38, 34, Color8(220, 235, 250))
+		"broken_coil":
+			_item_rect(image, 18, 16, 38, 38, Color8(42, 48, 55))
+			_item_line(image, Vector2(16, 22), Vector2(40, 22), Color8(215, 120, 45), 3)
+			_item_line(image, Vector2(16, 28), Vector2(40, 28), Color8(215, 120, 45), 3)
+			_item_line(image, Vector2(16, 34), Vector2(40, 34), Color8(215, 120, 45), 3)
+			_item_set(image, 14, 16, Color8(75, 225, 240))
+			_item_set(image, 42, 38, Color8(75, 225, 240))
+		"mutant_herb":
+			_item_line(image, Vector2(28, 42), Vector2(28, 18), Color8(34, 110, 45), 3)
+			_item_ellipse(image, Vector2i(20, 24), 7, 5, Color8(75, 205, 85))
+			_item_ellipse(image, Vector2i(36, 28), 7, 5, Color8(65, 185, 75))
+			_item_set(image, 20, 22, Color8(200, 255, 160))
+			_item_set(image, 36, 26, Color8(200, 255, 160))
+		"acid_sac":
+			_item_ellipse(image, Vector2i(28, 26), 13, 14, Color8(45, 120, 25))
+			_item_ellipse(image, Vector2i(28, 27), 10, 11, Color8(95, 195, 45))
+			_item_ellipse(image, Vector2i(25, 24), 5, 5, Color8(175, 245, 75))
+		"amethyst_gem":
+			_item_line(image, Vector2(28, 8), Vector2(18, 30), Color8(195, 85, 245), 4)
+			_item_line(image, Vector2(28, 8), Vector2(38, 30), Color8(155, 55, 215), 4)
+			_item_line(image, Vector2(18, 30), Vector2(28, 44), Color8(75, 20, 105), 4)
+			_item_line(image, Vector2(38, 30), Vector2(28, 44), Color8(75, 20, 105), 4)
+			_item_set(image, 28, 12, Color8(255, 225, 255))
+		"precision_chip":
+			_item_rect(image, 16, 16, 40, 40, Color8(20, 60, 40))
+			_item_rect(image, 22, 22, 34, 34, Color8(215, 175, 55))
+			_item_rect(image, 25, 25, 31, 31, Color8(30, 35, 40))
+		"dynamo_core":
+			_item_rect(image, 18, 14, 38, 42, Color8(42, 48, 56))
+			_item_rect(image, 22, 22, 34, 36, Color8(255, 165, 40))
+			_item_line(image, Vector2(24, 26), Vector2(32, 34), Color8(255, 240, 160), 2)
 		_:
 			_enemy_ellipse(image, Vector2i(30, 29), 21, 13, Color8(20, 15, 12))
 			_enemy_ellipse(image, Vector2i(24, 26), 14, 10, Color8(130, 67, 43))

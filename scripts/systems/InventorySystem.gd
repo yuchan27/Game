@@ -5,21 +5,35 @@ const CRAFT_STATION_ORDER: Array[String] = [
 	"spark_cutter",
 	"patched_armor",
 	"light_reinforced_armor",
-	"crystal_guard"
+	"crystal_guard",
+	"melee_sword",
+	"melee_axe"
 ]
 
 const MOD_STATION_ORDER: Array[String] = [
-	"coil_launcher"
+	"coil_launcher",
+	"ranged_pistol",
+	"ranged_smg",
+	"ranged_shotgun",
+	"ranged_revolver",
+	"ranged_crossbow",
+	"ranged_explosive"
 ]
 
 static func craft_basic_upgrade() -> bool:
-	return craft_next_from_order(CRAFT_STATION_ORDER, "合成台目前只開放二階武器與前三階護甲。高階裝備請完成公會任務取得。")
+	return craft_next_from_order(CRAFT_STATION_ORDER, "合成台所有近戰與護甲藍圖皆已製作完成。高階裝備請完成公會任務取得。")
 
 static func craft_mod_upgrade() -> bool:
-	return craft_next_from_order(MOD_STATION_ORDER, "改裝站目前只開放二階遠程武器。三階武器請完成公會任務取得。")
+	return craft_next_from_order(MOD_STATION_ORDER, "改裝站所有遠程武器藍圖皆已製作完成。高階武器請完成公會任務取得。")
 
 static func forge_ammo_pack() -> bool:
 	return craft_recipe("ammo_pack")
+
+static func upgrade_equipped_weapon(slot := "weapon") -> bool:
+	var item_id := String(GameState.equipment.get(slot, ""))
+	if item_id.is_empty():
+		return false
+	return GameState.upgrade_weapon_level(item_id)
 
 static func craft_next_from_order(recipe_ids: Array[String], done_message: String) -> bool:
 	for recipe_id: String in recipe_ids:
@@ -63,6 +77,15 @@ static func craft_coil_launcher() -> bool:
 
 static func recycle_core() -> bool:
 	return craft_recipe("recycle_core")
+
+static func disassemble_item(item_id: String, count: int = 1) -> Dictionary:
+	return GameState.disassemble_item(item_id, count)
+
+static func get_disassemble_yield(item_id: String) -> Dictionary:
+	return GameState.get_disassemble_yield(item_id)
+
+static func batch_recycle_duplicates() -> Dictionary:
+	return GameState.batch_recycle_duplicates()
 
 static func _item_name(item_id: String) -> String:
 	var resource := DataRegistry.get_resource(item_id)
