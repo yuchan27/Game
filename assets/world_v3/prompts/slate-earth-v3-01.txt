@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: seamless repeatable ground texture for a 2.5D pixel-art medieval wasteland game, ONE opaque square 1024x1024 PNG.
+Primary request: flat charcoal-slate and dark umber packed-earth road verge, uninterrupted flat ground filling every pixel from edge to edge; all four edges seamlessly tile with the opposite edge.
+References: Image 1 is the active armored player pixel cluster and shared fantasy mood reference only. Image 2 is scale/perspective reference only; DO NOT copy its industrial concrete or orange accents.
+Style: hand-authored crisp pixel art with deliberate readable clusters, visually a native 256x256 tile enlarged 4x nearest neighbor. Blocky defined pixels, flat ramps, no smooth blends or blur. At hero height 96 world pixels, small ground pebbles are 1-4 world pixels, widely spaced. A quiet low-contrast walkable floor.
+Materials and palette: subdued charcoal blue-gray shale chips, cool slate #44464a, warm brown-gray packed soil #49413b, earth #38342f, ash #56534c; modest quiet variation. Dust lies between flat shale pieces. Sparse tiny desiccated roots and broken gravel, no focal objects.
+Camera: ground surface top-down texture only, no visible vertical faces, no scene/horizon/perspective vanishing point. No central pathway shape; this is a continuous allover bare-earth material.
+Lighting: flat diffuse overcast, gentle upper-left light, muted dark-fantasy palette, no vignette or directional scene shadow.
+Avoid: photographs, photo noise, painterly brushwork, grass carpet, lush plants, checkerboard, grid, panel border, tile outline, isometric diamond, floating terrain slab, architecture, text, characters, objects, circular spotlight, large sharp black cracks, bright white chips. Do not draw reference characters. This texture will be repeated beneath independently placed props so it must have even visual density and calm contrast.

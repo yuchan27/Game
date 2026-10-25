@@ -1,0 +1,145 @@
+extends Node
+
+# Ordinary art-state staging only. No assertions, quest acceptance, action calls,
+# rewards, new-game reset, real saves or automated gameplay verification.
+func _ready() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false):
+        push_error("Use a dedicated isolated project/user directory.")
+        get_tree().quit(2)
+        return
+    var output := ""
+    var narrow_selection := false
+    var selected_view := ""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--art-output="):
+            output = argument.trim_prefix("--art-output=")
+        elif argument == "--narrow-selection":
+            narrow_selection = true
+        elif argument.begins_with("--art-view="):
+            selected_view = argument.trim_prefix("--art-view=")
+    if output.is_empty() or not output.is_absolute_path():
+        push_error("Pass an absolute --art-output directory.")
+        get_tree().quit(2)
+        return
+    DirAccess.make_dir_recursive_absolute(output)
+    print("ROAD_CONVOY_ART_VIEWPORT: ", get_viewport().get_visible_rect().size)
+    var views = [
+        ["highway-convoy-yard", "scrap_highway", Vector2(0.87871652,0.44869568)],
+        ["highway-convoy-story", "scrap_highway", Vector2(0.5,0.60453869)],
+        ["highway-west-turn", "scrap_highway", Vector2(0.2225,0.7565)],
+        ["highway-east-turn", "scrap_highway", Vector2(0.7775,0.6765)],
+        ["marsh-pump-yard", "toxic_marsh", Vector2(0.37445913,0.85358696)],
+        ["crystal-stele-scree", "crystal_scar", Vector2(0.12540509,0.52976563)],
+        ["factory-furnace-yard", "old_factory", Vector2(0.39628348,0.87020952)],
+        ["city-bell-courtyard", "ruined_metropolis", Vector2(0.38710129,0.86935872)],
+        ["facility-cistern-yard", "underground_facility", Vector2(0.39445913,0.40569661)],
+        ["relay-pending", "toxic_marsh", Vector2.ZERO, "drainage_rescue", false],
+        ["isolator-pending", "old_factory", Vector2.ZERO, "factory_sabotage", false]
+    ]
+    var staging_offsets = {
+        "highway-convoy-yard": Vector2(-110,70),
+        "highway-repair-pull-off": Vector2(-100,-100),
+        "highway-milepost": Vector2(-100,-100),
+        "marsh-pump-yard": Vector2(-100,-100),
+        "marsh-salvage-shelf": Vector2(-100,-100),
+        "marsh-spillway": Vector2(100,-100),
+        "crystal-stele-scree": Vector2(-100,-100),
+        "crystal-spoil-shelf": Vector2(100,-100),
+        "crystal-survey-spur": Vector2(100,-100),
+        "factory-furnace-yard": Vector2(-100,-100),
+        "factory-slag-lip": Vector2(-100,-100),
+        "factory-transfer-apron": Vector2(100,-100),
+        "city-bell-courtyard": Vector2(-100,-100),
+        "city-clinic-apron": Vector2(100,-100),
+        "city-arcade-edge": Vector2(-100,-100),
+        "facility-cistern-yard": Vector2(-100,-100),
+        "facility-filter-bay": Vector2(100,-100),
+        "facility-intake-spur": Vector2(210,100)
+    }
+    for index in range(views.size()):
+        var view: Array = views[index]
+        if not selected_view.is_empty() and view[0] != selected_view:
+            continue
+        get_tree().paused = false
+        GameState.current_route_id = view[1]
+        GameState.active_spawn_point = "default"
+        GameState.active_quest_id = ""
+        GameState.quest_progress = {}
+        GameState.route_states = {}
+        var field: Dictionary = {}
+        if view.size() > 3:
+            var quest: Dictionary = DataRegistry.get_quest(view[3])
+            field = quest["field_objective"]
+            GameState.active_quest_id = view[3]
+            GameState.quest_progress["field_objective_version"] = 1
+            for objective: Dictionary in quest.get("objectives", []):
+                if objective.get("type", "") == "defeat":
+                    GameState.quest_progress[objective.get("counter", "defeat_enemy")] = int(objective.get("amount", 0))
+                elif objective.get("type", "") == "collect":
+                    GameState.inventory[objective["item"]] = int(objective["amount"])
+            if view[4]:
+                GameState.route_states[view[1]] = {"field_objectives": {String(field["id"]): true}}
+        var scene = load("res://scenes/levels/wasteland/Wasteland.tscn").instantiate()
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        var center: Vector2 = Vector2(view[2]) * scene.world_size
+        center += staging_offsets.get(view[0], Vector2.ZERO)
+        if not field.is_empty():
+            center = Vector2(float(field["position"][0]), float(field["position"][1])) * scene.world_size + Vector2(-80, 60)
+        scene.player.position = center
+        scene.player.reset_physics_interpolation()
+        var camera = scene.player.get_node("Camera2D")
+        camera.position_smoothing_enabled = false
+        camera.enabled = false
+        # Let ordinary overlap signals settle before freezing an art frame.
+        await get_tree().physics_frame
+        await get_tree().physics_frame
+        await get_tree().process_frame
+        scene._refresh_architecture_occlusion()
+        scene._refresh_contract_field_labels()
+        var notice = scene.find_child("NoticeLabel", true, false)
+        if notice != null:
+            notice.hide()
+        get_tree().paused = true
+        get_viewport().canvas_transform = Transform2D(Vector2(1.15,0), Vector2(0,1.15), get_viewport().get_visible_rect().size * .5 - center * 1.15)
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png(output.path_join(view[0] + ".png"))
+        if view[0] == "highway-convoy-story":
+            scene.get_node("HUD").set_fullscreen_map(true)
+            await get_tree().process_frame
+            await get_tree().process_frame
+            await RenderingServer.frame_post_draw
+            get_viewport().get_texture().get_image().save_png(output.path_join("highway-route-map.png"))
+        scene.queue_free()
+        await get_tree().process_frame
+    if not selected_view.is_empty():
+        get_tree().quit()
+        return
+    for room: String in ["village", "guild"]:
+        get_tree().paused = false
+        GameState.active_spawn_point = "default"
+        GameState.active_quest_id = ""
+        GameState.quest_progress = {}
+        GameState.current_route_id = "scrap_highway"
+        var room_path = "res://scenes/levels/%s/%s.tscn" % [room, room.capitalize()]
+        var scene = load(room_path).instantiate()
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        var actor = get_tree().get_first_node_in_group("map_player")
+        var center: Vector2 = actor.global_position
+        actor.get_node("Camera2D").enabled = false
+        await get_tree().physics_frame
+        await get_tree().physics_frame
+        await get_tree().process_frame
+        get_tree().paused = true
+        get_viewport().canvas_transform = Transform2D(Vector2(1.15,0), Vector2(0,1.15), get_viewport().get_visible_rect().size * .5 - center * 1.15)
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png(output.path_join(room + ".png"))
+        scene.queue_free()
+        await get_tree().process_frame
+    get_tree().quit()

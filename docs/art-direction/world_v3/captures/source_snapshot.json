@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-23 Asia/Taipei",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "renderer": "OpenGL Compatibility, Intel Arc 140V",
+  "viewport": [
+    1280,
+    720
+  ],
+  "camera_zoom": 1.15,
+  "ordinary_render_exit_code": 0,
+  "custom_user_directory": "R17-Ordinary-Art-Preview-20261023",
+  "evidence_scope": "Ordinary art production render and source identity only. No tests/QA, traversal, save/load or performance verification. Transient notice hidden; actual HUD retained.",
+  "source_files": [
+    {
+      "path": "scripts/systems/WorldBackdrop.gd",
+      "sha256": "9b6d25183e49c2aa59f2cb3a5e243320ebf1575a1a6ad0fc6819d8ca01aa0868",
+      "rendered_mirror_sha256": "9b6d25183e49c2aa59f2cb3a5e243320ebf1575a1a6ad0fc6819d8ca01aa0868",
+      "same_bytes": true
+    },
+    {
+      "path": "scripts/components/WorldProp.gd",
+      "sha256": "2d27e9d57660a740ea4d797453329e56dcff1186536cf89d8a833a00988d59f1",
+      "rendered_mirror_sha256": "2d27e9d57660a740ea4d797453329e56dcff1186536cf89d8a833a00988d59f1",
+      "same_bytes": true
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.gd",
+      "sha256": "cdeff15ac96308fbb6f60b1fd79f6972fb85363e42de1dda8ce238ea35d64ee8",
+      "rendered_mirror_sha256": "cdeff15ac96308fbb6f60b1fd79f6972fb85363e42de1dda8ce238ea35d64ee8",
+      "same_bytes": true
+    },
+    {
+      "path": "scenes/player/Player.gd",
+      "sha256": "9727b7887aa688b408d8b17344b0ca376666a05d85fc81420b859dcb6267b9e4",
+      "rendered_mirror_sha256": "9727b7887aa688b408d8b17344b0ca376666a05d85fc81420b859dcb6267b9e4",
+      "same_bytes": true
+    },
+    {
+      "path": "scenes/ui/HUD.gd",
+      "sha256": "e3f0f0fa0d8ddc6bc8d4ec00758f0d7127ceb63bc7de36f83c4346e1606060bb",
+      "rendered_mirror_sha256": "e3f0f0fa0d8ddc6bc8d4ec00758f0d7127ceb63bc7de36f83c4346e1606060bb",
+      "same_bytes": true
+    },
+    {
+      "path": "scripts/autoload/GameState.gd",
+      "sha256": "c4f02e3bd20dcd4155b1e6a46572f3f297d5122d72b08d465d22ed1b261060b2",
+      "rendered_mirror_sha256": "c4f02e3bd20dcd4155b1e6a46572f3f297d5122d72b08d465d22ed1b261060b2",
+      "same_bytes": true
+    },
+    {
+      "path": "scripts/autoload/DataRegistry.gd",
+      "sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+      "rendered_mirror_sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+      "same_bytes": true
+    },
+    {
+      "path": "scripts/components/WastelandAtmosphere.gd",
+      "sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+      "rendered_mirror_sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+      "same_bytes": true
+    },
+    {
+      "path": "data/art/world_materials_v3.json",
+      "sha256": "2a1d7aff650c68fe67a8171957a3fc211c9cd192a752e56d97491ad972a94f0d",
+      "rendered_mirror_sha256": "2a1d7aff650c68fe67a8171957a3fc211c9cd192a752e56d97491ad972a94f0d",
+      "same_bytes": true
+    },
+    {
+      "path": "data/art/world_v2.json",
+      "sha256": "ffada26562cecb43877872905027d929abfbca295644c00839661ef805fc2acc",
+      "rendered_mirror_sha256": "ffada26562cecb43877872905027d929abfbca295644c00839661ef805fc2acc",
+      "same_bytes": true
+    },
+    {
+      "path": "data/art/r17_presentation_v2.json",
+      "sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764",
+      "rendered_mirror_sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764",
+      "same_bytes": true
+    },
+    {
+      "path": "data/art/r17_weapon_families_v2.json",
+      "sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+      "rendered_mirror_sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+      "same_bytes": true
+    },
+    {
+      "path": "data/maps/wasteland_routes.json",
+      "sha256": "49c226607e95e90fe843204f89401a4a0d04218696591a25610a55923df83a87",
+      "rendered_mirror_sha256": "49c226607e95e90fe843204f89401a4a0d04218696591a25610a55923df83a87",
+      "same_bytes": true
+    },
+    {
+      "path": "assets/world_v3/ground/broken-royal-road-v3-01.png",
+      "sha256": "5376212ba5b1eeeaeb4c2de9c9517c9938255e264ad47a70bc179917a61358ff",
+      "rendered_mirror_sha256": "5376212ba5b1eeeaeb4c2de9c9517c9938255e264ad47a70bc179917a61358ff",
+      "same_bytes": true
+    },
+    {
+      "path": "assets/world_v3/ground/slate-earth-v3-01.png",
+      "sha256": "4f1745dd3d05cabda831dbe3fb8833e9107f160e08f502b92809f45feff2d8ca",
+      "rendered_mirror_sha256": "4f1745dd3d05cabda831dbe3fb8833e9107f160e08f502b92809f45feff2d8ca",
+      "same_bytes": true
+    },
+    {
+      "path": "assets/world_v3/props/medieval-debris-v3-01.png",
+      "sha256": "eb8cd828a91035c0b87a2793a3c663a87bd7492d319d4aebc66415a2c84f4fab",
+      "rendered_mirror_sha256": "eb8cd828a91035c0b87a2793a3c663a87bd7492d319d4aebc66415a2c84f4fab",
+      "same_bytes": true
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/art-direction/world_v3/captures/crystal-scar-architecture.png",
+      "sha256": "59516d926202ae8faf11583adf3aae5c1da2a4192768d444d79f28422de50df9"
+    },
+    {
+      "path": "docs/art-direction/world_v3/captures/highway-convoy.png",
+      "sha256": "d7f9cb871c7015ee08646c698bd17540ae9dc40ed97f353862071b54f0a95d36"
+    },
+    {
+      "path": "docs/art-direction/world_v3/captures/highway-entry.png",
+      "sha256": "fe9bde70821d47a2b83590f779c0970761f7c994fa2876552fef84b76d7de1b5"
+    },
+    {
+      "path": "docs/art-direction/world_v3/captures/old-factory-architecture.png",
+      "sha256": "94f35591fa6b0dec221f1f915b394076ec3040a2df6f481901c18fe432b3f6ed"
+    },
+    {
+      "path": "docs/art-direction/world_v3/captures/ruined-metropolis-architecture.png",
+      "sha256": "c9330215d683985d12790456d135712a5f9e2264ad690ab93306932e5a430e1a"
+    },
+    {
+      "path": "docs/art-direction/world_v3/captures/toxic-marsh-architecture.png",
+      "sha256": "bd2079da12073aa0a806fb6d256d2f02969943295d03184d6c46563ada7e4bbf"
+    },
+    {
+      "path": "docs/art-direction/world_v3/captures/underground-facility-architecture.png",
+      "sha256": "a8d041eb5cfbfcbf4cc7f4232b800651a27ba0782c9b8e2c349a722af877e007"
+    }
+  ]
+}

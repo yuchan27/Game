@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="800" viewBox="0 0 1080 800">
+<style>text{font-family:"Microsoft JhengHei","Noto Sans CJK TC",sans-serif} .road{fill:none;stroke-linecap:round;stroke-linejoin:round}</style>
+<rect x="0.0" y="0.0" width="1080.0" height="800.0" fill="#171b21" stroke="none" />
+<text x="30.0" y="35.0" fill="#e8dfc9" font-size="23">西門：毒沼排水區 — authored navigation blueprint</text>
+<text x="30.0" y="61.0" fill="#a6b2bd" font-size="14">toxic_marsh | 6656 × 5888 world px | generated from runtime JSON</text>
+<rect x="34.0" y="84.0" width="667.0" height="590.0" fill="#262d34" stroke="#6b7279" />
+<rect x="227.4" y="255.1" width="66.7" height="177.0" fill="#174e47" stroke="#879399" />
+<rect x="407.5" y="266.9" width="66.7" height="147.5" fill="#174e47" stroke="#879399" />
+<rect x="387.5" y="538.3" width="66.7" height="53.1" fill="#174e47" stroke="#879399" />
+<rect x="360.8" y="361.3" width="50.0" height="67.8" fill="#174e47" stroke="#879399" />
+<polyline points="367.5,662.2 367.5,556.0 340.8,514.7 340.8,384.9" class="road" stroke="#ad9157" stroke-width="25.7"/>
+<polyline points="367.5,662.2 367.5,556.0 340.8,514.7 340.8,384.9" class="road" stroke="#d4d1bd" stroke-width="1" stroke-dasharray="4 7"/>
+<polyline points="340.8,514.7 187.4,514.7 187.4,449.8" class="road" stroke="#657e98" stroke-width="22.4"/>
+<polyline points="340.8,514.7 187.4,514.7 187.4,449.8" class="road" stroke="#d4d1bd" stroke-width="1" stroke-dasharray="4 7"/>
+<polyline points="340.8,467.5 447.5,467.5 540.9,414.4 540.9,343.6" class="road" stroke="#657e98" stroke-width="22.4"/>
+<polyline points="340.8,467.5 447.5,467.5 540.9,414.4 540.9,343.6" class="road" stroke="#d4d1bd" stroke-width="1" stroke-dasharray="4 7"/>
+<polyline points="540.9,343.6 540.9,219.7 334.1,219.7 334.1,207.9" class="road" stroke="#657e98" stroke-width="19.2"/>
+<polyline points="540.9,343.6 540.9,219.7 334.1,219.7 334.1,207.9" class="road" stroke="#d4d1bd" stroke-width="1" stroke-dasharray="4 7"/>
+<polyline points="187.4,449.8 187.4,219.7 334.1,219.7" class="road" stroke="#657e98" stroke-width="19.2"/>
+<polyline points="187.4,449.8 187.4,219.7 334.1,219.7" class="road" stroke="#d4d1bd" stroke-width="1" stroke-dasharray="4 7"/>
+<polyline points="540.9,414.4 607.6,467.5 487.5,567.8 367.5,556.0" class="road" stroke="#5a8b77" stroke-width="19.2"/>
+<polyline points="540.9,414.4 607.6,467.5 487.5,567.8 367.5,556.0" class="road" stroke="#d4d1bd" stroke-width="1" stroke-dasharray="4 7"/>
+<rect x="279.7" y="541.8" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="281.4" y="573.8" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="399.8" y="500.5" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="401.5" y="532.5" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="259.7" y="429.7" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="261.4" y="461.7" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="373.1" y="376.6" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="374.8" y="408.6" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="466.5" y="311.7" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="468.2" y="343.7" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="546.5" y="246.8" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="548.2" y="278.8" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="266.4" y="193.7" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="268.1" y="225.7" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="193.0" y="341.2" width="42.1" height="37.8" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="194.7" y="373.2" width="38.7" height="7.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="319.3" y="468.9" width="43.1" height="31.1" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="321.2" y="495.9" width="8.8" height="5.2" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="352.0" y="495.9" width="8.4" height="5.2" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="519.3" y="412.8" width="43.1" height="31.1" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="521.2" y="439.9" width="8.8" height="5.2" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="552.1" y="439.9" width="8.4" height="5.2" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="165.9" y="288.9" width="43.1" height="31.1" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="167.8" y="316.0" width="8.8" height="5.2" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="198.6" y="316.0" width="8.4" height="5.2" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<rect x="290.7" y="369.6" width="36.1" height="32.4" fill="#bdc6c9" stroke="#8b969c" fill-opacity="0.13" stroke-width="0.8"/>
+<rect x="292.2" y="397.0" width="33.2" height="6.0" fill="#c8796d" stroke="#e4a196" fill-opacity="0.8" stroke-width="0.7"/>
+<circle cx="311.5" cy="414.4" r="3" fill="#d69659"/>
+<circle cx="359.5" cy="407.3" r="3" fill="#d69659"/>
+<circle cx="324.1" cy="405.6" r="3" fill="#d69659"/>
+<rect x="302.7" y="329.0" width="76.2" height="68.1" fill="none" stroke="#eac96b" stroke-width="1.5" stroke-dasharray="5 4"/>
+<circle cx="340.8" cy="384.9" r="10" fill="#e5bf58" stroke="#171b21" stroke-width="2"/>
+<text x="335.8" y="389.9" fill="#171b21" font-size="15">S</text>
+<circle cx="187.4" cy="449.8" r="10" fill="#e1d9c5" stroke="#171b21" stroke-width="2"/>
+<text x="182.9" y="454.8" fill="#171b21" font-size="14">1</text>
+<circle cx="540.9" cy="343.6" r="10" fill="#e1d9c5" stroke="#171b21" stroke-width="2"/>
+<text x="536.4" y="348.6" fill="#171b21" font-size="14">2</text>
+<circle cx="334.1" cy="207.9" r="10" fill="#e1d9c5" stroke="#171b21" stroke-width="2"/>
+<text x="329.6" y="212.9" fill="#171b21" font-size="14">3</text>
+<rect x="359.5" y="659.0" width="16.0" height="12.0" fill="#6ecfa0" stroke="#b6efcc" />
+<text x="765.0" y="100.0" fill="#e8dfc9" font-size="20">Runtime layers / 圖例</text>
+<rect x="765.0" y="120.0" width="16.0" height="14.0" fill="#ad9157" stroke="none" />
+<text x="789.0" y="133.0" fill="#e8dfc9" font-size="13">主路 / main approach</text>
+<rect x="765.0" y="153.0" width="16.0" height="14.0" fill="#657e98" stroke="none" />
+<text x="789.0" y="166.0" fill="#e8dfc9" font-size="13">支路、側翼 / exploration loop</text>
+<rect x="765.0" y="186.0" width="16.0" height="14.0" fill="#5a8b77" stroke="none" />
+<text x="789.0" y="199.0" fill="#e8dfc9" font-size="13">連接、回程 / connector-return</text>
+<rect x="765.0" y="219.0" width="16.0" height="14.0" fill="#c8796d" stroke="none" />
+<text x="789.0" y="232.0" fill="#e8dfc9" font-size="13">建築實體底腳 / collision feet</text>
+<rect x="765.0" y="252.0" width="16.0" height="14.0" fill="#576069" stroke="none" />
+<text x="789.0" y="265.0" fill="#e8dfc9" font-size="13">淡框為精靈外觀範圍 / visual only</text>
+<rect x="765.0" y="285.0" width="16.0" height="14.0" fill="#174e47" stroke="none" />
+<text x="789.0" y="298.0" fill="#e8dfc9" font-size="13">深水、斷層、坑槽 / blocked basins</text>
+<rect x="765.0" y="318.0" width="16.0" height="14.0" fill="#e5bf58" stroke="none" />
+<text x="789.0" y="331.0" fill="#e8dfc9" font-size="13">S：劇情調查點；虛線為保留區</text>
+<rect x="765.0" y="351.0" width="16.0" height="14.0" fill="#6ecfa0" stroke="none" />
+<text x="789.0" y="364.0" fill="#e8dfc9" font-size="13">綠框：回村出口</text>
+<text x="765.0" y="412.0" fill="#e8dfc9" font-size="17">Guarded discoveries / 守衛據點</text>
+<text x="765.0" y="444.0" fill="#e8dfc9" font-size="14">1. 沉舟藥圃</text>
+<text x="765.0" y="476.0" fill="#e8dfc9" font-size="14">2. 腐水祭壇</text>
+<text x="765.0" y="508.0" fill="#e8dfc9" font-size="14">3. 鐘沉舊堤儲藏室</text>
+<text x="765.0" y="556.0" fill="#b5c4cf" font-size="14">腐水分流泵屋</text>
+<text x="765.0" y="582.0" fill="#b5c4cf" font-size="14">高架維修跨廊</text>
+<text x="765.0" y="608.0" fill="#b5c4cf" font-size="14">腐水分流泵屋</text>
+<text x="30.0" y="735.0" fill="#cbbfaf" font-size="14">Footprints are authored data; collision traversal is not verified. Existing saved positions can suppress new blockers.</text>
+<text x="30.0" y="762.0" fill="#cbbfaf" font-size="14">No concept-board terrain is used. Runtime evidence review and gameplay QA are separate; automated tests were not run.</text>
+</svg>

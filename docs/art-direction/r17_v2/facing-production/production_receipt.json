@@ -1,0 +1,110 @@
+{
+  "kind": "production_generation_requests_only_not_images_or_QA",
+  "recorded_utc": "2026-10-23T19:48:37.972923+00:00",
+  "author": "Antigravity CLI 1.4.6 gemini-3.8-flash-medium",
+  "lead_decision": "Approved request-builder and corrected prompts only. Runtime integration and actual raster production pending.",
+  "production_builder_exit": 0,
+  "production_family": "blade",
+  "active_facing_count": 8,
+  "missing_requests": 24,
+  "runtime_count_delta": 0,
+  "raster_tool_confirmed": false,
+  "raster_invoked": false,
+  "images_generated": 0,
+  "files": [
+    {
+      "path": "scripts/tools/prepare_r17_facing_batch.py",
+      "sha256": "1fbe56d7ed089d5e67d119d74ec7d78290ba680e883e191e8575dbc9f36878da"
+    },
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/batch_requests.json",
+      "sha256": "f76c07a861faf95c8589ac70ff7e9ab88eb35654eceb2529d7a6f82fc1ad7359"
+    },
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/prompts.txt",
+      "sha256": "e3a9ceb58625ddc25e5a790d342be69011739bba2912025836c43f42edfd65cf"
+    }
+  ],
+  "reviews": [
+    "Rejected simplified-schema parser and wrong chest-cross identity.",
+    "Corrected nested families/keys and 9/11-value cell schemas, standing height and muzzle pair.",
+    "Required explicit hard pixel art, complete idle silhouette and margins.",
+    "Added muzzle bounds and truncated PNG IHDR guards.",
+    "Current production builder ran once on blade manifest; rifle/heavy source reviewed but not executed."
+  ],
+  "cli_turn_receipts": [
+    {
+      "file": "agy-result.json",
+      "sha256": "cc4e490db9a35f57e40da149db3df20439f22b20a9db39e167c4b361ee7ab1a7",
+      "conversation_id": "536737d9-5041-4c25-8610-048576087b01",
+      "status": "SUCCESS",
+      "duration_seconds_as_reported": 5.7319435,
+      "usage_as_reported": {
+        "input_tokens": 8823,
+        "output_tokens": 270,
+        "thinking_tokens": 232,
+        "cache_read_tokens": 0,
+        "total_tokens": 9093
+      },
+      "denied_actions": [
+        {
+          "action": "command",
+          "display_name": "RunCommand"
+        }
+      ],
+      "observed_process_exit": 0,
+      "note": "First attempt produced no artifact despite SUCCESS/exit0; command permission auto-denied."
+    },
+    {
+      "file": "agy-code-result.json",
+      "sha256": "bcca7a311639f63b694953b8ecc274d2bec5109fa0b2156aecec8742adb524e8",
+      "conversation_id": "536737d9-5041-4c25-8610-048576087b01",
+      "status": "SUCCESS",
+      "duration_seconds_as_reported": 142.1263436,
+      "usage_as_reported": {
+        "input_tokens": 21062,
+        "output_tokens": 16134,
+        "thinking_tokens": 9587,
+        "cache_read_tokens": 0,
+        "total_tokens": 37196
+      },
+      "denied_actions": null,
+      "observed_process_exit": 0,
+      "note": "Lead-reviewed response artifact. Usage fields kept as reported; not summed across resumed conversations."
+    },
+    {
+      "file": "agy-code-revision-result.json",
+      "sha256": "5f6bc2d456c67c0a44c08bc201f275fd8338b78aa2ef667c13e9abe77534ded8",
+      "conversation_id": "536737d9-5041-4c25-8610-048576087b01",
+      "status": "SUCCESS",
+      "duration_seconds_as_reported": 305.6406838,
+      "usage_as_reported": {
+        "input_tokens": 54600,
+        "output_tokens": 29998,
+        "thinking_tokens": 17393,
+        "cache_read_tokens": 0,
+        "total_tokens": 84598
+      },
+      "denied_actions": null,
+      "observed_process_exit": 0,
+      "note": "Lead-reviewed response artifact. Usage fields kept as reported; not summed across resumed conversations."
+    },
+    {
+      "file": "agy-final-fix-result.json",
+      "sha256": "49e19b19f791571aa994639667cf76e55aad4f57ff595cd4da1e226b51dcd924",
+      "conversation_id": "536737d9-5041-4c25-8610-048576087b01",
+      "status": "SUCCESS",
+      "duration_seconds_as_reported": 414.0907381,
+      "usage_as_reported": {
+        "input_tokens": 71019,
+        "output_tokens": 33866,
+        "thinking_tokens": 19547,
+        "cache_read_tokens": 33174,
+        "total_tokens": 104885
+      },
+      "denied_actions": null,
+      "observed_process_exit": 0,
+      "note": "Lead-reviewed response artifact. Usage fields kept as reported; not summed across resumed conversations."
+    }
+  ]
+}

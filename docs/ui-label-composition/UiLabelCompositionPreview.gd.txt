@@ -1,0 +1,165 @@
+extends Node
+
+# Ordinary direct fixtures. No gameplay action, input simulation, rewards or IO.
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the isolated presentation project.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--action-output="):
+			output = argument.trim_prefix("--action-output=")
+	if not output.is_absolute_path():
+		push_error("Pass an absolute --action-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	var views: Array[String] = [
+		"escort-follow",
+		"escort-clear",
+		"escort-wait",
+		"carry-ambush",
+		"defense-pressure",
+		"modal",
+		"escort-transition",
+		"map-highway",
+		"map-marsh",
+		"map-crystal",
+		"map-factory",
+		"map-city",
+		"map-facility"
+	]
+	for view: String in views:
+		SceneRouter.transition_active = false
+		get_tree().paused = true
+		GameState.reset_new_run(false)
+		var action_id := _stage(view)
+		var scene = load(SceneRouter.SCENES["wasteland"]).instantiate()
+		scene.process_mode = Node.PROCESS_MODE_DISABLED
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		var actor = scene.player
+		var action: Node2D
+		for candidate in get_tree().get_nodes_in_group("campaign_action"):
+			if candidate.get_meta("campaign_action_id", "") == action_id:
+				action = candidate
+				break
+		if action != null:
+			actor.global_position = action.global_position + Vector2(70, 80)
+			if view.begins_with("escort-"):
+				action.call("_ensure_escort_actor")
+				action._escort_actor.global_position = action.global_position + Vector2(900, -100)
+				action._escort_actor.reset_physics_interpolation()
+				var offset_x := 100.0
+				if view == "escort-wait":
+					offset_x = 600.0
+				elif view in ["escort-clear", "escort-transition"]:
+					offset_x = -160.0
+				actor.global_position = action._escort_actor.global_position + Vector2(offset_x, 80)
+				action._wait_reason = "靠近護送者才能繼續" if view == "escort-wait" else ""
+			elif view == "carry-ambush":
+				action.call("_ensure_payload")
+				action._wait_reason = "清除本波伏擊敵人"
+			elif view in ["defense-pressure", "modal"]:
+				action._wait_reason = "清除據點附近敵人後繼續"
+			action.call("_refresh_status_display")
+		actor.reset_physics_interpolation()
+		scene.call("_refresh_architecture_occlusion")
+		var camera = actor.get_node("Camera2D")
+		camera.process_mode = Node.PROCESS_MODE_ALWAYS
+		camera.position_smoothing_enabled = false
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+		var hud = get_tree().get_first_node_in_group("hud")
+		hud.notice_timer.stop()
+		hud.call("_update_notice_visibility")
+		hud.call("_refresh_campaign_status")
+		if view == "escort-transition":
+			SceneRouter.transition_active = true
+		elif view == "modal":
+			hud.call("_set_contract_visible", true)
+		elif view.begins_with("map-"):
+			hud.call("set_fullscreen_map", true)
+		for frame in range(8):
+			await get_tree().process_frame
+		hud.call("_refresh_campaign_status")
+		for frame in range(2):
+			await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var error := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+		var label = hud.campaign_status_label
+		print("ACTION_STAGED_STATE: ", view, " live_visible=", label.visible, " text=", label.text.replace("\n", " | "), " bar=", hud.campaign_progress_bar.value, "/", hud.campaign_progress_bar.max_value, " rect=", label.get_global_rect())
+		if action != null:
+			print("ACTION_STAGED_ANCHOR: ", view, " site=", action.global_position, " label=", action._status_label.global_position, " label_visible=", action._status_label.visible)
+		if view == "escort-transition":
+			print("ACTION_STAGED_TRANSITION: staging fixture only, no actual transition")
+		print("ACTION_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", error)
+		SceneRouter.transition_active = false
+		scene.queue_free()
+		await get_tree().process_frame
+	get_tree().quit(0)
+
+func _stage(view: String) -> String:
+	var quest_id := ""
+	if view == "map-highway":
+		quest_id = "clear_scrap_route"
+	elif view == "map-marsh":
+		quest_id = "toxic_sample"
+	elif view == "map-crystal":
+		quest_id = "crystal_scar_recon"
+	elif view == "map-factory":
+		quest_id = "old_factory_core"
+	elif view == "map-city":
+		quest_id = "metropolis_archive"
+	elif view == "map-facility":
+		quest_id = "facility_memory"
+	elif view.begins_with("escort-") or view == "carry-ambush":
+		quest_id = "clear_scrap_route"
+	else:
+		quest_id = "facility_memory"
+	var quest := DataRegistry.get_quest(quest_id)
+	var outing_index := 0
+	var action_index := 0
+	if not view.begins_with("map-"):
+		if view == "carry-ambush" or quest_id == "facility_memory":
+			outing_index = 1
+			action_index = 1
+	var outing: Dictionary = quest["campaign_outings"][outing_index]
+	var action: Dictionary = outing["actions"][action_index]
+	GameState.current_scene_id = "wasteland"
+	GameState.current_route_id = String(quest["route"])
+	GameState.active_quest_id = quest_id
+	for earlier: Dictionary in DataRegistry.quests:
+		if bool(earlier.get("main_campaign", false)) and int(earlier["chapter"]) < int(quest["chapter"]):
+			GameState.completed_quests.append(String(earlier["id"]))
+	var banked := {}
+	if outing_index > 0:
+		for definition: Dictionary in quest["campaign_outings"][0]["actions"]:
+			banked[definition["id"]] = _result(definition)
+	GameState.quest_progress = {"campaign": {"version": 1, "outing_index": outing_index, "actions": banked}}
+	if quest.has("field_objective"):
+		GameState.quest_progress["field_objective_version"] = 1
+	GameState._expedition.begin(GameState.current_route_id, quest_id)
+	GameState._expedition.active["campaign_outing"] = outing["id"]
+	var done := {}
+	for index in range(action_index):
+		var definition: Dictionary = outing["actions"][index]
+		done[definition["id"]] = _result(definition)
+	GameState._expedition.active["campaign_actions"] = done
+	var progress := {"started": true}
+	if action["type"] in ["escort", "carry"]:
+		progress["checkpoint"] = 1
+	else:
+		progress["elapsed"] = minf(12.0 if action["type"] == "defend" else 2.4, float(action.get("duration", 3.0)))
+		if action["type"] == "defend":
+			progress["checkpoint"] = 1
+	GameState._expedition.active["campaign_runtime"] = {action["id"]: progress}
+	return String(action["id"])
+
+func _result(definition: Dictionary) -> String:
+	return String(definition["options"][0]["id"]) if definition.get("type", "") == "choice" else "done"

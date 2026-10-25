@@ -1,0 +1,146 @@
+extends Node
+
+# Staged presentation only. No quest action, reward, extraction, death or save/load.
+func _ready() -> void:
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the dedicated external presentation mirror and user directory.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--guidance-output="):
+			output = argument.trim_prefix("--guidance-output=")
+	if output.is_empty() or not output.is_absolute_path():
+		push_error("Pass an absolute --guidance-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	var views := ["first-hub", "second-hub", "cleanup-hub", "active-escort", "coupling-carry", "relay-carry", "field-notes", "banked-notes", "chapter-notes", "completed-npc-record", "legacy-journal", "final-hub", "order-notice"]
+	for view: String in views:
+		get_tree().paused = false
+		GameState.reset_new_run(false)
+		var quest_id := "clear_scrap_route"
+		if view in ["field-notes", "banked-notes"]: quest_id = "toxic_sample"
+		elif view == "relay-carry": quest_id = "crystal_scar_recon"
+		elif view == "final-hub": quest_id = "facility_memory"
+		elif view == "order-notice": quest_id = "old_factory_core"
+		var quest := DataRegistry.get_quest(quest_id)
+		GameState.active_quest_id = quest_id
+		GameState.current_route_id = String(quest["route"])
+		for earlier: Dictionary in DataRegistry.quests:
+			if bool(earlier.get("main_campaign", false)) and int(earlier.get("chapter", 0)) < int(quest.get("chapter", 0)):
+				GameState.completed_quests.append(String(earlier["id"]))
+				for objective: Dictionary in earlier.get("objectives", []):
+					if objective.get("type", "") == "discover" and not bool(objective.get("optional", false)):
+						GameState.discovered_events.append("%s:%s" % [String(objective["route"]), String(objective["event"])])
+		var index := 1 if view in ["second-hub", "coupling-carry", "relay-carry", "banked-notes", "final-hub"] else 0
+		if view == "cleanup-hub": index = 2
+		var entries: Array = quest["campaign_outings"]
+		var banked: Dictionary = {}
+		for previous in range(index):
+			for definition: Dictionary in entries[previous]["actions"]:
+				banked[definition["id"]] = _result(definition)
+		GameState.quest_progress = {"campaign": {"version": 1, "outing_index": index, "actions": banked}}
+		for objective: Dictionary in quest.get("objectives", []):
+			if objective.get("type", "") == "defeat":
+				GameState.quest_progress[String(objective.get("counter", "defeat_enemy"))] = 0
+		if quest.has("field_objective"):
+			GameState.quest_progress["field_objective_version"] = 1
+			if index > 0:
+				GameState.route_states[GameState.current_route_id] = {"field_objectives": {String(quest["field_objective"]["id"]): true}}
+		var field := view in ["active-escort", "coupling-carry", "relay-carry", "field-notes", "order-notice"]
+		GameState.current_scene_id = "wasteland" if field else "village"
+		var action: Dictionary = entries[mini(index, 1)]["actions"][0]
+		if field:
+			GameState._expedition.begin(GameState.current_route_id, quest_id)
+			GameState._expedition.active["campaign_outing"] = entries[index]["id"]
+			if view == "coupling-carry":
+				GameState._expedition.active["campaign_actions"][action["id"]] = "ch1b_covered_long"
+				action = entries[index]["actions"][1]
+			elif view == "field-notes":
+				GameState._expedition.active["campaign_actions"][action["id"]] = "done"
+			elif view == "order-notice":
+				for definition: Dictionary in entries[index]["actions"]:
+					GameState._expedition.active["campaign_actions"][definition["id"]] = "done"
+				action = entries[index]["actions"][1]
+			if view in ["active-escort", "coupling-carry", "relay-carry"]:
+				GameState._expedition.active["campaign_runtime"][action["id"]] = {"started": true, "checkpoint": 1}
+		if view in ["chapter-notes", "completed-npc-record", "legacy-journal"]:
+			GameState.completed_quests.append(quest_id)
+			GameState.active_quest_id = ""
+			GameState.quest_progress = {}
+			if view in ["chapter-notes", "completed-npc-record"]:
+				GameState.route_states[GameState.current_route_id] = {"campaign_completed": quest_id, "campaign_choices": {"ch1b_return_route": "ch1b_covered_long"}, "field_objectives": {"highway_bypass_repair": true}}
+		var scene = load("res://scenes/levels/wasteland/Wasteland.tscn" if field else "res://scenes/levels/village/Village.tscn").instantiate()
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		scene.set_process(false)
+		for enemy: Node in get_tree().get_nodes_in_group("enemy"):
+			enemy.set_physics_process(false)
+		for node: Node in scene.get_children():
+			if String(node.name).begins_with("CampaignAction_"):
+				node.set_process(false)
+		var actor = get_tree().get_first_node_in_group("map_player")
+		if actor != null:
+			actor.set_physics_process(false)
+			if field:
+				var point: Array = action["position"]
+				actor.global_position = Vector2(float(point[0]) * scene.world_size.x, float(point[1]) * scene.world_size.y) + Vector2(80, 62)
+			else:
+				actor.global_position = Vector2(1380, 970)
+			actor.reset_physics_interpolation()
+			var camera = actor.get_node("Camera2D")
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+		if view == "active-escort":
+			scene.get_node("CampaignAction_%s" % String(action["id"])).call("_ensure_escort_actor")
+		elif view in ["coupling-carry", "relay-carry"]:
+			var action_node = scene.get_node("CampaignAction_%s" % String(action["id"]))
+			action_node.call("_ensure_payload")
+			var payload: Sprite2D = actor.get_node("CampaignCarryPayload")
+			print("GUIDANCE_PRESENTATION_PAYLOAD: ", view, " item=", action.get("payload_item", ""), " pixels=", payload.texture.get_size() * payload.scale)
+		for node: Node in scene.get_children():
+			if String(node.name).begins_with("CampaignAction_"):
+				node.call("_refresh_status_display")
+		for frame in range(16):
+			await get_tree().physics_frame
+		var hud = get_tree().get_first_node_in_group("hud")
+		GameState.stats_changed.emit()
+		if view in ["first-hub", "second-hub", "cleanup-hub", "final-hub", "completed-npc-record"]:
+			var npc_id := "wasteland_survivor" if view == "second-hub" else ("repair_robot" if view in ["first-hub", "final-hub"] else ("guild_clerk" if view == "completed-npc-record" else "forge_master"))
+			var npc := DataRegistry.get_npc(npc_id)
+			var story_line := GameState.story_dialogue_for_npc(npc)
+			var message := story_line if not story_line.is_empty() else String(npc.get("line", ""))
+			GameState.dialogue_requested.emit(String(npc["name"]), String(npc["role"]), message + GameState.campaign_npc_record(npc_id))
+		elif view in ["field-notes", "banked-notes", "legacy-journal"]:
+			hud.call("_set_codex_visible", true)
+		elif view == "chapter-notes":
+			hud.call("_set_contract_visible", true)
+		elif view == "order-notice":
+			GameState.notify("現場完成：%s。成果待安全帶回；現場紀錄 [K]。" % String(action["name"]))
+		for frame in range(5):
+			await get_tree().process_frame
+		if view in ["field-notes", "banked-notes", "chapter-notes"]:
+			var toggle: Button = hud.find_child("CampaignNotes_%s" % quest_id, true, false)
+			if toggle != null:
+				toggle.button_pressed = true
+		var notice = scene.find_child("NoticeLabel", true, false)
+		if notice != null and view != "order-notice": notice.hide()
+		for frame in range(4):
+			await get_tree().process_frame
+		print("GUIDANCE_PRESENTATION_STATE: ", view, " hint=", GameState.get_journey_hint(), " recorded_notes_chars=", GameState.campaign_field_notes(quest_id).length())
+		get_tree().paused = true
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var result := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+		print("GUIDANCE_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", result)
+		scene.queue_free()
+		await get_tree().process_frame
+	get_tree().quit(0)
+
+func _result(definition: Dictionary) -> String:
+	return String(definition["options"][0]["id"]) if definition.get("type", "") == "choice" else "done"

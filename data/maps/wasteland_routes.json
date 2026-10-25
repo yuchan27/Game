@@ -2,13 +2,316 @@
   "routes": {
     "scrap_highway": {
       "name": "南門：廢鐵公路",
+      "return_gate_position": [0.5, 0.07],
+      "size_tiles": [
+        224,
+        168
+      ],
+      "regions": [
+        {
+          "name": "餘燼關口",
+          "center": [
+            0.5,
+            0.88
+          ]
+        },
+        {
+          "name": "折旗車隊",
+          "center": [
+            0.22,
+            0.64
+          ]
+        },
+        {
+          "name": "斷橋拾荒營",
+          "center": [
+            0.78,
+            0.46
+          ]
+        },
+        {
+          "name": "無名者石塚",
+          "center": [
+            0.5,
+            0.2
+          ]
+        }
+      ],
+      "path_props": [
+        "rust_rock",
+        "wreck",
+        "scrap_barricade"
+      ],
+      "path_widths": [
+        8,
+        6,
+        6,
+        5,
+        6,
+        3
+      ],
+      "exploration_paths": [
+        [
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.5,
+            0.9
+          ],
+          [
+            0.504,
+            0.82
+          ],
+          [
+            0.496,
+            0.74
+          ],
+          [
+            0.5,
+            0.68
+          ],
+          [
+            0.5,
+            0.6
+          ],
+          [
+            0.496,
+            0.52
+          ],
+          [
+            0.504,
+            0.44
+          ],
+          [
+            0.5,
+            0.36
+          ],
+          [
+            0.5,
+            0.3
+          ],
+          [
+            0.5,
+            0.07
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.76
+          ],
+          [
+            0.229,
+            0.76
+          ],
+          [
+            0.2225,
+            0.7565
+          ],
+          [
+            0.22,
+            0.748
+          ],
+          [
+            0.22,
+            0.64
+          ],
+          [
+            0.22,
+            0.312
+          ],
+          [
+            0.2225,
+            0.3035
+          ],
+          [
+            0.229,
+            0.3
+          ],
+          [
+            0.5,
+            0.3
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.68
+          ],
+          [
+            0.771,
+            0.68
+          ],
+          [
+            0.7775,
+            0.6765
+          ],
+          [
+            0.78,
+            0.668
+          ],
+          [
+            0.78,
+            0.46
+          ],
+          [
+            0.78,
+            0.312
+          ],
+          [
+            0.7775,
+            0.3035
+          ],
+          [
+            0.771,
+            0.3
+          ],
+          [
+            0.5,
+            0.3
+          ]
+        ],
+        [
+          [
+            0.22,
+            0.64
+          ],
+          [
+            0.29,
+            0.64
+          ],
+          [
+            0.33,
+            0.635
+          ],
+          [
+            0.35,
+            0.622
+          ],
+          [
+            0.39,
+            0.61
+          ],
+          [
+            0.44,
+            0.606
+          ],
+          [
+            0.47,
+            0.615
+          ],
+          [
+            0.5,
+            0.613
+          ],
+          [
+            0.5,
+            0.6
+          ]
+        ],
+        [
+          [
+            0.78,
+            0.68
+          ],
+          [
+            0.68,
+            0.8
+          ],
+          [
+            0.68,
+            0.89
+          ],
+          [
+            0.5,
+            0.89
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.635
+          ],
+          [
+            0.5335,
+            0.635
+          ],
+          [
+            0.5335,
+            0.625
+          ]
+        ]
+      ],
+      "exploration_points": [
+        {
+          "event": "supply_cache",
+          "draft_id": "scrap_highway_early",
+          "name": "折旗車隊補給站",
+          "position": [
+            0.22,
+            0.64
+          ],
+          "prop": "barrel_stack",
+          "guards": [
+            "scrap_biter",
+            "scrap_biter",
+            "rust_brute"
+          ],
+          "reward": {
+            "ammo": 12,
+            "scrap": 18
+          },
+          "description": "折斷的軍旗底下，還藏著未拆封的行軍物資。"
+        },
+        {
+          "event": "broken_robot",
+          "draft_id": "scrap_highway_late",
+          "name": "斷橋拾荒營",
+          "position": [
+            0.78,
+            0.46
+          ],
+          "prop": "scrap_pile",
+          "guards": [
+            "mech_husk",
+            "scrap_biter",
+            "rust_brute"
+          ],
+          "reward": {
+            "alloy_plate": 3,
+            "broken_coil": 3
+          },
+          "description": "從守衛圍住的熔爐殘骸回收可用的鍛造材料。"
+        },
+        {
+          "event": "toxic_pool",
+          "name": "無名者石塚",
+          "position": [
+            0.5,
+            0.2
+          ],
+          "prop": "ore_node",
+          "guards": [
+            "rust_brute",
+            "mech_husk",
+            "scrap_biter"
+          ],
+          "reward": {
+            "mutant_core": 2,
+            "bio_crystal": 2
+          },
+          "description": "替石塚驅散污染體，取回碑下封存的護衛核心。"
+        }
+      ],
       "direction": "south",
       "seed_offset": 1100,
       "music": "wasteland",
       "tile_theme": "road",
       "hazard_type": "scorched_zone",
       "weather": "dust_wind",
-      "notice": "進入南門廢鐵公路。沿破柏油雙向主幹道推進，回收車骸與彈藥箱。",
+      "notice": "進入南門廢鐵公路。沿破柏油主幹道前進，調查中央巴士上的撤離名冊。",
       "enemy_mix": [
         "scrap_biter",
         "rust_brute",
@@ -32,17 +335,299 @@
         "scrap"
       ],
       "boss_enabled": false,
-      "landmark_prop": "highway_bus"
+      "landmark_prop": "highway_bus",
+      "story_site": {
+        "walkup": [
+          0.422,
+          0.574
+        ],
+        "hud_prompt": true,
+        "protected_area": [
+          760,
+          680
+        ],
+        "landmark_offset": [
+          240,
+          100
+        ],
+        "props": [
+          {
+            "id": "road_marker",
+            "offset": [
+              -255,
+              -165
+            ],
+            "blocking": false
+          },
+          {
+            "id": "scrap_barricade",
+            "offset": [
+              240,
+              -160
+            ],
+            "blocking": true
+          },
+          {
+            "id": "wreck",
+            "offset": [
+              240,
+              -365
+            ],
+            "blocking": true
+          }
+        ]
+      }
     },
     "toxic_marsh": {
       "name": "西門：毒沼排水區",
+      "return_gate_position": [0.45, 0.07],
+      "size_tiles": [
+        208,
+        184
+      ],
+      "regions": [
+        {
+          "name": "枯葦渡口",
+          "center": [
+            0.5,
+            0.88
+          ]
+        },
+        {
+          "name": "沉舟藥圃",
+          "center": [
+            0.23,
+            0.62
+          ]
+        },
+        {
+          "name": "腐水祭壇",
+          "center": [
+            0.76,
+            0.44
+          ]
+        },
+        {
+          "name": "鐘沉舊堤",
+          "center": [
+            0.45,
+            0.21
+          ]
+        }
+      ],
+      "path_props": [
+        "dead_tree",
+        "rust_rock",
+        "scrap_wall"
+      ],
+      "path_widths": [
+        6,
+        7,
+        7,
+        6,
+        6,
+        6,
+        3,
+        3
+      ],
+      "exploration_paths": [
+        [
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.5,
+            0.8
+          ],
+          [
+            0.46,
+            0.73
+          ],
+          [
+            0.46,
+            0.51
+          ]
+        ],
+        [
+          [
+            0.46,
+            0.73
+          ],
+          [
+            0.23,
+            0.73
+          ],
+          [
+            0.23,
+            0.62
+          ]
+        ],
+        [
+          [
+            0.46,
+            0.65
+          ],
+          [
+            0.62,
+            0.65
+          ],
+          [
+            0.76,
+            0.56
+          ],
+          [
+            0.76,
+            0.44
+          ]
+        ],
+        [
+          [
+            0.76,
+            0.44
+          ],
+          [
+            0.76,
+            0.23
+          ],
+          [
+            0.45,
+            0.23
+          ],
+          [
+            0.45,
+            0.07
+          ]
+        ],
+        [
+          [
+            0.23,
+            0.62
+          ],
+          [
+            0.23,
+            0.23
+          ],
+          [
+            0.45,
+            0.23
+          ]
+        ],
+        [
+          [
+            0.76,
+            0.56
+          ],
+          [
+            0.86,
+            0.65
+          ],
+          [
+            0.68,
+            0.82
+          ],
+          [
+            0.5,
+            0.8
+          ]
+        ],
+        [
+          [
+            0.46,
+            0.54942255
+          ],
+          [
+            0.43795072,
+            0.54942255
+          ],
+          [
+            0.41841947,
+            0.54942255
+          ]
+        ],
+        [
+          [
+            0.46,
+            0.5298913
+          ],
+          [
+            0.47175481,
+            0.51970109
+          ],
+          [
+            0.48377404,
+            0.51715353
+          ]
+        ]
+      ],
+      "exploration_points": [
+        {
+          "event": "supply_cache",
+          "draft_id": "toxic_marsh_early",
+          "name": "沉舟藥圃",
+          "position": [
+            0.23,
+            0.62
+          ],
+          "prop": "herb_patch",
+          "guards": [
+            "toxic_runner",
+            "scrap_biter",
+            "toxic_runner"
+          ],
+          "reward": {
+            "mutant_herb": 6,
+            "acid_sac": 2
+          },
+          "description": "沉船的藥箱已生出新根，仍能提煉出淨化材料。"
+        },
+        {
+          "event": "broken_robot",
+          "draft_id": "toxic_marsh_late",
+          "name": "腐水祭壇",
+          "position": [
+            0.76,
+            0.44
+          ],
+          "prop": "crystal_node",
+          "guards": [
+            "spore_gunner",
+            "toxic_runner",
+            "rot_wing"
+          ],
+          "reward": {
+            "bio_crystal": 4,
+            "mutant_core": 1
+          },
+          "description": "擊碎盤踞者後，祭壇露出未被污染的晶核。"
+        },
+        {
+          "event": "toxic_pool",
+          "name": "鐘沉舊堤儲藏室",
+          "position": [
+            0.45,
+            0.21
+          ],
+          "prop": "barrel_stack",
+          "guards": [
+            "spore_gunner",
+            "rot_wing",
+            "toxic_runner"
+          ],
+          "reward": {
+            "ammo": 16,
+            "alloy_plate": 3
+          },
+          "description": "舊堤的警鐘已啞，守堤者留下的備用彈藥仍然乾燥。"
+        }
+      ],
       "direction": "west",
       "seed_offset": 2200,
       "music": "wasteland",
       "tile_theme": "toxic",
       "hazard_type": "acid_pool",
       "weather": "spore_mist",
-      "notice": "進入毒沼排水區。避開腐蝕毒泥水道，沿金屬格柵棧道採集污染晶核。",
+      "notice": "進入毒沼排水區。沿金屬格柵棧道前進，調查泵站留下的分流帳本。",
       "enemy_mix": [
         "toxic_runner",
         "spore_gunner",
@@ -66,17 +651,288 @@
         "bio_crystal"
       ],
       "boss_enabled": false,
-      "landmark_prop": "marsh_pump"
+      "landmark_prop": "marsh_pump",
+      "story_site": {
+        "walkup": [
+          0.42,
+          0.54942255
+        ],
+        "protected_area": [
+          760,
+          680
+        ],
+        "landmark_offset": [
+          -180,
+          10
+        ],
+        "props": [
+          {
+            "id": "dead_tree",
+            "offset": [
+              -245,
+              -170
+            ],
+            "blocking": true
+          },
+          {
+            "id": "toxic_pool",
+            "offset": [
+              245,
+              -145
+            ],
+            "blocking": false
+          },
+          {
+            "id": "scrap_wall",
+            "offset": [
+              0,
+              -375
+            ],
+            "blocking": true
+          }
+        ],
+        "hud_prompt": true
+      }
     },
     "crystal_scar": {
       "name": "北門：紫晶裂隙",
+      "return_gate_position": [0.5, 0.06],
+      "size_tiles": [
+        216,
+        184
+      ],
+      "regions": [
+        {
+          "name": "灰燼山口",
+          "center": [
+            0.5,
+            0.88
+          ]
+        },
+        {
+          "name": "裂骨礦場",
+          "center": [
+            0.22,
+            0.49
+          ]
+        },
+        {
+          "name": "失聲祭壇",
+          "center": [
+            0.77,
+            0.38
+          ]
+        },
+        {
+          "name": "長夜晶庭",
+          "center": [
+            0.5,
+            0.18
+          ]
+        }
+      ],
+      "path_props": [
+        "rust_rock",
+        "dead_tree",
+        "scrap_wall"
+      ],
+      "path_widths": [
+        7,
+        8,
+        7,
+        7,
+        6,
+        7,
+        3
+      ],
+      "exploration_paths": [
+        [
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.5,
+            0.83
+          ],
+          [
+            0.58,
+            0.76
+          ],
+          [
+            0.58,
+            0.67
+          ],
+          [
+            0.5,
+            0.62
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.72
+          ],
+          [
+            0.36,
+            0.72
+          ],
+          [
+            0.22,
+            0.62
+          ],
+          [
+            0.22,
+            0.49
+          ]
+        ],
+        [
+          [
+            0.58,
+            0.67
+          ],
+          [
+            0.77,
+            0.67
+          ],
+          [
+            0.77,
+            0.38
+          ]
+        ],
+        [
+          [
+            0.77,
+            0.38
+          ],
+          [
+            0.77,
+            0.23
+          ],
+          [
+            0.5,
+            0.23
+          ],
+          [
+            0.5,
+            0.06
+          ]
+        ],
+        [
+          [
+            0.22,
+            0.49
+          ],
+          [
+            0.22,
+            0.23
+          ],
+          [
+            0.5,
+            0.23
+          ]
+        ],
+        [
+          [
+            0.77,
+            0.67
+          ],
+          [
+            0.66,
+            0.8
+          ],
+          [
+            0.5,
+            0.83
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.62
+          ],
+          [
+            0.5,
+            0.64283288
+          ],
+          [
+            0.48032407,
+            0.64283288
+          ],
+          [
+            0.46296296,
+            0.63519022
+          ]
+        ]
+      ],
+      "exploration_points": [
+        {
+          "event": "supply_cache",
+          "draft_id": "crystal_scar_early",
+          "name": "裂骨礦場",
+          "position": [
+            0.22,
+            0.49
+          ],
+          "prop": "ore_node",
+          "guards": [
+            "toxic_runner",
+            "rot_wing",
+            "toxic_runner"
+          ],
+          "reward": {
+            "amethyst_gem": 4,
+            "alloy_plate": 2
+          },
+          "description": "礦工留下的鑿痕指向一層仍可開採的紫晶。"
+        },
+        {
+          "event": "broken_robot",
+          "draft_id": "crystal_scar_late",
+          "name": "失聲祭壇",
+          "position": [
+            0.77,
+            0.38
+          ],
+          "prop": "crystal_node",
+          "guards": [
+            "spore_gunner",
+            "rot_wing",
+            "spore_gunner"
+          ],
+          "reward": {
+            "bio_crystal": 4,
+            "mutant_core": 2
+          },
+          "description": "回波平息後，祭壇不再吞噬靠近者的聲音。"
+        },
+        {
+          "event": "toxic_pool",
+          "name": "長夜晶庭",
+          "position": [
+            0.5,
+            0.18
+          ],
+          "prop": "crystal_node",
+          "guards": [
+            "rot_wing",
+            "spore_gunner",
+            "toxic_runner"
+          ],
+          "reward": {
+            "amethyst_gem": 5,
+            "ammo": 18
+          },
+          "description": "晶庭的封匣裡仍有前代探索者留下的遠征儲備。"
+        }
+      ],
       "direction": "north",
       "seed_offset": 3300,
       "music": "wasteland",
       "tile_theme": "crystal",
       "hazard_type": "crystal_pulse",
       "weather": "crystal_aurora",
-      "notice": "進入紫晶裂隙。遠程污染體守住高能礦脈，裂隙深處有 Boss 吞噬核心前哨。",
+      "notice": "進入紫晶裂隙。沿晶脈調查紫晶中的求救回波，並留意深處的吞噬核心前哨。",
       "enemy_mix": [
         "spore_gunner",
         "rot_wing",
@@ -100,17 +956,287 @@
         "amethyst_gem"
       ],
       "boss_enabled": true,
-      "landmark_prop": "crystal_spire"
+      "landmark_prop": "crystal_spire",
+      "story_site": {
+        "walkup": [
+          0.46296296,
+          0.63519022
+        ],
+        "protected_area": [
+          760,
+          680
+        ],
+        "landmark_offset": [
+          -180,
+          10
+        ],
+        "props": [
+          {
+            "id": "scrap_wall",
+            "offset": [
+              -250,
+              -155
+            ],
+            "blocking": true
+          },
+          {
+            "id": "crystal_node",
+            "offset": [
+              245,
+              -155
+            ],
+            "blocking": false
+          },
+          {
+            "id": "dead_tree",
+            "offset": [
+              0,
+              -375
+            ],
+            "blocking": true
+          }
+        ],
+        "hud_prompt": true
+      }
     },
     "old_factory": {
       "name": "東門：舊工廠外圍",
+      "return_gate_position": [0.5, 0.08],
+      "size_tiles": [
+        224,
+        176
+      ],
+      "regions": [
+        {
+          "name": "熄火檢查口",
+          "center": [
+            0.5,
+            0.88
+          ]
+        },
+        {
+          "name": "囚爐鑄造場",
+          "center": [
+            0.25,
+            0.62
+          ]
+        },
+        {
+          "name": "鐵棺轉運站",
+          "center": [
+            0.77,
+            0.55
+          ]
+        },
+        {
+          "name": "無光動力廳",
+          "center": [
+            0.5,
+            0.2
+          ]
+        }
+      ],
+      "path_props": [
+        "scrap_wall",
+        "scrap_barricade",
+        "wreck"
+      ],
+      "path_widths": [
+        7,
+        9,
+        9,
+        8,
+        8,
+        7,
+        3,
+        3
+      ],
+      "exploration_paths": [
+        [
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.5,
+            0.72
+          ],
+          [
+            0.52,
+            0.72
+          ],
+          [
+            0.52,
+            0.43
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.72
+          ],
+          [
+            0.25,
+            0.72
+          ],
+          [
+            0.25,
+            0.62
+          ]
+        ],
+        [
+          [
+            0.52,
+            0.66
+          ],
+          [
+            0.77,
+            0.66
+          ],
+          [
+            0.77,
+            0.55
+          ]
+        ],
+        [
+          [
+            0.77,
+            0.55
+          ],
+          [
+            0.77,
+            0.22
+          ],
+          [
+            0.5,
+            0.22
+          ],
+          [
+            0.5,
+            0.08
+          ]
+        ],
+        [
+          [
+            0.25,
+            0.62
+          ],
+          [
+            0.25,
+            0.22
+          ],
+          [
+            0.5,
+            0.22
+          ]
+        ],
+        [
+          [
+            0.25,
+            0.42
+          ],
+          [
+            0.52,
+            0.42
+          ],
+          [
+            0.77,
+            0.42
+          ]
+        ],
+        [
+          [
+            0.52,
+            0.46697443
+          ],
+          [
+            0.50083705,
+            0.46875
+          ],
+          [
+            0.47851562,
+            0.46875
+          ]
+        ],
+        [
+          [
+            0.52,
+            0.44211648
+          ],
+          [
+            0.54827009,
+            0.44211648
+          ]
+        ]
+      ],
+      "exploration_points": [
+        {
+          "event": "supply_cache",
+          "draft_id": "old_factory_early",
+          "name": "囚爐鑄造場",
+          "position": [
+            0.25,
+            0.62
+          ],
+          "prop": "ore_node",
+          "guards": [
+            "rust_brute",
+            "mech_husk",
+            "rust_brute"
+          ],
+          "reward": {
+            "alloy_plate": 5,
+            "scrap": 24
+          },
+          "description": "餘溫早已散盡，鑄模裡仍留下成批合金。"
+        },
+        {
+          "event": "broken_robot",
+          "draft_id": "old_factory_late",
+          "name": "鐵棺轉運站",
+          "position": [
+            0.77,
+            0.55
+          ],
+          "prop": "barrel_stack",
+          "guards": [
+            "mech_husk",
+            "spore_gunner",
+            "rust_brute"
+          ],
+          "reward": {
+            "precision_chip": 4,
+            "ammo": 18
+          },
+          "description": "拆開被守衛封鎖的貨櫃，找回控制晶片和軍規彈藥。"
+        },
+        {
+          "event": "toxic_pool",
+          "name": "無光動力廳",
+          "position": [
+            0.5,
+            0.2
+          ],
+          "prop": "scrap_pile",
+          "guards": [
+            "mech_husk",
+            "rust_brute",
+            "spore_gunner"
+          ],
+          "reward": {
+            "dynamo_core": 3,
+            "mutant_core": 2
+          },
+          "description": "停止巡守的機兵終於讓出仍可回收的動力模組。"
+        }
+      ],
       "direction": "east",
       "seed_offset": 4400,
       "music": "wasteland",
       "tile_theme": "factory",
       "hazard_type": "steam_vent",
       "weather": "industrial_smog",
-      "notice": "進入舊工廠外圍。工業鋼板與黃黑警戒線後方有重裝機械與 Boss 殘骸。",
+      "notice": "進入舊工廠外圍。沿控制走廊調查核心黑盒，確認反應爐自毀前的命令。",
       "enemy_mix": [
         "mech_husk",
         "rust_brute",
@@ -135,17 +1261,310 @@
         "ammo"
       ],
       "boss_enabled": true,
-      "landmark_prop": "factory_turbine"
+      "landmark_prop": "factory_turbine",
+      "story_site": {
+        "walkup": [
+          0.47851562,
+          0.46875
+        ],
+        "protected_area": [
+          760,
+          680
+        ],
+        "landmark_offset": [
+          180,
+          -50
+        ],
+        "props": [
+          {
+            "id": "scrap_wall",
+            "offset": [
+              -250,
+              -155
+            ],
+            "blocking": true
+          },
+          {
+            "id": "barrel_stack",
+            "offset": [
+              215,
+              -150
+            ],
+            "blocking": true
+          },
+          {
+            "id": "road_marker",
+            "offset": [
+              0,
+              -375
+            ],
+            "blocking": false
+          }
+        ],
+        "hud_prompt": true
+      }
     },
     "ruined_metropolis": {
+      "return_gate_position": [0.5, 0.07],
       "name": "東南：崩塌都心區",
+      "size_tiles": [
+        232,
+        192
+      ],
+      "regions": [
+        {
+          "name": "落灰南街",
+          "center": [
+            0.5,
+            0.88
+          ]
+        },
+        {
+          "name": "弔鐘廣場",
+          "center": [
+            0.25,
+            0.62
+          ]
+        },
+        {
+          "name": "斷誓醫所",
+          "center": [
+            0.77,
+            0.39
+          ]
+        },
+        {
+          "name": "黑燈守望台",
+          "center": [
+            0.5,
+            0.2
+          ]
+        }
+      ],
+      "path_props": [
+        "ruin_wall",
+        "wreck",
+        "scrap_wall"
+      ],
+      "path_widths": [
+        8,
+        10,
+        9,
+        8,
+        7,
+        8,
+        3,
+        3,
+        3
+      ],
+      "exploration_paths": [
+        [
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.5,
+            0.72
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.72
+          ],
+          [
+            0.25,
+            0.72
+          ],
+          [
+            0.25,
+            0.62
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.6
+          ],
+          [
+            0.63,
+            0.6
+          ],
+          [
+            0.77,
+            0.47
+          ],
+          [
+            0.77,
+            0.39
+          ]
+        ],
+        [
+          [
+            0.77,
+            0.39
+          ],
+          [
+            0.77,
+            0.23
+          ],
+          [
+            0.5,
+            0.23
+          ],
+          [
+            0.5,
+            0.07
+          ]
+        ],
+        [
+          [
+            0.25,
+            0.62
+          ],
+          [
+            0.25,
+            0.23
+          ],
+          [
+            0.5,
+            0.23
+          ]
+        ],
+        [
+          [
+            0.77,
+            0.47
+          ],
+          [
+            0.86,
+            0.64
+          ],
+          [
+            0.7,
+            0.82
+          ],
+          [
+            0.5,
+            0.82
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.53710938
+          ],
+          [
+            0.46268858,
+            0.53710938
+          ],
+          [
+            0.45528017,
+            0.53548177
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.51269531
+          ],
+          [
+            0.52532328,
+            0.51269531
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.78776042
+          ],
+          [
+            0.57246767,
+            0.78776042
+          ],
+          [
+            0.60344828,
+            0.78776042
+          ],
+          [
+            0.60344828,
+            0.82
+          ]
+        ]
+      ],
+      "exploration_points": [
+        {
+          "event": "supply_cache",
+          "draft_id": "ruined_metropolis_early",
+          "name": "弔鐘廣場軍械點",
+          "position": [
+            0.25,
+            0.62
+          ],
+          "prop": "barrel_stack",
+          "guards": [
+            "rust_brute",
+            "mech_husk",
+            "spore_gunner"
+          ],
+          "reward": {
+            "ammo": 22,
+            "alloy_plate": 4
+          },
+          "description": "鐘聲消失的廣場，還藏著最後一班撤退守軍的物資。"
+        },
+        {
+          "event": "broken_robot",
+          "draft_id": "ruined_metropolis_late",
+          "name": "斷誓醫所",
+          "position": [
+            0.77,
+            0.39
+          ],
+          "prop": "herb_patch",
+          "guards": [
+            "spore_gunner",
+            "rot_wing",
+            "mech_husk"
+          ],
+          "reward": {
+            "mutant_herb": 8,
+            "bio_crystal": 4
+          },
+          "description": "從坍塌的診療櫃取回藥草，留給仍在地表的人。"
+        },
+        {
+          "event": "toxic_pool",
+          "name": "黑燈守望台",
+          "position": [
+            0.5,
+            0.2
+          ],
+          "prop": "scrap_pile",
+          "guards": [
+            "mech_husk",
+            "rust_brute",
+            "rot_wing"
+          ],
+          "reward": {
+            "precision_chip": 5,
+            "dynamo_core": 2
+          },
+          "description": "熄滅的探照燈底下，守望者的備用電路仍然完整。"
+        }
+      ],
       "direction": "southeast",
       "seed_offset": 5500,
       "music": "wasteland",
       "tile_theme": "metropolis",
       "hazard_type": "radiation_zone",
       "weather": "ash_fall",
-      "notice": "進入崩塌都心區。穿梭於廢棄十字街廓與大樓斷垣之間，搜尋高價值核心。",
+      "notice": "進入崩塌都心區。沿中央下沉街口進入檔案庫，尋找完整的撤離名冊。",
       "enemy_mix": [
         "mech_husk",
         "spore_gunner",
@@ -159,7 +1578,8 @@
         "road_marker",
         "signal_pylon",
         "ruin_wall",
-        "scrap_pile"
+        "scrap_pile",
+        "evacuation_archive"
       ],
       "resource_mix": [
         "alloy_plate",
@@ -169,17 +1589,299 @@
         "ammo"
       ],
       "boss_enabled": false,
-      "landmark_prop": "wreck"
+      "landmark_prop": "evacuation_archive",
+      "story_site": {
+        "walkup": [
+          0.45528017,
+          0.53548177
+        ],
+        "protected_area": [
+          820,
+          720
+        ],
+        "landmark_offset": [
+          195,
+          -50
+        ],
+        "props": [
+          {
+            "id": "ruin_wall",
+            "offset": [
+              -295,
+              -165
+            ],
+            "blocking": true
+          },
+          {
+            "id": "wreck",
+            "offset": [
+              220,
+              -255
+            ],
+            "blocking": true
+          },
+          {
+            "id": "road_marker",
+            "offset": [
+              0,
+              -410
+            ],
+            "blocking": false
+          }
+        ],
+        "hud_prompt": true
+      }
     },
     "underground_facility": {
+      "return_gate_position": [0.5, 0.06],
       "name": "西北：地底研究設施",
+      "size_tiles": [
+        208,
+        192
+      ],
+      "regions": [
+        {
+          "name": "封井下層",
+          "center": [
+            0.5,
+            0.88
+          ]
+        },
+        {
+          "name": "冷灰樣本庫",
+          "center": [
+            0.23,
+            0.62
+          ]
+        },
+        {
+          "name": "禁閉動力室",
+          "center": [
+            0.76,
+            0.44
+          ]
+        },
+        {
+          "name": "寂靜觀測廳",
+          "center": [
+            0.5,
+            0.2
+          ]
+        }
+      ],
+      "path_props": [
+        "scrap_wall",
+        "scrap_barricade",
+        "rust_rock"
+      ],
+      "path_widths": [
+        6,
+        8,
+        8,
+        8,
+        8,
+        7,
+        3,
+        3
+      ],
+      "exploration_paths": [
+        [
+          [
+            0.5,
+            0.98
+          ],
+          [
+            0.5,
+            0.76
+          ],
+          [
+            0.5,
+            0.46
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.76
+          ],
+          [
+            0.33,
+            0.72
+          ],
+          [
+            0.23,
+            0.62
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.66
+          ],
+          [
+            0.68,
+            0.66
+          ],
+          [
+            0.76,
+            0.56
+          ],
+          [
+            0.76,
+            0.44
+          ]
+        ],
+        [
+          [
+            0.76,
+            0.44
+          ],
+          [
+            0.76,
+            0.3
+          ],
+          [
+            0.66,
+            0.23
+          ],
+          [
+            0.5,
+            0.06
+          ]
+        ],
+        [
+          [
+            0.23,
+            0.62
+          ],
+          [
+            0.23,
+            0.3
+          ],
+          [
+            0.34,
+            0.23
+          ],
+          [
+            0.5,
+            0.2
+          ]
+        ],
+        [
+          [
+            0.23,
+            0.62
+          ],
+          [
+            0.32,
+            0.76
+          ],
+          [
+            0.5,
+            0.83
+          ],
+          [
+            0.68,
+            0.76
+          ],
+          [
+            0.76,
+            0.56
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.49723307
+          ],
+          [
+            0.47325721,
+            0.49723307
+          ],
+          [
+            0.45673077,
+            0.49723307
+          ]
+        ],
+        [
+          [
+            0.5,
+            0.47444661
+          ],
+          [
+            0.53034856,
+            0.47444661
+          ]
+        ]
+      ],
+      "exploration_points": [
+        {
+          "event": "supply_cache",
+          "draft_id": "underground_facility_early",
+          "name": "冷灰樣本庫",
+          "position": [
+            0.23,
+            0.62
+          ],
+          "prop": "crystal_node",
+          "guards": [
+            "toxic_runner",
+            "spore_gunner",
+            "mech_husk"
+          ],
+          "reward": {
+            "amethyst_gem": 5,
+            "acid_sac": 4
+          },
+          "description": "隔離容器依然密封，留下足以改造裝備的研究樣本。"
+        },
+        {
+          "event": "broken_robot",
+          "draft_id": "underground_facility_late",
+          "name": "禁閉動力室",
+          "position": [
+            0.76,
+            0.44
+          ],
+          "prop": "barrel_stack",
+          "guards": [
+            "mech_husk",
+            "spore_gunner",
+            "toxic_runner"
+          ],
+          "reward": {
+            "dynamo_core": 4,
+            "precision_chip": 4
+          },
+          "description": "解除封鎖後，將備援動力帶回仍需供電的村莊。"
+        },
+        {
+          "event": "toxic_pool",
+          "name": "寂靜觀測廳",
+          "position": [
+            0.5,
+            0.2
+          ],
+          "prop": "scrap_pile",
+          "guards": [
+            "spore_gunner",
+            "mech_husk",
+            "toxic_runner"
+          ],
+          "reward": {
+            "mutant_core": 3,
+            "ammo": 24
+          },
+          "description": "觀測者留下的密匣已能開啟，裡面是最後的遠征儲備。"
+        }
+      ],
       "direction": "northwest",
       "seed_offset": 6600,
       "music": "wasteland",
       "tile_theme": "facility",
       "hazard_type": "shock_grid",
       "weather": "cryo_haze",
-      "notice": "進入地底研究設施。沿高壓電漿導管推進，提防失控機兵與深層吞噬核心。",
+      "notice": "進入地底研究設施。沿中控脊線調查 R-17 的最後記憶，並解除失控守衛。",
       "enemy_mix": [
         "mech_husk",
         "toxic_runner",
@@ -193,7 +1895,8 @@
         "scrap_barricade",
         "rust_rock",
         "crystal_node",
-        "barrel_stack"
+        "barrel_stack",
+        "memory_vault"
       ],
       "resource_mix": [
         "amethyst_gem",
@@ -203,7 +1906,48 @@
         "mutant_core"
       ],
       "boss_enabled": true,
-      "landmark_prop": "signal_pylon"
+      "landmark_prop": "memory_vault",
+      "story_site": {
+        "walkup": [
+          0.54,
+          0.47444661
+        ],
+        "protected_area": [
+          820,
+          720
+        ],
+        "landmark_offset": [
+          225,
+          20
+        ],
+        "props": [
+          {
+            "id": "signal_pylon",
+            "offset": [
+              -275,
+              -160
+            ],
+            "blocking": true
+          },
+          {
+            "id": "scrap_wall",
+            "offset": [
+              275,
+              -155
+            ],
+            "blocking": true
+          },
+          {
+            "id": "crystal_node",
+            "offset": [
+              0,
+              -395
+            ],
+            "blocking": false
+          }
+        ],
+        "hud_prompt": true
+      }
     }
   }
 }

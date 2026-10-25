@@ -1,0 +1,8 @@
+Use case: stylized-concept
+Asset type: ONE opaque seamless square game ground texture, requested 1024x1024.
+Primary request: worn ancient royal-road cobbles embedded in the exact charcoal-slate and umber packed earth of reference Image 1. All four edges seamlessly tile. Image 1 is the material/pixel reference. This is flat road surface only, filled edge to edge, no horizon or road shoulder silhouette.
+Style: crisp hand-authored pixel art, readable deliberate pixel clusters, looks like a native 256x256 tile enlarged 4x nearest-neighbor. Suppress tiny noisy dither: quiet large flat material clusters with restrained chips. Every stone uses a few broad color planes.
+Palette: same charcoal blue-gray stone and dark brown-gray earth as reference, slate #44464a #56534c, soil #49413b #38342f. Muted overcast dark fantasy.
+Composition: irregular rectangular old slate pavers in loosely staggered rows across the image, mostly flat and worn flush with the ground, broken and missing sections reveal compacted dusty earth. Cobbles 8-22 world pixels at displayed texture scale 512 world pixels across. About 65 percent stone, 35 percent quiet dirt. Chipped but subdued, no black outlines around every stone, contrast low enough for the player and props to read.
+Lighting: diffuse upper-left, minimal raised side faces, no dramatic shadows.
+Avoid: modern asphalt, lane paint, road stripes, modern concrete, architecture, moss carpet, grass, furniture, props, text, grid border, panel border, floating tile, isometric diamond, vignette, perspective vanishing point, photographs, painter blur, random high-frequency texture noise. Do not depict the reference as a terrain scene: make an even continuous tileable cobblestone-earth material.

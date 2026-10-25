@@ -1,0 +1,9 @@
+Use case: identity-preserve. Production pixel-art TURNAROUND intermediate-angle batch, eight actual new camera views.
+Reference is exact approved R-17 ready character identity: slender bluegrey gold-trim steel knight, cylindrical facecross helm FRONT only, crimsoncape, short straight sword firmly held low in RIGHT hand. Preserve bodyproportions, headsize, armorstyle, swordsize, lighting and palette.
+CRITICAL: Draw eight NEW angles HALFWAY BETWEEN the reference's eight views. Do NOTrepeat referencecardinal/diagonal views. Rotate the CHARACTER in3D around its vertical axis while camera staysslightly elevated. Do not rotate/mirror the flat image. Every angle's shoulder overlaps, chest-plane width, helmet cross visibility, hands, sword foreshortening and cape occlusion must really change.
+Facing convention:0°facesright(E),90°facescamera(S),180°facesleft(W),270°facesaway(N).
+Requested order:
+toprow:22.5° (betweenrightprofileandSE, torso onlyslightlyfrontvisible);67.5° (betweenSEandfront, broadchestnearlyfront);112.5° (betweenfrontandSW, frontturned22.5°left);157.5° (betweenSWandleftprofile, narrowchest).
+bottomrow:202.5° (leftprofileturned22.5°away, onlysliverfrontcross);247.5° (mostlybackturned22.5°left, nofrontcross);292.5° (mostlybackturned22.5°right, nofrontcross);337.5° (rightprofileturned22.5°away, nofrontcross).
+Same neutral guarded stance withbothfeetplanted, noactionvariation. Rightfistattacheddirectlytoshortswordhilt. Same pixel density bodyandsword.
+1536x1024,4columns2rows. Every384x512cellcontainsoneentirefigure centred, completecape/sword/boots, substantial45pxclearalphagutters. Bodyheightabout300px. Crispdeliberatepixelart, solidopaqueclusters, noanti-aliassmoothpaint. Realtransparentbackgroundalpha0, nohalos,haze,glow,shadow,particles,text,labels,gridorwatermark.

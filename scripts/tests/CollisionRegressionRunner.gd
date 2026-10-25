@@ -120,7 +120,7 @@ func _check_route_spawn_clearance(route_id: String) -> void:
 		var player_query_hits: Array[Dictionary] = _intersect_shape(collision.shape, Transform2D(0.0, player.global_position + collision.position), player.get_rid())
 		_expect(player_query_hits.is_empty(), "%s player spawn has no static-body overlap" % route_id)
 
-	var lane_bounds: Rect2 = wasteland.call("_return_lane_bounds")
+	var lane_bounds: Rect2 = wasteland.call("_extraction_gate_bounds")
 	var world_size: Vector2 = wasteland.get("world_size")
 	var lane_clear := true
 	for raw_prop in get_tree().get_nodes_in_group("world_prop"):
@@ -129,8 +129,8 @@ func _check_route_spawn_clearance(route_id: String) -> void:
 			lane_clear = false
 	_expect(lane_clear, "%s keeps generated props out of the return lane" % route_id)
 	var lane_physics_clear := true
-	for y_offset: float in [-300.0, -220.0, -140.0]:
-		var position := Vector2(lane_bounds.get_center().x, world_size.y + y_offset)
+	for y_offset: float in [-120.0, 0.0, 120.0]:
+		var position := Vector2(lane_bounds.get_center().x, lane_bounds.get_center().y + y_offset)
 		var hits: Array[Dictionary] = _intersect_shape(_rectangle_shape(Vector2(64.0, 64.0)), Transform2D(0.0, position), player.get_rid() if player != null else RID())
 		if not hits.is_empty():
 			lane_physics_clear = false
@@ -202,12 +202,26 @@ func _shape_query_hits_prop(prop: WorldProp) -> bool:
 
 
 func _footprint_matches_sprite_transform(prop: WorldProp, asset: Dictionary) -> bool:
+	var collision: CollisionShape2D = null
+	for child in prop.get_children():
+		if child is CollisionShape2D:
+			collision = child
+			break
+	if collision == null or collision.shape == null:
+		return false
+	var material: Dictionary = prop.get("_material_asset") if prop.get("_material_asset") is Dictionary else {}
+	if not material.is_empty() and not material.get("footprints", []).is_empty():
+		var authored_footprints: Array = material.get("footprints", [])
+		if authored_footprints.size() > 0 and authored_footprints[0].size() == 4:
+			var authored_rect := Rect2(float(authored_footprints[0][0]), float(authored_footprints[0][1]), float(authored_footprints[0][2]), float(authored_footprints[0][3]))
+			var pos_err := collision.position.distance_to(authored_rect.get_center())
+			var size_err := (collision.shape as RectangleShape2D).size.distance_to(authored_rect.size)
+			return pos_err < 0.5 and size_err < 0.5
 	var footprint: Variant = asset.get("collision_footprint", [])
 	if not (footprint is Array) or footprint.size() != 4:
 		return false
 	var sprite := prop.get_node_or_null("Sprite2D") as Sprite2D
-	var collision := prop.get_node_or_null("CollisionShape2D") as CollisionShape2D
-	if sprite == null or collision == null or collision.shape == null:
+	if sprite == null or sprite.texture == null:
 		return false
 	var texture_size: Vector2 = sprite.texture.get_size()
 	var scale: Vector2 = sprite.scale

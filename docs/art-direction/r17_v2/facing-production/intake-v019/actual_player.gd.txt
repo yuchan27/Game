@@ -1,0 +1,259 @@
+# Source-only recipe. Copy beside the scene as res://actual_player.gd in an isolated project mirror.
+extends Node2D
+
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
+const OUTPUT_ARGUMENT_PREFIX := "--art-output="
+const COLUMN_CENTERS := [160.0, 480.0, 800.0, 1120.0]
+const TARGET_FACINGS := [0.0, 11.25, 22.5, 45.0]
+const ROWS := [
+	{"id": "blade-idle", "label": "BLADE · IDLE", "baseline": 270.0, "quick_slot": 0, "state": 0, "walk": false},
+	{"id": "blade-walk-phase-0", "label": "BLADE · WALK · PHASE 0", "baseline": 450.0, "quick_slot": 0, "state": 1, "walk": true},
+	{"id": "rifle-idle", "label": "RIFLE · IDLE", "baseline": 640.0, "quick_slot": 1, "state": 0, "walk": false}
+]
+const WALK_SPEED := 180.0
+const MAGNIFIED_SCALE := 1.5
+
+
+func _ready() -> void:
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	call_deferred("_prepare_preview")
+
+
+func _prepare_preview() -> void:
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this actual-Player source preview only with its dedicated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_path := _read_user_argument(OUTPUT_ARGUMENT_PREFIX)
+	if output_path.is_empty() or not output_path.is_absolute_path() or not output_path.to_lower().ends_with(".png"):
+		push_error("Pass an absolute --art-output= path ending in .png.")
+		get_tree().quit(2)
+		return
+	var output_directory := output_path.get_base_dir()
+	if output_directory.is_empty():
+		push_error("Could not resolve the requested PNG output directory.")
+		get_tree().quit(2)
+		return
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_directory)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested PNG output directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	get_tree().paused = true
+	_build_preview()
+	_print_layout()
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	var image := get_viewport().get_texture().get_image()
+	var save_error := image.save_png(output_path)
+	print("ART_FACING_ACTUAL_PLAYER_PNG: argument=", output_path, " path=", output_path, " result=", save_error)
+	if save_error != OK:
+		push_error("Could not save the actual-Player facing preview PNG: %s" % save_error)
+		get_tree().quit(3)
+		return
+	get_tree().quit(0)
+
+
+func _build_preview() -> void:
+	RenderingServer.set_default_clear_color(Color("#171c22"))
+	_add_backgrounds()
+	_add_label("R-17 ACTUAL PLAYER · E11.25 INTAKE", Vector2(24.0, 8.0), Vector2(760.0, 28.0), 22, Color8(239, 231, 211))
+	_add_label("Native Player scene · isolated autoload mirror · requested angles resolve through live presentation data", Vector2(25.0, 36.0), Vector2(1090.0, 20.0), 13, Color8(169, 184, 196))
+	_add_label("Each pair: left native 96px body · right 1.5× (144px body). Direction logs include the actual selected facing and source.", Vector2(25.0, 56.0), Vector2(1230.0, 18.0), 12, Color8(190, 199, 202))
+
+	for column in range(TARGET_FACINGS.size()):
+		var facing := float(TARGET_FACINGS[column])
+		var center_x := float(COLUMN_CENTERS[column])
+		var header := _facing_label(facing)
+		_add_label(header, Vector2(center_x - 145.0, 76.0), Vector2(290.0, 24.0), 15, Color8(233, 227, 212), true)
+
+	for row_index in range(ROWS.size()):
+		var row: Dictionary = ROWS[row_index]
+		var baseline := float(row["baseline"])
+		var heading_positions := [102.0, 284.0, 474.0]
+		var heading_y := float(heading_positions[row_index])
+		_add_label(
+			"%s · feet baseline y=%d · quick slot %d (RAM presentation state)" % [
+				String(row["label"]),
+				int(baseline),
+				int(row["quick_slot"]) + 1
+			],
+			Vector2(24.0, heading_y),
+			Vector2(900.0, 20.0),
+			13,
+			Color8(209, 198, 162)
+		)
+
+		for column in range(TARGET_FACINGS.size()):
+			var facing := float(TARGET_FACINGS[column])
+			var center_x := float(COLUMN_CENTERS[column])
+			var native_player := _create_player_view(row, facing, center_x - 68.0, baseline, 1.0)
+			if native_player == null:
+				return
+			_log_player_state(row, facing, native_player, 1.0)
+			var magnified_player := _create_player_view(row, facing, center_x + 68.0, baseline, MAGNIFIED_SCALE)
+			if magnified_player == null:
+				return
+
+
+func _create_player_view(row: Dictionary, requested_angle: float, x_position: float, sole_y: float, display_scale: float) -> CharacterBody2D:
+	var instance := PLAYER_SCENE.instantiate()
+	if not instance is CharacterBody2D:
+		push_error("The native Player scene root is not a CharacterBody2D.")
+		get_tree().quit(4)
+		return null
+	var player := instance as CharacterBody2D
+	var direction := Vector2.RIGHT.rotated(deg_to_rad(requested_angle))
+	var is_walking := bool(row["walk"])
+
+	# Select the existing blade/rifle quick slot in GameState RAM only.
+	GameState.active_quick_slot = int(row["quick_slot"])
+	player.process_mode = Node.PROCESS_MODE_DISABLED
+	player.position = Vector2(x_position, sole_y + 8.0 * display_scale)
+	player.scale = Vector2.ONE * display_scale
+	player.set("last_direction", direction)
+	player.set("state", int(row["state"]))
+	player.set("velocity", direction * WALK_SPEED if is_walking else Vector2.ZERO)
+	player.set("walk_phase", 0.0)
+	player.set("anim_clock", 0.0)
+	player.set("action_state_timer", 0.0)
+	player.set("dodge_timer", 0.0)
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera != null:
+		camera.enabled = false
+
+	add_child(player)
+	# Recompute only the Player's ordinary presentation from the staged RAM pose.
+	player.call("_update_weapon_overlay")
+	player.call("_update_animation")
+	return player
+
+
+func _log_player_state(row: Dictionary, requested_angle: float, player: CharacterBody2D, display_scale: float) -> void:
+	var family_id := String(player.get_meta("presentation_v2_family", player.get("current_loadout_id")))
+	var action_name := String(player.call("_presentation_action_name"))
+	var selected_angle := -1.0
+	var selected_index := int(player.call("_presentation_facing_index"))
+	var angle_values: Variant = player.call("_presentation_angles_for_action", family_id, action_name)
+	if angle_values is Array and selected_index >= 0 and selected_index < angle_values.size():
+		selected_angle = float(angle_values[selected_index])
+	var sprite := player.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	var animation_name := String(sprite.animation) if sprite != null else ""
+	var registration_source := _registration_source(player, family_id, action_name, selected_angle)
+
+	print(
+		"ART_FACING_ACTUAL_PLAYER_STATE: row=", row["id"],
+		" requested_angle=", requested_angle,
+		" resolved_angle=", selected_angle,
+		" family=", family_id,
+		" action=", action_name,
+		" selected_facing_index=", selected_index,
+		" action_facing_count=", player.get_meta("presentation_v2_facings", 0),
+		" action_keys=", player.get_meta("presentation_v2_action_keys", 0),
+		" frame_slots=", player.get_meta("presentation_v2_frame_slots", 0),
+		" presentation_v2_active=", player.get_meta("presentation_v2_active", false),
+		" animation=", animation_name,
+		" display_scale=", display_scale,
+		" registration_source=", registration_source
+	)
+
+
+func _registration_source(player: CharacterBody2D, family_id: String, action_name: String, selected_angle: float) -> String:
+	var raw_families: Variant = player.get("_presentation_families")
+	if not raw_families is Dictionary:
+		return "Player presentation family unavailable"
+	var families: Dictionary = raw_families
+	var raw_family: Variant = families.get(family_id, {})
+	if not raw_family is Dictionary:
+		return "Player family %s unavailable" % family_id
+	var family: Dictionary = raw_family
+
+	var raw_extras: Variant = family.get("additional_action_facings", {})
+	if raw_extras is Dictionary:
+		var action_extras: Variant = raw_extras.get(action_name, [])
+		if action_extras is Array:
+			for raw_extra in action_extras:
+				if not raw_extra is Dictionary:
+					continue
+				var extra: Dictionary = raw_extra
+				if not bool(extra.get("enabled", false)) or not is_equal_approx(float(extra.get("angle", -999.0)), selected_angle):
+					continue
+				var raw_frames: Variant = extra.get("frames", [])
+				if raw_frames is Array and not raw_frames.is_empty() and raw_frames[0] is Dictionary:
+					return String(raw_frames[0].get("path", "additional action facing")) + " (registered action facing)"
+
+	var raw_actions: Variant = family.get("actions", {})
+	var raw_keys: Variant = family.get("keys", {})
+	if not raw_actions is Dictionary or not raw_keys is Dictionary:
+		return "Player family %s manifest keys unavailable" % family_id
+	var action_sequences: Dictionary = raw_actions
+	var keys: Dictionary = raw_keys
+	var sequence: Variant = action_sequences.get(action_name, [])
+	if not sequence is Array or sequence.is_empty():
+		return "Player family %s action %s has no manifest sequence" % [family_id, action_name]
+	var key_index := int(player.call("_presentation_key_index"))
+	var key_name := String(sequence[clampi(key_index, 0, sequence.size() - 1)])
+	var key_entry: Variant = keys.get(key_name, {})
+	if key_entry is Dictionary:
+		return String(key_entry.get("path", "manifest key %s" % key_name))
+	return "manifest key %s" % key_name
+
+
+func _add_backgrounds() -> void:
+	for index in range(COLUMN_CENTERS.size()):
+		var panel := ColorRect.new()
+		panel.position = Vector2(float(COLUMN_CENTERS[index]) - 150.0, 72.0)
+		panel.size = Vector2(300.0, 615.0)
+		panel.color = Color8(29, 35, 42, 255) if index % 2 == 0 else Color8(32, 38, 45, 255)
+		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		panel.z_index = -10
+		add_child(panel)
+
+
+func _print_layout() -> void:
+	print(
+		"ART_FACING_ACTUAL_PLAYER_LAYOUT: viewport=", get_viewport().get_visible_rect().size,
+		" columns=4 centers=", COLUMN_CENTERS,
+		" requested_angles=", TARGET_FACINGS,
+		" rows=blade_idle@sole270,blade_walk_phase0@sole450,rifle_idle@sole640",
+		" pair_scales=1.0x,1.5x body_heights=96px,144px",
+		" actor_process_mode=DISABLED tree_paused=", get_tree().paused,
+		" save_api_calls=none gameplay_input=none"
+	)
+
+
+func _read_user_argument(prefix: String) -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(prefix):
+			return argument.trim_prefix(prefix)
+	return ""
+
+
+func _facing_label(angle: float) -> String:
+	if is_equal_approx(angle, 0.0):
+		return "E0°"
+	if is_equal_approx(angle, 11.25):
+		return "E11.25°"
+	if is_equal_approx(angle, 22.5):
+		return "E22.5°"
+	return "SE45°"
+
+
+func _add_label(text_value: String, position: Vector2, size: Vector2, font_size: int, color: Color, centered := false) -> void:
+	var label := Label.new()
+	label.text = text_value
+	label.position = position
+	label.size = size
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.z_index = 10
+	if centered:
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	add_child(label)

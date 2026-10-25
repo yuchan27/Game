@@ -2,12 +2,33 @@
   "quests": [
     {
       "id": "clear_scrap_route",
-      "name": "清理廢鐵公路",
+      "name": "南門旁路修復",
       "mode": "清剿",
+      "main_campaign": true,
+      "chapter": 1,
       "recommended_level": 1,
-      "story_step": "R-17 重新啟動後，第一條補給線必須恢復通行。",
-      "description": "南門外的廢鐵公路被污染體占住。清出道路、回收廢鐵，讓村莊能再次運送材料。",
+      "story_step": "村井停擺後，村民改按配水表輪供；沒有倒數，供水須等檢測與正式維修。艾倫認出 R-17，先護送回收隊接通南門臨時試運線，再帶回正式接頭。",
+      "description": "第一趟接通臨時試運線，只帶回讀數與封存水樣；第二趟取回正式替換接頭。完成兩趟並交付後，老陳才安裝接頭，艾達驗水後先開有限細流。擊退污染體 5 名與收集廢鐵 12 份是整章合計，可跨兩趟累積；每趟安全返村後才保留當趟成果。若找到巴士名冊，可補足 R-17 護送艾倫與柳青的路線，並把調查帶往毒沼泵站，追查外線水流去向。",
+      "completion_text": "南門旁路已接通。艾達測到一小股安全水流，足以暫時緩解村井壓力；這是有限應急水，還不能證明整條舊水路安全或穩定。",
+      "campaign_completion_text": "老陳接上你帶回的接頭，空桶底終於響起水聲。艾達驗過第一股水，在配水表上添了一小格；外線仍不能全面開放。\n\n艾倫：「今晚，我能替媽裝滿她那一杯了。謝謝你回來。」\n米婭：「回收隊和接頭都到了。這股水只確認了旁路；外線去向與斷水戶號還要逐段對照。」",
+      "completion_discovery_text": "南門旁路已接通；艾達測得一小股安全水流，暫時緩解村井壓力，完整水路仍待查證。名冊補足艾倫已說過的撤離紀錄：R-17 護送艾倫與柳青通過南門。名冊邊的紅布纖維與艾倫帶來的舊圍巾相符；配水編號指向西門毒沼泵站。",
+      "legacy_completion_text": "南門公路已清通。鍛造老陳用你帶回的廢料接起臨時旁路；艾達測到一小股安全水流，可暫時緩解村井壓力。這是有限應急水，完整水路仍待查證。",
+      "preparation_hint": "回收的廢鐵可在 [C]「武器強化」提升常用武器；帶足彈藥再出發。旁路只送出小股水，外圍水線為何被關閉仍待查清。",
       "route": "scrap_highway",
+      "field_objective": {
+        "id": "highway_bypass_repair",
+        "name": "南門旁路繼電器",
+        "route": "scrap_highway",
+        "position": [
+          0.475,
+          0.64
+        ],
+        "visual_prop": "rescue_relay",
+        "action_name": "接通旁路繼電器",
+        "purpose": "接通南門臨時供水線，讓艾達能檢測送回村裡的小股水。",
+        "pending_dialogue": "南門旁路繼電器沒有供電。接回手動迴路，艾達才能檢測送回村裡的第一股水。",
+        "completed_dialogue": "旁路繼電器已接通。這股水會先由艾達檢測；它只能提供有限應急供水，完整水路仍未確認。"
+      },
       "objectives": [
         {
           "type": "defeat",
@@ -18,6 +39,13 @@
           "type": "collect",
           "item": "scrap",
           "amount": 12
+        },
+        {
+          "type": "discover",
+          "route": "scrap_highway",
+          "event": "story_scrap_manifest",
+          "amount": 1,
+          "optional": true
         }
       ],
       "reward": {
@@ -26,15 +54,226 @@
         "scrap": 20,
         "alloy_plate": 3,
         "broken_coil": 2
-      }
+      },
+      "campaign_outings": [
+        {
+          "id": "ch1a_escort_repair",
+          "name": "南門護送與旁路試運",
+          "briefing": "村井停擺後，村民依配水表輪供，沒有缺水倒數。艾倫已在村裡認出 R-17；先護送回收隊走南門中段到繼電器，接通臨時試運線並帶回讀數與限量水樣。",
+          "return_text": "回收隊已隨本趟返村。這次試運只驗證手動迴路接通，讀數與限量水樣已封存待驗；它不能長期供水，也還不能判定水質或整條外線安全。正式替換接頭仍留在外線，下一趟由 R-17 帶回交老陳安裝。檢查完成前，村井仍照配水表輪供。",
+          "actions": [
+            {
+              "id": "ch1a_escort_crew",
+              "name": "護送回收隊到旁路",
+              "type": "escort",
+              "position": [
+                0.5,
+                0.9
+              ],
+              "waypoints": [
+                [
+                  0.5,
+                  0.82
+                ],
+                [
+                  0.5,
+                  0.76
+                ],
+                [
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.475,
+                  0.64
+                ]
+              ],
+                "interaction_verb": "護送",
+                "instruction": "艾倫已在村裡認出你；靠近回收隊按 E 起行，沿南門標記前進。",
+                "active_instruction": "保持在隊伍附近前進；隊員若受威脅停下，先清除周圍敵人。",
+                "result_text": "回收隊已抵達旁路繼電器，現在能支援現場檢修；村端水流仍待檢測。"
+            },
+            {
+              "id": "ch1a_repair_bypass",
+              "name": "接通南門旁路繼電器",
+              "type": "channel",
+              "position": [
+                0.475,
+                0.64
+              ],
+              "prop": "rescue_relay",
+              "requires": [
+                "ch1a_escort_crew"
+              ],
+              "duration": 4,
+              "field_objective": "highway_bypass_repair",
+                "interaction_verb": "接線",
+                "instruction": "靠近繼電器按住 E 接回手動迴路，完成南門旁路接通。",
+                "active_instruction": "持續按住 E，留在繼電器旁直到接線完成。",
+                "result_text": "手動迴路已接通，可供村端檢測第一股水；外圍支線仍待逐段查驗。"
+            }
+          ]
+        },
+        {
+          "id": "ch1b_route_coupling",
+          "name": "帶回旁路接頭",
+          "briefing": "回收隊已隨上一趟返村待命，替換接頭仍留在外線。選定路線後，由 R-17 獨自把接頭沿北行主路搬到遠端回村門前；暴露直路較短但較易遇襲，掩蔽繞道較長、遭遇較少。抵達門前路點後仍須走到回村門按 E 才算返村。",
+          "return_text": "R-17 已由遠端回村門撤離並帶回替換接頭；回收隊仍在村裡待命。這只補上南門旁路的維修條件，井水仍按表輪供，外圍水線與失聯住戶的去向都還沒有答案。",
+          "actions": [
+            {
+              "id": "ch1b_return_route",
+              "name": "選擇帶回路線",
+              "type": "choice",
+              "position": [
+                0.5,
+                0.76
+              ],
+              "options": [
+                {
+                  "id": "ch1b_exposed_short",
+                  "name": "走暴露的中央公路",
+                  "description": "路程較短，但容易遭遇伏擊；回收隊已在上一趟返村待命，R-17 獨自搬運接頭。選路時把兩份變異藥草記入本趟攜回清單，安全返村後入庫。",
+                  "waypoints": [
+                    [
+                      0.475,
+                      0.64
+                    ],
+                    [
+                      0.5,
+                      0.6
+                    ],
+                    [
+                      0.496,
+                      0.52
+                    ],
+                    [
+                      0.504,
+                      0.44
+                    ],
+                    [
+                      0.5,
+                      0.36
+                    ],
+                    [
+                      0.5,
+                      0.3
+                    ],
+                    [
+                      0.5,
+                      0.14
+                    ]
+                  ],
+                  "waves": 3,
+                  "reward": {
+                    "mutant_herb": 2
+                  }
+                },
+                {
+                  "id": "ch1b_covered_long",
+                  "name": "走較長的掩蔽繞道",
+                  "description": "多繞一段支路，遮蔽較多、遭遇較少；回收隊已在上一趟返村待命，R-17 獨自搬運接頭，沒有額外變異藥草補給。",
+                  "waypoints": [
+                    [
+                      0.475,
+                      0.64
+                    ],
+                    [
+                      0.5,
+                      0.68
+                    ],
+                    [
+                      0.68,
+                      0.8
+                    ],
+                    [
+                      0.68,
+                      0.89
+                    ],
+                    [
+                      0.5,
+                      0.89
+                    ],
+                    [
+                      0.5,
+                      0.82
+                    ],
+                    [
+                      0.5,
+                      0.74
+                    ],
+                    [
+                      0.5,
+                      0.68
+                    ],
+                    [
+                      0.5,
+                      0.6
+                    ],
+                    [
+                      0.496,
+                      0.52
+                    ],
+                    [
+                      0.504,
+                      0.44
+                    ],
+                    [
+                      0.5,
+                      0.36
+                    ],
+                    [
+                      0.5,
+                      0.3
+                    ],
+                    [
+                      0.5,
+                      0.14
+                    ]
+                  ],
+                  "waves": 1
+                }
+              ],
+                "interaction_verb": "選路",
+                "instruction": "比較直路與掩蔽路的距離、伏擊和補給差異，選定返村路線。",
+                "active_instruction": "依眼前風險選定回程；此選擇只安排路線與途中遭遇。",
+                "result_text": "回收隊已在上一趟返村待命；R-17 將沿所選路線獨自搬運接頭，途中風險仍需現場應對。"
+            },
+            {
+              "id": "ch1b_carry_coupling",
+              "name": "搬運接頭返村",
+              "type": "carry",
+              "position": [
+                0.475,
+                0.64
+              ],
+              "prop": "rescue_relay",
+              "requires": [
+                "ch1b_return_route"
+              ],
+              "route_choice": "ch1b_return_route",
+                "interaction_verb": "搬運",
+                "instruction": "回收隊已先返村待命；R-17 靠近接頭按 E 搬起，沿所選路線走完 M 點到遠端回村門前，再靠近實際回村門按 E 才完成返村。",
+                "active_instruction": "沿路點前往遠端回村門前的接應點，再走到實際回村門按 E 撤離；遇到伏擊先清除阻路威脅。",
+                "result_text": "R-17 已把接頭運到遠端回村門前的接應點，尚未撤離；走到回村門靠近按 E 才完成本趟返村。接頭可供旁路檢修，整條外線安全仍未確認。",
+                "payload_item": "broken_coil"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "toxic_sample",
-      "name": "毒沼樣本回收",
+      "name": "毒沼分流調查",
       "mode": "採集",
+      "main_campaign": true,
+      "chapter": 2,
       "recommended_level": 2,
-      "story_step": "維修機器人需要毒沼資料，才能校準 R-17 的外殼抗蝕層。",
-      "description": "西門排水區滲出綠色污染液。採回污染晶核並擊退靠近的飛行體。",
+      "story_step": "毒沼泵站保留舊水線的閥位帳；帶回材料檢修，帳本可補查水流去向與外圍支線紀錄。",
+      "description": "村井配水仍受限；帶回晶核供檢修，先比對上游與回流水樣，再決定如何處理第一輪小流量回流。泵站帳本可補充水流去向與外圍支線紀錄，找不到也不影響委託交付。",
+      "completion_text": "排水區暫時安全，帶回的晶核足以補修設備。艾達仍要逐段檢測舊管線，不能只靠壓力讀數擴大供水。",
+      "campaign_completion_text": "艾達把兩處水樣並排放下。上游與回流水樣已留下基準，第一輪限量沖洗也取得可供比較的新樣本；這些讀值仍不能證明整條管線安全，村裡照舊表配水。\n\n艾倫：「現在的樣本只說明取樣時的水路狀況，還不能回答那晚發生了什麼。」\n米婭：「今天的讀值不證明歷史分流或整線安全；泵站帳本與裂隙回波可供交叉核對。」",
+      "completion_discovery_text": "閥位表證實有人手動把處理過的水留給地下避難所，並隔離外線；帳本沒有填上複測或解封日期。帶回的晶核可補修設備，完整管線仍待檢測。民用訊號轉送單指向北門裂隙。",
+      "preparation_hint": "在 [C] 合成護甲並補足彈藥；[I] 可分配升級點。未讀的泵站帳本仍能回來補查；主線下一步以 [J] 顯示為準。",
       "route": "toxic_marsh",
       "objectives": [
         {
@@ -46,6 +285,13 @@
           "type": "defeat",
           "counter": "defeat_enemy",
           "amount": 3
+        },
+        {
+          "type": "discover",
+          "route": "toxic_marsh",
+          "event": "story_marsh_ledger",
+          "amount": 1,
+          "optional": true
         }
       ],
       "reward": {
@@ -53,15 +299,123 @@
         "bio_crystal": 2,
         "mutant_herb": 4,
         "acid_sac": 2
-      }
+      },
+      "campaign_outings": [
+        {
+          "id": "ch2a_sample_taps",
+          "name": "泵站雙點取樣",
+          "briefing": "泵站旁路有兩處仍通水。分別取得上游與回流水樣，保留各自讀數再比較；不要把單點壓力讀數當成整條管線安全的證明。",
+          "return_text": "上游與回流水樣已取得並留下讀數，可供後續比對；目前資料只反映取樣時的讀值，不足以判定歷史分流或整線安全。",
+          "actions": [
+            {
+              "id": "ch2a_sample_upper",
+              "name": "封存上游水樣",
+              "type": "channel",
+              "position": [
+                0.46,
+                0.73
+              ],
+              "prop": "rescue_relay",
+              "duration": 4,
+                "interaction_verb": "取樣",
+                "instruction": "到上游取樣口按住 E 封存水樣與讀數，再前往另一處回流水口。",
+                "active_instruction": "持續按住 E，讓上游取樣讀數完成並留存。",
+                "result_text": "上游樣本與讀數已封存；需和回流水樣一起比對，不能據此判定整線安全。"
+            },
+            {
+              "id": "ch2a_sample_return",
+              "name": "校準回流水樣",
+              "type": "channel",
+              "position": [
+                0.45,
+                0.21
+              ],
+              "requires": [
+                "ch2a_sample_upper"
+              ],
+              "duration": 4,
+                "interaction_verb": "校準",
+                "instruction": "到回流水口按住 E 取得第二組讀數，與已封存的上游樣本對照。",
+                "active_instruction": "持續按住 E 完成回流段讀取，再核對兩處結果。",
+                "result_text": "回流水樣與讀數已留存，與上游樣本的差異可供後續檢測；兩點資料都不能代替泵站分流紀錄或證明整線安全。"
+            }
+          ]
+        },
+        {
+          "id": "ch2b_first_flush",
+          "name": "控制第一輪回流",
+          "briefing": "用旁路做一輪小流量沖洗。先選沉降緩存或快速排氣，再操作回流閥；這是取樣，不會直接改變村裡的配給水量。",
+          "return_text": "第一輪沖洗只取得有限水樣。艾達會繼續逐段檢查，村井仍按現有配水表輪供。",
+          "actions": [
+            {
+              "id": "ch2b_flush_plan",
+              "name": "決定如何處理第一輪回流",
+              "type": "choice",
+              "position": [
+                0.46,
+                0.51
+              ],
+              "options": [
+                {
+                  "id": "ch2b_settle_sample",
+                  "name": "沉降後封存小樣",
+                  "description": "採用沉降方案，閥門需按住 E 8 秒；選擇時把兩份變異藥草記入本趟攜回清單，安全返村後入庫。",
+                  "duration": 8,
+                  "reward": {
+                    "mutant_herb": 2
+                  }
+                },
+                {
+                  "id": "ch2b_purge_air",
+                  "name": "快速排氣清除氣塞",
+                  "description": "採用快速排氣方案，閥門需按住 E 3.5 秒；選擇時把四發彈藥記入本趟攜回清單，安全返村後入庫。",
+                  "duration": 3.5,
+                  "reward": {
+                    "ammo": 4
+                  }
+                }
+              ],
+                "interaction_verb": "選法",
+                "instruction": "選擇沉降取樣或快速排氣，依現場需要安排第一輪回流處理。",
+                "active_instruction": "比較兩種做法的樣本與補給差異，再確認一項沖洗方式。",
+                "result_text": "第一輪回流處理方案已記錄；實際取樣須待下一步開閥後進行，村井配給維持現況。"
+            },
+            {
+              "id": "ch2b_open_return_valve",
+              "name": "開啟受控回流閥",
+              "type": "channel",
+              "position": [
+                0.46,
+                0.54942255
+              ],
+              "prop": "rescue_relay",
+              "requires": [
+                "ch2b_flush_plan"
+              ],
+              "route_choice": "ch2b_flush_plan",
+              "duration": 8,
+                "interaction_verb": "開閥",
+                "instruction": "選好沖洗方案後靠近回流閥按住 E，開啟受控回流取樣。",
+                "active_instruction": "持續按住 E 開啟回流閥，完成短程沖洗並留存讀數。",
+                "result_text": "受控回流已短暫開啟並取得限量水樣；這不代表淨水，也不改變村井配給。"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "crystal_scar_recon",
-      "name": "紫晶裂隙偵查",
+      "name": "紫晶裂隙回波調查",
       "mode": "探索",
+      "main_campaign": true,
+      "chapter": 3,
       "recommended_level": 3,
-      "story_step": "紫晶裂隙正在擴大，公會需要一台能承受污染脈衝的機器人進入。",
-      "description": "北門裂隙出現遠程污染體。沿晶脈調查、收集污染晶核並帶回紀錄。",
+      "story_step": "艾倫早已在村裡認出 R-17。前往裂隙保存求救回波，核對守門時序；回波只補足當刻紀錄，記憶缺口仍待查證。",
+      "description": "現有水樣無法回答封門時序。校準裂隙共振並守住中繼器，保存求救回波以核對當刻門控；這段紀錄不補回 R-17 其他記憶，也不單獨說明封鎖命令。",
+      "completion_text": "裂隙周圍的污染體已退，晶核能暫時補強防護。R-17 仍記不起警報前後的完整經過；裂隙回波只保留當時的門控紀錄，不補回其他記憶，也不取代封鎖命令本身的紀錄。",
+      "campaign_completion_text": "你守住的中繼器帶回了完整回波。關門訊號抵達前，R-17 仍撐著門；艾倫與柳青從出口通過。錄音到這裡中斷，沒有替其餘空白補上答案。\n\n艾倫：「我一直記得你救了我們。現在別只替我找證明，門外的人也該有一份紀錄。」\n米婭：「回波只補上守門時序，沒有記下封鎖命令內容；公會會把各項證據分開保存。」",
+      "completion_discovery_text": "回波中，艾倫等著母親過門，R-17 在關門訊號到達後仍撐住出口。護甲與晶核可補強裝備；回波本身無法指出封鎖命令由誰下達，也不能補回 R-17 其餘記憶；接續調查請以 [J] 顯示為準。",
+      "preparation_hint": "新護甲需在背包 [I] 裝備才生效；整備彈藥後，依 [J] 顯示的下一步繼續。已完成的調查不必重走，回波只記錄守門當刻。",
       "route": "crystal_scar",
       "objectives": [
         {
@@ -73,6 +427,13 @@
           "type": "collect",
           "item": "bio_crystal",
           "amount": 3
+        },
+        {
+          "type": "discover",
+          "route": "crystal_scar",
+          "event": "story_crystal_echo",
+          "amount": 1,
+          "optional": true
         }
       ],
       "reward": {
@@ -80,15 +441,117 @@
         "hazard_armor": 1,
         "amethyst_gem": 3,
         "bio_crystal": 2
-      }
+      },
+      "campaign_outings": [
+        {
+          "id": "ch3a_resonator_sync",
+          "name": "裂隙共振校準",
+          "briefing": "在兩個共振端點校準訊號，重播當年門控回波。只要核對這段求救訊號，不必翻遍裂隙裡的其他殘響。",
+          "return_text": "回波顯示母親正在通過出口時，R-17 仍撐住門扇直到關門訊號抵達。這補上守門當刻的紀錄，但沒有恢復其餘記憶；回波本身不記錄封鎖命令與其他調查結果。",
+          "actions": [
+            {
+              "id": "ch3a_align_resonator",
+              "name": "校準南側共振端點",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.62
+              ],
+              "duration": 4,
+                "interaction_verb": "校準",
+                "instruction": "到南側共振端點按住 E 對準頻率，建立兩端可比對的訊號基準。",
+                "active_instruction": "持續按住 E 校準南側端點，直到訊號讀數穩定。",
+                "result_text": "南側端點已校準，兩端訊號可對時；門控求救回波尚未重播。"
+            },
+            {
+              "id": "ch3a_replay_gate_echo",
+              "name": "重播門控回波",
+              "type": "channel",
+              "position": [
+                0.77,
+                0.38
+              ],
+              "requires": [
+                "ch3a_align_resonator"
+              ],
+              "duration": 4,
+                "interaction_verb": "重播",
+                "instruction": "到門控端點按住 E 重播校準回波，核對出口關門前的求救時序。",
+                "active_instruction": "持續按住 E 讀取回波紀錄，等候門控時序完整播放。",
+                "result_text": "回波記下 R-17 撐住門扇直到關門訊號抵達，補上當刻紀錄，沒有恢復其餘記憶。"
+            }
+          ]
+        },
+        {
+          "id": "ch3b_relay_defense",
+          "name": "帶回充能中繼器",
+          "briefing": "把充能中的共振中繼器帶往南側入口接線點；裂隙回波可能引來追兵，守住設備以保存副本。防守結束後，仍須沿主路前往北側遠端回村門按 E 撤離。",
+          "return_text": "中繼器完整帶出裂隙，回波副本也保留下來。艾倫確認那只是守門訊號，不能替 R-17 補回整段記憶。",
+          "actions": [
+            {
+              "id": "ch3b_carry_relay",
+              "name": "搬運充能中繼器",
+              "type": "carry",
+              "position": [
+                0.5,
+                0.62
+              ],
+              "waypoints": [
+                [
+                  0.5,
+                  0.62
+                ],
+                [
+                  0.5,
+                  0.72
+                ],
+                [
+                  0.5,
+                  0.83
+                ]
+              ],
+                "interaction_verb": "搬運",
+                "instruction": "靠近充能中繼器按 E 搬起，沿路標前往南側入口接線點。",
+                "active_instruction": "沿南側入口方向通過各個 M 點；遇襲時先清除威脅再繼續搬運。",
+                "result_text": "充能中繼器已搬到南側入口接線點；接下來須守住輸出，才能保存上一趟已核對的回波副本。",
+                "payload_item": "precision_chip"
+            },
+            {
+              "id": "ch3b_defend_relay",
+              "name": "守住南側入口中繼器",
+              "type": "defend",
+              "position": [
+                0.5,
+                0.83
+              ],
+              "requires": [
+                "ch3b_carry_relay"
+              ],
+              "waves": 1,
+              "duration": 18,
+              "prop": "rescue_relay",
+                "interaction_verb": "守備",
+                "instruction": "抵達南側入口中繼器後留在裝置範圍，準備擊退裂隙追兵。",
+                "active_instruction": "留在中繼器範圍守住位置；附近有威脅時，防守計時會暫停。",
+                "result_text": "中繼器在南側入口接線點保持完整，回波副本得以保留。接下來沿主路前往北側遠端回村門，靠近按 E 才完成本趟撤離；回波不能補回 R-17 其餘記憶。"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "old_factory_core",
-      "name": "舊工廠核心討伐",
+      "name": "舊工廠核心與封鎖紀錄",
       "mode": "Boss 前哨",
+      "main_campaign": true,
+      "chapter": 4,
       "recommended_level": 4,
-      "story_step": "舊工廠仍在無人指令下運轉，污染核心把附近機械改造成敵人。",
-      "description": "東門工廠外圍有精英與 Boss 反應。擊敗污染核心，帶回重型拆解槌與工業外骨架。",
+      "story_step": "前往舊工廠查找污染警報與封鎖命令，核對供水分配、複測條件和覆核紀錄；確認守衛是否仍執行舊程序。",
+      "description": "前往舊工廠擊退守衛、回收核心供檢修，並核對污染警報後的供水分配、複測條件與覆核紀錄。若想追查命令脈絡，可另尋封鎖黑盒；未找到也不影響交付。帶回可核實的資料，讓公會追查受影響街區戶號。",
+      "completion_text": "工廠守衛已停下，回收的核心可以修理設備。供水分配的名冊仍不完整；公會已記下都心檔案座標，當前可接續的委託與前置狀態以 [J] 顯示為準。",
+      "campaign_completion_text": "洩壓通道已穩住，工廠守衛也停了。你帶回的命令要求污染複測後重開外線，卻沒指定期限與覆核人；守門設備至今仍在執行。\n\n米婭：「公會把這條線登成廢料路時，也沒問過還有人等水。這一筆由我補上。」\n艾倫：「門外的人不能只剩一個總數。我希望名冊能把他們的街區和戶號也記回來。」",
+      "completion_discovery_text": "黑盒記下操作員在污染警報下，先把處理過的水留給地下避難所、暫時封閉外線。命令雖說等複測再開，卻沒有指定期限與覆核責任，也沒有留下後續複測紀錄。守衛仍執行舊令。米婭已記下都心接收簿座標；接續主線以 [J] 顯示為準。",
+      "preparation_hint": "在 [I] 查看新武器與外骨架；都心檔案要求前四份外圍主線全部結案，當前接續步驟以 [J] 顯示為準。名冊要補回受隔離街區的住戶姓名，而不只是 R-17 的行動紀錄。",
       "route": "old_factory",
       "objectives": [
         {
@@ -105,6 +568,13 @@
           "type": "collect",
           "item": "mutant_core",
           "amount": 2
+        },
+        {
+          "type": "discover",
+          "route": "old_factory",
+          "event": "story_factory_blackbox",
+          "amount": 1,
+          "optional": true
         }
       ],
       "reward": {
@@ -113,16 +583,117 @@
         "industrial_exoshell": 1,
         "precision_chip": 3,
         "dynamo_core": 2
-      }
+      },
+      "campaign_outings": [
+        {
+          "id": "ch4a_isolate_alarm",
+          "name": "隔離舊警報",
+          "briefing": "先隔離仍在響的污染警報分支，保留原始設定，再讀出操作員的封鎖命令時間與覆核欄。警報記錄的是當時狀況，不能單獨證明今天的水質。",
+          "return_text": "黑盒顯示操作員在污染警報後，把處理水留給地下避難所並隔離外線；命令要求複測後重開，卻沒有期限或覆核者。守衛仍照這份舊程序執行，紀錄裡沒有後續複測。",
+          "actions": [
+            {
+              "id": "ch4a_isolate_warning",
+              "name": "隔離污染警報分支",
+              "type": "channel",
+              "position": [
+                0.52,
+                0.43
+              ],
+              "prop": "alarm_isolator",
+              "duration": 4,
+                "interaction_verb": "隔離",
+                "instruction": "靠近警報隔離器按住 E，切離仍在響的污染警報支線並保留設定。",
+                "active_instruction": "持續按住 E 隔離警報支線，原始設定仍留作讀取。",
+                "result_text": "污染警報支線已隔離並保留原設定；舊警報不能單獨證明今日水質。"
+            },
+            {
+              "id": "ch4a_read_order",
+              "name": "讀取操作員封鎖命令",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.2
+              ],
+              "requires": [
+                "ch4a_isolate_warning"
+              ],
+              "duration": 4,
+                "interaction_verb": "查閱",
+                "instruction": "到操作台按住 E 讀出封鎖命令時間、複測條件與覆核欄。",
+                "active_instruction": "持續按住 E 讀取命令紀錄，核對期限與責任欄位。",
+                "result_text": "命令記錄顯示處理水留給避難所、外線遭隔離，要求複測後重開，卻沒有期限或覆核者。"
+            }
+          ]
+        },
+        {
+          "id": "ch4b_vent_defense",
+          "name": "開啟並守住洩壓通道",
+          "briefing": "手動開啟舊工廠的洩壓通道，讓旁路不再受警報支線反向加壓；接著守住通道，直到水壓回到可控範圍。",
+          "return_text": "洩壓通道恢復可控運作，舊封鎖命令與其缺少覆核的紀錄都已保留。接續委託與尚缺目標以 [J] 顯示為準。",
+          "actions": [
+            {
+              "id": "ch4b_open_vent",
+              "name": "打開洩壓通道",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.72
+              ],
+              "prop": "alarm_isolator",
+              "duration": 5,
+                "interaction_verb": "洩壓",
+                "instruction": "靠近洩壓閥按住 E 打開舊工廠通道，解除警報支線反向加壓。",
+                "active_instruction": "持續按住 E 開啟洩壓通道，等待裝置切換完成。",
+                "result_text": "洩壓通道已開，旁路不再受舊警報支線反向加壓；水質仍須另外檢驗。"
+            },
+            {
+              "id": "ch4b_hold_vent",
+              "name": "守住洩壓通道",
+              "type": "defend",
+              "position": [
+                0.52,
+                0.66
+              ],
+              "requires": [
+                "ch4b_open_vent"
+              ],
+              "waves": 2,
+              "duration": 24,
+              "prop": "alarm_isolator",
+                "interaction_verb": "守備",
+                "instruction": "留在洩壓通道附近防守，攔住來襲威脅直到水壓回到可控範圍。",
+                "active_instruction": "留在通道範圍維持防線；附近有威脅時防守計時暫停。",
+                "result_text": "洩壓通道恢復可控運作，封鎖命令與未複核紀錄得以保留；水質安全仍待檢驗。"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "drainage_rescue",
       "name": "排水站救援訊號",
       "mode": "事件救援",
       "recommended_level": 3,
-      "story_step": "斥候在毒沼留下斷續訊號，內容只剩下座標與求救代碼。",
-      "description": "進入西門毒沼，清出訊號站周邊敵人並回收足夠資源修復中繼器。",
+      "story_step": "斥候已撤回村裡，毒沼中繼站卻仍反覆發送舊求救代碼；替回收隊清出安全的維修區。",
+      "description": "進入西門毒沼，擊退訊號站周邊敵人、回收維修物資，再親手修復求救中繼器。",
+      "completion_text": "救援中繼器已恢復清晰定位，回收隊能安全處理訊號來源。米婭把磁吸拆解器交給你，讓往後的回收更有效率。",
+      "legacy_completion_text": "維修物資已交給回村的斥候，小隊能去處理仍在循環的求救訊號。米婭把磁吸拆解器交給你，讓往後的回收更有效率。",
+      "preparation_hint": "在背包 [I] 裝備磁吸拆解器；這是支線報酬，不影響六章主線的解鎖。",
       "route": "toxic_marsh",
+      "field_objective": {
+        "id": "marsh_relay_repair",
+        "name": "救援中繼器",
+        "route": "toxic_marsh",
+        "position": [
+          0.415,
+          0.675
+        ],
+        "visual_prop": "rescue_relay",
+        "action_name": "修復中繼器",
+        "purpose": "讓回收隊收到清晰定位，安全處理反覆發出的求救訊號。",
+        "pending_dialogue": "中繼器外殼已經腐蝕，求救代碼還在循環。修好手動迴路，回收隊才收得到清晰定位。",
+        "completed_dialogue": "手動迴路接通，清晰定位已送出；回收隊可以撤出中繼站。這只是救援通訊，村莊水路仍需其他修復。"
+      },
       "objectives": [
         {
           "type": "defeat",
@@ -148,9 +719,26 @@
       "name": "工廠外圍破壞任務",
       "mode": "破壞",
       "recommended_level": 5,
-      "story_step": "如果不關閉舊工廠的外圍節點，村莊周邊會持續生成機械污染體。",
-      "description": "前往東門舊工廠，擊敗機械敵人並帶回異變核心，讓改裝站能研究反制裝置。",
+      "story_step": "舊工廠的外圍機械仍在活動；公會需要核心樣本，替巡邏隊研究反制方案。",
+      "description": "前往東門舊工廠，擊退機械敵人、帶回異變核心，並破壞外圍警戒節點，讓改裝站研究反制裝置。",
+      "completion_text": "外圍警戒節點已被破壞，巡邏頻道停止回報；核心樣本已交給改裝站研究反制裝置。公會以核心裝甲回報你的支援。",
+      "legacy_completion_text": "核心樣本已交給改裝站。巡邏隊有了能研究的完整材料；公會以核心裝甲回報你的支援。",
+      "preparation_hint": "在背包 [I] 查看核心裝甲，並比較防禦與生命加成；往後仍可巡查工廠、回收裝備材料。",
       "route": "old_factory",
+      "field_objective": {
+        "id": "factory_watch_node_destroyed",
+        "name": "外圍警戒隔離閘",
+        "route": "old_factory",
+        "position": [
+          0.65,
+          0.37
+        ],
+        "visual_prop": "alarm_isolator",
+        "action_name": "切斷警戒電源",
+        "purpose": "中斷工廠外圍機械的巡邏回報，讓改裝站能研究反制方案。",
+        "pending_dialogue": "警戒節點還在把外圍動靜傳給守衛。破壞它，巡邏回報才會中斷。",
+        "completed_dialogue": "警戒節點已斷電，此處的巡邏回報已切斷，外圍增援效率降低。核心區守衛仍然運作，工廠主核心也尚未停機。"
+      },
       "objectives": [
         {
           "type": "defeat",
@@ -170,6 +758,304 @@
         "dynamo_core": 2,
         "ammo": 20
       }
+    },
+    {
+      "id": "metropolis_archive",
+      "name": "都心檔案：被隔離街區的名字",
+      "mode": "主線調查",
+      "main_campaign": true,
+      "chapter": 5,
+      "recommended_level": 5,
+      "story_step": "完成四份外圍委託後，公會從舊座標找到都心檔案庫。找回受隔離街區的名冊，也核對艾倫和柳青確實抵達避難所。",
+      "description": "工廠命令要求複測，卻沒有後續紀錄，斷水住戶仍只是總數。找回都心配水圖與撤離名冊，逐戶補回街區和戶號；艾倫可決定自己的姓名是否公開。現有檔案沒有柳青本人同意公開姓名的紀錄，她的姓名保留在受限副本。水線仍待設施實測。",
+      "completion_text": "名冊確認柳青與兒子艾倫抵達地下避難所，也列出外圍供水被切斷的住戶。艾倫核對了撤離時間與路線，並要求公會把受影響街區與戶號一併記入村史。完整供水仍待地下設施修復與檢測。",
+      "campaign_completion_text": "米婭把兩份名冊攤在同一張桌上。配水線已對上受影響街區與缺水戶號。艾倫只決定自己的姓名是否公開；現有檔案沒有柳青本人同意公開姓名的紀錄，她的姓名留在受限公會副本。公開副本仍保留街區、配水線與戶號，不列其他住戶姓名。\n\n艾倫：「把我得救的紀錄，跟外面斷水的紀錄放在一起。往後有人問，公會會把事情和可公開的戶號交代清楚。」\n艾達：「下一步帶新水樣到地下設施。用現在的讀值複核舊封鎖，再做受控供水測試。」",
+      "preparation_hint": "名冊已交由米婭整理，艾倫也核對了撤離時間與路線；整備護甲與彈藥後，按 [J] 查看下一步並承接地下設施終章。",
+      "route": "ruined_metropolis",
+      "prerequisites": [
+        "clear_scrap_route",
+        "toxic_sample",
+        "crystal_scar_recon",
+        "old_factory_core"
+      ],
+      "objectives": [
+        {
+          "type": "discover",
+          "route": "ruined_metropolis",
+          "event": "story_metropolis_archive",
+          "amount": 1,
+          "optional": false
+        },
+        {
+          "type": "defeat",
+          "counter": "defeat_enemy",
+          "amount": 5
+        },
+        {
+          "type": "collect",
+          "item": "precision_chip",
+          "amount": 2
+        }
+      ],
+      "reward": {
+        "ammo": 20,
+        "precision_chip": 2,
+        "alloy_plate": 3,
+        "scrap": 30
+      },
+      "campaign_outings": [
+        {
+          "id": "ch5a_district_map",
+          "name": "逐戶補畫配水圖",
+          "briefing": "接通都心避難所的配水底圖，逐戶標出仍未收到水的街區，讓公會知道哪些人被隔離，而不只留下受影響總數。",
+          "return_text": "地圖把受影響街區、各戶編號與舊供水支線逐一對上；這份清單能用來查回應得水卻沒有收到的住戶。",
+          "actions": [
+            {
+              "id": "ch5a_power_archive_map",
+              "name": "接通街區配水底圖",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.5
+              ],
+              "prop": "evacuation_archive",
+              "duration": 4,
+                "interaction_verb": "接圖",
+                "instruction": "靠近避難所底圖按住 E 啟動畫面，載入受影響街區與配水支線。",
+                "active_instruction": "持續按住 E 接通地圖，等待街區、戶號與支線資料載入。",
+                "result_text": "受影響街區與舊供水支線底圖已載入；缺水戶號尚待下一步逐戶標出。"
+            },
+            {
+              "id": "ch5a_mark_household_rows",
+              "name": "標出各戶缺水欄",
+              "type": "channel",
+              "position": [
+                0.63,
+                0.6
+              ],
+              "requires": [
+                "ch5a_power_archive_map"
+              ],
+              "duration": 4,
+                "interaction_verb": "標記",
+                "instruction": "到名冊終端按住 E，逐戶標出未收到配給水的欄位。",
+                "active_instruction": "持續按住 E 完成住戶缺水欄標記，保留戶號與街區對應。",
+                "result_text": "缺水戶號已逐筆標出，供水中斷落到具體住戶，不再只是街區總數。"
+            }
+          ]
+        },
+        {
+          "id": "ch5b_household_record",
+          "name": "封存兩份名冊",
+          "briefing": "先複製兩份相同的受影響街區與配水名冊。艾倫同意把自己的姓名對回當年的戶號，並由他決定是否公開自己的姓名；現有檔案沒有柳青本人同意公開姓名的紀錄，她的姓名留在受限公會副本。公開副本列街區、配水線與戶號，不列其他住戶姓名。",
+          "return_text": "兩份副本都保留受影響街區與配水欄。艾倫的姓名依本人選擇處理；沒有柳青本人同意公開姓名的紀錄，她的姓名留在受限公會副本。公開副本仍列街區、配水線與各戶戶號，不列其他住戶姓名。",
+          "actions": [
+            {
+              "id": "ch5b_copy_archive",
+              "name": "封存配水名冊副本",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.5
+              ],
+              "prop": "evacuation_archive",
+              "duration": 4,
+                "interaction_verb": "複製",
+                "instruction": "靠近名冊終端按住 E，封存兩份街區與配水欄相同的副本。",
+                "active_instruction": "持續按住 E 完成雙份封存，核對街區與配水欄一致。",
+                "result_text": "兩份街區與配水名冊副本已封存，可供交叉核對；姓名仍待依同意處理。"
+            },
+            {
+              "id": "ch5b_record_family",
+              "name": "決定艾倫姓名的公開範圍",
+              "type": "choice",
+              "position": [
+                0.5,
+                0.53710938
+              ],
+              "requires": [
+                "ch5b_copy_archive"
+              ],
+              "options": [
+                {
+                  "id": "ch5b_publish_consent",
+                  "name": "依艾倫本人同意公開姓名",
+                  "description": "公開副本列出艾倫的全名與當年戶號；柳青及其他住戶姓名留在受限公會副本。公開本仍列全區受影響街區、配水線與各戶戶號。"
+                },
+                {
+                  "id": "ch5b_seal_family_names",
+                  "name": "封存艾倫姓名，公開戶號",
+                  "description": "艾倫、柳青及其他住戶姓名留在受限公會副本；公開副本仍列全區受影響街區、配水線與各戶戶號。"
+                }
+              ],
+                "interaction_verb": "選名",
+                "instruction": "依艾倫本人同意，選擇是否公開他的姓名；柳青及其他住戶姓名留在受限副本。街區、配水線與戶號仍須公開。",
+                "active_instruction": "核對艾倫姓名的公開範圍；兩種方案都保留受影響街區、配水線與戶號，且不公開其他住戶姓名。",
+                "result_text": "艾倫的姓名已依本人選擇處理；柳青及其他住戶姓名留在受限副本。公開副本仍保留受影響街區、配水線與戶號。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "facility_memory",
+      "name": "地下設施：有限供水與最後紀錄",
+      "mode": "主線終章",
+      "main_campaign": true,
+      "chapter": 6,
+      "recommended_level": 6,
+      "story_step": "帶回完整名冊後，前往地下設施讀取最後紀錄、擊敗失控守衛並帶回動力核心，讓艾達修復和檢測供水中樞。",
+      "description": "帶著名冊與新水樣複核舊警報，標記缺少覆核的封鎖，再擊敗守衛、帶回動力核心供修復。完成受控測試並交付原委託後，村裡才有有限穩定供水，仍須輪供；公開紀錄也會並列避難所獲水與外圍家庭失水的代價。",
+      "completion_text": "淨水中樞修復後，艾達測得有限而穩定的供水；村民仍須按配水表輪供。公會保留撤離與外圍斷水街區的紀錄，R-17 記下自己守住的那道門，也記下門外住戶承受的代價。這份紀錄不替任何人抹去責任。",
+      "campaign_completion_text": "核心裝回中樞後，艾達核對了旁路測試與村端讀值。井邊終於能按表穩定接水，總量仍有限。公會把撤離紀錄與斷水街區並列，姓名沿用都心留下的公開範圍。\n\n艾倫把磨白的童年圍巾收好：「我會記得你撐住門，也會去找門外那些戶號的下落。下次出門，我們把路一起記清楚。」\nR-17 在手記寫下：「那晚的空白還在。今天的供水由我們複核，今天的回報由我帶回。」\n\n主線完結。你仍可回收、整備與完成未結的支線；缺失的記憶沒有因此全部恢復。",
+      "preparation_hint": "回村與艾達核對淨水檢測結果，並與艾倫整理受影響街區的名冊。供水已穩定但仍有限；支路與支線可繼續探索。",
+      "route": "underground_facility",
+      "prerequisites": [
+        "metropolis_archive"
+      ],
+      "objectives": [
+        {
+          "type": "discover",
+          "route": "underground_facility",
+          "event": "story_facility_memory",
+          "amount": 1,
+          "optional": false
+        },
+        {
+          "type": "defeat",
+          "counter": "defeat_boss",
+          "amount": 1
+        },
+        {
+          "type": "collect",
+          "item": "dynamo_core",
+          "amount": 1
+        }
+      ],
+      "reward": {
+        "ammo": 24,
+        "dynamo_core": 2,
+        "mutant_core": 2,
+        "scrap": 40
+      },
+      "campaign_outings": [
+        {
+          "id": "ch6a_sensor_review",
+          "name": "複測警報與隔離旗標",
+          "briefing": "將保存艙的污染警報門檻與現場新水樣比對，再標記那面缺少複測日期與覆核者的舊封鎖旗標。設備沿用操作員留下的命令，不會自行判斷外線是否安全。",
+          "return_text": "警報門檻與現場水樣的比對結果、缺少複測日期與覆核者的舊旗標已帶回；下一趟須啟動受控旁路完成水質與水壓測試。村內配給維持現況。",
+          "actions": [
+            {
+              "id": "ch6a_compare_sensor",
+              "name": "比對警報門檻與新水樣",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.46
+              ],
+              "prop": "memory_vault",
+              "duration": 5,
+                "interaction_verb": "比對",
+                "instruction": "靠近保存艙按住 E，將現場新水樣與污染警報門檻逐項比較。",
+                "active_instruction": "持續按住 E 讀取兩組資料，留存警報門檻與水樣比對結果。",
+                "result_text": "現場新水樣與保存艙門檻已逐項比對並留存；這不會自行解除舊封鎖。"
+            },
+            {
+              "id": "ch6a_mark_stale_lock",
+              "name": "標記待複核的隔離旗標",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.66
+              ],
+              "requires": [
+                "ch6a_compare_sensor"
+              ],
+              "duration": 4,
+                "interaction_verb": "標記",
+                "instruction": "到舊隔離旗標按住 E，標明缺少複測日期與覆核者，保留待核狀態。",
+                "active_instruction": "持續按住 E 標記逾期旗標，保留原命令並註明待人工覆核。",
+                "result_text": "舊封鎖旗標缺少複測日期與覆核者，已標為待複核；現場實測另行記錄。"
+            }
+          ]
+        },
+        {
+          "id": "ch6b_supply_test",
+          "name": "有限供水實測",
+          "briefing": "啟動旁路完成水質與水壓測試，守住系統直到艾達取樣；再決定保存艙備品優先支援診療所或村蓄水槽。兩種安排都維持有限配給。",
+          "return_text": "受控旁路測試資料已帶回；待原任務的記錄、守衛與動力核心目標齊備並完成公會交付後，艾達才能確認有限且穩定的供水；村內配給維持現況。",
+          "actions": [
+            {
+              "id": "ch6b_test_bypass",
+              "name": "啟動受控供水旁路",
+              "type": "channel",
+              "position": [
+                0.5,
+                0.46
+              ],
+              "prop": "memory_vault",
+              "duration": 5,
+                "interaction_verb": "測試",
+                "instruction": "靠近供水旁路按住 E 啟動受控測試，讓艾達在現場取樣。",
+                "active_instruction": "持續按住 E 完成旁路啟動，維持水流供艾達檢測。",
+                "result_text": "受控旁路已啟動，開始水質與水壓實測；穩定供水仍待後續守備與交接。"
+            },
+            {
+              "id": "ch6b_hold_supply",
+              "name": "守住取樣期間的水壓",
+              "type": "defend",
+              "position": [
+                0.5,
+                0.66
+              ],
+              "requires": [
+                "ch6b_test_bypass"
+              ],
+              "waves": 2,
+              "duration": 30,
+              "prop": "rescue_relay",
+                "interaction_verb": "守壓",
+                "instruction": "守在繼電器範圍內，擊退來襲威脅並維持水壓直到艾達取樣。",
+                "active_instruction": "留在供水設備附近守住位置；有威脅時防守計時暫停，清除後再續。",
+                "result_text": "取樣期間的水壓保持可測，為受控旁路留下現場紀錄；村內配給尚未改變。"
+            },
+            {
+              "id": "ch6b_reserve_choice",
+              "name": "分配第一批保存艙備品",
+              "type": "choice",
+              "position": [
+                0.5,
+                0.66
+              ],
+              "requires": [
+                "ch6b_hold_supply"
+              ],
+              "options": [
+                {
+                  "id": "ch6b_clinic_first",
+                  "name": "優先安排診療所備援",
+                  "description": "記錄優先支援診療所；選擇時把兩份變異藥草記入本趟攜回清單，安全返村後入庫。各戶水量仍按表輪供。",
+                  "reward": {
+                    "mutant_herb": 2
+                  }
+                },
+                {
+                  "id": "ch6b_cistern_first",
+                  "name": "優先安排村蓄水槽整修",
+                  "description": "記錄優先安排村蓄水槽接口整修；選擇時把四份廢鐵記入本趟攜回清單，安全返村後入庫。總水量仍有限，各戶照表輪供。",
+                  "reward": {
+                    "scrap": 4
+                  }
+                }
+              ],
+                "interaction_verb": "分配",
+                "instruction": "比較診療所備藥與蓄水槽接口優先的差異，選擇首批保存艙備品去向。",
+                "active_instruction": "依目前需求選擇診療所或蓄水槽先獲支援；兩者都保留有限配給。",
+                "result_text": "首批保存艙備品已按所選方向記錄；這只決定支援順序，不會增加總水量。"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

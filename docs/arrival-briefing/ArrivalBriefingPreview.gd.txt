@@ -1,0 +1,86 @@
+extends Node
+
+# Staged title composition only. No travel, save/load, action completion or QA.
+const ENTRANCE := preload("res://scripts/ui/SceneEntrance.gd")
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the isolated presentation mirror and user directory.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--arrival-output="):
+			output = argument.trim_prefix("--arrival-output=")
+	if output.is_empty() or not output.is_absolute_path():
+		push_error("Pass an absolute --arrival-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	for view: String in ["highway-start", "highway-carry", "wrong-route", "facility-reserve", "village-continue"]:
+		get_tree().paused = true
+		SceneRouter.transition_active = true
+		GameState.reset_new_run(false)
+		_stage(view)
+		var scene_id := GameState.current_scene_id
+		var scene = load(SceneRouter.SCENES[scene_id]).instantiate()
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		var actor = get_tree().get_first_node_in_group("map_player")
+		if actor != null:
+			var camera = actor.get_node("Camera2D")
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+		var layer := CanvasLayer.new()
+		layer.layer = 100
+		add_child(layer)
+		var entrance := ENTRANCE.new()
+		layer.add_child(entrance)
+		var copy := SceneRouter.entrance_text(scene_id)
+		entrance.arrive(copy[0], copy[1])
+		entrance._animation.pause()
+		entrance.reveal = 1.0
+		for frame in range(6):
+			await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var error := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+		print("ARRIVAL_PRESENTATION_COPY: ", view, " | ", copy[0], " | ", copy[1].replace("\n", " | "))
+		print("ARRIVAL_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", error)
+		layer.queue_free()
+		scene.queue_free()
+		await get_tree().process_frame
+	SceneRouter.transition_active = false
+	get_tree().quit(0)
+
+func _stage(view: String) -> void:
+	var quest_id := "facility_memory" if view == "facility-reserve" else "clear_scrap_route"
+	var quest := DataRegistry.get_quest(quest_id)
+	GameState.current_scene_id = "village" if view == "village-continue" else "wasteland"
+	GameState.current_route_id = "toxic_marsh" if view == "wrong-route" else String(quest["route"])
+	GameState.active_quest_id = quest_id
+	var index := 1 if view in ["highway-carry", "facility-reserve"] else 0
+	var banked := {}
+	if index == 1:
+		for action: Dictionary in quest["campaign_outings"][0]["actions"]:
+			banked[action["id"]] = "done"
+	if view == "village-continue":
+		banked["ch1a_escort_crew"] = "done"
+	GameState.quest_progress = {"field_objective_version": 1, "campaign": {"version": 1, "outing_index": index, "actions": banked}}
+	if view == "facility-reserve":
+		for previous: Dictionary in DataRegistry.quests:
+			if bool(previous.get("main_campaign", false)) and previous["id"] != quest_id:
+				GameState.completed_quests.append(String(previous["id"]))
+	if GameState.current_scene_id == "wasteland":
+		GameState._expedition.begin(GameState.current_route_id, quest_id)
+		if view != "wrong-route":
+			GameState._expedition.active["campaign_outing"] = quest["campaign_outings"][index]["id"]
+		if view == "highway-carry":
+			GameState._expedition.active["campaign_actions"] = {"ch1b_return_route": "ch1b_covered_long"}
+			GameState._expedition.active["campaign_runtime"] = {"ch1b_carry_coupling": {"started": true, "checkpoint": 1}}
+		elif view == "facility-reserve":
+			GameState._expedition.active["campaign_actions"] = {"ch6b_test_bypass": "done", "ch6b_hold_supply": "done"}

@@ -1,0 +1,136 @@
+extends Node
+
+# Ordinary, manually staged presentation. No mission input, rewards, settlement or save/load.
+func _ready() -> void:
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the dedicated external presentation mirror and user directory.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--campaign-output="):
+			output = argument.trim_prefix("--campaign-output=")
+	if output.is_empty() or not output.is_absolute_path():
+		push_error("Pass an absolute --campaign-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	var views := ["highway-escort", "highway-action-map", "highway-contract", "highway-route-choice", "marsh-flush-choice", "crystal-defense", "city-record-choice", "facility-reserve-choice", "village-followup", "ending-records"]
+	for view: String in views:
+		get_tree().paused = false
+		GameState.reset_new_run(false)
+		var quest_id := "clear_scrap_route"
+		if view == "marsh-flush-choice": quest_id = "toxic_sample"
+		elif view == "crystal-defense": quest_id = "crystal_scar_recon"
+		elif view == "city-record-choice": quest_id = "metropolis_archive"
+		elif view == "facility-reserve-choice" or view == "ending-records": quest_id = "facility_memory"
+		var quest := DataRegistry.get_quest(quest_id)
+		for earlier: Dictionary in DataRegistry.quests:
+			if bool(earlier.get("main_campaign", false)) and int(earlier.get("chapter", 0)) < int(quest.get("chapter", 0)):
+				GameState.completed_quests.append(String(earlier["id"]))
+		GameState.active_quest_id = quest_id
+		GameState.current_route_id = String(quest["route"])
+		var second := view in ["highway-route-choice", "marsh-flush-choice", "crystal-defense", "city-record-choice", "facility-reserve-choice", "village-followup"]
+		var outing_index := 1 if second else 0
+		var entries: Array = quest.get("campaign_outings", [])
+		var committed: Dictionary = {}
+		if second:
+			for definition: Dictionary in entries[0]["actions"]:
+				committed[definition["id"]] = "done"
+		GameState.quest_progress = {"campaign": {"version": 1, "outing_index": outing_index, "actions": committed}}
+		if quest.has("field_objective"):
+			GameState.quest_progress["field_objective_version"] = 1
+		for objective: Dictionary in quest.get("objectives", []):
+			if objective.get("type", "") == "defeat":
+				GameState.quest_progress[String(objective.get("counter", "defeat_enemy"))] = 0
+		var village := view in ["village-followup", "ending-records"]
+		GameState.current_scene_id = "village" if village else "wasteland"
+		var chosen_action: Dictionary = {}
+		if not village:
+			GameState._expedition.begin(GameState.current_route_id, quest_id)
+			GameState._expedition.active["campaign_outing"] = entries[outing_index]["id"]
+			var actions: Array = entries[outing_index]["actions"]
+			chosen_action = actions[0]
+			if view == "city-record-choice" or view == "crystal-defense":
+				GameState._expedition.active["campaign_actions"][actions[0]["id"]] = "done"
+				chosen_action = actions[1]
+			elif view == "facility-reserve-choice":
+				GameState._expedition.active["campaign_actions"][actions[0]["id"]] = "done"
+				GameState._expedition.active["campaign_actions"][actions[1]["id"]] = "done"
+				chosen_action = actions[2]
+			if chosen_action.get("type", "") == "choice":
+				GameState._expedition.active["campaign_runtime"][chosen_action["id"]] = {"started": true}
+			elif view == "crystal-defense":
+				GameState._expedition.active["campaign_runtime"][chosen_action["id"]] = {"started": true, "elapsed": 8.0, "checkpoint": 0}
+			elif view == "highway-escort":
+				GameState._expedition.active["campaign_runtime"][chosen_action["id"]] = {"started": true, "checkpoint": 0}
+		if view == "ending-records":
+			GameState.completed_quests.append(quest_id)
+			GameState.active_quest_id = ""
+			GameState.quest_progress = {}
+			for event: Dictionary in DataRegistry.events:
+				if bool(event.get("story", false)):
+					GameState.discovered_events.append("%s:%s" % [String(event["route"]), String(event["id"])])
+			GameState.route_states = {"underground_facility": {"campaign_choices": {"ch6b_reserve_choice": "ch6b_clinic_first"}}, "ruined_metropolis": {"campaign_choices": {"ch5b_record_family": "ch5b_seal_family_names"}}}
+		var scene_path := "res://scenes/levels/village/Village.tscn" if village else "res://scenes/levels/wasteland/Wasteland.tscn"
+		var scene = load(scene_path).instantiate()
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		# Freeze simulation immediately; only presentation/layout frames follow.
+		scene.set_process(false)
+		for enemy: Node in get_tree().get_nodes_in_group("enemy"):
+			enemy.set_physics_process(false)
+		for node: Node in scene.get_children():
+			if String(node.name).begins_with("CampaignAction_"):
+				node.set_process(false)
+		var actor = get_tree().get_first_node_in_group("map_player")
+		if actor != null:
+			actor.set_physics_process(false)
+			if village:
+				actor.global_position = Vector2(1380, 970)
+			else:
+				var raw_position: Array = chosen_action.get("position", [0.5, 0.86])
+				actor.global_position = Vector2(float(raw_position[0]) * scene.world_size.x, float(raw_position[1]) * scene.world_size.y) + Vector2(80, 62)
+			actor.reset_physics_interpolation()
+			var camera = actor.get_node("Camera2D")
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+		if view == "highway-escort":
+			var action = scene.get_node("CampaignAction_ch1a_escort_crew")
+			action.call("_ensure_escort_actor")
+		if not village:
+			for node: Node in scene.get_children():
+				if String(node.name).begins_with("CampaignAction_"):
+					node.call("_refresh_status_display")
+		for frame in range(16):
+			await get_tree().physics_frame
+		var hud = get_tree().get_first_node_in_group("hud")
+		GameState.stats_changed.emit()
+		if view == "highway-action-map":
+			hud.call("_toggle_map")
+		elif view == "highway-contract":
+			hud.call("_set_contract_visible", true)
+		elif view == "village-followup":
+			GameState.dialogue_requested.emit("米婭", "章節行動回報（展示狀態）", String(entries[0].get("return_text", "")) + "\n下一趟：" + String(entries[1]["name"]) + "\n章節報酬仍須完成全部目標後按 [J] 交付。")
+		elif view == "ending-records":
+			hud.call("_set_codex_visible", true)
+		for frame in range(5):
+			await get_tree().process_frame
+		var notice = scene.find_child("NoticeLabel", true, false)
+		if notice != null: notice.hide()
+		if view in ["highway-escort", "crystal-defense"]:
+			print("CAMPAIGN_PRESENTATION_BARS: ", view, " quick=", hud.quick_bar_panel.get_rect(), " minimum=", hud.quick_bar_panel.get_combined_minimum_size(), " nav=", hud.nav_bar_panel.get_rect(), " hint=", hud.controls_hint.get_rect())
+		if hud.campaign_choice_panel.visible:
+			print("CAMPAIGN_PRESENTATION_LAYOUT: ", view, " panel=", hud.campaign_choice_panel.get_rect())
+		get_tree().paused = true
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var result := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+		print("CAMPAIGN_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", result)
+		scene.queue_free()
+		await get_tree().process_frame
+	get_tree().quit(0)

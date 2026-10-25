@@ -28,14 +28,15 @@ func _ready() -> void:
 	set_meta("map_scene_label", "冒險公會")
 	AudioManager.play_music("guild")
 	var backdrop: Node2D = BACKDROP_SCRIPT.new()
-	backdrop.setup("guild", MAP_TILES, 4096)
+	backdrop.setup("guild", MAP_TILES, 4096, "guild")
 	add_child(backdrop)
 	_add_boundaries(Vector2(MAP_TILES.x * TILE_SIZE, MAP_TILES.y * TILE_SIZE))
 	_add_decor()
-	_add_counter("contract", "委託板：選擇下一份委託", Vector2(330, 275), Color8(102, 74, 118), "委託板")
+	_add_counter("contract", "委託板：查看並選擇委託", Vector2(330, 390), Color8(102, 74, 118), "委託板")
 	_add_counter("reward", "回報櫃台：交付完成委託", Vector2(680, 275), Color8(75, 96, 122), "回報櫃台")
 	_add_counter("to_wasteland", "前往目前委託路線", Vector2(1080, 540), Color8(92, 88, 56), "出擊門")
 	_add_counter("to_village", "返回村莊", Vector2(560, 720), Color8(64, 110, 70), "回村門")
+	_register_ground_contacts(backdrop)
 	_spawn_npcs()
 	_add_projectile_pool(200)
 	var player := PLAYER_SCENE.instantiate()
@@ -44,7 +45,7 @@ func _ready() -> void:
 	if player.has_method("set_world_bounds"):
 		player.set_world_bounds(WORLD_RECT)
 	add_child(HUD_SCENE.instantiate())
-	GameState.notify("冒險公會：接委託、交付獎勵，或直接前往目前路線。")
+	GameState.notify("冒險公會：靠近委託板按 [E] 選任務；回報櫃台可交付，出擊門可前往目前路線。")
 
 func _add_projectile_pool(limit: int) -> void:
 	var pool: Node = PROJECTILE_POOL_SCRIPT.new()
@@ -81,7 +82,8 @@ class GuildFoundation extends Node2D:
 func _add_counter(id: String, label: String, pos: Vector2, color: Color, map_label: String) -> void:
 	var node := Node2D.new()
 	node.position = pos
-	node.y_sort_enabled = true
+	# Sort the structure as one unit by its authored ground foot.
+	node.y_sort_enabled = false
 	node.add_to_group("map_station")
 	node.set_meta("map_label", map_label)
 	node.set_meta("map_marker", "station")
@@ -93,18 +95,30 @@ func _add_counter(id: String, label: String, pos: Vector2, color: Color, map_lab
 	var texture := _counter_texture(id)
 	sprite.texture = texture if texture != null else PIXEL.new().make_texture(Vector2i(200, 104), [color.darkened(0.3), color, color.lightened(0.22)], id.length())
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var texture_size := sprite.texture.get_size()
-	var foundation := GuildFoundation.new(texture_size)
-	foundation.name = "GuildFoundation"
-	node.add_child(foundation)
 	sprite.centered = false
+	var texture_size := sprite.texture.get_size()
 	sprite.position = Vector2(-texture_size.x * 0.5, -texture_size.y)
+	var visual_bounds: Rect2 = ASSET_LOADER.apply_world_presentation(sprite, DataRegistry.get_visual_asset(asset_id), "guild")
+	var has_world_presentation := visual_bounds.size.x > 0.0 and visual_bounds.size.y > 0.0
+	if has_world_presentation:
+		sprite.material = WORLD_PROP_SCRIPT.world_source_material(ASSET_LOADER.world_presentation_source(DataRegistry.get_visual_asset(asset_id), "guild"), "guild")
+	if not has_world_presentation:
+		var foundation := GuildFoundation.new(texture_size)
+		foundation.name = "GuildFoundation"
+		node.add_child(foundation)
+		# Retain the old sprite canvas bounds for presentation anchors only.
+		visual_bounds = Rect2(sprite.position, texture_size)
 	node.add_child(sprite)
 	var badge := Label.new()
 	badge.text = "【%s】" % map_label
 	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	badge.custom_minimum_size = Vector2(140, 20)
-	badge.position = Vector2(-70, -texture_size.y - 14.0)
+	badge.position = Vector2(visual_bounds.get_center().x - 70.0, visual_bounds.position.y - 14.0)
+	if id == "contract":
+		# Keep this west-side service's text below the HUD and beside its approach.
+		badge.position.x = visual_bounds.end.x + 16.0
+		badge.position.y = visual_bounds.end.y + 4.0
+		badge.z_index = 10
 	badge.add_theme_font_size_override("font_size", 11)
 	badge.add_theme_color_override("font_color", Color(0.55, 0.85, 0.90, 0.75))
 	badge.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.92))
@@ -112,12 +126,16 @@ func _add_counter(id: String, label: String, pos: Vector2, color: Color, map_lab
 	badge.add_theme_constant_override("shadow_offset_y", 1)
 	node.add_child(badge)
 
-	_add_counter_collision(node, texture_size, asset_id)
+	var open_passage := has_world_presentation and asset_id in ["structure_wasteland_gate", "structure_village_return_gate"]
+	_add_counter_collision(node, texture_size, asset_id, open_passage)
 
 	var interactable: Area2D = INTERACTABLE_SCRIPT.new()
 	interactable.interaction_id = id
 	interactable.prompt = label
 	interactable.radius = max(texture_size.x, texture_size.y) * 0.38
+	interactable.set_prompt_anchor(Vector2(visual_bounds.get_center().x, visual_bounds.position.y - 24.0))
+	if id == "contract":
+		interactable.set_prompt_anchor(Vector2(visual_bounds.end.x + 80.0, visual_bounds.end.y + 23.0))
 	interactable.interacted.connect(_on_interacted)
 	node.add_child(interactable)
 
@@ -125,21 +143,35 @@ func _counter_texture(id: String) -> Texture2D:
 	var asset_id := String(COUNTER_ASSETS.get(id, ""))
 	return ASSET_LOADER.load_png(DataRegistry.asset_path(asset_id)) if not asset_id.is_empty() else null
 
-func _add_counter_collision(node: Node2D, texture_size: Vector2, asset_id: String) -> void:
+func _add_counter_collision(node: Node2D, texture_size: Vector2, asset_id: String, open_passage := false) -> void:
 	var body := StaticBody2D.new()
 	body.name = "StructureCollider"
 	body.add_to_group("obstacle")
-	var shape := RectangleShape2D.new()
+	var collider_size: Vector2
 	var authored_collision: Variant = DataRegistry.get_visual_asset(asset_id).get("collision", [])
 	if authored_collision is Array and authored_collision.size() == 2:
-		shape.size = Vector2(max(24.0, float(authored_collision[0])), max(16.0, float(authored_collision[1])))
+		collider_size = Vector2(max(24.0, float(authored_collision[0])), max(16.0, float(authored_collision[1])))
 	else:
-		shape.size = Vector2(max(48.0, texture_size.x * 0.54), max(22.0, texture_size.y * 0.18))
-	var collision := CollisionShape2D.new()
-	collision.name = "CollisionShape2D"
-	collision.shape = shape
-	collision.position = Vector2(0, -shape.size.y * 0.5)
-	body.add_child(collision)
+		collider_size = Vector2(max(48.0, texture_size.x * 0.54), max(22.0, texture_size.y * 0.18))
+	if open_passage:
+		var pier_width := collider_size.x * 0.18
+		for pier_index in range(2):
+			var collision := CollisionShape2D.new()
+			collision.name = "CollisionShape2D" if pier_index == 0 else "GatePierRight"
+			var shape := RectangleShape2D.new()
+			shape.size = Vector2(pier_width, collider_size.y)
+			collision.shape = shape
+			var direction := -1.0 if pier_index == 0 else 1.0
+			collision.position = Vector2(direction * (collider_size.x - pier_width) * 0.5, -collider_size.y * 0.5)
+			body.add_child(collision)
+	else:
+		var shape := RectangleShape2D.new()
+		shape.size = collider_size
+		var collision := CollisionShape2D.new()
+		collision.name = "CollisionShape2D"
+		collision.shape = shape
+		collision.position = Vector2(0, -shape.size.y * 0.5)
+		body.add_child(collision)
 	node.add_child(body)
 
 func _add_decor() -> void:
@@ -151,9 +183,45 @@ func _add_decor() -> void:
 	]
 	for prop_data in props:
 		var prop: StaticBody2D = WORLD_PROP_SCRIPT.new()
-		prop.setup(String(prop_data[0]), bool(prop_data[2]), prop_data[3])
+		prop.preserve_legacy_collision = true
+		prop.setup(String(prop_data[0]), bool(prop_data[2]), prop_data[3], "guild")
 		prop.global_position = prop_data[1]
 		add_child(prop)
+	for entry: Dictionary in WORLD_PROP_SCRIPT.material_kit().get("hubs", {}).get("guild", {}).get("scenery", []):
+		var prop := WORLD_PROP_SCRIPT.new()
+		prop.setup(String(entry.id), true, Vector2i(340, 240), "guild")
+		prop.position = Vector2(float(entry.position[0]), float(entry.position[1]))
+		add_child(prop)
+		if GameState.active_spawn_point == "saved" and prop.get_collision_bounds().grow(48.0).has_point(GameState.player_position):
+			remove_child(prop)
+			prop.free()
+
+func _register_ground_contacts(backdrop: Node) -> void:
+	if not backdrop.has_method("has_material_ground") or not bool(backdrop.call("has_material_ground")):
+		return
+	var contacts: Array[Rect2] = []
+	for station in get_tree().get_nodes_in_group("map_station"):
+		if not station is Node2D:
+			continue
+		var structure := station.get_node_or_null("StructureCollider") as StaticBody2D
+		if structure == null:
+			continue
+		for child in structure.get_children():
+			var collision := child as CollisionShape2D
+			if collision == null or not collision.shape is RectangleShape2D:
+				continue
+			var rectangle := collision.shape as RectangleShape2D
+			var size := rectangle.size * collision.global_scale.abs()
+			if size.x > 0.0 and size.y > 0.0:
+				contacts.append(Rect2(collision.global_position - size * 0.5, size))
+	for prop in get_tree().get_nodes_in_group("world_prop"):
+		if not prop.has_method("get_collision_bounds"):
+			continue
+		var bounds: Variant = prop.call("get_collision_bounds")
+		if bounds is Rect2 and bounds.size.x > 0.0 and bounds.size.y > 0.0:
+			contacts.append(bounds)
+	if not contacts.is_empty():
+		backdrop.call("register_ground_contacts", contacts)
 
 func _add_boundaries(world_size: Vector2) -> void:
 	_add_boundary(Vector2(world_size.x * 0.5, 12), Vector2(world_size.x, 24))
@@ -181,23 +249,21 @@ func _spawn_npcs() -> void:
 func _on_interacted(id: String) -> void:
 	match id:
 		"contract":
-			_start_next_contract()
+			_open_contract_catalog()
 		"reward":
 			GameState.complete_active_quest()
 		"to_wasteland":
 			if GameState.active_quest_id.is_empty():
-				GameState.notify("尚未接委託，仍可從村莊四門選擇探索路線。")
+				GameState.notify("尚未接委託，仍可從村莊六門選擇探索路線。")
 			GameState.seed = randi_range(1000, 999999)
 			SceneRouter.change_to("wasteland", "from_guild")
 		"to_village":
 			SceneRouter.change_to("village", "from_guild")
 
-func _start_next_contract() -> void:
-	if not GameState.active_quest_id.is_empty():
-		GameState.notify("目前委託：%s" % GameState.active_quest_summary())
-		return
-	for quest_id in DataRegistry.quest_ids():
-		if not GameState.completed_quests.has(quest_id):
-			GameState.start_quest(quest_id)
-			return
-	GameState.notify("目前沒有新的公會委託。")
+func _open_contract_catalog() -> void:
+	var hud_nodes := get_tree().get_nodes_in_group("hud")
+	var hud: Node = hud_nodes[0] if not hud_nodes.is_empty() else null
+	if hud != null and hud.has_method("open_contracts"):
+		hud.call("open_contracts")
+	else:
+		GameState.notify("委託清單尚未載入，請按 [J] 開啟委託頁。")

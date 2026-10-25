@@ -10,6 +10,8 @@ const PROJECTILE_INTERVAL := 6
 var qa_output_dir := ""
 var checks: Array[Dictionary] = []
 var peak_active_projectiles := 0
+var rendered_intervals: Array[float] = []
+var previous_draw_usec := 0
 
 func _ready() -> void:
 	qa_output_dir = _read_user_arg("--qa-output", "")
@@ -72,6 +74,9 @@ func _run_representative_scene_sample() -> void:
 	var primitive_samples: Array[float] = []
 	var memory_before := _memory_static_bytes()
 	var node_count_before := int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))
+	rendered_intervals.clear()
+	previous_draw_usec = 0
+	RenderingServer.frame_post_draw.connect(_record_render_interval)
 	for frame_index in range(SAMPLE_FRAMES):
 		var process_start := Time.get_ticks_usec()
 		await get_tree().process_frame
@@ -88,6 +93,7 @@ func _run_representative_scene_sample() -> void:
 			var direction := Vector2.RIGHT.rotated(float(frame_index % 8) * TAU / 8.0)
 			pool.fire_projectile(player.global_position + direction * 64.0, direction, 1, "qa_no_collision_target")
 		peak_active_projectiles = max(peak_active_projectiles, int(pool.active_count))
+	RenderingServer.frame_post_draw.disconnect(_record_render_interval)
 	var memory_after := _memory_static_bytes()
 	var node_count_after := int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))
 	_check(process_samples.size() == SAMPLE_FRAMES and physics_samples.size() == SAMPLE_FRAMES, "performance sample contains all requested frame waits", "%d process / %d physics" % [process_samples.size(), physics_samples.size()])
@@ -140,6 +146,7 @@ func _run_representative_scene_sample() -> void:
 			"process": _distribution(process_monitor_samples),
 			"physics": _distribution(physics_monitor_samples)
 		},
+		"rendered_frame_intervals_ms": _distribution(rendered_intervals),
 		"render_work_per_frame": {
 			"draw_calls": _distribution(draw_call_samples),
 			"rendered_objects": _distribution(rendered_object_samples),
@@ -177,6 +184,13 @@ func _run_representative_scene_sample() -> void:
 	world.queue_free()
 	await get_tree().process_frame
 	return
+
+
+func _record_render_interval() -> void:
+	var now := Time.get_ticks_usec()
+	if previous_draw_usec > 0:
+		rendered_intervals.append(float(now - previous_draw_usec) / 1000.0)
+	previous_draw_usec = now
 
 func _measure_frame_waits(frame_count: int) -> int:
 	var start := Time.get_ticks_usec()

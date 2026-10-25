@@ -1,0 +1,115 @@
+extends Node
+
+# Ordinary staged UI views; no draft choice, loot, settlement or save/load actions.
+func _ready() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+        push_error("Use the dedicated external presentation mirror and user directory.")
+        get_tree().quit(2)
+        return
+    var output := ""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--draft-output="):
+            output = argument.trim_prefix("--draft-output=")
+    if output.is_empty() or not output.is_absolute_path():
+        push_error("Pass an absolute --draft-output directory.")
+        get_tree().quit(2)
+        return
+    DirAccess.make_dir_recursive_absolute(output)
+    var bank: Dictionary = GameState.inventory.duplicate(true)
+    var views := ["first-offer", "second-offer", "hybrid-inventory", "claimed-site-approach", "claimed-site-map", "legacy-inventory", "expired-report"]
+    for view: String in views:
+        get_tree().paused = false
+        GameState._expedition.clear()
+        GameState._last_ammo_spend.clear()
+        GameState.inventory = bank.duplicate(true)
+        GameState.perks = {}
+        GameState.active_quest_id = "clear_scrap_route"
+        GameState.quest_progress = {"defeat_enemy": 0, "field_objective_version": 1}
+        GameState.route_states = {}
+        GameState.completed_quests.clear()
+        GameState.discovered_events.clear()
+        GameState.current_route_id = "scrap_highway"
+        GameState.active_spawn_point = "default"
+        GameState.hp = GameState.get_max_hp()
+        GameState.ep = GameState.get_max_ep()
+        GameState.death_pending = false
+        GameState.player_position = Vector2.ZERO
+        var report := view == "expired-report"
+        if view == "legacy-inventory":
+            GameState._expedition.legacy_trip = true
+        var points: Array = DataRegistry.get_wasteland_route("scrap_highway").get("exploration_points", [])
+        if view != "legacy-inventory" and not report:
+            GameState.discovered_events.append("scrap_highway:%s" % String(points[0]["event"]))
+            if view == "second-offer":
+                GameState.discovered_events.append("scrap_highway:%s" % String(points[1]["event"]))
+        GameState.current_scene_id = "village" if report else "wasteland"
+        var scene_path := "res://scenes/levels/village/Village.tscn" if report else "res://scenes/levels/wasteland/Wasteland.tscn"
+        var scene = load(scene_path).instantiate()
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        for frame in range(4):
+            await get_tree().process_frame
+        if view == "first-offer":
+            GameState._expedition.active["pending_draft"] = "scrap_highway_early"
+        elif view == "second-offer":
+            GameState.perks = {"arc_overload": 1, "armor_piercer": 1}
+            GameState._expedition.active["draft_choices"] = {"scrap_highway_early": "arc"}
+            GameState._expedition.active["pending_draft"] = "scrap_highway_late"
+        elif view == "hybrid-inventory":
+            GameState._expedition.active["draft_choices"] = {"scrap_highway_early": "arc", "scrap_highway_late": "salvage"}
+            GameState._expedition.active["haul"] = {"scrap": 18, "ammo": 9}
+        elif report:
+            GameState.perks = {"arc_overload": 1, "armor_piercer": 1}
+            GameState._expedition.last_result = {
+                "id": "presentation-only-draft-result", "route": "scrap_highway", "quest_id": "clear_scrap_route", "outcome": "extracted",
+                "haul": {}, "counters": {}, "fields": {}, "draft_choices": {"scrap_highway_early": "arc", "scrap_highway_late": "salvage"}
+            }
+        GameState._sync_resource_counters()
+        GameState.stats_changed.emit()
+        var actor = get_tree().get_first_node_in_group("map_player")
+        if actor != null:
+            if report:
+                actor.global_position = Vector2(1380, 970)
+            else:
+                var point: Dictionary = points[1] if view == "second-offer" else points[0]
+                actor.global_position = Vector2(float(point["position"][0]) * scene.world_size.x, float(point["position"][1]) * scene.world_size.y) + Vector2(110, 80)
+            actor.set_physics_process(false)
+            actor.reset_physics_interpolation()
+            var camera = actor.get_node("Camera2D")
+            camera.position_smoothing_enabled = false
+            camera.reset_smoothing()
+            camera.force_update_scroll()
+        for enemy: Node in get_tree().get_nodes_in_group("enemy"):
+            enemy.set_physics_process(false)
+        for frame in range(16):
+            await get_tree().physics_frame
+        var hud = get_tree().get_first_node_in_group("hud")
+        if view == "first-offer" or view == "second-offer":
+            GameState.expedition_draft_changed.emit()
+        elif view == "hybrid-inventory" or view == "legacy-inventory":
+            hud.call("_set_inventory_visible", true)
+        elif view == "claimed-site-map":
+            hud.call("_toggle_map")
+        elif report:
+            GameState.show_expedition_result(GameState._expedition.last_result)
+        var notice = scene.find_child("NoticeLabel", true, false)
+        if notice != null:
+            notice.hide()
+        print("DRAFT_PRESENTATION_STATE: ", view, " build=", GameState.expedition_build_summary(), " permanent=", GameState.perks, " effective_arc=", GameState.get_effective_perk_level("arc_overload"))
+        for frame in range(5):
+            await get_tree().process_frame
+        if view == "first-offer" or view == "second-offer":
+            var panel: Control = hud.expedition_draft_panel
+            var scroll: ScrollContainer = hud.expedition_draft_cards.get_parent()
+            print("DRAFT_PRESENTATION_LAYOUT: ", view, " panel=", panel.get_rect(), " panel_min=", panel.get_combined_minimum_size(), " scroll=", scroll.get_rect(), " scroll_min=", scroll.get_combined_minimum_size(), " vertical_mode=", scroll.vertical_scroll_mode)
+        get_tree().paused = true
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        var result := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+        print("DRAFT_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", result)
+        scene.queue_free()
+        await get_tree().process_frame
+    get_tree().quit(0)

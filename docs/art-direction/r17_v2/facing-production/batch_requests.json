@@ -1,0 +1,2734 @@
+{
+  "project": "Wasteland Recycler",
+  "family": "blade",
+  "runtime_body_height_px": 96,
+  "runtime_count_delta": 0,
+  "active_facing_count": 8,
+  "active_facing_angles": [
+    0.0,
+    45.0,
+    90.0,
+    135.0,
+    180.0,
+    225.0,
+    270.0,
+    315.0
+  ],
+  "missing_facing_count": 24,
+  "missing_facing_angles": [
+    11.25,
+    22.5,
+    33.75,
+    56.25,
+    67.5,
+    78.75,
+    101.25,
+    112.5,
+    123.75,
+    146.25,
+    157.5,
+    168.75,
+    191.25,
+    202.5,
+    213.75,
+    236.25,
+    247.5,
+    258.75,
+    281.25,
+    292.5,
+    303.75,
+    326.25,
+    337.5,
+    348.75
+  ],
+  "requests": [
+    {
+      "requested_angle": 11.25,
+      "bracket": {
+        "lower": {
+          "angle": 0.0,
+          "cell_index": 0,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                448
+              ],
+              "absolute_grip": [
+                195,
+                306
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                424
+              ],
+              "absolute_grip": [
+                197,
+                295
+              ],
+              "standing_body_height": 298,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 45.0,
+          "cell_index": 1,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                448
+              ],
+              "absolute_grip": [
+                513,
+                312
+              ],
+              "standing_body_height": 339,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                431
+              ],
+              "absolute_grip": [
+                535,
+                307
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 11.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 0.00 deg and 45.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 11.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 22.5,
+      "bracket": {
+        "lower": {
+          "angle": 0.0,
+          "cell_index": 0,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                448
+              ],
+              "absolute_grip": [
+                195,
+                306
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                424
+              ],
+              "absolute_grip": [
+                197,
+                295
+              ],
+              "standing_body_height": 298,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 45.0,
+          "cell_index": 1,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                448
+              ],
+              "absolute_grip": [
+                513,
+                312
+              ],
+              "standing_body_height": 339,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                431
+              ],
+              "absolute_grip": [
+                535,
+                307
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 22.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 0.00 deg and 45.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 22.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 33.75,
+      "bracket": {
+        "lower": {
+          "angle": 0.0,
+          "cell_index": 0,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                448
+              ],
+              "absolute_grip": [
+                195,
+                306
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                424
+              ],
+              "absolute_grip": [
+                197,
+                295
+              ],
+              "standing_body_height": 298,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 45.0,
+          "cell_index": 1,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                448
+              ],
+              "absolute_grip": [
+                513,
+                312
+              ],
+              "standing_body_height": 339,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                431
+              ],
+              "absolute_grip": [
+                535,
+                307
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 33.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 0.00 deg and 45.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 33.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 56.25,
+      "bracket": {
+        "lower": {
+          "angle": 45.0,
+          "cell_index": 1,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                448
+              ],
+              "absolute_grip": [
+                513,
+                312
+              ],
+              "standing_body_height": 339,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                431
+              ],
+              "absolute_grip": [
+                535,
+                307
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 90.0,
+          "cell_index": 2,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                450
+              ],
+              "absolute_grip": [
+                876,
+                312
+              ],
+              "standing_body_height": 342,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                434
+              ],
+              "absolute_grip": [
+                890,
+                307
+              ],
+              "standing_body_height": 315,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 56.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 45.00 deg and 90.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 56.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 67.5,
+      "bracket": {
+        "lower": {
+          "angle": 45.0,
+          "cell_index": 1,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                448
+              ],
+              "absolute_grip": [
+                513,
+                312
+              ],
+              "standing_body_height": 339,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                431
+              ],
+              "absolute_grip": [
+                535,
+                307
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 90.0,
+          "cell_index": 2,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                450
+              ],
+              "absolute_grip": [
+                876,
+                312
+              ],
+              "standing_body_height": 342,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                434
+              ],
+              "absolute_grip": [
+                890,
+                307
+              ],
+              "standing_body_height": 315,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 67.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 45.00 deg and 90.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 67.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 78.75,
+      "bracket": {
+        "lower": {
+          "angle": 45.0,
+          "cell_index": 1,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                448
+              ],
+              "absolute_grip": [
+                513,
+                312
+              ],
+              "standing_body_height": 339,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                431
+              ],
+              "absolute_grip": [
+                535,
+                307
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 90.0,
+          "cell_index": 2,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                450
+              ],
+              "absolute_grip": [
+                876,
+                312
+              ],
+              "standing_body_height": 342,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                434
+              ],
+              "absolute_grip": [
+                890,
+                307
+              ],
+              "standing_body_height": 315,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 78.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 45.00 deg and 90.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 78.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 101.25,
+      "bracket": {
+        "lower": {
+          "angle": 90.0,
+          "cell_index": 2,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                450
+              ],
+              "absolute_grip": [
+                876,
+                312
+              ],
+              "standing_body_height": 342,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                434
+              ],
+              "absolute_grip": [
+                890,
+                307
+              ],
+              "standing_body_height": 315,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 135.0,
+          "cell_index": 3,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                448
+              ],
+              "absolute_grip": [
+                1260,
+                312
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                431
+              ],
+              "absolute_grip": [
+                1265,
+                299
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 101.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 90.00 deg and 135.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 101.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 112.5,
+      "bracket": {
+        "lower": {
+          "angle": 90.0,
+          "cell_index": 2,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                450
+              ],
+              "absolute_grip": [
+                876,
+                312
+              ],
+              "standing_body_height": 342,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                434
+              ],
+              "absolute_grip": [
+                890,
+                307
+              ],
+              "standing_body_height": 315,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 135.0,
+          "cell_index": 3,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                448
+              ],
+              "absolute_grip": [
+                1260,
+                312
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                431
+              ],
+              "absolute_grip": [
+                1265,
+                299
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 112.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 90.00 deg and 135.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 112.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 123.75,
+      "bracket": {
+        "lower": {
+          "angle": 90.0,
+          "cell_index": 2,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                450
+              ],
+              "absolute_grip": [
+                876,
+                312
+              ],
+              "standing_body_height": 342,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                960,
+                434
+              ],
+              "absolute_grip": [
+                890,
+                307
+              ],
+              "standing_body_height": 315,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 135.0,
+          "cell_index": 3,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                448
+              ],
+              "absolute_grip": [
+                1260,
+                312
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                431
+              ],
+              "absolute_grip": [
+                1265,
+                299
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 123.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 90.00 deg and 135.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 123.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 146.25,
+      "bracket": {
+        "lower": {
+          "angle": 135.0,
+          "cell_index": 3,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                448
+              ],
+              "absolute_grip": [
+                1260,
+                312
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                431
+              ],
+              "absolute_grip": [
+                1265,
+                299
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 180.0,
+          "cell_index": 4,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                916
+              ],
+              "absolute_grip": [
+                176,
+                771
+              ],
+              "standing_body_height": 345,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                909
+              ],
+              "absolute_grip": [
+                188,
+                773
+              ],
+              "standing_body_height": 304,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 146.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 135.00 deg and 180.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 146.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 157.5,
+      "bracket": {
+        "lower": {
+          "angle": 135.0,
+          "cell_index": 3,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                448
+              ],
+              "absolute_grip": [
+                1260,
+                312
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                431
+              ],
+              "absolute_grip": [
+                1265,
+                299
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 180.0,
+          "cell_index": 4,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                916
+              ],
+              "absolute_grip": [
+                176,
+                771
+              ],
+              "standing_body_height": 345,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                909
+              ],
+              "absolute_grip": [
+                188,
+                773
+              ],
+              "standing_body_height": 304,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 157.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 135.00 deg and 180.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 157.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 168.75,
+      "bracket": {
+        "lower": {
+          "angle": 135.0,
+          "cell_index": 3,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                448
+              ],
+              "absolute_grip": [
+                1260,
+                312
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1330,
+                431
+              ],
+              "absolute_grip": [
+                1265,
+                299
+              ],
+              "standing_body_height": 308,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 180.0,
+          "cell_index": 4,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                916
+              ],
+              "absolute_grip": [
+                176,
+                771
+              ],
+              "standing_body_height": 345,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                909
+              ],
+              "absolute_grip": [
+                188,
+                773
+              ],
+              "standing_body_height": 304,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 168.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 135.00 deg and 180.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 168.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 191.25,
+      "bracket": {
+        "lower": {
+          "angle": 180.0,
+          "cell_index": 4,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                916
+              ],
+              "absolute_grip": [
+                176,
+                771
+              ],
+              "standing_body_height": 345,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                909
+              ],
+              "absolute_grip": [
+                188,
+                773
+              ],
+              "standing_body_height": 304,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 225.0,
+          "cell_index": 5,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                916
+              ],
+              "absolute_grip": [
+                508,
+                771
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                912
+              ],
+              "absolute_grip": [
+                520,
+                770
+              ],
+              "standing_body_height": 311,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 191.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 180.00 deg and 225.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 191.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 202.5,
+      "bracket": {
+        "lower": {
+          "angle": 180.0,
+          "cell_index": 4,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                916
+              ],
+              "absolute_grip": [
+                176,
+                771
+              ],
+              "standing_body_height": 345,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                909
+              ],
+              "absolute_grip": [
+                188,
+                773
+              ],
+              "standing_body_height": 304,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 225.0,
+          "cell_index": 5,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                916
+              ],
+              "absolute_grip": [
+                508,
+                771
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                912
+              ],
+              "absolute_grip": [
+                520,
+                770
+              ],
+              "standing_body_height": 311,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 202.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 180.00 deg and 225.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 202.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 213.75,
+      "bracket": {
+        "lower": {
+          "angle": 180.0,
+          "cell_index": 4,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                916
+              ],
+              "absolute_grip": [
+                176,
+                771
+              ],
+              "standing_body_height": 345,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                190,
+                909
+              ],
+              "absolute_grip": [
+                188,
+                773
+              ],
+              "standing_body_height": 304,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 225.0,
+          "cell_index": 5,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                916
+              ],
+              "absolute_grip": [
+                508,
+                771
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                912
+              ],
+              "absolute_grip": [
+                520,
+                770
+              ],
+              "standing_body_height": 311,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 213.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 180.00 deg and 225.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 213.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 236.25,
+      "bracket": {
+        "lower": {
+          "angle": 225.0,
+          "cell_index": 5,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                916
+              ],
+              "absolute_grip": [
+                508,
+                771
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                912
+              ],
+              "absolute_grip": [
+                520,
+                770
+              ],
+              "standing_body_height": 311,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 270.0,
+          "cell_index": 6,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1045,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1028,
+                773
+              ],
+              "standing_body_height": 318,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 236.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 225.00 deg and 270.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 236.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 247.5,
+      "bracket": {
+        "lower": {
+          "angle": 225.0,
+          "cell_index": 5,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                916
+              ],
+              "absolute_grip": [
+                508,
+                771
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                912
+              ],
+              "absolute_grip": [
+                520,
+                770
+              ],
+              "standing_body_height": 311,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 270.0,
+          "cell_index": 6,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1045,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1028,
+                773
+              ],
+              "standing_body_height": 318,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 247.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 225.00 deg and 270.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 247.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 258.75,
+      "bracket": {
+        "lower": {
+          "angle": 225.0,
+          "cell_index": 5,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                916
+              ],
+              "absolute_grip": [
+                508,
+                771
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                384,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                585,
+                912
+              ],
+              "absolute_grip": [
+                520,
+                770
+              ],
+              "standing_body_height": 311,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 270.0,
+          "cell_index": 6,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1045,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1028,
+                773
+              ],
+              "standing_body_height": 318,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 258.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 225.00 deg and 270.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 258.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 281.25,
+      "bracket": {
+        "lower": {
+          "angle": 270.0,
+          "cell_index": 6,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1045,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1028,
+                773
+              ],
+              "standing_body_height": 318,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 315.0,
+          "cell_index": 7,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1395,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1380,
+                770
+              ],
+              "standing_body_height": 317,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 281.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 270.00 deg and 315.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 281.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 292.5,
+      "bracket": {
+        "lower": {
+          "angle": 270.0,
+          "cell_index": 6,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1045,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1028,
+                773
+              ],
+              "standing_body_height": 318,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 315.0,
+          "cell_index": 7,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1395,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1380,
+                770
+              ],
+              "standing_body_height": 317,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 292.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 270.00 deg and 315.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 292.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 303.75,
+      "bracket": {
+        "lower": {
+          "angle": 270.0,
+          "cell_index": 6,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1045,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                768,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                955,
+                916
+              ],
+              "absolute_grip": [
+                1028,
+                773
+              ],
+              "standing_body_height": 318,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 315.0,
+          "cell_index": 7,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1395,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1380,
+                770
+              ],
+              "standing_body_height": 317,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 303.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 270.00 deg and 315.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 303.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 326.25,
+      "bracket": {
+        "lower": {
+          "angle": 315.0,
+          "cell_index": 7,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1395,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1380,
+                770
+              ],
+              "standing_body_height": 317,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 0.0,
+          "cell_index": 0,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                448
+              ],
+              "absolute_grip": [
+                195,
+                306
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                424
+              ],
+              "absolute_grip": [
+                197,
+                295
+              ],
+              "standing_body_height": 298,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 326.25 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 315.00 deg and 0.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 326.25,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 337.5,
+      "bracket": {
+        "lower": {
+          "angle": 315.0,
+          "cell_index": 7,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1395,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1380,
+                770
+              ],
+              "standing_body_height": 317,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 0.0,
+          "cell_index": 0,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                448
+              ],
+              "absolute_grip": [
+                195,
+                306
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                424
+              ],
+              "absolute_grip": [
+                197,
+                295
+              ],
+              "standing_body_height": 298,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 337.50 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 315.00 deg and 0.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 337.5,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    },
+    {
+      "requested_angle": 348.75,
+      "bracket": {
+        "lower": {
+          "angle": 315.0,
+          "cell_index": 7,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1395,
+                776
+              ],
+              "standing_body_height": 347,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                1152,
+                512,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                1340,
+                916
+              ],
+              "absolute_grip": [
+                1380,
+                770
+              ],
+              "standing_body_height": 317,
+              "muzzle": null
+            }
+          }
+        },
+        "upper": {
+          "angle": 0.0,
+          "cell_index": 0,
+          "ready": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+            "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                448
+              ],
+              "absolute_grip": [
+                195,
+                306
+              ],
+              "standing_body_height": 340,
+              "muzzle": null
+            }
+          },
+          "identity": {
+            "path": "res://assets/sprites/player/redesign_v2/source/r17_blade_contact_a_v007.png",
+            "sha256": "6812e60d236820a8adad140aa28f9738b3617158672fbf50991237608a9c1fe7",
+            "metadata": {
+              "crop": [
+                0,
+                0,
+                384,
+                512
+              ],
+              "absolute_sole": [
+                200,
+                424
+              ],
+              "absolute_grip": [
+                197,
+                295
+              ],
+              "standing_body_height": 298,
+              "muzzle": null
+            }
+          }
+        }
+      },
+      "prompt": "Generate a new 3D camera perspective view at 348.75 degrees on the Godot screen plane (0 E/right, 90 S/front, 180 W/left, 270 N/back; clockwise). Perspective brackets between active reference angles 315.00 deg and 0.00 deg. True 3D perspective projection; do NOT flat-rotate or mirror existing sprites. Art Style: Explicit crisp hard-edged pixel art for a 2.5D pixel game. Coherent limited color palette, controlled pixel cluster size, and nearest-downsample readability. Never produce smooth 3D renders, painterly textures, soft shading, or antialiasing. Pose & Framing: Neutral standing idle with both boots firmly planted. Entire helmet, boots, cape, and weapon must remain completely inside generous transparent margins. No floor, no ground shadow, no text, and no labels. Character & Equipment: Medieval knight in blue-gray metal armor with gold trim, cylindrical closed helm with a golden cross emblem strictly on the front of the helmet only, and a crimson red cape draping behind. Weapon & Identity: short straight sword with short silver blade held firmly in right hand. Strictly preserve right-hand grip, character proportions, and family-specific ratios directly from the existing reference sheets; do not invent new armor or weapon designs. Source canvas ~300px standing body height on transparent background, structured to scale cleanly down to runtime target gameplay body height of 96.0px. Note: This prompt provides directional perspective guidance only; exact mathematical pixel angles cannot be certified from raster output without Codex lead review.",
+      "candidate_registration": {
+        "requested_angle": 348.75,
+        "review": "pending",
+        "actual_image": null,
+        "visually_accepted_angle": null,
+        "runtime_registered_angle": null,
+        "atlas_cell": null,
+        "grip_anchor": null,
+        "sole_anchor": null
+      }
+    }
+  ]
+}

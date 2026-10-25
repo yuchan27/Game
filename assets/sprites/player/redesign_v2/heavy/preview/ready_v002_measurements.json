@@ -1,0 +1,176 @@
+{
+  "alpha_cutoff": 0.65,
+  "directions": [
+    {
+      "direction": "E",
+      "helmet_to_sole_height": 360.0,
+      "rect": [
+        0,
+        0,
+        410,
+        512
+      ],
+      "scale_96": 0.266666666666667,
+      "sole": [
+        266.0,
+        450.0
+      ],
+      "solid_bbox": [
+        31,
+        91,
+        334,
+        360
+      ]
+    },
+    {
+      "direction": "SE",
+      "helmet_to_sole_height": 366.0,
+      "rect": [
+        410,
+        0,
+        390,
+        512
+      ],
+      "scale_96": 0.262295081967213,
+      "sole": [
+        627.11767578125,
+        456.0
+      ],
+      "solid_bbox": [
+        422,
+        91,
+        334,
+        366
+      ]
+    },
+    {
+      "direction": "S",
+      "helmet_to_sole_height": 372.0,
+      "rect": [
+        800,
+        0,
+        360,
+        512
+      ],
+      "scale_96": 0.258064516129032,
+      "sole": [
+        932.5,
+        459.0
+      ],
+      "solid_bbox": [
+        816,
+        88,
+        325,
+        372
+      ]
+    },
+    {
+      "direction": "SW",
+      "helmet_to_sole_height": 364.0,
+      "rect": [
+        1160,
+        0,
+        376,
+        512
+      ],
+      "scale_96": 0.263736263736264,
+      "sole": [
+        1285.5,
+        456.0
+      ],
+      "solid_bbox": [
+        1175,
+        93,
+        329,
+        364
+      ]
+    },
+    {
+      "direction": "W",
+      "helmet_to_sole_height": 366.0,
+      "rect": [
+        0,
+        512,
+        384,
+        512
+      ],
+      "scale_96": 0.262295081967213,
+      "sole": [
+        133.716659545898,
+        933.0
+      ],
+      "solid_bbox": [
+        26,
+        568,
+        346,
+        366
+      ]
+    },
+    {
+      "direction": "NW",
+      "helmet_to_sole_height": 379.0,
+      "rect": [
+        384,
+        512,
+        416,
+        512
+      ],
+      "scale_96": 0.253298153034301,
+      "sole": [
+        599.5,
+        944.0
+      ],
+      "solid_bbox": [
+        401,
+        566,
+        354,
+        379
+      ]
+    },
+    {
+      "direction": "N",
+      "helmet_to_sole_height": 385.0,
+      "rect": [
+        800,
+        512,
+        360,
+        512
+      ],
+      "scale_96": 0.249350649350649,
+      "sole": [
+        938.0,
+        948.0
+      ],
+      "solid_bbox": [
+        822,
+        564,
+        310,
+        385
+      ]
+    },
+    {
+      "direction": "NE",
+      "helmet_to_sole_height": 384.0,
+      "rect": [
+        1160,
+        512,
+        376,
+        512
+      ],
+      "scale_96": 0.25,
+      "sole": [
+        1319.0,
+        947.0
+      ],
+      "solid_bbox": [
+        1185,
+        564,
+        337,
+        384
+      ]
+    }
+  ],
+  "path": "C:/Code/Game/first-game/assets/sprites/player/redesign_v2/heavy/r17_heavy_ready_v002.png",
+  "sha256": "5d1894496ccabebb9065f7baf9ad29d149a97396748b95a977e6528bccf8535e",
+  "source_preserved": true
+}

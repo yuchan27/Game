@@ -1,0 +1,12 @@
+config_version=5
+[application]
+config/name="R17 Rifle Gait Source Art"
+run/main_scene="res://gait_preview.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="R17-Rifle-Gait-Source-Art-20261023"
+[display]
+window/size/viewport_width=1400
+window/size/viewport_height=720
+[rendering]
+renderer/rendering_method="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.07,0.08,0.09,1)

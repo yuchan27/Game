@@ -1,0 +1,249 @@
+extends Node
+
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const OUTPUT_ARGUMENT_PREFIX := "--journey-output="
+const MAIN_VIEWS: Array[String] = ["title", "title-load-failure", "new-game-confirmation", "prologue"]
+const VIEWS: Array[String] = [
+	"title",
+	"title-load-failure",
+	"new-game-confirmation",
+	"prologue",
+	"help-controls",
+	"help-journey",
+	"help-rules",
+	"help-legacy",
+	"pause",
+	"pause-saved",
+	"pause-save-failed",
+	"pause-load-failed"
+]
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+func _capture() -> void:
+	# This only clears the in-memory routing guard; no route transition is started.
+	SceneRouter.transition_active = false
+	get_tree().paused = true
+
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this presentation fixture only from its isolated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_dir := _read_output_directory()
+	if output_dir.is_empty() or not output_dir.is_absolute_path():
+		push_error("Pass an absolute --journey-output= directory as a user argument.")
+		get_tree().quit(2)
+		return
+
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_dir)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested journey image directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	# This setting belongs to the temporary presentation fixture so the native
+	# confirmation window is included in the captured main viewport.
+	get_tree().root.gui_embed_subwindows = true
+
+	for view_name: String in VIEWS:
+		get_tree().paused = true
+		var capture_ok := false
+		if view_name in MAIN_VIEWS:
+			capture_ok = await _capture_main_view(view_name, output_dir)
+		else:
+			capture_ok = await _capture_hud_view(view_name, output_dir)
+		get_tree().paused = true
+		if not capture_ok:
+			get_tree().quit(3)
+			return
+
+	get_tree().quit(0)
+
+func _read_output_directory() -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(OUTPUT_ARGUMENT_PREFIX):
+			return argument.trim_prefix(OUTPUT_ARGUMENT_PREFIX)
+	return ""
+
+func _capture_main_view(view_name: String, output_dir: String) -> bool:
+	get_tree().paused = true
+	var main_scene = load("res://scenes/main/Main.tscn").instantiate()
+	main_scene.process_mode = Node.PROCESS_MODE_DISABLED
+	main_scene.set("force_fullscreen_on_start", false)
+	get_tree().root.add_child(main_scene)
+	get_tree().current_scene = main_scene
+
+	# Main._ready() waits one frame before creating the title interface.
+	for frame_index in range(4):
+		await get_tree().process_frame
+
+	match view_name:
+		"title":
+			print("JOURNEY_STAGED_STATE view=title ordinary title; isolated user-dir existence metadata only")
+		"title-load-failure":
+			var title_status := main_scene.get("title_status") as Label
+			if title_status != null:
+				title_status.text = "讀取存檔失敗，請檢查存檔內容後再試。"
+				title_status.visible = true
+			print("JOURNEY_STAGED_STATE view=title-load-failure direct RAM status display; no payload read")
+		"new-game-confirmation":
+			main_scene.call("_show_new_game_confirmation")
+			print("JOURNEY_STAGED_STATE view=new-game-confirmation presentation helper only; no confirmation callback")
+		"prologue":
+			main_scene.call("_show_intro")
+			print("JOURNEY_STAGED_STATE view=prologue presentation helper only")
+
+	get_tree().paused = true
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	if view_name == "new-game-confirmation":
+		var confirmation := main_scene.find_child("NewGameConfirmation", true, false) as Window
+		if confirmation != null:
+			confirmation.hide()
+	main_scene.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+func _capture_hud_view(view_name: String, output_dir: String) -> bool:
+	get_tree().paused = true
+	_stage_village_memory()
+
+	var village_scene = load("res://scenes/levels/village/Village.tscn").instantiate()
+	village_scene.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(village_scene)
+	get_tree().current_scene = village_scene
+
+	# Let Village._ready() finish building its stationary player and HUD, then
+	# allow layout to settle before setting the intended scroll position.
+	for frame_index in range(4):
+		await get_tree().process_frame
+
+	var hud = village_scene.find_child("HUD", true, false)
+	if hud == null:
+		push_error("The village presentation scene did not create its HUD.")
+		village_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	var notice_timer := hud.get("notice_timer") as Timer
+	if notice_timer != null:
+		notice_timer.stop()
+	if hud.has_method("_update_notice_visibility"):
+		hud.call("_update_notice_visibility")
+	var notice_label := hud.get("notice_label") as Label
+	if notice_label != null:
+		notice_label.visible = false
+
+	var player := village_scene.find_child("Player", true, false) as Node2D
+	if player != null:
+		player.global_position = Vector2(1248, 920)
+		player.reset_physics_interpolation()
+		var camera := player.get_node_or_null("Camera2D") as Camera2D
+		if camera != null:
+			camera.process_mode = Node.PROCESS_MODE_ALWAYS
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+
+	if view_name.begins_with("help-"):
+		if view_name == "help-legacy":
+			GameState.current_scene_id = "wasteland"
+			GameState._expedition.legacy_trip = true
+			hud.call("_refresh_tutorial_rules")
+			print("JOURNEY_STAGED_STATE view=help-legacy direct RAM; legacy_trip=true; no save")
+		else:
+			hud.call("_refresh_tutorial_rules")
+			print("JOURNEY_STAGED_STATE view=%s direct RAM tutorial presentation" % view_name)
+		# Actors remain disabled. Let the real help own its presentation pause.
+		get_tree().paused = false
+		hud.call("_set_tutorial_visible", true)
+		print("JOURNEY_STAGED_HELP:", view_name, " tree_paused=", get_tree().paused, " owned=", hud.get("_tutorial_paused_tree"))
+		await _set_tutorial_scroll(view_name, hud)
+	elif view_name.begins_with("pause"):
+		GameState.current_scene_id = "wasteland"
+		GameState._expedition.begin("scrap_highway", "")
+		hud.call("_set_pause_visible", true)
+		_match_pause_feedback(view_name, hud)
+
+	get_tree().paused = true
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	village_scene.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+func _stage_village_memory() -> void:
+	GameState._expedition.clear()
+	GameState.active_quest_id = ""
+	GameState.quest_progress = {}
+	GameState.current_route_id = "scrap_highway"
+	GameState.current_scene_id = "village"
+	GameState.active_spawn_point = "default"
+	GameState.completed_quests.clear()
+	GameState.route_states = {}
+	GameState.discovered_events.clear()
+	GameState.hp = GameState.MAX_HP
+	GameState.ep = GameState.MAX_EP
+
+func _set_tutorial_scroll(view_name: String, hud: Node) -> void:
+	var tutorial_scroll := hud.find_child("TutorialScroll", true, false) as ScrollContainer
+	if tutorial_scroll == null:
+		return
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var scroll_bar := tutorial_scroll.get_v_scroll_bar()
+	var max_scroll := maxf(0.0, scroll_bar.max_value - scroll_bar.page)
+	var section_to_reveal: Control
+	match view_name:
+		"help-controls":
+			tutorial_scroll.scroll_vertical = 0
+		"help-journey":
+			tutorial_scroll.scroll_vertical = int(round(max_scroll * 0.42))
+			section_to_reveal = hud.get("tutorial_journey_label") as Control
+		"help-rules", "help-legacy":
+			tutorial_scroll.scroll_vertical = int(round(max_scroll))
+			section_to_reveal = hud.get("tutorial_status_label") as Control
+	if section_to_reveal != null:
+		tutorial_scroll.ensure_control_visible(section_to_reveal)
+
+func _match_pause_feedback(view_name: String, hud: Node) -> void:
+	match view_name:
+		"pause":
+			print("JOURNEY_STAGED_STATE view=pause direct RAM pause presentation; no IO")
+		"pause-saved":
+			hud.call("_set_pause_feedback", "已儲存目前狀態；存檔不會提前結算本趟收穫。", true)
+			print("JOURNEY_STAGED_STATE view=pause-saved synthetic feedback; direct RAM; no save IO")
+		"pause-save-failed":
+			hud.call("_set_pause_feedback", "存檔失敗；本趟收穫未因此入庫。按 Esc 關閉暫停可查看詳細訊息。", false)
+			print("JOURNEY_STAGED_STATE view=pause-save-failed synthetic feedback; direct RAM; no save IO")
+		"pause-load-failed":
+			hud.call("_set_pause_feedback", "讀取失敗；目前仍留在暫停選單。按 Esc 關閉暫停可查看詳細訊息。", false)
+			print("JOURNEY_STAGED_STATE view=pause-load-failed synthetic feedback; direct RAM; no save IO")
+
+func _write_view_image(view_name: String, output_dir: String) -> bool:
+	for frame_index in range(8):
+		await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+
+	var viewport := get_viewport()
+	var hud = get_tree().get_first_node_in_group("hud")
+	if view_name.begins_with("pause") and hud != null:
+		var panel := hud.get("pause_panel") as Control
+		var feedback := hud.get("pause_status_label") as Label
+		print("JOURNEY_STAGED_LAYOUT:", view_name, " panel=", panel.get_global_rect(), " minimum=", panel.get_combined_minimum_size(), " feedback=", feedback.text)
+	var image := viewport.get_texture().get_image()
+	var output_path := output_dir.path_join(view_name + ".png")
+	var save_error := image.save_png(output_path)
+	print("JOURNEY_PRESENTATION_FRAME:", view_name, " viewport=", viewport.get_visible_rect().size, " image_result=", save_error)
+	if save_error != OK:
+		push_error("Could not save journey presentation frame %s: %s" % [view_name, save_error])
+		return false
+	return true

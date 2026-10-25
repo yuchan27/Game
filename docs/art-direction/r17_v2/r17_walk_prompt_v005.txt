@@ -1,0 +1,7 @@
+Use case: precise-object-edit.
+Edit target: attached 8-column x4-row R-17 sword walk sheet.
+Make only production hygiene corrections. Preserve ALL32 poses, actual8 facings, gait silhouettes, body proportions, colors, short swords and integrated hand grips.
+1. Add safe transparent gutters by scaling every entire pose uniformly to 78 percent of its current size, centred inside its OWN same cell. Do not change the 8x4 layout. No character, sword or cape may touch any cell edge. Every character needs at least20 transparent pixels on all sides in its own cell. Give the leftmost and rightmost columns enough canvas padding; reconstruct any tiny clipped cape/sword tip on those outer edges.
+2. Remove every stray blue, yellow, grey or red background speckle/fringe outside the solid pixel silhouettes. Only deliberate opaque pixel clusters for the character and sword; all background alpha exactly0. No anti-aliased fringe, blur, glow, colored mist, floor shadow or checkerboard. Clean silhouette including the spaces between legs, sword and cape.
+3. Keep consistent standing helmet-to-foot height across all32 cells and align soles at each row's common ground baseline. Preserve foot lifts/strides.
+Style: crisp professional game pixel art, same cluster scale on steel, gold, cape and sword. No text, grid, frame, label or watermark. Actual transparent PNG, NOT a painted dark background. This is sheet cleanup and padding only, do not redesign knight or turn into3D.

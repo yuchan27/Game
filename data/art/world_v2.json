@@ -1,0 +1,4998 @@
+{
+  "version": 2,
+  "atlas_contract": "Original generated PNG bytes, explicit disjoint source rectangles, bottom-centre world anchors. Collision rectangles are world pixels relative to anchor.",
+  "modules": {
+    "highway_flyover": {
+      "path": "res://assets/world_v4/architecture/broken-viaduct-v4-01.png",
+      "source_rect": [
+        161,
+        149,
+        1241,
+        736
+      ],
+      "width": 620,
+      "label": "斷裂石拱高架",
+      "footprints": [
+        [
+          -264,
+          -65,
+          140,
+          70
+        ],
+        [
+          143,
+          -4,
+          143,
+          70
+        ]
+      ],
+      "foot": [
+        768,
+        780
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "highway_depot": {
+      "path": "res://assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+      "source_rect": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "width": 570,
+      "label": "路衛修繕棚",
+      "footprints": [
+        [
+          -161.0,
+          -88.0,
+          58.0,
+          37.0
+        ],
+        [
+          114.0,
+          -42.0,
+          58.0,
+          35.0
+        ],
+        [
+          -98.0,
+          -156.0,
+          225.0,
+          35.0
+        ]
+      ],
+      "foot": [
+        768,
+        900
+      ],
+      "alpha_cutoff": 0.035,
+      "authored_ground_contact": true
+    },
+    "highway_median": {
+      "path": "res://assets/world_v4/architecture/slate-boundary-wall-v4-01.png",
+      "source_rect": [
+        90,
+        264,
+        1380,
+        556
+      ],
+      "width": 460,
+      "label": "斷裂板岩護路牆",
+      "footprints": [
+        [
+          -224,
+          -80,
+          112,
+          32
+        ],
+        [
+          -112,
+          -52,
+          112,
+          32
+        ],
+        [
+          0,
+          -24,
+          112,
+          32
+        ],
+        [
+          112,
+          4,
+          112,
+          32
+        ]
+      ],
+      "foot": [
+        768,
+        679
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "highway_toll": {
+      "path": "res://assets/world_v4/architecture/roadwarden-gate-v4-01.png",
+      "source_rect": [
+        112,
+        144,
+        1314,
+        741
+      ],
+      "width": 610,
+      "label": "破損驛路關門",
+      "footprints": [
+        [
+          -270,
+          -52,
+          132,
+          54
+        ],
+        [
+          138,
+          -4,
+          132,
+          54
+        ]
+      ],
+      "foot": [
+        768,
+        800
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "marsh_pumphouse": {
+      "path": "res://assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+      "source_rect": [
+        167,
+        48,
+        1242,
+        935
+      ],
+      "width": 420,
+      "label": "腐水分流泵屋",
+      "footprints": [
+        [
+          -166,
+          -63,
+          328,
+          80
+        ]
+      ],
+      "foot": [
+        790,
+        845
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "crystal_buttress": {
+      "path": "res://assets/world_v4/architecture/crystal-buttress-v4-01.png",
+      "source_rect": [
+        155,
+        17,
+        1267,
+        983
+      ],
+      "width": 390,
+      "label": "紫晶共鳴殘壁",
+      "footprints": [
+        [
+          -170,
+          -80,
+          85,
+          34
+        ],
+        [
+          -85,
+          -50,
+          85,
+          34
+        ],
+        [
+          0,
+          -20,
+          85,
+          34
+        ],
+        [
+          85,
+          10,
+          85,
+          34
+        ]
+      ],
+      "foot": [
+        800,
+        820
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "factory_furnace": {
+      "path": "res://assets/world_v4/architecture/ruined-forge-v4-01.png",
+      "source_rect": [
+        118,
+        3,
+        1331,
+        1007
+      ],
+      "width": 420,
+      "label": "雙煙囪熔爐廳",
+      "footprints": [
+        [
+          -182,
+          -70,
+          364,
+          88
+        ]
+      ],
+      "foot": [
+        800,
+        865
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "metropolis_bell": {
+      "path": "res://assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+      "source_rect": [
+        171,
+        81,
+        1243,
+        852
+      ],
+      "width": 420,
+      "label": "封存名冊鐘堂",
+      "footprints": [
+        [
+          -182,
+          -62,
+          364,
+          84
+        ]
+      ],
+      "foot": [
+        790,
+        835
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "facility_lab": {
+      "path": "res://assets/world_v4/architecture/sealed-cistern-v4-01.png",
+      "source_rect": [
+        119,
+        114,
+        1297,
+        801
+      ],
+      "width": 460,
+      "label": "封存淨水蓄池",
+      "footprints": [
+        [
+          -205,
+          -70,
+          410,
+          88
+        ]
+      ],
+      "foot": [
+        768,
+        835
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "industrial_crossing": {
+      "path": "res://assets/world_v4/architecture/stone-service-crossing-v4-01.png",
+      "source_rect": [
+        207,
+        298,
+        1141,
+        488
+      ],
+      "width": 430,
+      "label": "架空供水石廊",
+      "footprints": [
+        [
+          -198,
+          -35,
+          100,
+          50
+        ],
+        [
+          102,
+          -15,
+          100,
+          50
+        ]
+      ],
+      "foot": [
+        768,
+        725
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "highway_depot_small": {
+      "path": "res://assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+      "source_rect": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "width": 400,
+      "label": "路衛修繕棚",
+      "footprints": [
+        [
+          -112.98,
+          -61.75,
+          40.7,
+          25.96
+        ],
+        [
+          80.0,
+          -29.47,
+          40.7,
+          24.56
+        ],
+        [
+          -68.77,
+          -109.47,
+          157.89,
+          24.56
+        ]
+      ],
+      "foot": [
+        768,
+        900
+      ],
+      "alpha_cutoff": 0.035,
+      "authored_ground_contact": true
+    },
+    "marsh_pumphouse_low": {
+      "path": "res://assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+      "source_rect": [
+        167,
+        48,
+        1242,
+        935
+      ],
+      "width": 360,
+      "label": "腐水分流泵屋",
+      "footprints": [
+        [
+          -142.29,
+          -54,
+          281.14,
+          68.57
+        ]
+      ],
+      "foot": [
+        790,
+        845
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "factory_furnace_story": {
+      "path": "res://assets/world_v4/architecture/ruined-forge-v4-01.png",
+      "source_rect": [
+        118,
+        3,
+        1331,
+        1007
+      ],
+      "width": 390,
+      "label": "雙煙囪熔爐廳",
+      "footprints": [
+        [
+          -169.0,
+          -65.0,
+          338.0,
+          81.714286
+        ]
+      ],
+      "foot": [
+        800,
+        865
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "metropolis_bell_story": {
+      "path": "res://assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+      "source_rect": [
+        171,
+        81,
+        1243,
+        852
+      ],
+      "width": 390,
+      "label": "封存名冊鐘堂",
+      "footprints": [
+        [
+          -169.0,
+          -57.571429,
+          338.0,
+          78.0
+        ]
+      ],
+      "foot": [
+        790,
+        835
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "facility_lab_story": {
+      "path": "res://assets/world_v4/architecture/sealed-cistern-v4-01.png",
+      "source_rect": [
+        119,
+        114,
+        1297,
+        801
+      ],
+      "width": 400,
+      "label": "封存淨水蓄池",
+      "footprints": [
+        [
+          -178.26087,
+          -60.869565,
+          356.521739,
+          76.521739
+        ]
+      ],
+      "foot": [
+        768,
+        835
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "metropolis_street_workshop": {
+      "path": "res://assets/world_v4/architecture/ash-street-workshop-v4-01.png",
+      "source_rect": [
+        19,
+        90,
+        1499,
+        871
+      ],
+      "width": 600,
+      "label": "落灰南街民居工坊",
+      "footprints": [
+        [
+          -273.382255,
+          -82.054703,
+          204.136091,
+          60.040027
+        ],
+        [
+          -77.251501,
+          -50.033356,
+          172.114743,
+          56.037358
+        ],
+        [
+          88.859239,
+          -22.014676,
+          172.114743,
+          50.033356
+        ]
+      ],
+      "foot": [
+        768,
+        855
+      ],
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    }
+  },
+  "routes": {
+    "scrap_highway": {
+      "placements": [
+        {
+          "module": "highway_toll",
+          "position": [
+            0.5,
+            0.858
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.422,
+            0.835
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.578,
+            0.835
+          ]
+        },
+        {
+          "module": "highway_depot",
+          "position": [
+            0.414,
+            0.746
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.585,
+            0.759
+          ]
+        },
+        {
+          "module": "highway_flyover",
+          "position": [
+            0.5,
+            0.81
+          ]
+        },
+        {
+          "module": "highway_depot_small",
+          "position": [
+            0.5335,
+            0.625
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.59,
+            0.594
+          ]
+        },
+        {
+          "module": "highway_flyover",
+          "position": [
+            0.5,
+            0.502
+          ]
+        },
+        {
+          "module": "highway_depot",
+          "position": [
+            0.27,
+            0.59
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.166,
+            0.754
+          ]
+        },
+        {
+          "module": "highway_toll",
+          "position": [
+            0.78,
+            0.526
+          ]
+        },
+        {
+          "module": "highway_depot",
+          "position": [
+            0.855,
+            0.438
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.694,
+            0.436
+          ]
+        },
+        {
+          "module": "highway_flyover",
+          "position": [
+            0.5,
+            0.24
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.385,
+            0.19
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.615,
+            0.19
+          ]
+        }
+      ],
+      "ground_areas": [
+        {
+          "rect": [
+            0.87732143,
+            0.43706994,
+            0.05022321,
+            0.04464286
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.88133929,
+              0.44242708
+            ],
+            [
+              0.889375,
+              0.43885566
+            ],
+            [
+              0.90042411,
+              0.44064137
+            ],
+            [
+              0.91197545,
+              0.4379628
+            ],
+            [
+              0.92302456,
+              0.44376637
+            ],
+            [
+              0.9205134,
+              0.45314137
+            ],
+            [
+              0.92503349,
+              0.46474851
+            ],
+            [
+              0.91498884,
+              0.47724851
+            ],
+            [
+              0.90444197,
+              0.47456994
+            ],
+            [
+              0.89339286,
+              0.47948066
+            ],
+            [
+              0.88284599,
+              0.47367708
+            ],
+            [
+              0.87933036,
+              0.46073066
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.31245535,
+            0.18906994,
+            0.05022321,
+            0.04464286
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.31647321,
+              0.19442708
+            ],
+            [
+              0.32450892,
+              0.19085566
+            ],
+            [
+              0.33555803,
+              0.19264137
+            ],
+            [
+              0.34710937,
+              0.1899628
+            ],
+            [
+              0.35815848,
+              0.19576637
+            ],
+            [
+              0.35564732,
+              0.20514137
+            ],
+            [
+              0.36016741,
+              0.21674851
+            ],
+            [
+              0.35012276,
+              0.22924851
+            ],
+            [
+              0.33957589,
+              0.22656994
+            ],
+            [
+              0.32852678,
+              0.23148066
+            ],
+            [
+              0.31797991,
+              0.22567708
+            ],
+            [
+              0.31446428,
+              0.21273066
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.62145536,
+            0.43506994,
+            0.05022321,
+            0.04464286
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.62547321,
+              0.44042708
+            ],
+            [
+              0.63350893,
+              0.43685565
+            ],
+            [
+              0.64455804,
+              0.43864137
+            ],
+            [
+              0.65610937,
+              0.4359628
+            ],
+            [
+              0.66715848,
+              0.44176637
+            ],
+            [
+              0.66464732,
+              0.45114137
+            ],
+            [
+              0.66916741,
+              0.46274851
+            ],
+            [
+              0.65912277,
+              0.47524851
+            ],
+            [
+              0.64857589,
+              0.47256994
+            ],
+            [
+              0.63752679,
+              0.47748065
+            ],
+            [
+              0.62697991,
+              0.47167708
+            ],
+            [
+              0.62346429,
+              0.45873065
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.45479911,
+            0.59895833,
+            0.10323661,
+            0.0437128
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.4561942,
+              0.60360863
+            ],
+            [
+              0.46456473,
+              0.59895833
+            ],
+            [
+              0.48409598,
+              0.60044643
+            ],
+            [
+              0.50083705,
+              0.61197917
+            ],
+            [
+              0.52385603,
+              0.61532738
+            ],
+            [
+              0.55106027,
+              0.61941964
+            ],
+            [
+              0.55664062,
+              0.63058036
+            ],
+            [
+              0.54966518,
+              0.64174107
+            ],
+            [
+              0.52315848,
+              0.64267113
+            ],
+            [
+              0.50223214,
+              0.6296503
+            ],
+            [
+              0.47293527,
+              0.62313988
+            ],
+            [
+              0.45479911,
+              0.61290923
+            ]
+          ]
+        }
+      ],
+      "decorations": [
+        {
+          "prop": "covered_wagon",
+          "position": [
+            0.88848215,
+            0.4504628
+          ],
+          "size": [
+            168,
+            160
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "overturned_wagon",
+          "position": [
+            0.90243304,
+            0.45939137
+          ],
+          "size": [
+            168,
+            160
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "wagon",
+          "position": [
+            0.91638393,
+            0.46831994
+          ],
+          "size": [
+            168,
+            160
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.8877846,
+            0.46720387
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.8940625,
+            0.47427232
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.90243304,
+            0.44637054
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.91708148,
+            0.45157887
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.91080358,
+            0.44451042
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.32989397,
+            0.21604167
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.34035714,
+            0.21883185
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.34733259,
+            0.20488095
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.32222098,
+            0.22162202
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.35291294,
+            0.20395089
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.32291852,
+            0.20302083
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.65912277,
+            0.46483185
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.63680134,
+            0.45925149
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.64656696,
+            0.46297173
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.63261607,
+            0.44902083
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.66191295,
+            0.44902083
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.63401116,
+            0.44809077
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "scrap_wall",
+          "position": [
+            0.54896763,
+            0.63058036
+          ],
+          "size": [
+            148,
+            120
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.54896763,
+            0.63802083
+          ],
+          "size": [
+            96,
+            70
+          ],
+          "blocking": false
+        }
+      ]
+    },
+    "toxic_marsh": {
+      "placements": [
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.4,
+            0.84
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.67,
+            0.77
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.37,
+            0.65
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.425,
+            0.535
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.695,
+            0.45
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.8,
+            0.34
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.38,
+            0.25
+          ]
+        },
+        {
+          "module": "marsh_pumphouse",
+          "position": [
+            0.26,
+            0.5
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.46,
+            0.705
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.76,
+            0.61
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.23,
+            0.4
+          ]
+        },
+        {
+          "module": "marsh_pumphouse_low",
+          "position": [
+            0.43,
+            0.605
+          ]
+        }
+      ],
+      "ground_areas": [
+        {
+          "rect": [
+            0.29,
+            0.29,
+            0.1,
+            0.3
+          ],
+          "kind": "water",
+          "blocking": true,
+          "outline": [
+            [
+              0.302,
+              0.3005
+            ],
+            [
+              0.322,
+              0.29
+            ],
+            [
+              0.341,
+              0.317
+            ],
+            [
+              0.366,
+              0.296
+            ],
+            [
+              0.385,
+              0.326
+            ],
+            [
+              0.374,
+              0.365
+            ],
+            [
+              0.39,
+              0.407
+            ],
+            [
+              0.378,
+              0.449
+            ],
+            [
+              0.389,
+              0.497
+            ],
+            [
+              0.37,
+              0.536
+            ],
+            [
+              0.383,
+              0.572
+            ],
+            [
+              0.357,
+              0.59
+            ],
+            [
+              0.338,
+              0.563
+            ],
+            [
+              0.317,
+              0.584
+            ],
+            [
+              0.298,
+              0.554
+            ],
+            [
+              0.309,
+              0.506
+            ],
+            [
+              0.291,
+              0.473
+            ],
+            [
+              0.304,
+              0.425
+            ],
+            [
+              0.29,
+              0.38
+            ],
+            [
+              0.307,
+              0.341
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.56,
+            0.31,
+            0.1,
+            0.25
+          ],
+          "kind": "water",
+          "blocking": true,
+          "outline": [
+            [
+              0.643,
+              0.3525
+            ],
+            [
+              0.66,
+              0.385
+            ],
+            [
+              0.646,
+              0.4225
+            ],
+            [
+              0.659,
+              0.4625
+            ],
+            [
+              0.641,
+              0.49
+            ],
+            [
+              0.652,
+              0.53
+            ],
+            [
+              0.633,
+              0.555
+            ],
+            [
+              0.612,
+              0.5375
+            ],
+            [
+              0.593,
+              0.56
+            ],
+            [
+              0.567,
+              0.545
+            ],
+            [
+              0.58,
+              0.515
+            ],
+            [
+              0.561,
+              0.4825
+            ],
+            [
+              0.572,
+              0.4425
+            ],
+            [
+              0.56,
+              0.4075
+            ],
+            [
+              0.576,
+              0.3725
+            ],
+            [
+              0.565,
+              0.34
+            ],
+            [
+              0.584,
+              0.315
+            ],
+            [
+              0.609,
+              0.3325
+            ],
+            [
+              0.628,
+              0.31
+            ],
+            [
+              0.648,
+              0.31875
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.53,
+            0.77,
+            0.1,
+            0.09
+          ],
+          "kind": "water",
+          "blocking": false,
+          "outline": [
+            [
+              0.542,
+              0.77315
+            ],
+            [
+              0.562,
+              0.77
+            ],
+            [
+              0.581,
+              0.7781
+            ],
+            [
+              0.606,
+              0.7718
+            ],
+            [
+              0.625,
+              0.7808
+            ],
+            [
+              0.614,
+              0.7925
+            ],
+            [
+              0.63,
+              0.8051
+            ],
+            [
+              0.618,
+              0.8177
+            ],
+            [
+              0.629,
+              0.8321
+            ],
+            [
+              0.61,
+              0.8438
+            ],
+            [
+              0.623,
+              0.8546
+            ],
+            [
+              0.597,
+              0.86
+            ],
+            [
+              0.578,
+              0.8519
+            ],
+            [
+              0.557,
+              0.8582
+            ],
+            [
+              0.538,
+              0.8492
+            ],
+            [
+              0.549,
+              0.8348
+            ],
+            [
+              0.531,
+              0.8249
+            ],
+            [
+              0.544,
+              0.8105
+            ],
+            [
+              0.53,
+              0.797
+            ],
+            [
+              0.547,
+              0.7853
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.49,
+            0.47,
+            0.075,
+            0.115
+          ],
+          "kind": "water",
+          "blocking": true,
+          "outline": [
+            [
+              0.55225,
+              0.48955
+            ],
+            [
+              0.565,
+              0.5045
+            ],
+            [
+              0.5545,
+              0.52175
+            ],
+            [
+              0.56425,
+              0.54015
+            ],
+            [
+              0.55075,
+              0.5528
+            ],
+            [
+              0.559,
+              0.5712
+            ],
+            [
+              0.54475,
+              0.5827
+            ],
+            [
+              0.529,
+              0.57465
+            ],
+            [
+              0.51475,
+              0.585
+            ],
+            [
+              0.49525,
+              0.5781
+            ],
+            [
+              0.505,
+              0.5643
+            ],
+            [
+              0.49075,
+              0.54935
+            ],
+            [
+              0.499,
+              0.53095
+            ],
+            [
+              0.49,
+              0.51485
+            ],
+            [
+              0.502,
+              0.49875
+            ],
+            [
+              0.49375,
+              0.4838
+            ],
+            [
+              0.508,
+              0.4723
+            ],
+            [
+              0.52675,
+              0.48035
+            ],
+            [
+              0.541,
+              0.47
+            ],
+            [
+              0.556,
+              0.474025
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.321875,
+            0.84679348,
+            0.05408654,
+            0.04076087
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.32620192,
+              0.85168478
+            ],
+            [
+              0.33485577,
+              0.84842391
+            ],
+            [
+              0.34675481,
+              0.85005435
+            ],
+            [
+              0.35919471,
+              0.8476087
+            ],
+            [
+              0.37109375,
+              0.85290761
+            ],
+            [
+              0.36838942,
+              0.86146739
+            ],
+            [
+              0.37325721,
+              0.87206522
+            ],
+            [
+              0.3624399,
+              0.88347826
+            ],
+            [
+              0.35108173,
+              0.88103261
+            ],
+            [
+              0.33918269,
+              0.8855163
+            ],
+            [
+              0.32782452,
+              0.88021739
+            ],
+            [
+              0.32403846,
+              0.86839674
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.30990385,
+            0.64915082,
+            0.05408654,
+            0.04076087
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.31423077,
+              0.65404212
+            ],
+            [
+              0.32288462,
+              0.65078125
+            ],
+            [
+              0.33478365,
+              0.65241168
+            ],
+            [
+              0.34722356,
+              0.64996603
+            ],
+            [
+              0.3591226,
+              0.65526495
+            ],
+            [
+              0.35641827,
+              0.66382473
+            ],
+            [
+              0.36128606,
+              0.67442255
+            ],
+            [
+              0.35046875,
+              0.6858356
+            ],
+            [
+              0.33911058,
+              0.68338995
+            ],
+            [
+              0.32721154,
+              0.68787364
+            ],
+            [
+              0.31585337,
+              0.68257473
+            ],
+            [
+              0.31206731,
+              0.67075408
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.40403846,
+            0.26953125,
+            0.05408654,
+            0.04076087
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.40836538,
+              0.27442255
+            ],
+            [
+              0.41701923,
+              0.27116168
+            ],
+            [
+              0.42891827,
+              0.27279212
+            ],
+            [
+              0.44135817,
+              0.27034647
+            ],
+            [
+              0.45325721,
+              0.27564538
+            ],
+            [
+              0.45055288,
+              0.28420516
+            ],
+            [
+              0.45542067,
+              0.29480299
+            ],
+            [
+              0.44460337,
+              0.30621603
+            ],
+            [
+              0.43324519,
+              0.30377038
+            ],
+            [
+              0.42134615,
+              0.30825408
+            ],
+            [
+              0.40998798,
+              0.30295516
+            ],
+            [
+              0.40620192,
+              0.29113451
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.40414663,
+            0.51120924,
+            0.09014423,
+            0.04840353
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.40414663,
+              0.54177989
+            ],
+            [
+              0.41316106,
+              0.53838315
+            ],
+            [
+              0.4311899,
+              0.54008152
+            ],
+            [
+              0.44621394,
+              0.5358356
+            ],
+            [
+              0.45973558,
+              0.5298913
+            ],
+            [
+              0.4702524,
+              0.51630435
+            ],
+            [
+              0.48076923,
+              0.51120924
+            ],
+            [
+              0.49429087,
+              0.51375679
+            ],
+            [
+              0.49429087,
+              0.52309783
+            ],
+            [
+              0.47926683,
+              0.5298913
+            ],
+            [
+              0.4672476,
+              0.54347826
+            ],
+            [
+              0.45372596,
+              0.55536685
+            ],
+            [
+              0.4296875,
+              0.55961277
+            ],
+            [
+              0.40865385,
+              0.55366848
+            ]
+          ]
+        }
+      ],
+      "decorations": [
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.36319111,
+            0.86038043
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.33990385,
+            0.85953125
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": true
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.3609375,
+            0.87532609
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.33614784,
+            0.87141984
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.34891827,
+            0.87481658
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.36394231,
+            0.86632473
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.33239183,
+            0.87736413
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.35042067,
+            0.8569837
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.32192308,
+            0.6610394
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.34295673,
+            0.66188859
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.32643029,
+            0.6720788
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.33694712,
+            0.67547554
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.35121995,
+            0.67717391
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.35347356,
+            0.66528533
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "toxic_pool",
+          "position": [
+            0.42206731,
+            0.28991168
+          ],
+          "size": [
+            112,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.44535457,
+            0.29245924
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.41680889,
+            0.29670516
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.43108173,
+            0.29925272
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.44460337,
+            0.29925272
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.44760817,
+            0.28226902
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.45222356,
+            0.54177989
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        }
+      ]
+    },
+    "crystal_scar": {
+      "placements": [
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.42,
+            0.88
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.59,
+            0.79
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.4,
+            0.65
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.62,
+            0.59
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.15,
+            0.52
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.29,
+            0.39
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.7,
+            0.42
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.84,
+            0.31
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.42,
+            0.21
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.61,
+            0.16
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.53385417,
+            0.61990489
+          ]
+        },
+        {
+          "module": "crystal_buttress",
+          "position": [
+            0.62,
+            0.37
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.22,
+            0.69
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.77,
+            0.57
+          ]
+        }
+      ],
+      "decorations": [
+        {
+          "prop": "crystal_node",
+          "position": [
+            0.09140625,
+            0.53953125
+          ],
+          "size": [
+            96,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.09068287,
+            0.54377717
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.10081019,
+            0.54632473
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.11600116,
+            0.54547554
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.08706597,
+            0.53188859
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "crystal_node",
+          "position": [
+            0.88050926,
+            0.32953125
+          ],
+          "size": [
+            96,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.90221065,
+            0.3269837
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.87689236,
+            0.33717391
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.88918981,
+            0.33887228
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.90438079,
+            0.33717391
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.64170139,
+            0.60528533
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.65327546,
+            0.60868207
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.6662963,
+            0.60273777
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.63663773,
+            0.59424592
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.66050926,
+            0.59339674
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.49045139,
+            0.63179348
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.52228009,
+            0.64028533
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "crystal_node",
+          "position": [
+            0.47453704,
+            0.64368207
+          ],
+          "size": [
+            96,
+            64
+          ],
+          "blocking": false
+        }
+      ],
+      "ground_areas": [
+        {
+          "rect": [
+            0.31,
+            0.31,
+            0.08,
+            0.28
+          ],
+          "kind": "chasm",
+          "blocking": true,
+          "outline": [
+            [
+              0.3196,
+              0.3198
+            ],
+            [
+              0.3356,
+              0.31
+            ],
+            [
+              0.3508,
+              0.3352
+            ],
+            [
+              0.3708,
+              0.3156
+            ],
+            [
+              0.386,
+              0.3436
+            ],
+            [
+              0.3772,
+              0.38
+            ],
+            [
+              0.39,
+              0.4192
+            ],
+            [
+              0.3804,
+              0.4584
+            ],
+            [
+              0.3892,
+              0.5032
+            ],
+            [
+              0.374,
+              0.5396
+            ],
+            [
+              0.3844,
+              0.5732
+            ],
+            [
+              0.3636,
+              0.59
+            ],
+            [
+              0.3484,
+              0.5648
+            ],
+            [
+              0.3316,
+              0.5844
+            ],
+            [
+              0.3164,
+              0.5564
+            ],
+            [
+              0.3252,
+              0.5116
+            ],
+            [
+              0.3108,
+              0.4808
+            ],
+            [
+              0.3212,
+              0.436
+            ],
+            [
+              0.31,
+              0.394
+            ],
+            [
+              0.3236,
+              0.3576
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.59,
+            0.26,
+            0.07,
+            0.22
+          ],
+          "kind": "chasm",
+          "blocking": true,
+          "outline": [
+            [
+              0.6481,
+              0.2974
+            ],
+            [
+              0.66,
+              0.326
+            ],
+            [
+              0.6502,
+              0.359
+            ],
+            [
+              0.6593,
+              0.3942
+            ],
+            [
+              0.6467,
+              0.4184
+            ],
+            [
+              0.6544,
+              0.4536
+            ],
+            [
+              0.6411,
+              0.4756
+            ],
+            [
+              0.6264,
+              0.4602
+            ],
+            [
+              0.6131,
+              0.48
+            ],
+            [
+              0.5949,
+              0.4668
+            ],
+            [
+              0.604,
+              0.4404
+            ],
+            [
+              0.5907,
+              0.4118
+            ],
+            [
+              0.5984,
+              0.3766
+            ],
+            [
+              0.59,
+              0.3458
+            ],
+            [
+              0.6012,
+              0.315
+            ],
+            [
+              0.5935,
+              0.2864
+            ],
+            [
+              0.6068,
+              0.2644
+            ],
+            [
+              0.6243,
+              0.2798
+            ],
+            [
+              0.6376,
+              0.26
+            ],
+            [
+              0.6516,
+              0.2677
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.07476852,
+            0.51915082,
+            0.05208333,
+            0.04076087
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.07893519,
+              0.52404212
+            ],
+            [
+              0.08726852,
+              0.52078125
+            ],
+            [
+              0.09872685,
+              0.52241168
+            ],
+            [
+              0.11070602,
+              0.51996603
+            ],
+            [
+              0.12216435,
+              0.52526495
+            ],
+            [
+              0.11956019,
+              0.53382473
+            ],
+            [
+              0.12424769,
+              0.54442255
+            ],
+            [
+              0.11383102,
+              0.5558356
+            ],
+            [
+              0.10289352,
+              0.55338995
+            ],
+            [
+              0.09143519,
+              0.55787364
+            ],
+            [
+              0.08049769,
+              0.55257473
+            ],
+            [
+              0.07685185,
+              0.54075408
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.86314815,
+            0.30915082,
+            0.05208333,
+            0.04076087
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.86731481,
+              0.31404212
+            ],
+            [
+              0.87564815,
+              0.31078125
+            ],
+            [
+              0.88710648,
+              0.31241168
+            ],
+            [
+              0.89908565,
+              0.30996603
+            ],
+            [
+              0.91054398,
+              0.31526495
+            ],
+            [
+              0.90793981,
+              0.32382473
+            ],
+            [
+              0.91262731,
+              0.33442255
+            ],
+            [
+              0.90221065,
+              0.3458356
+            ],
+            [
+              0.89127315,
+              0.34338995
+            ],
+            [
+              0.87981481,
+              0.34787364
+            ],
+            [
+              0.86887731,
+              0.34257473
+            ],
+            [
+              0.86523148,
+              0.33075408
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.62578704,
+            0.58150815,
+            0.05208333,
+            0.04076087
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.6299537,
+              0.58639946
+            ],
+            [
+              0.63828704,
+              0.58313859
+            ],
+            [
+              0.64974537,
+              0.58476902
+            ],
+            [
+              0.66172454,
+              0.58232337
+            ],
+            [
+              0.67318287,
+              0.58762228
+            ],
+            [
+              0.6705787,
+              0.59618207
+            ],
+            [
+              0.6752662,
+              0.60677989
+            ],
+            [
+              0.66484954,
+              0.61819293
+            ],
+            [
+              0.65391204,
+              0.61574728
+            ],
+            [
+              0.6424537,
+              0.62023098
+            ],
+            [
+              0.6315162,
+              0.61493207
+            ],
+            [
+              0.62787037,
+              0.60311141
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.45355903,
+            0.60971467,
+            0.11212384,
+            0.04585598
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.45355903,
+              0.62075408
+            ],
+            [
+              0.46368634,
+              0.60971467
+            ],
+            [
+              0.47887731,
+              0.61141304
+            ],
+            [
+              0.49334491,
+              0.62330163
+            ],
+            [
+              0.51070602,
+              0.62754755
+            ],
+            [
+              0.53096065,
+              0.61990489
+            ],
+            [
+              0.55555556,
+              0.63009511
+            ],
+            [
+              0.56568287,
+              0.63858696
+            ],
+            [
+              0.55555556,
+              0.65047554
+            ],
+            [
+              0.53385417,
+              0.64877717
+            ],
+            [
+              0.5150463,
+              0.65387228
+            ],
+            [
+              0.49334491,
+              0.64877717
+            ],
+            [
+              0.4759838,
+              0.65557065
+            ],
+            [
+              0.45717593,
+              0.64028533
+            ]
+          ]
+        }
+      ]
+    },
+    "old_factory": {
+      "placements": [
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.42,
+            0.86
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.6,
+            0.76
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.18,
+            0.61
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.33,
+            0.53
+          ]
+        },
+        {
+          "module": "factory_furnace_story",
+          "position": [
+            0.48828125,
+            0.45099432
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.61,
+            0.35
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.85,
+            0.5
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.69,
+            0.27
+          ]
+        },
+        {
+          "module": "factory_furnace",
+          "position": [
+            0.58,
+            0.12
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.52,
+            0.67
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.77,
+            0.39
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.25,
+            0.35
+          ]
+        }
+      ],
+      "decorations": [
+        {
+          "prop": "waypost",
+          "position": [
+            0.35791853,
+            0.87242898
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.36349888,
+            0.8821946
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.37256696,
+            0.88663352
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.38651786,
+            0.88840909
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.38163504,
+            0.87242898
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.11861607,
+            0.61621449
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.12489397,
+            0.6268679
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.13256696,
+            0.62953125
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.14582031,
+            0.62953125
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.14791295,
+            0.61799006
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.88487723,
+            0.51242898
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wagon",
+          "position": [
+            0.90859375,
+            0.51331676
+          ],
+          "size": [
+            168,
+            160
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.90301339,
+            0.50177557
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.89255022,
+            0.52130682
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.91208147,
+            0.50443892
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        }
+      ],
+      "ground_areas": [
+        {
+          "rect": [
+            0.34,
+            0.5,
+            0.08,
+            0.1
+          ],
+          "kind": "furnace",
+          "blocking": true,
+          "outline": [
+            [
+              0.348,
+              0.506
+            ],
+            [
+              0.368,
+              0.5
+            ],
+            [
+              0.3856,
+              0.508
+            ],
+            [
+              0.4104,
+              0.503
+            ],
+            [
+              0.4184,
+              0.52
+            ],
+            [
+              0.4104,
+              0.542
+            ],
+            [
+              0.42,
+              0.565
+            ],
+            [
+              0.4112,
+              0.591
+            ],
+            [
+              0.392,
+              0.598
+            ],
+            [
+              0.3712,
+              0.591
+            ],
+            [
+              0.352,
+              0.6
+            ],
+            [
+              0.3424,
+              0.579
+            ],
+            [
+              0.348,
+              0.555
+            ],
+            [
+              0.34,
+              0.528
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.6,
+            0.46,
+            0.07,
+            0.13
+          ],
+          "kind": "furnace",
+          "blocking": true,
+          "outline": [
+            [
+              0.607,
+              0.4678
+            ],
+            [
+              0.6245,
+              0.46
+            ],
+            [
+              0.6399,
+              0.4704
+            ],
+            [
+              0.6616,
+              0.4639
+            ],
+            [
+              0.6686,
+              0.486
+            ],
+            [
+              0.6616,
+              0.5146
+            ],
+            [
+              0.67,
+              0.5445
+            ],
+            [
+              0.6623,
+              0.5783
+            ],
+            [
+              0.6455,
+              0.5874
+            ],
+            [
+              0.6273,
+              0.5783
+            ],
+            [
+              0.6105,
+              0.59
+            ],
+            [
+              0.6021,
+              0.5627
+            ],
+            [
+              0.607,
+              0.5315
+            ],
+            [
+              0.6,
+              0.4964
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.34,
+            0.28,
+            0.08,
+            0.09
+          ],
+          "kind": "furnace",
+          "blocking": true,
+          "outline": [
+            [
+              0.348,
+              0.2854
+            ],
+            [
+              0.368,
+              0.28
+            ],
+            [
+              0.3856,
+              0.2872
+            ],
+            [
+              0.4104,
+              0.2827
+            ],
+            [
+              0.4184,
+              0.298
+            ],
+            [
+              0.4104,
+              0.3178
+            ],
+            [
+              0.42,
+              0.3385
+            ],
+            [
+              0.4112,
+              0.3619
+            ],
+            [
+              0.392,
+              0.3682
+            ],
+            [
+              0.3712,
+              0.3619
+            ],
+            [
+              0.352,
+              0.37
+            ],
+            [
+              0.3424,
+              0.3511
+            ],
+            [
+              0.348,
+              0.3295
+            ],
+            [
+              0.34,
+              0.3052
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.34745536,
+            0.85911222,
+            0.05022321,
+            0.04261364
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.35147321,
+              0.86422585
+            ],
+            [
+              0.35950893,
+              0.86081676
+            ],
+            [
+              0.37055804,
+              0.86252131
+            ],
+            [
+              0.38210937,
+              0.85996449
+            ],
+            [
+              0.39315848,
+              0.86550426
+            ],
+            [
+              0.39064732,
+              0.87445312
+            ],
+            [
+              0.39516741,
+              0.88553267
+            ],
+            [
+              0.38512277,
+              0.89746449
+            ],
+            [
+              0.37457589,
+              0.89490767
+            ],
+            [
+              0.36352679,
+              0.89959517
+            ],
+            [
+              0.35297991,
+              0.8940554
+            ],
+            [
+              0.34946429,
+              0.88169744
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.10745536,
+            0.60112216,
+            0.05022321,
+            0.04261364
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.11147321,
+              0.6062358
+            ],
+            [
+              0.11950893,
+              0.6028267
+            ],
+            [
+              0.13055804,
+              0.60453125
+            ],
+            [
+              0.14210938,
+              0.60197443
+            ],
+            [
+              0.15315848,
+              0.6075142
+            ],
+            [
+              0.15064732,
+              0.61646307
+            ],
+            [
+              0.15516741,
+              0.62754261
+            ],
+            [
+              0.14512277,
+              0.63947443
+            ],
+            [
+              0.13457589,
+              0.63691761
+            ],
+            [
+              0.12352679,
+              0.64160511
+            ],
+            [
+              0.11297991,
+              0.63606534
+            ],
+            [
+              0.10946429,
+              0.62370739
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.87232143,
+            0.49112216,
+            0.05022321,
+            0.04261364
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.87633929,
+              0.4962358
+            ],
+            [
+              0.884375,
+              0.4928267
+            ],
+            [
+              0.89542411,
+              0.49453125
+            ],
+            [
+              0.90697545,
+              0.49197443
+            ],
+            [
+              0.91802455,
+              0.4975142
+            ],
+            [
+              0.91551339,
+              0.50646307
+            ],
+            [
+              0.92003348,
+              0.51754261
+            ],
+            [
+              0.90998884,
+              0.52947443
+            ],
+            [
+              0.89944196,
+              0.52691761
+            ],
+            [
+              0.88839286,
+              0.53160511
+            ],
+            [
+              0.87784598,
+              0.52606534
+            ],
+            [
+              0.87433036,
+              0.51370739
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.45479911,
+            0.43323864,
+            0.10881696,
+            0.04616477
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.45479911,
+              0.45365767
+            ],
+            [
+              0.46456473,
+              0.44744318
+            ],
+            [
+              0.48967634,
+              0.45099432
+            ],
+            [
+              0.5078125,
+              0.44389205
+            ],
+            [
+              0.52176339,
+              0.44034091
+            ],
+            [
+              0.53989955,
+              0.43323864
+            ],
+            [
+              0.56082589,
+              0.43856534
+            ],
+            [
+              0.56361607,
+              0.45099432
+            ],
+            [
+              0.54827009,
+              0.45898438
+            ],
+            [
+              0.52455357,
+              0.46253551
+            ],
+            [
+              0.50641741,
+              0.47762784
+            ],
+            [
+              0.48270089,
+              0.47940341
+            ],
+            [
+              0.46037946,
+              0.47141335
+            ]
+          ]
+        }
+      ]
+    },
+    "ruined_metropolis": {
+      "placements": [
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.41,
+            0.86
+          ]
+        },
+        {
+          "module": "metropolis_street_workshop",
+          "position": [
+            0.56573276,
+            0.77148438
+          ]
+        },
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.17,
+            0.64
+          ]
+        },
+        {
+          "module": "metropolis_bell_story",
+          "position": [
+            0.46875,
+            0.52164714
+          ]
+        },
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.43,
+            0.44
+          ]
+        },
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.62,
+            0.37
+          ]
+        },
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.85,
+            0.38
+          ]
+        },
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.42,
+            0.18
+          ]
+        },
+        {
+          "module": "metropolis_bell",
+          "position": [
+            0.6,
+            0.14
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.29,
+            0.78
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.7,
+            0.58
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.35,
+            0.33
+          ]
+        },
+        {
+          "module": "highway_median",
+          "position": [
+            0.69,
+            0.25
+          ]
+        }
+      ],
+      "decorations": [
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.37699892,
+            0.87708984
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.35612069,
+            0.88115885
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.36420259,
+            0.88522786
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.35073276,
+            0.87139323
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.37363147,
+            0.88766927
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wagon",
+          "position": [
+            0.88569504,
+            0.39302083
+          ],
+          "size": [
+            168,
+            160
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.90589978,
+            0.38406901
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.89849138,
+            0.39871745
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.88165409,
+            0.38406901
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.90994073,
+            0.39953125
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.37477371,
+            0.45220703
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.38554957,
+            0.45708984
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.39699892,
+            0.45871745
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "thorn",
+          "position": [
+            0.39834591,
+            0.44488281
+          ],
+          "size": [
+            70,
+            70
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.37005927,
+            0.44406901
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        }
+      ],
+      "ground_areas": [
+        {
+          "rect": [
+            0.33,
+            0.61,
+            0.08,
+            0.1
+          ],
+          "kind": "rubble",
+          "blocking": false
+        },
+        {
+          "rect": [
+            0.6,
+            0.48,
+            0.08,
+            0.09
+          ],
+          "kind": "rubble",
+          "blocking": false
+        },
+        {
+          "rect": [
+            0.34,
+            0.28,
+            0.08,
+            0.09
+          ],
+          "kind": "rubble",
+          "blocking": false
+        },
+        {
+          "rect": [
+            0.3399569,
+            0.8591862,
+            0.04849138,
+            0.0390625
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.34383621,
+              0.8638737
+            ],
+            [
+              0.35159483,
+              0.8607487
+            ],
+            [
+              0.36226293,
+              0.8623112
+            ],
+            [
+              0.37341595,
+              0.85996745
+            ],
+            [
+              0.38408405,
+              0.86504557
+            ],
+            [
+              0.38165948,
+              0.8732487
+            ],
+            [
+              0.38602371,
+              0.88340495
+            ],
+            [
+              0.37632543,
+              0.89434245
+            ],
+            [
+              0.36614224,
+              0.8919987
+            ],
+            [
+              0.35547414,
+              0.89629557
+            ],
+            [
+              0.34529095,
+              0.89121745
+            ],
+            [
+              0.34189655,
+              0.87988932
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.87155172,
+            0.37186198,
+            0.04849138,
+            0.0390625
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.87543103,
+              0.37654948
+            ],
+            [
+              0.88318966,
+              0.37342448
+            ],
+            [
+              0.89385776,
+              0.37498698
+            ],
+            [
+              0.90501078,
+              0.37264323
+            ],
+            [
+              0.91567888,
+              0.37772135
+            ],
+            [
+              0.91325431,
+              0.38592448
+            ],
+            [
+              0.91761853,
+              0.39608073
+            ],
+            [
+              0.90792026,
+              0.40701823
+            ],
+            [
+              0.89773707,
+              0.40467448
+            ],
+            [
+              0.88706897,
+              0.40897135
+            ],
+            [
+              0.87688578,
+              0.40389323
+            ],
+            [
+              0.87349138,
+              0.3925651
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.3599569,
+            0.43186198,
+            0.04849138,
+            0.0390625
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.36383621,
+              0.43654948
+            ],
+            [
+              0.37159483,
+              0.43342448
+            ],
+            [
+              0.38226293,
+              0.43498698
+            ],
+            [
+              0.39341595,
+              0.43264323
+            ],
+            [
+              0.40408405,
+              0.43772135
+            ],
+            [
+              0.40165948,
+              0.44592448
+            ],
+            [
+              0.40602371,
+              0.45608073
+            ],
+            [
+              0.39632543,
+              0.46701823
+            ],
+            [
+              0.38614224,
+              0.46467448
+            ],
+            [
+              0.37547414,
+              0.46897135
+            ],
+            [
+              0.36529095,
+              0.46389323
+            ],
+            [
+              0.36189655,
+              0.4525651
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.43978987,
+            0.50537109,
+            0.10708513,
+            0.04394531
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.43978987,
+              0.52490234
+            ],
+            [
+              0.44854526,
+              0.51920573
+            ],
+            [
+              0.47009698,
+              0.52408854
+            ],
+            [
+              0.48895474,
+              0.51757812
+            ],
+            [
+              0.50377155,
+              0.51106771
+            ],
+            [
+              0.51993534,
+              0.50537109
+            ],
+            [
+              0.54148707,
+              0.5094401
+            ],
+            [
+              0.546875,
+              0.52246094
+            ],
+            [
+              0.53071121,
+              0.52978516
+            ],
+            [
+              0.5078125,
+              0.53304036
+            ],
+            [
+              0.49299569,
+              0.5452474
+            ],
+            [
+              0.47009698,
+              0.54931641
+            ],
+            [
+              0.44854526,
+              0.54280599
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.49568966,
+            0.76497396,
+            0.11449353,
+            0.03255208
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.49568966,
+              0.77392578
+            ],
+            [
+              0.52128233,
+              0.77067057
+            ],
+            [
+              0.53475216,
+              0.76497396
+            ],
+            [
+              0.56438578,
+              0.76985677
+            ],
+            [
+              0.59536638,
+              0.77473958
+            ],
+            [
+              0.61018319,
+              0.78125
+            ],
+            [
+              0.60614224,
+              0.79589844
+            ],
+            [
+              0.58054957,
+              0.79752604
+            ],
+            [
+              0.5549569,
+              0.79182943
+            ],
+            [
+              0.52667026,
+              0.79101562
+            ],
+            [
+              0.50646552,
+              0.78938802
+            ],
+            [
+              0.49568966,
+              0.78450521
+            ]
+          ]
+        }
+      ]
+    },
+    "underground_facility": {
+      "placements": [
+        {
+          "module": "facility_lab",
+          "position": [
+            0.41,
+            0.86
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.6,
+            0.74
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.16,
+            0.63
+          ]
+        },
+        {
+          "module": "facility_lab_story",
+          "position": [
+            0.46649639,
+            0.48177083
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.42,
+            0.4
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.6,
+            0.38
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.85,
+            0.45
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.37,
+            0.2
+          ]
+        },
+        {
+          "module": "facility_lab",
+          "position": [
+            0.6,
+            0.25
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.5,
+            0.68
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.82,
+            0.57
+          ]
+        },
+        {
+          "module": "industrial_crossing",
+          "position": [
+            0.23,
+            0.4
+          ]
+        }
+      ],
+      "decorations": [
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.38319111,
+            0.41139323
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.35990385,
+            0.41383464
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.36891827,
+            0.41790365
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.35389423,
+            0.40406901
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.37868389,
+            0.40244141
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "supply",
+          "position": [
+            0.8883113,
+            0.46546224
+          ],
+          "size": [
+            96,
+            84
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.89732572,
+            0.47360026
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.90934495,
+            0.47522786
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.91610577,
+            0.46220703
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.91310096,
+            0.47848307
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "wall_stub",
+          "position": [
+            0.64657452,
+            0.39302083
+          ],
+          "size": [
+            148,
+            152
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_a",
+          "position": [
+            0.62403846,
+            0.39302083
+          ],
+          "size": [
+            96,
+            68
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "rubble_b",
+          "position": [
+            0.63305288,
+            0.39790365
+          ],
+          "size": [
+            80,
+            64
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "dry_grass",
+          "position": [
+            0.61802885,
+            0.38406901
+          ],
+          "size": [
+            52,
+            44
+          ],
+          "blocking": false
+        },
+        {
+          "prop": "waypost",
+          "position": [
+            0.64206731,
+            0.38244141
+          ],
+          "size": [
+            60,
+            62
+          ],
+          "blocking": false
+        }
+      ],
+      "ground_areas": [
+        {
+          "rect": [
+            0.34,
+            0.5,
+            0.08,
+            0.11
+          ],
+          "kind": "coolant",
+          "blocking": true,
+          "outline": [
+            [
+              0.348,
+              0.5066
+            ],
+            [
+              0.368,
+              0.5
+            ],
+            [
+              0.3856,
+              0.5088
+            ],
+            [
+              0.4104,
+              0.5033
+            ],
+            [
+              0.4184,
+              0.522
+            ],
+            [
+              0.4104,
+              0.5462
+            ],
+            [
+              0.42,
+              0.5715
+            ],
+            [
+              0.4112,
+              0.6001
+            ],
+            [
+              0.392,
+              0.6078
+            ],
+            [
+              0.3712,
+              0.6001
+            ],
+            [
+              0.352,
+              0.61
+            ],
+            [
+              0.3424,
+              0.5869
+            ],
+            [
+              0.348,
+              0.5605
+            ],
+            [
+              0.34,
+              0.5308
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.6,
+            0.47,
+            0.06,
+            0.1
+          ],
+          "kind": "coolant",
+          "blocking": true,
+          "outline": [
+            [
+              0.606,
+              0.476
+            ],
+            [
+              0.621,
+              0.47
+            ],
+            [
+              0.6342,
+              0.478
+            ],
+            [
+              0.6528,
+              0.473
+            ],
+            [
+              0.6588,
+              0.49
+            ],
+            [
+              0.6528,
+              0.512
+            ],
+            [
+              0.66,
+              0.535
+            ],
+            [
+              0.6534,
+              0.561
+            ],
+            [
+              0.639,
+              0.568
+            ],
+            [
+              0.6234,
+              0.561
+            ],
+            [
+              0.609,
+              0.57
+            ],
+            [
+              0.6018,
+              0.549
+            ],
+            [
+              0.606,
+              0.525
+            ],
+            [
+              0.6,
+              0.498
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.35,
+            0.28,
+            0.08,
+            0.08
+          ],
+          "kind": "coolant",
+          "blocking": true,
+          "outline": [
+            [
+              0.358,
+              0.2848
+            ],
+            [
+              0.378,
+              0.28
+            ],
+            [
+              0.3956,
+              0.2864
+            ],
+            [
+              0.4204,
+              0.2824
+            ],
+            [
+              0.4284,
+              0.296
+            ],
+            [
+              0.4204,
+              0.3136
+            ],
+            [
+              0.43,
+              0.332
+            ],
+            [
+              0.4212,
+              0.3528
+            ],
+            [
+              0.402,
+              0.3584
+            ],
+            [
+              0.3812,
+              0.3528
+            ],
+            [
+              0.362,
+              0.36
+            ],
+            [
+              0.3524,
+              0.3432
+            ],
+            [
+              0.358,
+              0.324
+            ],
+            [
+              0.35,
+              0.3024
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.341875,
+            0.39186198,
+            0.05408654,
+            0.0390625
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.34620192,
+              0.39654948
+            ],
+            [
+              0.35485577,
+              0.39342448
+            ],
+            [
+              0.36675481,
+              0.39498698
+            ],
+            [
+              0.37919471,
+              0.39264323
+            ],
+            [
+              0.39109375,
+              0.39772135
+            ],
+            [
+              0.38838942,
+              0.40592448
+            ],
+            [
+              0.39325721,
+              0.41608073
+            ],
+            [
+              0.3824399,
+              0.42701823
+            ],
+            [
+              0.37108173,
+              0.42467448
+            ],
+            [
+              0.35918269,
+              0.42897135
+            ],
+            [
+              0.34782452,
+              0.42389323
+            ],
+            [
+              0.34403846,
+              0.4125651
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.87403846,
+            0.4491862,
+            0.05408654,
+            0.0390625
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.87836538,
+              0.4538737
+            ],
+            [
+              0.88701923,
+              0.4507487
+            ],
+            [
+              0.89891827,
+              0.4523112
+            ],
+            [
+              0.91135817,
+              0.44996745
+            ],
+            [
+              0.92325721,
+              0.45504557
+            ],
+            [
+              0.92055288,
+              0.4632487
+            ],
+            [
+              0.92542067,
+              0.47340495
+            ],
+            [
+              0.91460337,
+              0.48434245
+            ],
+            [
+              0.90324519,
+              0.4819987
+            ],
+            [
+              0.89134615,
+              0.48629557
+            ],
+            [
+              0.87998798,
+              0.48121745
+            ],
+            [
+              0.87620192,
+              0.46988932
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.60600962,
+            0.37186198,
+            0.05408654,
+            0.0390625
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.61033654,
+              0.37654948
+            ],
+            [
+              0.61899038,
+              0.37342448
+            ],
+            [
+              0.63088942,
+              0.37498698
+            ],
+            [
+              0.64332933,
+              0.37264323
+            ],
+            [
+              0.65522837,
+              0.37772135
+            ],
+            [
+              0.65252404,
+              0.38592448
+            ],
+            [
+              0.65739183,
+              0.39608073
+            ],
+            [
+              0.64657452,
+              0.40701823
+            ],
+            [
+              0.63521635,
+              0.40467448
+            ],
+            [
+              0.62331731,
+              0.40897135
+            ],
+            [
+              0.61195913,
+              0.40389323
+            ],
+            [
+              0.60817308,
+              0.3925651
+            ]
+          ]
+        },
+        {
+          "rect": [
+            0.42743389,
+            0.46630859,
+            0.12545072,
+            0.04313151
+          ],
+          "kind": "rubble",
+          "blocking": false,
+          "outline": [
+            [
+              0.42743389,
+              0.48339844
+            ],
+            [
+              0.43870192,
+              0.47851562
+            ],
+            [
+              0.46274038,
+              0.48339844
+            ],
+            [
+              0.48227163,
+              0.47688802
+            ],
+            [
+              0.50180288,
+              0.47200521
+            ],
+            [
+              0.52133413,
+              0.46630859
+            ],
+            [
+              0.5483774,
+              0.4703776
+            ],
+            [
+              0.55288462,
+              0.48177083
+            ],
+            [
+              0.53335337,
+              0.48990885
+            ],
+            [
+              0.50480769,
+              0.49316406
+            ],
+            [
+              0.48677885,
+              0.5061849
+            ],
+            [
+              0.46274038,
+              0.5094401
+            ],
+            [
+              0.43719952,
+              0.50211589
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "rendering": {
+    "texture_filter": "nearest",
+    "source_alpha_cutoff": 0.65,
+    "near_player_occlusion_alpha": 0.32,
+    "occlusion_refresh_seconds": 0.2,
+    "source_pixels_modified": false
+  },
+  "production_review": {
+    "status": "v4_six_region_art_registered_pending_full_camera_review",
+    "parent_reviewed_routes": [
+      "scrap_highway",
+      "toxic_marsh",
+      "crystal_scar",
+      "old_factory",
+      "ruined_metropolis",
+      "underground_facility"
+    ],
+    "review_scope": "Sixteen v4 architecture module entries select eleven original PNGs with explicit crops/feet. City street row replaces one unpaired church, with three stepped solid feet and a connected frontage. Whole-route composition, traversal and save acceptance remain unverified.",
+    "captures": "res://docs/art-direction/world_v4/captures/city-street-block/",
+    "automated_tests": "not run by latest user instruction",
+    "collision_traversal": "not verified"
+  },
+  "provenance": [
+    {
+      "path": "res://assets/world_v2/kits/highway-architecture-v2-01.png",
+      "sha256": "ad8eca0f3cf364b0fba26775127f249a7b0753d16468dd1f2d5cf763440d22c9",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://docs/art-direction/world_v2/prompts/highway-architecture-v2-01.txt"
+    },
+    {
+      "path": "res://assets/world_v2/kits/region-architecture-v2-01.png",
+      "sha256": "57e6128a66eb29f67687e2b1da7df5cbb61f149624d05dc978cbb3e751b62c64",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://docs/art-direction/world_v2/prompts/region-architecture-v2-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+      "sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+      "method": "built-in image_gen, unchanged original PNG",
+      "prompt": "res://assets/world_v4/prompts/roadwarden-shelter-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/slate-boundary-wall-v4-01.png",
+      "sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/slate-boundary-wall-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/roadwarden-gate-v4-01.png",
+      "sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/roadwarden-gate-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/broken-viaduct-v4-01.png",
+      "sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/broken-viaduct-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+      "sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/marsh-pumphouse-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/crystal-buttress-v4-01.png",
+      "sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/crystal-buttress-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/ruined-forge-v4-01.png",
+      "sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/ruined-forge-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+      "sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/fallen-bell-sanctuary-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/sealed-cistern-v4-01.png",
+      "sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/sealed-cistern-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/stone-service-crossing-v4-01.png",
+      "sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/stone-service-crossing-v4-01.txt"
+    },
+    {
+      "path": "res://assets/world_v4/architecture/ash-street-workshop-v4-01.png",
+      "sha256": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909",
+      "method": "built-in image_gen, original PNG bytes",
+      "prompt": "res://assets/world_v4/prompts/ash-street-workshop-v4-01.txt"
+    }
+  ]
+}

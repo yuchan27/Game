@@ -1,0 +1,405 @@
+extends Node
+
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const OUTPUT_ARGUMENT_PREFIX := "--seams-output="
+const VIEWS_ARGUMENT_PREFIX := "--seams-views="
+const VILLAGE_SCENE_PATH := "res://scenes/levels/village/Village.tscn"
+const GUILD_SCENE_PATH := "res://scenes/levels/guild/Guild.tscn"
+const WASTELAND_SCENE_PATH := "res://scenes/levels/wasteland/Wasteland.tscn"
+const CAMPAIGN_SCRIPT := preload("res://scripts/systems/CampaignProgress.gd")
+const ACTION_VIEWS: Array[String] = [
+	"escort-resume",
+	"carry-resume"
+]
+const ALL_VIEWS: Array[String] = [
+	"alan-first",
+	"alan-last",
+	"report-after-alan",
+	"mia-first",
+	"escort-resume",
+	"carry-resume"
+]
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+
+func _capture() -> void:
+	# Frozen presentation with staged RAM, isolated from real saves and authored art.
+	SceneRouter.transition_active = false
+	get_tree().paused = true
+
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this story presentation fixture only from its isolated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_dir := _read_argument(OUTPUT_ARGUMENT_PREFIX)
+	if output_dir.is_empty() or not output_dir.is_absolute_path():
+		push_error("Pass an absolute --seams-output= directory as a user argument.")
+		get_tree().quit(2)
+		return
+
+	var selected_views := _read_views()
+	if not bool(selected_views.get("ok", false)):
+		push_error(String(selected_views.get("error", "Invalid story seam view selection.")))
+		get_tree().quit(2)
+		return
+
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_dir)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested story presentation directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	var views: Array[String] = selected_views["views"]
+	for view_name: String in views:
+		get_tree().paused = true
+		var capture_ok := await _capture_view(view_name, output_dir)
+		get_tree().paused = true
+		if not capture_ok:
+			get_tree().quit(3)
+			return
+
+	get_tree().quit(0)
+
+
+func _read_argument(prefix: String) -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(prefix):
+			return argument.trim_prefix(prefix)
+	return ""
+
+
+func _read_views() -> Dictionary:
+	var raw_selection := _read_argument(VIEWS_ARGUMENT_PREFIX)
+	if raw_selection.is_empty():
+		return {"ok": true, "views": ALL_VIEWS.duplicate()}
+
+	var views: Array[String] = []
+	for raw_name: String in raw_selection.split(",", false):
+		var view_name := raw_name.strip_edges()
+		if not ALL_VIEWS.has(view_name):
+			return {"ok": false, "error": "Unknown story seam view: %s" % view_name}
+		if not views.has(view_name):
+			views.append(view_name)
+	if views.is_empty():
+		return {"ok": false, "error": "The --seams-views= list is empty."}
+	return {"ok": true, "views": views}
+
+
+func _capture_view(view_name: String, output_dir: String) -> bool:
+	var is_action_view := ACTION_VIEWS.has(view_name)
+	var is_mia_view := view_name == "mia-first"
+	var scene_path := WASTELAND_SCENE_PATH if is_action_view else (GUILD_SCENE_PATH if is_mia_view else VILLAGE_SCENE_PATH)
+	if is_action_view:
+		_stage_action_memory(view_name)
+	else:
+		_stage_story_memory("guild" if is_mia_view else "village")
+
+	var packed_scene := load(scene_path) as PackedScene
+	if packed_scene == null:
+		push_error("Could not load the native scene for story presentation: %s" % scene_path)
+		return false
+	var scene_root: Node = packed_scene.instantiate()
+	scene_root.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(scene_root)
+	get_tree().current_scene = scene_root
+	await _wait_process_frames(4)
+
+	var hud := scene_root.find_child("HUD", true, false)
+	var player := scene_root.find_child("Player", true, false) as Node2D
+	if hud == null or player == null:
+		push_error("The frozen native scene did not create its HUD and player for %s." % view_name)
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	_prepare_hud_notice(hud)
+
+	var presentation_ok := false
+	if is_action_view:
+		presentation_ok = _present_action_view(view_name, scene_root, hud, player)
+	else:
+		presentation_ok = await _present_story_view(view_name, scene_root, hud, player)
+	if not presentation_ok:
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	await _wait_process_frames(2)
+	_print_layout(view_name, hud, scene_root)
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	scene_root.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+
+func _stage_story_memory(scene_id: String) -> void:
+	GameState._expedition.clear()
+	GameState.active_quest_id = ""
+	GameState.quest_progress = {}
+	GameState.completed_quests.clear()
+	GameState.talked_npcs.clear()
+	GameState.route_states = {}
+	GameState.current_route_id = "scrap_highway"
+	GameState.current_scene_id = scene_id
+	GameState.active_spawn_point = "default"
+	GameState.death_pending = false
+	GameState.hp = GameState.get_max_hp()
+	GameState.ep = GameState.get_max_ep()
+
+
+func _stage_action_memory(view_name: String) -> void:
+	GameState._expedition.clear()
+	GameState.completed_quests.clear()
+	GameState.talked_npcs.clear()
+	GameState.route_states = {}
+	GameState.death_pending = false
+	GameState.hp = GameState.get_max_hp()
+	GameState.ep = GameState.get_max_ep()
+	GameState.active_spawn_point = "saved"
+
+	var quest_id := "clear_scrap_route"
+	var outing_id := "ch1a_escort_repair"
+	var action_id := "ch1a_escort_crew"
+	var checkpoint := 1
+	var actor_position := Vector2.ZERO
+	var player_position := Vector2.ZERO
+	if view_name == "carry-resume":
+		quest_id = "crystal_scar_recon"
+		outing_id = "ch3b_relay_defense"
+		action_id = "ch3b_carry_relay"
+		checkpoint = 1
+
+	var quest := DataRegistry.get_quest(quest_id)
+	var route_id := String(quest.get("route", ""))
+	var route := DataRegistry.get_wasteland_route(route_id)
+	var tile_size := int(DataRegistry.map_params.get("tile_size", 32))
+	var size_tiles: Array = route.get("size_tiles", [180, 140])
+	var world_size := Vector2(float(int(size_tiles[0]) * tile_size), float(int(size_tiles[1]) * tile_size))
+	GameState.active_quest_id = quest_id
+	GameState.quest_progress = {"campaign": CAMPAIGN_SCRIPT.new_state()}
+	if view_name == "carry-resume":
+		GameState.quest_progress["campaign"]["outing_index"] = 1
+		for previous_action: Dictionary in quest["campaign_outings"][0]["actions"]:
+			GameState.quest_progress["campaign"]["actions"][String(previous_action["id"])] = "done"
+	GameState.current_route_id = route_id
+	GameState.current_scene_id = "wasteland"
+	GameState._expedition.begin(route_id, quest_id)
+	GameState._expedition.active["campaign_outing"] = outing_id
+
+	if view_name == "escort-resume":
+		actor_position = Vector2(world_size.x * 0.5, world_size.y * 0.82)
+		player_position = Vector2(world_size.x * 0.5, world_size.y * 0.85)
+	else:
+		# Checkpoint 1 means the action has passed its first authored waypoint.
+		# The player stands before the next marker without advancing the action.
+		player_position = Vector2(world_size.x * 0.5, world_size.y * 0.67)
+	GameState.player_position = player_position
+	var runtime_progress := {
+		"started": true,
+		"checkpoint": checkpoint
+	}
+	if view_name == "escort-resume":
+		runtime_progress["actor_x"] = actor_position.x
+		runtime_progress["actor_y"] = actor_position.y
+	GameState._expedition.active["campaign_runtime"] = {action_id: runtime_progress}
+	GameState._expedition.active["haul"] = {}
+	GameState._expedition.active["campaign_actions"] = {}
+	GameState._expedition.active["campaign_outing"] = outing_id
+	print("STORY_SEAM_STATE:", view_name, " synthetic_ram_checkpoint=true; quest=", quest_id, " outing=", outing_id, " action=", action_id, " checkpoint=", checkpoint, " player=", player_position, " escort_actor=", actor_position, "; no save/load, interaction, action completion, reward, or settlement")
+
+
+func _present_story_view(view_name: String, scene_root: Node, hud: Node, player: Node2D) -> bool:
+	var npc_id := "wasteland_survivor"
+	if view_name == "mia-first":
+		npc_id = "guild_clerk"
+	var npc := DataRegistry.get_npc(npc_id)
+	var owner := _find_npc(scene_root, npc_id)
+	if npc.is_empty() or owner == null:
+		push_error("Native story scene is missing DialogueNpc %s." % npc_id)
+		return false
+	_position_player_near_owner(player, owner)
+	_prepare_player_camera(player, player.global_position)
+
+	if view_name == "report-after-alan":
+		_stage_owned_npc_page(hud, owner, npc, 1)
+		var owned_dialogue_panel := hud.get("dialogue_panel") as Control
+		if owned_dialogue_panel == null:
+			push_error("The native HUD did not create its dialogue panel.")
+			return false
+		var owner_before := int(owned_dialogue_panel.get_meta("dialogue_npc_owner_id", 0))
+		var staged_result := {
+			"outcome": "extracted",
+			"route": "scrap_highway",
+			"quest_id": "clear_scrap_route",
+			"campaign_outing": "ch1a_escort_repair",
+			"campaign_actions": {},
+			"haul": {"scrap": 7, "ammo": 3},
+			"draft_choices": {}
+		}
+		var report_text := GameState.expedition_result_text(staged_result)
+		if report_text.is_empty():
+			push_error("The staged result builder returned no story seam copy.")
+			return false
+		hud.call("_show_dialogue", "米婭", "撤離回報", report_text)
+		await get_tree().process_frame
+		var dialogue_panel := hud.get("dialogue_panel") as Control
+		var owner_after := int(dialogue_panel.get_meta("dialogue_npc_owner_id", -1)) if dialogue_panel != null else -1
+		var old_npc_active := bool(owner.get("_dialogue_active"))
+		print("STORY_SEAM_STATE:", view_name, " synthetic_ram_result=true; staged_result_only=true; owned_owner_id=", owner_before, " report_owner_id=", owner_after, " old_npc_active=", old_npc_active, "; no finish, quest completion, reward, settlement, or SaveManager IO")
+		return true
+
+	var page := 1
+	if view_name == "alan-last":
+		page = 2
+	_stage_owned_npc_page(hud, owner, npc, page)
+	await get_tree().process_frame
+	var dialogue_panel := hud.get("dialogue_panel") as Control
+	var panel_owner_id := int(dialogue_panel.get_meta("dialogue_npc_owner_id", 0)) if dialogue_panel != null else 0
+	print("STORY_SEAM_STATE:", view_name, " native_npc_copy=true; page=", page, " synthetic_ram_dialogue_state=true; owner_id=", panel_owner_id, " npc_active=", bool(owner.get("_dialogue_active")), "; no _talk, input, reward, quest change, or save IO")
+	return true
+
+
+func _stage_owned_npc_page(hud: Node, owner: Node, npc: Dictionary, page: int) -> void:
+	var npc_id := String(npc.get("id", ""))
+	var story_text := String(GameState.story_dialogue_for_npc(npc))
+	var first_message := story_text if not story_text.is_empty() else String(npc.get("line", ""))
+	first_message += GameState.campaign_npc_record(npc_id)
+	var message := first_message
+	if page >= 2:
+		if story_text.is_empty():
+			message = String(npc.get("repeat_line", first_message))
+		else:
+			message = "%s\n詳細紀錄可按 [K] 回看；委託與交付目標在 [J]。" % GameState.get_journey_hint()
+	owner.set("_dialogue_active", true)
+	owner.set("_dialogue_page", page)
+	owner.set("_player_near", true)
+	owner.call("_update_prompt_text")
+	hud.call("_show_npc_dialogue", owner, String(npc.get("name", npc_id)), String(npc.get("role", "倖存者")), message)
+
+
+func _present_action_view(view_name: String, scene_root: Node, hud: Node, player: Node2D) -> bool:
+	_prepare_player_camera(player, player.global_position)
+	var action_id := "ch1a_escort_crew" if view_name == "escort-resume" else "ch3b_carry_relay"
+	var action := _find_campaign_action(scene_root, action_id)
+	if action == null:
+		push_error("The frozen wasteland scene did not create campaign action %s." % action_id)
+		return false
+	if view_name == "escort-resume":
+		if not action.has_method("_ensure_escort_actor"):
+			push_error("Campaign escort presentation helper is unavailable.")
+			return false
+		action.call("_ensure_escort_actor")
+	else:
+		if not action.has_method("_ensure_payload"):
+			push_error("Campaign carry presentation helper is unavailable.")
+			return false
+		action.call("_ensure_payload")
+	if scene_root.has_method("_refresh_architecture_occlusion"):
+		scene_root.call("_refresh_architecture_occlusion")
+	if action.has_method("_refresh_status_display"):
+		action.call("_refresh_status_display")
+	if action.has_method("_update_status_label_position"):
+		action.call("_update_status_label_position")
+	var progress_state: Variant = action.call("presentation_state") if action.has_method("presentation_state") else {}
+	var actor_position := Vector2.ZERO
+	var payload_visible := false
+	if view_name == "escort-resume":
+		var escort := action.get("_escort_actor") as Node2D
+		if escort != null:
+			actor_position = escort.global_position
+	else:
+		var payload := player.get_node_or_null("CampaignCarryPayload") as Sprite2D
+		payload_visible = payload != null and payload.visible
+	print("STORY_SEAM_STATE:", view_name, " existing_action_presentation=true; action_state=", progress_state, " escort_actor=", actor_position, " payload_visible=", payload_visible, " player=", player.global_position, "; staged RAM/frozen scene; no input, completion, reward, or payload IO")
+	return true
+
+
+func _find_npc(scene_root: Node, npc_id: String) -> Node:
+	for candidate: Node in get_tree().get_nodes_in_group("dialogue_npc"):
+		if scene_root.is_ancestor_of(candidate) and String(candidate.get("npc_id")) == npc_id:
+			return candidate
+	return null
+
+
+func _find_campaign_action(scene_root: Node, action_id: String) -> Node:
+	for candidate: Node in get_tree().get_nodes_in_group("campaign_action"):
+		if scene_root.is_ancestor_of(candidate) and String(candidate.get_meta("campaign_action_id", "")) == action_id:
+			return candidate
+	return null
+
+
+func _position_player_near_owner(player: Node2D, owner: Node) -> void:
+	if not (owner is Node2D):
+		return
+	player.global_position = (owner as Node2D).global_position + Vector2(-58.0, 50.0)
+	player.reset_physics_interpolation()
+
+
+func _prepare_player_camera(player: Node2D, player_position: Vector2) -> void:
+	player.global_position = player_position
+	player.reset_physics_interpolation()
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera != null:
+		camera.process_mode = Node.PROCESS_MODE_ALWAYS
+		camera.position_smoothing_enabled = false
+		camera.make_current()
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+
+
+func _prepare_hud_notice(hud: Node) -> void:
+	var notice_timer := hud.get("notice_timer") as Timer
+	if notice_timer != null:
+		notice_timer.stop()
+	if hud.has_method("_update_notice_visibility"):
+		hud.call("_update_notice_visibility")
+	var notice_label := hud.get("notice_label") as Label
+	if notice_label != null:
+		notice_label.visible = false
+
+
+func _print_layout(view_name: String, hud: Node, scene_root: Node) -> void:
+	var panel := hud.get("dialogue_panel") as Control
+	var body := hud.get("dialogue_body") as Control
+	var footer := hud.get("dialogue_hint") as Label
+	var scroll: ScrollContainer = body.get_parent() as ScrollContainer if body != null else null
+	var owner_id := int(panel.get_meta("dialogue_npc_owner_id", -1)) if panel != null else -1
+	var panel_rect := panel.get_global_rect() if panel != null else Rect2()
+	var body_rect := body.get_global_rect() if body != null else Rect2()
+	var scroll_rect := scroll.get_global_rect() if scroll != null else Rect2()
+	var scroll_vertical := 0
+	var scroll_max := 0.0
+	if scroll != null:
+		var bar := scroll.get_v_scroll_bar()
+		scroll_vertical = scroll.scroll_vertical
+		scroll_max = maxf(0.0, bar.max_value - bar.page)
+	print("STORY_SEAM_LAYOUT:", view_name, " scene=", scene_root.name, " panel_rect=", panel_rect, " body_rect=", body_rect, " scroll_rect=", scroll_rect, " scroll_clip=", scroll.clip_contents if scroll != null else false, " scroll_v=", scroll_vertical, "/", scroll_max, " footer=", footer.text if footer != null else "", " owner_id=", owner_id)
+
+
+func _wait_process_frames(count: int) -> void:
+	for frame_index in range(count):
+		await get_tree().process_frame
+
+
+func _write_view_image(view_name: String, output_dir: String) -> bool:
+	await _wait_process_frames(8)
+	await RenderingServer.frame_post_draw
+	var viewport := get_viewport()
+	var image := viewport.get_texture().get_image()
+	var output_path := output_dir.path_join(view_name + ".png")
+	var save_error := image.save_png(output_path)
+	print("STORY_SEAM_FRAME:", view_name, "/", viewport.get_visible_rect().size, "/", save_error)
+	if save_error != OK:
+		push_error("Could not save story presentation frame %s: %s" % [view_name, save_error])
+		return false
+	return true

@@ -20,6 +20,7 @@ var _talk_timer := 0.0
 var _interact_radius := 96.0
 var _dialogue_page := 0
 var _dialogue_active := false
+var _dialogue_signature := ""
 
 func setup(data: Dictionary) -> void:
 	npc_id = String(data.get("id", ""))
@@ -65,6 +66,18 @@ func interact() -> void:
 func is_dialogue_active() -> bool:
 	return _dialogue_active
 
+func is_dialogue_final_page() -> bool:
+	return _dialogue_active and _dialogue_page >= 2
+
+func reset_dialogue_state() -> void:
+	var was_active := _dialogue_active
+	_dialogue_active = false
+	_dialogue_page = 0
+	_dialogue_signature = ""
+	if was_active:
+		AudioManager.stop_voice()
+	_update_prompt_text()
+
 func _talk() -> void:
 	var npc: Dictionary = DataRegistry.get_npc(npc_id)
 	if npc.is_empty():
@@ -72,7 +85,6 @@ func _talk() -> void:
 		return
 
 	AudioManager.play_sfx("interact")
-	AudioManager.play_voice("npc_" + npc_id)
 	_dialogue_active = true
 	_talk_timer = 0.45
 
@@ -84,15 +96,40 @@ func _talk() -> void:
 			GameState.add_item(String(item_id), int(reward[item_id]))
 
 	var first_line: String = String(npc.get("line", ""))
+	var story_line := GameState.story_dialogue_for_npc(npc)
+	if not story_line.is_empty():
+		first_line = story_line
+	first_line += GameState.campaign_npc_record(npc_id)
+	if _dialogue_signature != first_line:
+		_dialogue_signature = first_line
+		_dialogue_page = 0
 	var second_line: String = String(npc.get("repeat_line", first_line))
-	var message: String = first_line if _dialogue_page <= 0 else second_line
-	GameState.dialogue_requested.emit(String(npc.get("name", npc_id)), String(npc.get("role", "倖存者")), message)
+	if not story_line.is_empty():
+		second_line = "%s\n詳細紀錄可按 [K] 回看；委託與交付目標在 [J]。" % GameState.get_journey_hint()
+	if _dialogue_active and _dialogue_page >= 2:
+		_finish_dialogue()
+		return
+
+	var message: String
+	if _dialogue_page <= 0:
+		message = first_line
+		_dialogue_page = 1 if not second_line.is_empty() and second_line != first_line else 2
+	else:
+		message = second_line
+		_dialogue_page = 2
+	var should_play_voice: bool = bool(npc.get("voice_enabled", true)) and message == String(npc.get("line", ""))
+	GameState.npc_dialogue_requested.emit(self, String(npc.get("name", npc_id)), String(npc.get("role", "倖存者")), message)
+	if should_play_voice:
+		AudioManager.play_voice("npc_" + npc_id)
+	else:
+		AudioManager.stop_voice()
 	GameState.inventory_changed.emit()
 	GameState.stats_changed.emit()
-
-	if _dialogue_page <= 0 and not second_line.is_empty() and second_line != first_line:
-		_dialogue_page = 1
 	_update_prompt_text()
+
+func _finish_dialogue() -> void:
+	reset_dialogue_state()
+	GameState.npc_dialogue_closed.emit(self)
 
 func _update_player_near_from_distance() -> void:
 	var player: Node2D = _nearest_player()
@@ -108,10 +145,10 @@ func _update_player_near_from_distance() -> void:
 	if _prompt != null:
 		_prompt.visible = _player_near
 	if not _player_near:
-		_dialogue_active = false
-		_dialogue_page = 0
-		AudioManager.stop_voice()
-		GameState.close_dialogue()
+		var should_close_dialogue := _dialogue_active
+		reset_dialogue_state()
+		if should_close_dialogue:
+			GameState.npc_dialogue_closed.emit(self)
 	_update_prompt_text()
 
 func _nearest_player() -> Node2D:
@@ -179,7 +216,12 @@ func _add_labels() -> void:
 func _update_prompt_text() -> void:
 	if _prompt == null:
 		return
-	_prompt.text = "E：下一段" if _dialogue_page == 1 else "E：交談"
+	if _dialogue_page == 1:
+		_prompt.text = "E：下一段"
+	elif _dialogue_active and _dialogue_page >= 2:
+		_prompt.text = "E：結束對話"
+	else:
+		_prompt.text = "E：交談"
 
 func _npc_texture() -> Texture2D:
 	var asset: Dictionary = DataRegistry.get_visual_asset(sprite_asset_id)
@@ -199,9 +241,4 @@ func _on_body_entered(body: Node) -> void:
 
 func _on_body_exited(body: Node) -> void:
 	if body.is_in_group("player"):
-		_player_near = false
-		if _name_label != null:
-			_name_label.visible = false
-		if _prompt != null:
-			_prompt.visible = false
 		_update_player_near_from_distance()

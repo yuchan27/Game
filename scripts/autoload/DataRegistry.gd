@@ -51,6 +51,12 @@ func get_quest(quest_id: String) -> Dictionary:
 			return quest
 	return {}
 
+func get_event(event_id: String) -> Dictionary:
+	for event in events:
+		if String(event.get("id", "")) == event_id:
+			return event
+	return {}
+
 func quest_ids() -> Array[String]:
 	var ids: Array[String] = []
 	for quest in quests:
@@ -62,6 +68,13 @@ func get_npc(npc_id: String) -> Dictionary:
 		if String(npc.get("id", "")) == npc_id:
 			return npc
 	return {}
+
+func story_events_for_route(route_id: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for event in events:
+		if bool(event.get("story", false)) and String(event.get("route", "")) == route_id:
+			result.append(event)
+	return result
 
 func get_wasteland_route(route_id: String) -> Dictionary:
 	return wasteland_routes.get(route_id, {})

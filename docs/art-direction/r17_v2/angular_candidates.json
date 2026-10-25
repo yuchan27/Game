@@ -1,0 +1,107 @@
+{
+  "status": "candidate only; not active and not counted toward32",
+  "baseline": {
+    "path": "C:/Code/Game/first-game/assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+    "angles": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "sole_x": [
+      200,
+      585,
+      960,
+      1330,
+      190,
+      585,
+      955,
+      1340
+    ],
+    "sole_y": [
+      448,
+      448,
+      450,
+      448,
+      916,
+      916,
+      916,
+      916
+    ],
+    "head_y": [
+      108,
+      109,
+      108,
+      108,
+      571,
+      569,
+      569,
+      569
+    ]
+  },
+  "candidates": [
+    {
+      "requested_offset": 22.5,
+      "path": "C:/Code/Game/first-game/assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_ready_offset_22_5_v016.png",
+      "requested_angles": [
+        22.5,
+        67.5,
+        112.5,
+        157.5,
+        202.5,
+        247.5,
+        292.5,
+        337.5
+      ],
+      "sole_x": [
+        210,
+        585,
+        960,
+        1330,
+        190,
+        585,
+        955,
+        1340
+      ],
+      "sole_y": [
+        461,
+        457,
+        461,
+        461,
+        929,
+        931,
+        930,
+        931
+      ],
+      "head_y": [
+        85,
+        84,
+        84,
+        83,
+        555,
+        554,
+        554,
+        555
+      ],
+      "review": "rejected as a uniform intermediate batch: first E22.5 remains too close to E0, other views drift; true angular spacing unproven; retain outside active runtime"
+    },
+    {
+      "requested_angle": 22.5,
+      "path": "res://assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_idle_e22_5_v017.png",
+      "source_size": [1024, 1536],
+      "crop": [0, 0, 1024, 1536],
+      "sole": [590, 1338],
+      "head_y": 184,
+      "anchor_status": "Manual source-image preview registration only; grip not registered; not a runtime cell",
+      "sha256": "b4df7433c2ba92d90e96ecf21188f8621e2042329052ee1a0fc1f8ca8e583a70",
+      "provenance": "Built-in imagegen edit from approved idle_v011 and contact_a_v007; original generated RGBA bytes copied unchanged into project",
+      "prompt": "docs/art-direction/r17_v2/angular_e22_5_v017_prompt.txt",
+      "comparison": "docs/art-direction/r17_v2/angular_e22_5_v017_comparison.png",
+      "review": "Approved as an identity/perspective reference only, matching angular_e22_5_checkpoint.md. Narrow front helmet/cross and chest plane are visible between approved E0 and SE45. Exact 22.5-degree azimuth is unproven; grip unregistered; inactive; not counted toward32"
+    }
+  ]
+}

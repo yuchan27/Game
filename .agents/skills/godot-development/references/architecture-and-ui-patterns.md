@@ -11,4 +11,4 @@
 1. Create `PanelContainer` in `HUD.gd`, set `z_index = 60`, `mouse_filter = Control.MOUSE_FILTER_STOP`, and add to `"gameplay_input_blocker"`.
 2. Add a `_set_<name>_visible(is_visible: bool)` helper that closes competing modals, hides dialogue, refreshes content, and calls `_refresh_overlay_visibility()`.
 3. Add a tab button in `_build_modal_switcher()` and `_add_nav_bar()`, plus hotkey handling in `_unhandled_input()`.
-4. Size and center the panel inside `_layout()` so it fits both `1280×720` and `1024×768`.
+4. Size and position the panel from its allocated viewport/container. Derive the required design, launch, narrow cold-start, and resize profiles from `project.godot` and `docs/SCREEN_STATE_MATRIX.md`; do not copy fixed dimensions from another project or an older capture.

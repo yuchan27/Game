@@ -1,0 +1,1182 @@
+{
+  "version": 3,
+  "enabled": true,
+  "atlas_contract": "Original PNG bytes preserved. Disjoint inspected source rectangles and absolute source feet; world widths/physical feet explicit. Native nearest sampling, per-entry alpha clipping and optional world-space root dust. Never infer a uniform atlas grid.",
+  "ground": {
+    "earth": {
+      "path": "res://assets/world_v4/ground/packed-umber-earth-v4-01.png",
+      "world_size": 512,
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    "road": {
+      "path": "res://assets/world_v4/ground/buried-slate-cobbles-v4-02.png",
+      "world_size": 512,
+      "source_rect": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    }
+  },
+  "props": {
+    "rubble_a": {
+      "source_rect": [
+        0,
+        300,
+        378,
+        270
+      ],
+      "width": 96,
+      "foot": [
+        190,
+        506
+      ],
+      "footprints": [
+        [
+          -46,
+          -16,
+          92,
+          28
+        ]
+      ],
+      "role": "rubble",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "rubble_b": {
+      "source_rect": [
+        382,
+        300,
+        338,
+        270
+      ],
+      "width": 80,
+      "foot": [
+        549,
+        506
+      ],
+      "footprints": [
+        [
+          -36,
+          -12,
+          72,
+          22
+        ]
+      ],
+      "role": "rubble",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "wall_stub": {
+      "source_rect": [
+        720,
+        170,
+        410,
+        420
+      ],
+      "width": 148,
+      "foot": [
+        921,
+        515
+      ],
+      "footprints": [
+        [
+          -73,
+          -19,
+          145,
+          35
+        ]
+      ],
+      "role": "wall",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "wagon": {
+      "source_rect": [
+        1130,
+        200,
+        406,
+        390
+      ],
+      "width": 168,
+      "foot": [
+        1330,
+        524
+      ],
+      "footprints": [
+        [
+          -70,
+          -24,
+          141,
+          45
+        ]
+      ],
+      "role": "wagon",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "thorn": {
+      "source_rect": [
+        0,
+        600,
+        380,
+        380
+      ],
+      "width": 70,
+      "foot": [
+        191,
+        915
+      ],
+      "footprints": [],
+      "role": "thorn",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "dry_grass": {
+      "source_rect": [
+        384,
+        700,
+        338,
+        280
+      ],
+      "width": 52,
+      "foot": [
+        535,
+        906
+      ],
+      "footprints": [],
+      "role": "grass",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "supply": {
+      "source_rect": [
+        722,
+        630,
+        408,
+        360
+      ],
+      "width": 96,
+      "foot": [
+        931,
+        920
+      ],
+      "footprints": [
+        [
+          -43,
+          -17,
+          86,
+          31
+        ]
+      ],
+      "role": "supply",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "waypost": {
+      "source_rect": [
+        1132,
+        580,
+        404,
+        410
+      ],
+      "width": 60,
+      "foot": [
+        1347,
+        915
+      ],
+      "footprints": [
+        [
+          -21,
+          -11,
+          42,
+          20
+        ]
+      ],
+      "role": "marker",
+      "path": "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "alpha_cutoff": 0.15
+    },
+    "marsh_pump": {
+      "path": "res://assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "source_rect": [
+        10,
+        170,
+        580,
+        380
+      ],
+      "foot": [
+        300,
+        440
+      ],
+      "width": 169.599990844727,
+      "footprints": [
+        [
+          -64.401611328125,
+          -45.90380859375,
+          139.388305664063,
+          24.4820594787598
+        ]
+      ],
+      "role": "story_landmark",
+      "alpha_cutoff": 0.45
+    },
+    "crystal_spire": {
+      "path": "res://assets/world_v4/landmarks/resonance-outcrop-v4-02.png",
+      "source_rect": [
+        68,
+        105,
+        1162,
+        1001
+      ],
+      "foot": [
+        645,
+        1030
+      ],
+      "width": 216.139999389648,
+      "footprints": [
+        [
+          -51.18505859375,
+          -45.296630859375,
+          118.145500183105,
+          35.4496078491211
+        ]
+      ],
+      "role": "story_landmark",
+      "alpha_cutoff": 0.45,
+      "saturation": 0.86,
+      "exposure": 0.88
+    },
+    "factory_turbine": {
+      "path": "res://assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "source_rect": [
+        955,
+        130,
+        581,
+        420
+      ],
+      "foot": [
+        1230,
+        460
+      ],
+      "width": 180.758438110352,
+      "footprints": [
+        [
+          -75.8857421875,
+          -55.447265625,
+          157.617523193359,
+          32.6160049438477
+        ]
+      ],
+      "role": "story_landmark",
+      "alpha_cutoff": 0.45
+    },
+    "evacuation_archive": {
+      "path": "res://assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "source_rect": [
+        40,
+        550,
+        700,
+        410
+      ],
+      "foot": [
+        400,
+        850
+      ],
+      "width": 224.808670043945,
+      "footprints": [
+        [
+          -82.05615234375,
+          -61.98779296875,
+          176.528076171875,
+          49.2934608459473
+        ]
+      ],
+      "role": "story_landmark",
+      "alpha_cutoff": 0.45
+    },
+    "memory_vault": {
+      "path": "res://assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "source_rect": [
+        770,
+        540,
+        710,
+        440
+      ],
+      "foot": [
+        1120,
+        875
+      ],
+      "width": 278.010955810547,
+      "footprints": [
+        [
+          -102.483642578125,
+          -52.441650390625,
+          205.08430480957,
+          37.4583206176758
+        ]
+      ],
+      "role": "story_landmark",
+      "alpha_cutoff": 0.45
+    },
+    "toxic_pool": {
+      "path": "res://assets/world_v4/props/grounded-hazards-v4-01.png",
+      "source_rect": [
+        35,
+        340,
+        755,
+        420
+      ],
+      "foot": [
+        408,
+        620
+      ],
+      "width": 112,
+      "footprints": [
+        [
+          -40,
+          -16,
+          80,
+          24
+        ]
+      ],
+      "role": "hazard",
+      "route_ids": [
+        "toxic_marsh"
+      ],
+      "alpha_cutoff": 0.45
+    },
+    "crystal_node": {
+      "path": "res://assets/world_v4/props/grounded-hazards-v4-01.png",
+      "source_rect": [
+        810,
+        350,
+        695,
+        390
+      ],
+      "foot": [
+        1140,
+        615
+      ],
+      "width": 96,
+      "footprints": [
+        [
+          -28,
+          -14,
+          56,
+          24
+        ]
+      ],
+      "role": "mineral",
+      "route_ids": [
+        "crystal_scar"
+      ],
+      "alpha_cutoff": 0.45
+    },
+    "rescue_relay": {
+      "path": "res://assets/world_v4/props/field-mechanisms-v4-01.png",
+      "source_rect": [
+        27,
+        226,
+        786,
+        585
+      ],
+      "foot": [
+        430,
+        745
+      ],
+      "width": 124,
+      "footprints": [],
+      "role": "contract_mechanism",
+      "route_ids": [
+        "toxic_marsh",
+        "scrap_highway"
+      ],
+      "alpha_cutoff": 0.45
+    },
+    "alarm_isolator": {
+      "path": "res://assets/world_v4/props/field-mechanisms-v4-01.png",
+      "source_rect": [
+        1088,
+        78,
+        661,
+        740
+      ],
+      "foot": [
+        1420,
+        750
+      ],
+      "width": 108,
+      "footprints": [],
+      "role": "contract_mechanism",
+      "route_ids": [
+        "old_factory"
+      ],
+      "alpha_cutoff": 0.45
+    },
+    "covered_wagon": {
+      "source_rect": [
+        60,
+        195,
+        900,
+        580
+      ],
+      "width": 168,
+      "foot": [
+        510,
+        700
+      ],
+      "footprints": [
+        [
+          -70,
+          -24,
+          141,
+          45
+        ]
+      ],
+      "role": "wagon",
+      "path": "res://assets/world_v4/props/convoy-remnants-v4-01.png",
+      "alpha_cutoff": 0.45,
+      "route_ids": [
+        "scrap_highway"
+      ]
+    },
+    "overturned_wagon": {
+      "source_rect": [
+        995,
+        300,
+        650,
+        490
+      ],
+      "width": 168,
+      "foot": [
+        1320,
+        733
+      ],
+      "footprints": [
+        [
+          -70,
+          -24,
+          141,
+          45
+        ]
+      ],
+      "role": "wagon",
+      "path": "res://assets/world_v4/props/convoy-remnants-v4-01.png",
+      "alpha_cutoff": 0.45,
+      "route_ids": [
+        "scrap_highway"
+      ]
+    },
+    "hub_house": {
+      "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "source_rect": [
+        20,
+        80,
+        710,
+        510
+      ],
+      "foot": [
+        380,
+        520
+      ],
+      "width": 300,
+      "alpha_cutoff": 0.7,
+      "authored_ground_contact": true,
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "saturation": 0.8,
+      "exposure": 0.9,
+      "footprints": [
+        [
+          -119,
+          -38,
+          238,
+          45
+        ]
+      ],
+      "route_ids": [
+        "village",
+        "guild"
+      ],
+      "role": "housing"
+    },
+    "hub_lodge": {
+      "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "source_rect": [
+        733,
+        40,
+        799,
+        565
+      ],
+      "foot": [
+        1130,
+        539
+      ],
+      "width": 340,
+      "alpha_cutoff": 0.7,
+      "authored_ground_contact": true,
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "saturation": 0.8,
+      "exposure": 0.9,
+      "footprints": [
+        [
+          -133,
+          -42,
+          266,
+          50
+        ]
+      ],
+      "route_ids": [
+        "village",
+        "guild"
+      ],
+      "role": "housing"
+    }
+  },
+  "provenance": {
+    "generator": "Built-in image_gen; original source PNGs unchanged",
+    "prompt_directory": "res://assets/world_v4/prompts",
+    "source_sha256": {
+      "slate-earth-v3-01.png": "4f1745dd3d05cabda831dbe3fb8833e9107f160e08f502b92809f45feff2d8ca",
+      "broken-royal-road-v3-01.png": "5376212ba5b1eeeaeb4c2de9c9517c9938255e264ad47a70bc179917a61358ff",
+      "medieval-debris-v3-01.png": "eb8cd828a91035c0b87a2793a3c663a87bd7492d319d4aebc66415a2c84f4fab",
+      "rooted-medieval-debris-v4-01.png": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+      "cold-fractured-shale-v4-01.png": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8"
+    },
+    "source_dimensions": {
+      "ground": [
+        1254,
+        1254
+      ],
+      "props": [
+        1536,
+        1024
+      ]
+    },
+    "crop_method": "Disjoint inspected source rectangles and manually registered source feet; native alpha clipping. Original source PNGs unchanged. Five story landmarks retain live legacy physical feet from the isolated registration capture.",
+    "activation": "v3 composition rejected by user; v4 revision undergoing same-camera review. Original source PNGs retained.",
+    "active_source_sha256": {
+      "res://assets/world_v4/ground/buried-slate-cobbles-v4-02.png": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+      "res://assets/world_v4/ground/packed-umber-earth-v4-01.png": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+      "res://assets/world_v4/props/rooted-medieval-debris-v4-01.png": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+      "res://assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+      "res://assets/world_v4/props/grounded-hazards-v4-01.png": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+      "res://assets/world_v4/ground/damp-cut-slate-v4-01.png": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+      "res://assets/world_v4/props/field-mechanisms-v4-01.png": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "assets/world_v4/props/convoy-remnants-v4-01.png": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "assets/world_v4/props/hub-workstations-v4-02.png": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+      "assets/world_v4/props/hub-guild-fixtures-v4-02.png": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+      "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "res://assets/world_v4/architecture/guild-entrance-v4-03.png": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+      "res://assets/world_v4/ground/cold-silt-shale-v4-02.png": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a"
+    }
+  },
+  "ground_contact": {
+    "enabled": true,
+    "band_pixels": 5.0,
+    "strength": 0.4
+  },
+  "production_review": {
+    "status": "v4_same_camera_composition_in_progress_after_user_rejection",
+    "checkpoint": "res://docs/art-direction/world_v4/README.md",
+    "scope": "Ground detail scale, oblique architecture, consistent source material and rooted prop feet. Full routes/campaign acceptance incomplete."
+  },
+  "regions": {
+    "scrap_highway": {
+      "paving_continuity": 0.7,
+      "tint": [
+        1,
+        1,
+        1
+      ]
+    },
+    "toxic_marsh": {
+      "tint": [
+        0.88,
+        0.96,
+        0.84
+      ],
+      "water": {
+        "path": "res://assets/world_v4/ground/stagnant-silt-water-v4-02.png",
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "world_size": 416
+      }
+    },
+    "crystal_scar": {
+      "earth": {
+        "path": "res://assets/world_v4/ground/cold-silt-shale-v4-02.png",
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "world_size": 512
+      },
+      "tint": [
+        0.95,
+        0.91,
+        1
+      ],
+      "road": {
+        "path": "res://assets/world_v4/ground/damp-cut-slate-v4-01.png",
+        "world_size": 320,
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ]
+      },
+      "earth_contrast": 0.36
+    },
+    "old_factory": {
+      "earth": {
+        "path": "res://assets/world_v4/ground/cold-silt-shale-v4-02.png",
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "world_size": 512
+      },
+      "tint": [
+        0.87,
+        0.82,
+        0.76
+      ],
+      "earth_contrast": 0.26,
+      "road": {
+        "path": "res://assets/world_v4/ground/buried-slate-cobbles-v4-02.png",
+        "world_size": 512,
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ]
+      },
+      "paving_continuity": 0.6
+    },
+    "ruined_metropolis": {
+      "earth": {
+        "path": "res://assets/world_v4/ground/packed-umber-earth-v4-01.png",
+        "world_size": 512,
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ]
+      },
+      "tint": [
+        0.96,
+        0.95,
+        0.93
+      ],
+      "earth_contrast": 0.48,
+      "road": {
+        "path": "res://assets/world_v4/ground/damp-cut-slate-v4-01.png",
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "world_size": 320
+      }
+    },
+    "underground_facility": {
+      "earth": {
+        "path": "res://assets/world_v4/ground/cold-silt-shale-v4-02.png",
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "world_size": 512
+      },
+      "road": {
+        "path": "res://assets/world_v4/ground/damp-cut-slate-v4-01.png",
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "world_size": 320
+      },
+      "tint": [
+        0.81,
+        0.9,
+        0.94
+      ],
+      "earth_contrast": 0.28
+    },
+    "village": {
+      "earth_contrast": 0.68,
+      "tint": [
+        1,
+        0.98,
+        0.94
+      ]
+    },
+    "guild": {
+      "earth": {
+        "path": "res://assets/world_v4/ground/damp-cut-slate-v4-01.png",
+        "world_size": 320,
+        "source_rect": [
+          0,
+          0,
+          1254,
+          1254
+        ]
+      },
+      "earth_contrast": 0.42,
+      "tint": [
+        0.95,
+        0.94,
+        0.91
+      ]
+    }
+  },
+  "hubs": {
+    "village": {
+      "coordinate_space": "world pixels; visual lanes only, no floor collision",
+      "paving_continuity": 0.8,
+      "lanes": [
+        {
+          "points": [
+            [
+              1248,
+              1560
+            ],
+            [
+              1248,
+              1280
+            ],
+            [
+              1248,
+              1000
+            ],
+            [
+              1250,
+              800
+            ],
+            [
+              1248,
+              430
+            ],
+            [
+              1248,
+              170
+            ]
+          ],
+          "width": 112
+        },
+        {
+          "points": [
+            [
+              230,
+              970
+            ],
+            [
+              680,
+              970
+            ],
+            [
+              1248,
+              900
+            ],
+            [
+              1800,
+              970
+            ],
+            [
+              2260,
+              970
+            ]
+          ],
+          "width": 112
+        },
+        {
+          "points": [
+            [
+              1248,
+              850
+            ],
+            [
+              940,
+              800
+            ],
+            [
+              680,
+              720
+            ]
+          ],
+          "width": 100
+        },
+        {
+          "points": [
+            [
+              1248,
+              850
+            ],
+            [
+              1560,
+              800
+            ],
+            [
+              1810,
+              720
+            ],
+            [
+              1810,
+              650
+            ]
+          ],
+          "width": 100
+        },
+        {
+          "points": [
+            [
+              1248,
+              1000
+            ],
+            [
+              960,
+              1100
+            ],
+            [
+              720,
+              1200
+            ]
+          ],
+          "width": 100
+        },
+        {
+          "points": [
+            [
+              1248,
+              1000
+            ],
+            [
+              1510,
+              1100
+            ],
+            [
+              1760,
+              1130
+            ]
+          ],
+          "width": 100
+        },
+        {
+          "points": [
+            [
+              1800,
+              970
+            ],
+            [
+              2060,
+              970
+            ]
+          ],
+          "width": 96
+        },
+        {
+          "points": [
+            [
+              680,
+              720
+            ],
+            [
+              430,
+              630
+            ],
+            [
+              260,
+              580
+            ]
+          ],
+          "width": 96
+        },
+        {
+          "points": [
+            [
+              1760,
+              1130
+            ],
+            [
+              2010,
+              1390
+            ],
+            [
+              2240,
+              1530
+            ]
+          ],
+          "width": 96
+        },
+        {
+          "points": [
+            [
+              940,
+              800
+            ],
+            [
+              940,
+              620
+            ]
+          ],
+          "width": 80
+        },
+        {
+          "points": [
+            [
+              1610,
+              970
+            ],
+            [
+              1610,
+              890
+            ],
+            [
+              1610,
+              850
+            ]
+          ],
+          "width": 80
+        },
+        {
+          "points": [
+            [
+              2260,
+              970
+            ],
+            [
+              2260,
+              620
+            ],
+            [
+              2260,
+              540
+            ]
+          ],
+          "width": 88
+        },
+        {
+          "points": [
+            [
+              1810,
+              900
+            ],
+            [
+              1810,
+              650
+            ]
+          ],
+          "width": 72
+        },
+        {
+          "points": [
+            [
+              1610,
+              850
+            ],
+            [
+              1700,
+              860
+            ],
+            [
+              1780,
+              885
+            ]
+          ],
+          "width": 72
+        },
+        {
+          "points": [
+            [
+              1760,
+              1130
+            ],
+            [
+              1775,
+              1040
+            ],
+            [
+              1795,
+              970
+            ]
+          ],
+          "width": 72
+        },
+        {
+          "points": [
+            [
+              2000,
+              900
+            ],
+            [
+              2060,
+              900
+            ],
+            [
+              2060,
+              970
+            ]
+          ],
+          "width": 72
+        }
+      ],
+      "plazas": [
+        {
+          "center": [
+            1248,
+            900
+          ],
+          "radii": [
+            245,
+            150
+          ]
+        },
+        {
+          "center": [
+            1248,
+            440
+          ],
+          "radii": [
+            140,
+            95
+          ]
+        },
+        {
+          "center": [
+            1885,
+            940
+          ],
+          "radii": [
+            140,
+            90
+          ]
+        }
+      ],
+      "scenery": [
+        {
+          "id": "hub_house",
+          "position": [
+            940,
+            580
+          ]
+        },
+        {
+          "id": "hub_house",
+          "position": [
+            1610,
+            850
+          ]
+        },
+        {
+          "id": "scrap_wall",
+          "position": [
+            1785,
+            865
+          ]
+        },
+        {
+          "id": "scrap_wall",
+          "position": [
+            1920,
+            890
+          ]
+        }
+      ]
+    },
+    "guild": {
+      "coordinate_space": "world pixels; visual lanes only, no floor collision",
+      "lanes": [
+        {
+          "points": [
+            [
+              560,
+              780
+            ],
+            [
+              660,
+              520
+            ],
+            [
+              680,
+              350
+            ]
+          ],
+          "width": 112
+        },
+        {
+          "points": [
+            [
+              330,
+              450
+            ],
+            [
+              500,
+              430
+            ],
+            [
+              660,
+              520
+            ],
+            [
+              1080,
+              610
+            ]
+          ],
+          "width": 104
+        }
+      ],
+      "plazas": [
+        {
+          "center": [
+            660,
+            490
+          ],
+          "radii": [
+            370,
+            230
+          ]
+        }
+      ],
+      "scenery": [
+        {
+          "id": "hub_lodge",
+          "position": [
+            1040,
+            285
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,866 @@
+{
+  "kind": "ordinary_art_production_source_identity_not_QA",
+  "recorded_utc": "2026-10-23T06:35:38.770825+00:00",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "backend": "gl_compatibility Intel Arc 140V OpenGL 3.3",
+  "render_processes": [
+    {
+      "log": "hubs-wide.log",
+      "exit_code": 0
+    },
+    {
+      "log": "hubs-narrow.log",
+      "exit_code": 0
+    }
+  ],
+  "scope": "20 ordinary cameras at each size: 17 hub views, 3 Wasteland controls. Dry and completed cistern manually staged. Native camera limits and zoom retained. No gameplay/quest/collision/save/performance/QA. Test GDScript hashes record identity only. All v4 PNGs include inactive candidates; legacy PNGs are outside this source hash record.",
+  "recipe": {
+    "path": "../HubPreview.gd.txt",
+    "sha256": "5ed00aa6e5022018fa85e206316d543493b1203e17cdf0d62db4295ff3c36692",
+    "mirror_sha256": "5ed00aa6e5022018fa85e206316d543493b1203e17cdf0d62db4295ff3c36692"
+  },
+  "project_settings": {
+    "source_sha256": "3d47319f2dedc0fa31a68606348dda4aefb155cee45ad50e6321888ae1d1dcee",
+    "isolated_sha256": "6ea04d3b107eb3f98d5228af455c64b0761d9096541ec563b9e6a00718de7bcc",
+    "intentional_difference": "Dedicated custom user directory R17-Ordinary-Art-Preview-20261023; source project settings preserved."
+  },
+  "inputs": [
+    {
+      "path": "assets/world_v4/architecture/broken-viaduct-v4-01.png",
+      "sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+      "mirror_sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73"
+    },
+    {
+      "path": "assets/world_v4/architecture/crystal-buttress-v4-01.png",
+      "sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+      "mirror_sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c"
+    },
+    {
+      "path": "assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+      "sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+      "mirror_sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c"
+    },
+    {
+      "path": "assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+      "sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+      "mirror_sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d"
+    },
+    {
+      "path": "assets/world_v4/architecture/roadwarden-gate-v4-01.png",
+      "sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+      "mirror_sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf"
+    },
+    {
+      "path": "assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+      "sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+      "mirror_sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8"
+    },
+    {
+      "path": "assets/world_v4/architecture/ruined-forge-v4-01.png",
+      "sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+      "mirror_sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc"
+    },
+    {
+      "path": "assets/world_v4/architecture/sealed-cistern-v4-01.png",
+      "sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+      "mirror_sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b"
+    },
+    {
+      "path": "assets/world_v4/architecture/slate-boundary-wall-v4-01.png",
+      "sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+      "mirror_sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11"
+    },
+    {
+      "path": "assets/world_v4/architecture/stone-service-crossing-v4-01.png",
+      "sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+      "mirror_sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12"
+    },
+    {
+      "path": "assets/world_v4/ground/buried-slate-cobbles-v4-01.png",
+      "sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21",
+      "mirror_sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21"
+    },
+    {
+      "path": "assets/world_v4/ground/buried-slate-cobbles-v4-02.png",
+      "sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+      "mirror_sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2"
+    },
+    {
+      "path": "assets/world_v4/ground/cold-fractured-shale-v4-01.png",
+      "sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8",
+      "mirror_sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8"
+    },
+    {
+      "path": "assets/world_v4/ground/damp-cut-slate-v4-01.png",
+      "sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+      "mirror_sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1"
+    },
+    {
+      "path": "assets/world_v4/ground/packed-umber-earth-v4-01.png",
+      "sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+      "mirror_sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf"
+    },
+    {
+      "path": "assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+      "mirror_sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c"
+    },
+    {
+      "path": "assets/world_v4/landmarks/evacuation-bus-v4-01.png",
+      "sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+      "mirror_sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c"
+    },
+    {
+      "path": "assets/world_v4/props/convoy-remnants-v4-01.png",
+      "sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "mirror_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c"
+    },
+    {
+      "path": "assets/world_v4/props/field-mechanisms-v4-01.png",
+      "sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "mirror_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160"
+    },
+    {
+      "path": "assets/world_v4/props/grounded-hazards-v4-01.png",
+      "sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+      "mirror_sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9"
+    },
+    {
+      "path": "assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+      "sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+      "mirror_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4"
+    },
+    {
+      "path": "assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "mirror_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9"
+    },
+    {
+      "path": "assets/world_v4/props/hub-workstations-v4-02.png",
+      "sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+      "mirror_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082"
+    },
+    {
+      "path": "assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+      "mirror_sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b"
+    },
+    {
+      "path": "data/art/player_animation_manifest.json",
+      "sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17",
+      "mirror_sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17"
+    },
+    {
+      "path": "data/art/r17_presentation_v2.json",
+      "sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764",
+      "mirror_sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764"
+    },
+    {
+      "path": "data/art/r17_weapon_families_v2.json",
+      "sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+      "mirror_sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5"
+    },
+    {
+      "path": "data/art/visual_assets.json",
+      "sha256": "299f4f9fc29084114c974edc0e1aeb216e3644b86e6aed2091c91d19f965545b",
+      "mirror_sha256": "299f4f9fc29084114c974edc0e1aeb216e3644b86e6aed2091c91d19f965545b"
+    },
+    {
+      "path": "data/art/world_materials_v3.json",
+      "sha256": "fd337774e2a2254114ab8418d89c3e533d9f9ccf7f101047b03b615c99a1ed51",
+      "mirror_sha256": "fd337774e2a2254114ab8418d89c3e533d9f9ccf7f101047b03b615c99a1ed51"
+    },
+    {
+      "path": "data/art/world_v2.json",
+      "sha256": "e63baa97a3c27908105167c06261c9aaa7a056a6edc748964954f9c51da600dd",
+      "mirror_sha256": "e63baa97a3c27908105167c06261c9aaa7a056a6edc748964954f9c51da600dd"
+    },
+    {
+      "path": "data/enemies/enemies.json",
+      "sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6",
+      "mirror_sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6"
+    },
+    {
+      "path": "data/items/equipment.json",
+      "sha256": "5555c755e2d43910e64d1feead8eb6d554cd74ae27e50ad46fa1d10b5c16e529",
+      "mirror_sha256": "5555c755e2d43910e64d1feead8eb6d554cd74ae27e50ad46fa1d10b5c16e529"
+    },
+    {
+      "path": "data/items/recipes.json",
+      "sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c",
+      "mirror_sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c"
+    },
+    {
+      "path": "data/maps/events.json",
+      "sha256": "f70b207c21549b749238b22b080908a28451d0e999b885800e4d7e380e31fc74",
+      "mirror_sha256": "f70b207c21549b749238b22b080908a28451d0e999b885800e4d7e380e31fc74"
+    },
+    {
+      "path": "data/maps/npcs.json",
+      "sha256": "8a4d67548341c744396266c14715021bff27e580782eb849f848f189926e48a3",
+      "mirror_sha256": "8a4d67548341c744396266c14715021bff27e580782eb849f848f189926e48a3"
+    },
+    {
+      "path": "data/maps/quests.json",
+      "sha256": "8b410ace009067972529e381a2097bf79273622a2d50b44d8e4a32052f421b01",
+      "mirror_sha256": "8b410ace009067972529e381a2097bf79273622a2d50b44d8e4a32052f421b01"
+    },
+    {
+      "path": "data/maps/wasteland_params.json",
+      "sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798",
+      "mirror_sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798"
+    },
+    {
+      "path": "data/maps/wasteland_routes.json",
+      "sha256": "0d413ef65fde497a270dbd16e7769f234798d1d63fdf35221252daf1e3a973b8",
+      "mirror_sha256": "0d413ef65fde497a270dbd16e7769f234798d1d63fdf35221252daf1e3a973b8"
+    },
+    {
+      "path": "scenes/levels/guild/Guild.gd",
+      "sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62",
+      "mirror_sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62"
+    },
+    {
+      "path": "scenes/levels/guild/Guild.tscn",
+      "sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955",
+      "mirror_sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955"
+    },
+    {
+      "path": "scenes/levels/village/Village.gd",
+      "sha256": "b7389e6913baadf9849804908fb8703ff0b015bf27705fc9079128cb19774f6a",
+      "mirror_sha256": "b7389e6913baadf9849804908fb8703ff0b015bf27705fc9079128cb19774f6a"
+    },
+    {
+      "path": "scenes/levels/village/Village.tscn",
+      "sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c",
+      "mirror_sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c"
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.gd",
+      "sha256": "5f0e106e790b42ec090d1c8a336fc4b2702985f96f77d3a5a4c435e46e2ac016",
+      "mirror_sha256": "5f0e106e790b42ec090d1c8a336fc4b2702985f96f77d3a5a4c435e46e2ac016"
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.tscn",
+      "sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565",
+      "mirror_sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565"
+    },
+    {
+      "path": "scenes/main/Main.gd",
+      "sha256": "4b5c0ac64bd4fe2701240a43bffbf31abe36fbf47aa8ebe91341e49f9a6146dc",
+      "mirror_sha256": "4b5c0ac64bd4fe2701240a43bffbf31abe36fbf47aa8ebe91341e49f9a6146dc"
+    },
+    {
+      "path": "scenes/main/Main.tscn",
+      "sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0",
+      "mirror_sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0"
+    },
+    {
+      "path": "scenes/player/Player.gd",
+      "sha256": "9727b7887aa688b408d8b17344b0ca376666a05d85fc81420b859dcb6267b9e4",
+      "mirror_sha256": "9727b7887aa688b408d8b17344b0ca376666a05d85fc81420b859dcb6267b9e4"
+    },
+    {
+      "path": "scenes/player/player.tscn",
+      "sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e",
+      "mirror_sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e"
+    },
+    {
+      "path": "scenes/tests/AutomatedPlaytestRunner.tscn",
+      "sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf",
+      "mirror_sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf"
+    },
+    {
+      "path": "scenes/tests/CollisionRegressionRunner.tscn",
+      "sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71",
+      "mirror_sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71"
+    },
+    {
+      "path": "scenes/tests/DirectionalPresentationRegression.tscn",
+      "sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163",
+      "mirror_sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163"
+    },
+    {
+      "path": "scenes/tests/GameplayRegressionRunner.tscn",
+      "sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42",
+      "mirror_sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42"
+    },
+    {
+      "path": "scenes/tests/PerformanceRunner.tscn",
+      "sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24",
+      "mirror_sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24"
+    },
+    {
+      "path": "scenes/tests/PixelAssetBaker.tscn",
+      "sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e",
+      "mirror_sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e"
+    },
+    {
+      "path": "scenes/tests/SceneEntranceRegression.tscn",
+      "sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310",
+      "mirror_sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310"
+    },
+    {
+      "path": "scenes/tests/ValidationRunner.tscn",
+      "sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005",
+      "mirror_sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005"
+    },
+    {
+      "path": "scenes/tests/VisualReviewRunner.tscn",
+      "sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b",
+      "mirror_sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b"
+    },
+    {
+      "path": "scenes/tests/WorldAtlasRegression.tscn",
+      "sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee",
+      "mirror_sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee"
+    },
+    {
+      "path": "scenes/tests/WorldExpansionRunner.tscn",
+      "sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc",
+      "mirror_sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc"
+    },
+    {
+      "path": "scenes/ui/HUD.gd",
+      "sha256": "85a10933f514deee346c76f2b7b1120a8633339e24f82615aa65551fd5cce975",
+      "mirror_sha256": "85a10933f514deee346c76f2b7b1120a8633339e24f82615aa65551fd5cce975"
+    },
+    {
+      "path": "scenes/ui/HUD.tscn",
+      "sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6",
+      "mirror_sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6"
+    },
+    {
+      "path": "scripts/autoload/AudioManager.gd",
+      "sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f",
+      "mirror_sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f"
+    },
+    {
+      "path": "scripts/autoload/DataRegistry.gd",
+      "sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+      "mirror_sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f"
+    },
+    {
+      "path": "scripts/autoload/GameState.gd",
+      "sha256": "5b65a11c4ee79af8854181f654793b6153b391fd67236e99350e96b51ad04c9a",
+      "mirror_sha256": "5b65a11c4ee79af8854181f654793b6153b391fd67236e99350e96b51ad04c9a"
+    },
+    {
+      "path": "scripts/autoload/SaveManager.gd",
+      "sha256": "9de614ca9fa057678b9745d1bbee988103a30543d69cdf4f0b316ba13ea0356e",
+      "mirror_sha256": "9de614ca9fa057678b9745d1bbee988103a30543d69cdf4f0b316ba13ea0356e"
+    },
+    {
+      "path": "scripts/autoload/SceneRouter.gd",
+      "sha256": "b24cdc158ada161454f06ec76a515589247a406599289086181595cd47e5d635",
+      "mirror_sha256": "b24cdc158ada161454f06ec76a515589247a406599289086181595cd47e5d635"
+    },
+    {
+      "path": "scripts/components/AnimatedNpc.gd",
+      "sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299",
+      "mirror_sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299"
+    },
+    {
+      "path": "scripts/components/AttackFlash.gd",
+      "sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c",
+      "mirror_sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c"
+    },
+    {
+      "path": "scripts/components/DamagePopup.gd",
+      "sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825",
+      "mirror_sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825"
+    },
+    {
+      "path": "scripts/components/DialogueNpc.gd",
+      "sha256": "ef1812992273ffe204fb76526f972c0cabf532c01e9586a69951e4aaeb655ed6",
+      "mirror_sha256": "ef1812992273ffe204fb76526f972c0cabf532c01e9586a69951e4aaeb655ed6"
+    },
+    {
+      "path": "scripts/components/Enemy.gd",
+      "sha256": "4d707856db649c3aa12c835779d37b492c4dd879fd5df4b5312dbcc71125561e",
+      "mirror_sha256": "4d707856db649c3aa12c835779d37b492c4dd879fd5df4b5312dbcc71125561e"
+    },
+    {
+      "path": "scripts/components/EnemyHealthBar.gd",
+      "sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef",
+      "mirror_sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef"
+    },
+    {
+      "path": "scripts/components/HitEffect.gd",
+      "sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94",
+      "mirror_sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94"
+    },
+    {
+      "path": "scripts/components/Interactable.gd",
+      "sha256": "764e5eb03f822d8f1346817bc26a955b043051186632b5ed2f87c3d0f20f1ce3",
+      "mirror_sha256": "764e5eb03f822d8f1346817bc26a955b043051186632b5ed2f87c3d0f20f1ce3"
+    },
+    {
+      "path": "scripts/components/Pickup.gd",
+      "sha256": "fc2c762032e667c2b59d639cdbd813ef63594ba43b1f9ae32e9100a32be36cca",
+      "mirror_sha256": "fc2c762032e667c2b59d639cdbd813ef63594ba43b1f9ae32e9100a32be36cca"
+    },
+    {
+      "path": "scripts/components/Projectile.gd",
+      "sha256": "b35cc50337611e8bc96dd50927585d1eebf6ca79d873a58557cbb7158c601bd1",
+      "mirror_sha256": "b35cc50337611e8bc96dd50927585d1eebf6ca79d873a58557cbb7158c601bd1"
+    },
+    {
+      "path": "scripts/components/RouteGate.gd",
+      "sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1",
+      "mirror_sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1"
+    },
+    {
+      "path": "scripts/components/WastelandAtmosphere.gd",
+      "sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+      "mirror_sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a"
+    },
+    {
+      "path": "scripts/components/WorldProp.gd",
+      "sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de",
+      "mirror_sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de"
+    },
+    {
+      "path": "scripts/systems/InventorySystem.gd",
+      "sha256": "892e6d8f3ff64b2fec22c219886235f40fa270b0c050170caddbd38666f1c521",
+      "mirror_sha256": "892e6d8f3ff64b2fec22c219886235f40fa270b0c050170caddbd38666f1c521"
+    },
+    {
+      "path": "scripts/systems/LevelGenerator.gd",
+      "sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357",
+      "mirror_sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357"
+    },
+    {
+      "path": "scripts/systems/ProjectilePool.gd",
+      "sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67",
+      "mirror_sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67"
+    },
+    {
+      "path": "scripts/systems/VillageTileMap.gd",
+      "sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0",
+      "mirror_sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0"
+    },
+    {
+      "path": "scripts/systems/WorldBackdrop.gd",
+      "sha256": "ff5053024a9019e0cf8dbd022573c579e6414b3fe64a1a3f01f0f40c15692c23",
+      "mirror_sha256": "ff5053024a9019e0cf8dbd022573c579e6414b3fe64a1a3f01f0f40c15692c23"
+    },
+    {
+      "path": "scripts/tests/AutomatedPlaytestRunner.gd",
+      "sha256": "de22b52057cfbe035c530bf98532564b47699bd49ee889c6d94a9627f877b63f",
+      "mirror_sha256": "de22b52057cfbe035c530bf98532564b47699bd49ee889c6d94a9627f877b63f"
+    },
+    {
+      "path": "scripts/tests/CollisionRegressionRunner.gd",
+      "sha256": "045dba3ecc18bb59ef3796c2bbeecc6af324703a70d358b5b2f2fe8beab57534",
+      "mirror_sha256": "045dba3ecc18bb59ef3796c2bbeecc6af324703a70d358b5b2f2fe8beab57534"
+    },
+    {
+      "path": "scripts/tests/DirectionalPresentationRegression.gd",
+      "sha256": "dd87fecd62dd60852cd33a9da2b7b3a199be3f8643edbff15a71a4923aeccbdb",
+      "mirror_sha256": "dd87fecd62dd60852cd33a9da2b7b3a199be3f8643edbff15a71a4923aeccbdb"
+    },
+    {
+      "path": "scripts/tests/GameplayRegressionRunner.gd",
+      "sha256": "ba7045d93f16eafd43d41d65ddacc92b22589ac6b3cbbdee37388f30f78bcb23",
+      "mirror_sha256": "ba7045d93f16eafd43d41d65ddacc92b22589ac6b3cbbdee37388f30f78bcb23"
+    },
+    {
+      "path": "scripts/tests/PerformanceRunner.gd",
+      "sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a",
+      "mirror_sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a"
+    },
+    {
+      "path": "scripts/tests/SceneEntranceRegression.gd",
+      "sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc",
+      "mirror_sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc"
+    },
+    {
+      "path": "scripts/tests/VerticalSliceVerifier.gd",
+      "sha256": "c03c96dffaf19cea3214e9628c3aa4538e7ab455cb17d9bb84bbc06526a1101e",
+      "mirror_sha256": "c03c96dffaf19cea3214e9628c3aa4538e7ab455cb17d9bb84bbc06526a1101e"
+    },
+    {
+      "path": "scripts/tests/VisualReviewRunner.gd",
+      "sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda",
+      "mirror_sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda"
+    },
+    {
+      "path": "scripts/tests/WorldAtlasRegression.gd",
+      "sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e",
+      "mirror_sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e"
+    },
+    {
+      "path": "scripts/tests/WorldExpansionRegression.gd",
+      "sha256": "7db41c9b9e960b3f0b8ee84657dff528b5abd206d23c55d6bb20a1559ab47838",
+      "mirror_sha256": "7db41c9b9e960b3f0b8ee84657dff528b5abd206d23c55d6bb20a1559ab47838"
+    },
+    {
+      "path": "scripts/tests/WorldExpansionRunner.gd",
+      "sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203",
+      "mirror_sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203"
+    },
+    {
+      "path": "scripts/tools/PixelAssetBaker.gd",
+      "sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75",
+      "mirror_sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75"
+    },
+    {
+      "path": "scripts/ui/SceneEntrance.gd",
+      "sha256": "af9c4cd1bf87491fe00b8a2551290f697f7ed2f76cefcafd3de29c7da0b151bc",
+      "mirror_sha256": "af9c4cd1bf87491fe00b8a2551290f697f7ed2f76cefcafd3de29c7da0b151bc"
+    },
+    {
+      "path": "scripts/ui/WorldAtlasPanel.gd",
+      "sha256": "273b63a36efd850fcdbb5787b67636265a9b8d564c8223d467ef25dc2cb255ee",
+      "mirror_sha256": "273b63a36efd850fcdbb5787b67636265a9b8d564c8223d467ef25dc2cb255ee"
+    },
+    {
+      "path": "scripts/ui/WorldMapView.gd",
+      "sha256": "f71c3227bd4840e5173d7c1d3f8b83c8fcc597e7ccdeed26f15bbb7e4b17ae11",
+      "mirror_sha256": "f71c3227bd4840e5173d7c1d3f8b83c8fcc597e7ccdeed26f15bbb7e4b17ae11"
+    },
+    {
+      "path": "scripts/utils/PixelArtFactory.gd",
+      "sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5",
+      "mirror_sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5"
+    },
+    {
+      "path": "scripts/utils/RuntimeAssetLoader.gd",
+      "sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f",
+      "mirror_sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f"
+    }
+  ],
+  "frames": [
+    {
+      "path": "1024x768/factory-yard-control.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "cb9403fdb3aec39d92aba68b9d67c39135282141275817cd168a5d2d7d88f228"
+    },
+    {
+      "path": "1024x768/guild-centre.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "3b108ff68eee595135a6ad2587ce0586e6109e664578bd771c55be4a270dd090"
+    },
+    {
+      "path": "1024x768/guild-contract.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "c1273b377077f77c88171f11b7a82bf28166d3158f5e97b61d9053dcb9e7a6ea"
+    },
+    {
+      "path": "1024x768/guild-departure.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "eed643b5a739f2f13cfb8b0b78b0c59817e792d05323a82e85e17af07746f5d4"
+    },
+    {
+      "path": "1024x768/guild-return.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "d412fe651c64166cabe6a060672a7256ffa258b779307b9238b85041920f3fb8"
+    },
+    {
+      "path": "1024x768/guild-reward.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "ad53d8bc8a89e1a6ba66df57a54d27abb4245204b95ae356fa6522dca56c8847"
+    },
+    {
+      "path": "1024x768/highway-convoy-control.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "117af121433d06f11fd9557f7f57c625e611887c5d767184a5622f30e199ccfc"
+    },
+    {
+      "path": "1024x768/marsh-yard-control.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "5695ebdbdb8d1017fc080e10f44e6c7878b720d86d78d33d353e5f862031a1ad"
+    },
+    {
+      "path": "1024x768/village-centre.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "a156ca1b3810ddb7420520d3c0b9daa24bb23512e2278fc1651f06c905f4fed7"
+    },
+    {
+      "path": "1024x768/village-craft.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "5d71106f6b12eae4c3ca41badb9648f0fc4c4134136d1f9fc3f922502610ab20"
+    },
+    {
+      "path": "1024x768/village-forge.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "22f1bfc7876e49d1e8a7cb4775cdabcaa334e83dccbaa77725d6328752723124"
+    },
+    {
+      "path": "1024x768/village-guild-entrance.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "ae44afdc7c12392aa8cc5106abf7be2e38c779cb1d331ef705f28ff5a2d8fa94"
+    },
+    {
+      "path": "1024x768/village-mod.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "51b47937f4d4edc3b1154b9a561436d05ab4d47e9a3cfce1b8d8de2f0ec9cd7e"
+    },
+    {
+      "path": "1024x768/village-north-route.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "dbeb102bfbaa9a22b67ccc72cbaf57bb201eba9d1ce6255875f17d364d534fb2"
+    },
+    {
+      "path": "1024x768/village-recycle.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "19edc6b78aed478056b8ca19039c5bf9154dcb005be19651f5f47095079dd639"
+    },
+    {
+      "path": "1024x768/village-save.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "9ff62fed41827cb7a3827c805e3c0d62ea11eaafe1dc4dab4d2bc642594dc819"
+    },
+    {
+      "path": "1024x768/village-shop.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "7d090285fa78aaba07edd55534cf8c60e9279c262bd1a8d803ade7bf3b5b0ac2"
+    },
+    {
+      "path": "1024x768/village-water-dry.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "2f16a36367569b6870c815038b21946bbd7034b082336d2c52b32d7690a41a7c"
+    },
+    {
+      "path": "1024x768/village-water-restored-staged.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "22b12c8cbe5950076dfac2ef4aade938f79bdaddf94c226e4452338653062230"
+    },
+    {
+      "path": "1024x768/village-west-route.png",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "sha256": "34e14c75222bf0630a6b505e8398f4f34a590115a1bc7d7befe582a8566593d6"
+    },
+    {
+      "path": "factory-yard-control.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "45409ebb687e8034b4ed7bfc2f60eaecf5c24147d524becd385fa457bd586e07"
+    },
+    {
+      "path": "guild-centre.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "bb3cf338ce6893af4cca1abc5db413014c207065d43890660f80fa1eab6f000e"
+    },
+    {
+      "path": "guild-contract.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "4e7ee37eda18cd796f66d1d71c9f73611e5ec83889826427b1b870cbb8d49289"
+    },
+    {
+      "path": "guild-departure.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "8c12ea7e62c82a5722eb220c00947e999ace50b832e6ad5b6a2903b19ce7b916"
+    },
+    {
+      "path": "guild-return.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "aa8f8ca658a56d873301511e947f1dacd145923ef56de096570af36c233b1573"
+    },
+    {
+      "path": "guild-reward.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "77f254334e3b339fcb13d5569ce3b8c138932dd3ce4922d32f68b8dcde2414df"
+    },
+    {
+      "path": "highway-convoy-control.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "448c9e5670887a7644a4f3cfc6a0af16128220d5786c1b27f894d6d6cac89375"
+    },
+    {
+      "path": "marsh-yard-control.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "c55a064beea908cd04bf568bdde8c7a1c14db426bb898054291ad4e52cb054d5"
+    },
+    {
+      "path": "village-centre.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "da88f05ca6421d8e8d1bbffdf362b1b3fa4044dc779010b6f7aa0bab2ae5fcad"
+    },
+    {
+      "path": "village-craft.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "821ebb0ae692fea885caae103c17d6b38c222b386892b3fa46de523a34044dc3"
+    },
+    {
+      "path": "village-forge.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "df7a6a24f998c989d23ebc26b0b43f4470770534c1d726083bcd683e35286a8f"
+    },
+    {
+      "path": "village-guild-entrance.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "6c7ee5495e2d35bb475d76e8dc5a27cf19c55e06b662b71d558d50d01e5802d4"
+    },
+    {
+      "path": "village-mod.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "12bc9c8a495e4fd9888b0ec027e0ffe662dd9abaad1d889819a3409b32954206"
+    },
+    {
+      "path": "village-north-route.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "c2b4bbe49be77a8bce235dbb5b793d49569dd056d43f7068280196c06f081259"
+    },
+    {
+      "path": "village-recycle.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "8d07f4cc58fcd58a3ab4dc4d2e67fa00155bef575393059ffcd5adf764ae02ac"
+    },
+    {
+      "path": "village-save.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "5814ccb663b1cce9e36996eceea0ba8dfa2cf3aeba88daf6505616f517a62d3c"
+    },
+    {
+      "path": "village-shop.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "f8bfec6d1cc8f4f1756cf3cb395e59f80b2d2c30c48ed4d8a2bd57dc6c8f8794"
+    },
+    {
+      "path": "village-water-dry.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "ebd34fa468fb45d8580b5410685621e9729290531c592744f960b608375941ae"
+    },
+    {
+      "path": "village-water-restored-staged.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "c09f9ea9a432be39dc4da751fd6e2a7ea038db8f2d2f0dc8e0c247ec788904aa"
+    },
+    {
+      "path": "village-west-route.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "e0a8727127c3e7f8242224244d1b700d3ec094e4d8c03aea5060bf7cab010c34"
+    }
+  ],
+  "logs": [
+    {
+      "path": "hubs-wide.log",
+      "sha256": "b33e5d60b1fb793f00cc164d60ff33357d0de9d1242a7dc35d653d02dfac9d17"
+    },
+    {
+      "path": "hubs-narrow.log",
+      "sha256": "12124b8ecc2cd714a6f523cc85d9373d1af71bfa4dee14b731ed40bfb8d55336"
+    }
+  ]
+}

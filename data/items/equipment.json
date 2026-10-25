@@ -502,7 +502,7 @@
       "sfx_id": "interact",
       "shake_strength": 0.02,
       "progression": "core",
-      "obtain_hint": "在工坊合成，解鎖方舟終端遠程操控與機密檔案解密"
+      "obtain_hint": "工坊合成；荒野出擊可用 T 查閱路線情報，回村莊或公會補給"
     }
   },
   "resources": {

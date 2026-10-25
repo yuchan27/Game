@@ -11,6 +11,7 @@ var swing_sign := 1.0
 
 func setup(new_effect_id: String, new_direction: Vector2, strength := 1.0, combo_sign := 1.0) -> void:
 	effect_id = new_effect_id
+	age = 0.0
 	direction = new_direction.normalized()
 	if direction.length() < 0.1:
 		direction = Vector2.RIGHT
@@ -61,13 +62,13 @@ func _draw() -> void:
 		_draw_slash(t, alpha)
 
 func _draw_slash(t: float, alpha: float) -> void:
-	var eased := 1.0 - pow(1.0 - t, 3.0)
+	var eased := smoothstep(0.20, 0.58, t)
 	var base_ang := direction.angle()
 	var spread_mult := 1.24 if effect_id.contains("heavy") else (1.12 if effect_id.contains("blade") else 1.04)
 	var radius := lerpf(38.0, 62.0, eased) * spread_mult
 	var pivot := direction * 10.0 + Vector2(0, -4)
-	var sweep_head := lerpf(-1.75, 1.30, eased) * swing_sign
-	var sweep_tail := lerpf(-1.95, 0.35, pow(t, 1.35)) * swing_sign
+	var sweep_head := lerpf(-1.50, 1.30, eased) * swing_sign
+	var sweep_tail := lerpf(-1.50, 1.30, smoothstep(0.20, 0.58, maxf(0.0, t - 0.15))) * swing_sign
 	var a0 := minf(sweep_head, sweep_tail)
 	var a1 := maxf(sweep_head, sweep_tail)
 	if a1 - a0 < 0.35:
@@ -85,9 +86,9 @@ func _draw_slash(t: float, alpha: float) -> void:
 		var r_mid := r_out - (4.5 + env * 3.5)
 		var r_in := r_out - (10.0 + env * 8.0)
 		var dir_pt := Vector2(cos(ang), sin(ang) * 0.84)
-		pts_outer.append(pivot + dir_pt * r_out)
-		pts_mid.append(pivot + dir_pt * r_mid)
-		pts_inner.append(pivot + dir_pt * r_in)
+		pts_outer.append((pivot + dir_pt * r_out).round())
+		pts_mid.append((pivot + dir_pt * r_mid).round())
+		pts_inner.append((pivot + dir_pt * r_in).round())
 
 	var poly_wake := PackedVector2Array()
 	poly_wake.append_array(pts_outer)
@@ -104,14 +105,14 @@ func _draw_slash(t: float, alpha: float) -> void:
 		draw_colored_polygon(poly_core, Color(color_secondary.r, color_secondary.g, color_secondary.b, alpha * 0.78))
 
 	if pts_outer.size() >= 2:
-		draw_polyline(pts_outer, Color(0.96, 0.99, 1.0, alpha * 0.94), 3.0, true)
+		draw_polyline(pts_outer, Color(0.96, 0.99, 1.0, alpha * 0.94), 2.0, false)
 
 	for i in range(6):
 		var spark_u := float(i) / 5.0
 		var spark_ang := base_ang + lerpf(a0, a1, spark_u)
 		var spark_dir := Vector2(cos(spark_ang), sin(spark_ang) * 0.84)
 		var spark_pos := pivot + spark_dir * (radius + 4.0 + float(i * 3) * eased)
-		draw_circle(spark_pos, 2.4 * (1.0 - t * 0.55), Color(color_secondary.r, color_secondary.g, color_secondary.b, alpha * 0.85))
+		draw_rect(Rect2(spark_pos.round(), Vector2(3, 2)), Color(color_secondary.r, color_secondary.g, color_secondary.b, alpha * 0.85))
 
 func _draw_slam(t: float, alpha: float) -> void:
 	var center := direction * 34.0 + Vector2(0, -4)

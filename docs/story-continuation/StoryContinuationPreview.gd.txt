@@ -1,0 +1,97 @@
+extends Node
+
+# Direct story fixtures and ordinary native HUD rendering; no gameplay or disk IO.
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the isolated presentation project.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--story-output="):
+			output = argument.trim_prefix("--story-output=")
+	if not output.is_absolute_path():
+		push_error("Pass an absolute --story-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	for view: String in ["factory-first", "marsh-then-highway", "city-archive", "facility-before", "facility-after"]:
+		get_tree().paused = true
+		GameState.reset_new_run(false)
+		_stage(view)
+		var scene = load(SceneRouter.SCENES[GameState.current_scene_id]).instantiate()
+		scene.process_mode = Node.PROCESS_MODE_DISABLED
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		var actor = get_tree().get_first_node_in_group("map_player")
+		if actor != null:
+			var camera = actor.get_node("Camera2D")
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+		var hud = get_tree().get_first_node_in_group("hud")
+		var text := ""
+		if view in ["factory-first", "marsh-then-highway"]:
+			var npc := DataRegistry.get_npc("wasteland_survivor" if view == "factory-first" else "repair_robot")
+			text = GameState.story_dialogue_for_npc(npc) + GameState.campaign_npc_record(String(npc["id"]))
+			hud.call("_show_dialogue", npc["name"], npc["role"], text)
+		else:
+			var event := DataRegistry.get_event("story_metropolis_archive" if view == "city-archive" else "story_facility_memory")
+			text = "%s\n\n%s" % [String(event["description"]), String(event["revelation"])]
+			hud.call("_show_dialogue", event["name"], "第 %d 章・劇情線索" % int(event["chapter"]), text)
+		for frame in range(8):
+			await get_tree().process_frame
+		print("STORY_STAGED_COPY: ", view, " next=", GameState.get_journey_hint(), " text=", text.replace("\n", " | "))
+		await _image(output, view)
+		if view in ["city-archive", "facility-before"]:
+			var scroll = hud.dialogue_body.get_parent()
+			scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+			for frame in range(3):
+				await get_tree().process_frame
+			await _image(output, view + "-tail")
+		scene.queue_free()
+		await get_tree().process_frame
+	get_tree().quit(0)
+
+func _image(output: String, view: String) -> void:
+	await RenderingServer.frame_post_draw
+	var error := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+	print("STORY_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", error)
+
+func _stage(view: String) -> void:
+	GameState.current_scene_id = "village"
+	if view == "factory-first":
+		_complete("old_factory_core")
+		return
+	if view == "marsh-then-highway":
+		_complete("toxic_sample")
+		_complete("clear_scrap_route")
+		return
+	for quest: Dictionary in DataRegistry.quests:
+		if bool(quest.get("main_campaign", false)) and (int(quest["chapter"]) <= 4 or view != "city-archive" and int(quest["chapter"]) == 5 or view == "facility-after"):
+			_complete(String(quest["id"]))
+	GameState.current_scene_id = "wasteland"
+	GameState.current_route_id = "ruined_metropolis" if view == "city-archive" else "underground_facility"
+	if view != "facility-after":
+		GameState.active_quest_id = "metropolis_archive" if view == "city-archive" else "facility_memory"
+		GameState.quest_progress = {"campaign": {"version": 1, "outing_index": 0, "actions": {}}}
+
+func _complete(quest_id: String) -> void:
+	# Direct fixture assignment, never a real hand-in or settlement.
+	var quest := DataRegistry.get_quest(quest_id)
+	GameState.completed_quests.append(quest_id)
+	var state := {"campaign_completed": quest_id, "campaign_choices": {}}
+	for outing: Dictionary in quest["campaign_outings"]:
+		for action: Dictionary in outing["actions"]:
+			if action.get("type", "") == "choice":
+				state["campaign_choices"][action["id"]] = action["options"][1 if quest_id == "metropolis_archive" else 0]["id"]
+	if quest.has("field_objective"):
+		state["field_objectives"] = {quest["field_objective"]["id"]: true}
+	GameState.route_states[quest["route"]] = state
+	for objective: Dictionary in quest.get("objectives", []):
+		if objective.get("type", "") == "discover" and not bool(objective.get("optional", false)):
+			GameState.discovered_events.append(String(objective["route"]) + ":" + String(objective["event"]))

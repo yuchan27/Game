@@ -1,0 +1,175 @@
+extends Node
+
+# Frozen ordinary presentation only. Status is synthetic RAM text, never a load result.
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const OUTPUT_ARGUMENT_PREFIX := "--load-output="
+const VIEWS: Array[String] = [
+	"title-load-pending",
+	"title-load-failed",
+	"pause-load-pending",
+	"pause-load-failed"
+]
+const TITLE_PENDING_TEXT := "讀取中…正在進入存檔場景。"
+const TITLE_FAILED_TEXT := "讀取失敗，仍留在標題畫面；請確認存檔後重試。"
+const PAUSE_FAILED_TEXT := "讀取失敗；目前仍留在暫停選單。按 Esc 關閉暫停可查看詳細訊息。"
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+func _capture() -> void:
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this presentation fixture only from its isolated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_dir := _read_output_directory()
+	if output_dir.is_empty() or not output_dir.is_absolute_path():
+		push_error("Pass an absolute --load-output= directory as a user argument.")
+		get_tree().quit(2)
+		return
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_dir)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested load-presentation image directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	get_tree().paused = true
+	for view_name: String in VIEWS:
+		var capture_ok := false
+		if view_name.begins_with("title-"):
+			capture_ok = await _capture_title_view(view_name, output_dir)
+		else:
+			capture_ok = await _capture_pause_view(view_name, output_dir)
+		get_tree().paused = true
+		if not capture_ok:
+			get_tree().quit(3)
+			return
+	get_tree().quit(0)
+
+func _read_output_directory() -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(OUTPUT_ARGUMENT_PREFIX):
+			return argument.trim_prefix(OUTPUT_ARGUMENT_PREFIX)
+	return ""
+
+func _capture_title_view(view_name: String, output_dir: String) -> bool:
+	get_tree().paused = true
+	var main_scene = load("res://scenes/main/Main.tscn").instantiate()
+	main_scene.process_mode = Node.PROCESS_MODE_DISABLED
+	main_scene.set("force_fullscreen_on_start", false)
+	get_tree().root.add_child(main_scene)
+	get_tree().current_scene = main_scene
+	for frame_index in range(4):
+		await get_tree().process_frame
+
+	var title_panel := main_scene.get("title_panel") as Control
+	var title_status := main_scene.get("title_status") as Label
+	var continue_button := main_scene.get("continue_button") as Button
+	var new_game_button := main_scene.get("new_game_button") as Button
+	if title_panel == null or title_status == null or continue_button == null or new_game_button == null:
+		push_error("The Main presentation scene did not create its title controls.")
+		main_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	# Isolated Main._ready() checks only SaveManager.has_save() metadata. This
+	# in-memory flag enables the retry button in the staged failure frame; it
+	# does not create or read a save payload.
+	main_scene.set("_title_has_save", true)
+	if view_name == "title-load-pending":
+		main_scene.call("_set_load_pending", true, TITLE_PENDING_TEXT)
+	else:
+		main_scene.call("_set_load_pending", false, TITLE_FAILED_TEXT)
+	print("LOAD_PRESENTATION_STATE name=", view_name, " synthetic RAM status only; no load request or result; isolated title file-existence metadata only")
+	print("LOAD_PRESENTATION_LAYOUT name=", view_name, " viewport=", get_viewport().get_visible_rect().size, " title_panel=", title_panel.get_global_rect(), " status_visible=", title_status.visible, " status=", title_status.text, " continue_disabled=", continue_button.disabled, " new_game_disabled=", new_game_button.disabled)
+	get_tree().paused = true
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	main_scene.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+func _capture_pause_view(view_name: String, output_dir: String) -> bool:
+	get_tree().paused = true
+	_stage_pause_state()
+	var village_scene = load("res://scenes/levels/village/Village.tscn").instantiate()
+	village_scene.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(village_scene)
+	get_tree().current_scene = village_scene
+	for frame_index in range(4):
+		await get_tree().process_frame
+
+	var hud = village_scene.find_child("HUD", true, false)
+	if hud == null:
+		push_error("The Village presentation scene did not create its HUD.")
+		village_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	var player := village_scene.find_child("Player", true, false) as Node2D
+	if player != null:
+		player.process_mode = Node.PROCESS_MODE_DISABLED
+		player.global_position = Vector2(1248, 920)
+		player.reset_physics_interpolation()
+		var camera := player.get_node_or_null("Camera2D") as Camera2D
+		if camera != null:
+			camera.process_mode = Node.PROCESS_MODE_ALWAYS
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+
+	hud.call("_set_pause_visible", true)
+	if view_name == "pause-load-pending":
+		hud.call("_set_pause_load_state", true, TITLE_PENDING_TEXT, true)
+	else:
+		hud.call("_set_pause_load_state", false, PAUSE_FAILED_TEXT, false)
+	var pause_panel := hud.get("pause_panel") as Control
+	var pause_status := hud.get("pause_status_label") as Label
+	var pause_resume_button := hud.get("pause_resume_button") as Button
+	var pause_save_button := hud.get("pause_save_button") as Button
+	var pause_load_button := hud.get("pause_load_button") as Button
+	var pause_title_button := hud.get("pause_title_button") as Button
+	var pause_exit_button := hud.get("pause_exit_button") as Button
+	if pause_panel == null or pause_status == null or pause_resume_button == null or pause_save_button == null or pause_load_button == null or pause_title_button == null or pause_exit_button == null:
+		push_error("The HUD presentation scene did not create the pause load controls.")
+		village_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	print("LOAD_PRESENTATION_STATE name=", view_name, " synthetic RAM status only; no load request, result, callback, or save IO")
+	print("LOAD_PRESENTATION_LAYOUT name=", view_name, " viewport=", get_viewport().get_visible_rect().size, " pause_panel=", pause_panel.get_global_rect(), " status_visible=", pause_status.visible, " status=", pause_status.text, " resume_disabled=", pause_resume_button.disabled, " save_disabled=", pause_save_button.disabled, " load_disabled=", pause_load_button.disabled, " title_disabled=", pause_title_button.disabled, " exit_disabled=", pause_exit_button.disabled)
+	get_tree().paused = true
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	village_scene.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+func _stage_pause_state() -> void:
+	GameState._expedition.clear()
+	GameState.current_scene_id = "village"
+	GameState.active_spawn_point = "default"
+	GameState.hp = GameState.MAX_HP
+	GameState.ep = GameState.MAX_EP
+	GameState.death_pending = false
+
+func _write_view_image(view_name: String, output_dir: String) -> bool:
+	for frame_index in range(8):
+		await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var viewport := get_viewport()
+	var image := viewport.get_texture().get_image()
+	var output_path := output_dir.path_join(view_name + ".png")
+	var result := image.save_png(output_path)
+	print("LOAD_PRESENTATION_FRAME name=", view_name, " viewport=", viewport.get_visible_rect().size, " result=", result)
+	if result != OK:
+		push_error("Could not save load presentation frame %s: %s" % [view_name, result])
+		return false
+	return true

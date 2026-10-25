@@ -12,6 +12,12 @@ class DrawChunk extends Node2D:
 
 const ASSET_LOADER := preload("res://scripts/utils/RuntimeAssetLoader.gd")
 const CHUNK_TILE_SIZE := 16
+const WASTELAND_SURFACE_SIZE := 64
+const MATERIAL_MASK_STEP := 8.0
+
+static var _wasteland_surface_cache: Dictionary = {}
+static var _ground_shader: Shader
+static var _ground_mask_cache: Dictionary = {}
 
 var mode := "village"
 var map_size := Vector2i(60, 40)
@@ -25,12 +31,24 @@ var factory_texture: Texture2D
 var toxic_path_texture: Texture2D
 var crystal_path_texture: Texture2D
 var factory_path_texture: Texture2D
+var wasteland_surface_texture: Texture2D
 var route_id := ""
 var _chunks: Array[Node2D] = []
 var _tile_rng_states := PackedInt64Array()
+var _authored_road_tiles := PackedByteArray()
+var _authored_road_directions := PackedByteArray()
+var _authored_road_offsets := PackedFloat32Array()
+var _authored_ground_tiles := PackedByteArray()
+var _has_authored_paths := false
 var _batch_rects: Array = []
 var _batch_lines: Array = []
 var _batch_circles: Array = []
+var _ground_material: ShaderMaterial
+var _material_roads: Array[Dictionary] = []
+var _material_areas: Array[Dictionary] = []
+# Separate registered feet preserve authored openings between structure supports.
+var _material_architecture_feet: Array[Rect2] = []
+var _material_mask_key := ""
 
 func setup(new_mode: String, size_tiles: Vector2i, new_seed: int, new_route_id := "") -> void:
 	mode = new_mode
@@ -45,7 +63,554 @@ func setup(new_mode: String, size_tiles: Vector2i, new_seed: int, new_route_id :
 	toxic_path_texture = ASSET_LOADER.load_png("res://assets/sprites/tiles/toxic_path_variants_2p5d.png")
 	crystal_path_texture = ASSET_LOADER.load_png("res://assets/sprites/tiles/crystal_path_variants_2p5d.png")
 	factory_path_texture = ASSET_LOADER.load_png("res://assets/sprites/tiles/factory_path_variants_2p5d.png")
+	_build_authored_road_tiles()
+	_build_authored_ground_tiles()
+	_load_ground_material()
+	wasteland_surface_texture = null
+	if mode == "wasteland" and _ground_material == null:
+		wasteland_surface_texture = _get_wasteland_surface_texture(route_id)
 	_rebuild_chunks()
+
+
+func _build_authored_road_tiles() -> void:
+	_authored_road_tiles.clear()
+	_authored_road_directions.clear()
+	_authored_road_offsets.clear()
+	if mode != "wasteland" or map_size.x <= 0 or map_size.y <= 0:
+		return
+	_authored_road_tiles.resize(map_size.x * map_size.y)
+	_authored_road_tiles.fill(0)
+	_authored_road_directions.resize(map_size.x * map_size.y)
+	_authored_road_directions.fill(0)
+	_authored_road_offsets.resize(map_size.x * map_size.y)
+	_authored_road_offsets.fill(0.0)
+	var route: Dictionary = DataRegistry.get_wasteland_route(route_id)
+	var paths: Array = route.get("exploration_paths", [])
+	_has_authored_paths = not paths.is_empty()
+	var widths: Array = route.get("path_widths", [])
+	for path_index in range(paths.size()):
+		var raw_path: Array = paths[path_index]
+		var half_width := float(widths[path_index]) * 0.5 if path_index < widths.size() else 3.5
+		for index in range(1, raw_path.size()):
+			var a := Vector2(float(raw_path[index - 1][0]) * map_size.x, float(raw_path[index - 1][1]) * map_size.y)
+			var b := Vector2(float(raw_path[index][0]) * map_size.x, float(raw_path[index][1]) * map_size.y)
+			var minimum := Vector2i(floori(minf(a.x, b.x) - half_width - 1.5), floori(minf(a.y, b.y) - half_width - 1.5))
+			var maximum := Vector2i(ceili(maxf(a.x, b.x) + half_width + 1.5), ceili(maxf(a.y, b.y) + half_width + 1.5))
+			for y in range(maxi(0, minimum.y), mini(map_size.y, maximum.y + 1)):
+				for x in range(maxi(0, minimum.x), mini(map_size.x, maximum.x + 1)):
+					var center := Vector2(x + 0.5, y + 0.5)
+					var nearest := Geometry2D.get_closest_point_to_segment(center, a, b)
+					var distance := center.distance_to(nearest)
+					if distance > half_width + 1.3:
+						continue
+					var value := 1 if distance > half_width else (3 if distance < 0.48 else 2)
+					var tile_index := y * map_size.x + x
+					if value >= _authored_road_tiles[tile_index]:
+						_authored_road_tiles[tile_index] = value
+						_authored_road_directions[tile_index] = 1 if absf(b.x - a.x) >= absf(b.y - a.y) else 2
+						_authored_road_offsets[tile_index] = distance
+	for point: Dictionary in route.get("exploration_points", []):
+		var raw_position: Array = point.get("position", [0.5, 0.5])
+		var center := Vector2(float(raw_position[0]) * map_size.x, float(raw_position[1]) * map_size.y)
+		for y in range(maxi(0, floori(center.y - 5.0)), mini(map_size.y, ceili(center.y + 5.0))):
+			for x in range(maxi(0, floori(center.x - 7.0)), mini(map_size.x, ceili(center.x + 7.0))):
+				if Vector2((x - center.x) / 7.0, (y - center.y) / 5.0).length_squared() <= 1.0:
+					_authored_road_tiles[y * map_size.x + x] = maxi(2, _authored_road_tiles[y * map_size.x + x])
+
+
+func _build_authored_ground_tiles() -> void:
+	_authored_ground_tiles.resize(map_size.x * map_size.y)
+	_authored_ground_tiles.fill(0)
+	if mode != "wasteland":
+		return
+	var file := FileAccess.open("res://data/art/world_v2.json", FileAccess.READ)
+	if file == null:
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		return
+	var composition: Dictionary = parsed.get("routes", {}).get(route_id, {})
+	var kinds := {"water": 1, "chasm": 2, "furnace": 3, "rubble": 4, "coolant": 5}
+	var world_extent := Vector2(map_size) * tile_size
+	for area: Dictionary in composition.get("ground_areas", []):
+		var values: Array = area.get("rect", [])
+		if values.size() != 4:
+			continue
+		var rect := Rect2(float(values[0]) * map_size.x, float(values[1]) * map_size.y, float(values[2]) * map_size.x, float(values[3]) * map_size.y)
+		var world_bounds := Rect2(Vector2(float(values[0]), float(values[1])) * world_extent, Vector2(float(values[2]), float(values[3])) * world_extent)
+		var outline := parse_ground_outline(area.get("outline", null), world_extent, world_bounds)
+		for y in range(maxi(0, floori(rect.position.y)), mini(map_size.y, ceili(rect.end.y))):
+			for x in range(maxi(0, floori(rect.position.x)), mini(map_size.x, ceili(rect.end.x))):
+				if not outline.is_empty() and not Geometry2D.is_point_in_polygon(Vector2(x + 0.5, y + 0.5) * tile_size, outline):
+					continue
+				_authored_ground_tiles[y * map_size.x + x] = int(kinds.get(String(area.get("kind", "water")), 1))
+
+
+static func parse_ground_outline(raw: Variant, world_extent: Vector2, world_bounds: Rect2) -> PackedVector2Array:
+	var invalid := PackedVector2Array()
+	if not raw is Array or raw.size() < 3 or world_extent.x <= 0.0 or world_extent.y <= 0.0 or world_bounds.size.x <= 0.0 or world_bounds.size.y <= 0.0:
+		return invalid
+	var points := PackedVector2Array()
+	var allowed_bounds := world_bounds.grow(0.01)
+	for raw_point in raw:
+		if not raw_point is Array or raw_point.size() != 2:
+			return invalid
+		if (typeof(raw_point[0]) != TYPE_INT and typeof(raw_point[0]) != TYPE_FLOAT) or (typeof(raw_point[1]) != TYPE_INT and typeof(raw_point[1]) != TYPE_FLOAT):
+			return invalid
+		var normalized := Vector2(float(raw_point[0]), float(raw_point[1]))
+		if not is_finite(normalized.x) or not is_finite(normalized.y) or normalized.x < 0.0 or normalized.x > 1.0 or normalized.y < 0.0 or normalized.y > 1.0:
+			return invalid
+		var point := normalized * world_extent
+		if not allowed_bounds.has_point(point):
+			return invalid
+		for existing: Vector2 in points:
+			if existing.distance_squared_to(point) <= 0.0001:
+				return invalid
+		points.append(point)
+	var double_area := 0.0
+	for index in range(points.size()):
+		double_area += points[index].cross(points[(index + 1) % points.size()])
+	if absf(double_area) <= 0.01:
+		return invalid
+	for index in range(points.size()):
+		var previous: Vector2 = points[(index + points.size() - 1) % points.size()]
+		var current: Vector2 = points[index]
+		var next: Vector2 = points[(index + 1) % points.size()]
+		if absf((current - previous).cross(next - current)) <= 0.001 and (current - previous).dot(next - current) < 0.0:
+			return invalid
+	for first in range(points.size()):
+		var first_next := (first + 1) % points.size()
+		for second in range(first + 1, points.size()):
+			var second_next := (second + 1) % points.size()
+			if first_next == second or second_next == first:
+				continue
+			if _ground_segments_intersect(points[first], points[first_next], points[second], points[second_next]):
+				return invalid
+	return points
+
+
+static func _ground_segments_intersect(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> bool:
+	var ab_c := (b - a).cross(c - a)
+	var ab_d := (b - a).cross(d - a)
+	var cd_a := (d - c).cross(a - c)
+	var cd_b := (d - c).cross(b - c)
+	const EPSILON := 0.001
+	if ((ab_c > EPSILON and ab_d < -EPSILON) or (ab_c < -EPSILON and ab_d > EPSILON)) and ((cd_a > EPSILON and cd_b < -EPSILON) or (cd_a < -EPSILON and cd_b > EPSILON)):
+		return true
+	return (absf(ab_c) <= EPSILON and _ground_point_on_segment(c, a, b)) or (absf(ab_d) <= EPSILON and _ground_point_on_segment(d, a, b)) or (absf(cd_a) <= EPSILON and _ground_point_on_segment(a, c, d)) or (absf(cd_b) <= EPSILON and _ground_point_on_segment(b, c, d))
+
+
+static func _ground_point_on_segment(point: Vector2, a: Vector2, b: Vector2) -> bool:
+	const EPSILON := 0.001
+	return point.x >= minf(a.x, b.x) - EPSILON and point.x <= maxf(a.x, b.x) + EPSILON and point.y >= minf(a.y, b.y) - EPSILON and point.y <= maxf(a.y, b.y) + EPSILON
+
+
+static func ground_outline_contains_or_near(outline: PackedVector2Array, point: Vector2, distance: float) -> bool:
+	if outline.size() < 3:
+		return false
+	if Geometry2D.is_point_in_polygon(point, outline):
+		return true
+	var limit_squared := distance * distance
+	for index in range(outline.size()):
+		var closest := Geometry2D.get_closest_point_to_segment(point, outline[index], outline[(index + 1) % outline.size()])
+		if point.distance_squared_to(closest) <= limit_squared:
+			return true
+	return false
+
+
+func _load_ground_material() -> void:
+	_ground_material = null
+	_material_roads.clear()
+	_material_areas.clear()
+	_material_architecture_feet.clear()
+	if mode not in ["wasteland", "village", "guild"]:
+		return
+	var file := FileAccess.open("res://data/art/world_materials_v3.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest: Variant = JSON.parse_string(file.get_as_text())
+	if not manifest is Dictionary or manifest.get("version", 0) != 3 or manifest.get("enabled", false) != true:
+		return
+	var ground: Variant = manifest.get("ground", {})
+	if not ground is Dictionary:
+		return
+	var region_config: Dictionary = {}
+	var region_entries: Variant = manifest.get("regions", {})
+	if region_entries is Dictionary:
+		var route_region: Variant = region_entries.get(route_id, {})
+		if route_region is Dictionary:
+			region_config = route_region
+	var textures: Array[Texture2D] = []
+	var regions: Array[Vector4] = []
+	var scales: Array[float] = []
+	for key in ["earth", "road"]:
+		var entry: Variant = region_config.get(key, ground.get(key, {}))
+		if not entry is Dictionary:
+			return
+		var texture := ASSET_LOADER.load_png(String(entry.get("path", "")))
+		if texture == null:
+			return
+		var raw: Variant = entry.get("source_rect", [0, 0, texture.get_width(), texture.get_height()])
+		if not raw is Array or raw.size() != 4:
+			return
+		var region := Rect2(float(raw[0]), float(raw[1]), float(raw[2]), float(raw[3]))
+		if region.size.x <= 0 or region.size.y <= 0 or not Rect2(Vector2.ZERO, texture.get_size()).encloses(region):
+			return
+		textures.append(texture)
+		regions.append(Vector4(region.position.x / texture.get_width(), region.position.y / texture.get_height(), region.size.x / texture.get_width(), region.size.y / texture.get_height()))
+		scales.append(maxf(32.0, float(entry.get("world_size", 512.0))))
+	var water_texture: Texture2D = textures[0]
+	var water_region: Vector4 = regions[0]
+	var water_size: float = scales[0]
+	var water_enabled := false
+	var water_entry: Variant = region_config.get("water")
+	if water_entry is Dictionary:
+		var candidate: Texture2D = ASSET_LOADER.load_png(String(water_entry.get("path", "")))
+		var raw_size: Variant = water_entry.get("world_size", 512.0)
+		var size_type := typeof(raw_size)
+		var size_valid := (size_type == TYPE_INT or size_type == TYPE_FLOAT) and is_finite(float(raw_size))
+		if candidate != null:
+			var raw: Variant = water_entry.get("source_rect", [0, 0, candidate.get_width(), candidate.get_height()])
+			var valid: bool = raw is Array and raw.size() == 4
+			if valid:
+				for value in raw:
+					var value_type := typeof(value)
+					if (value_type != TYPE_INT and value_type != TYPE_FLOAT) or not is_finite(float(value)):
+						valid = false
+						break
+			if valid and size_valid:
+				var rect := Rect2(float(raw[0]), float(raw[1]), float(raw[2]), float(raw[3]))
+				if rect.size.x > 0.0 and rect.size.y > 0.0 and Rect2(Vector2.ZERO, candidate.get_size()).encloses(rect):
+					water_texture = candidate
+					water_region = Vector4(rect.position.x / candidate.get_width(), rect.position.y / candidate.get_height(), rect.size.x / candidate.get_width(), rect.size.y / candidate.get_height())
+					water_size = maxf(32.0, float(raw_size))
+					water_enabled = true
+	if _ground_shader == null:
+		_ground_shader = Shader.new()
+		_ground_shader.code = """
+shader_type canvas_item;
+render_mode unshaded;
+uniform sampler2D earth_texture : source_color, filter_nearest, repeat_enable;
+uniform sampler2D road_texture : source_color, filter_nearest, repeat_enable;
+uniform sampler2D water_texture : source_color, filter_nearest, repeat_enable;
+uniform sampler2D ground_mask : filter_linear, repeat_disable;
+uniform vec4 earth_region;
+uniform vec4 road_region;
+uniform vec4 water_region;
+uniform float earth_size = 512.0;
+uniform float road_size = 512.0;
+uniform float water_size = 512.0;
+uniform float water_enabled = 0.0;
+uniform float earth_contrast = 0.68;
+uniform float road_contrast = 0.72;
+uniform float paving_continuity = 0.0;
+uniform vec2 chunk_origin;
+uniform vec2 mask_size;
+uniform vec4 region_tint : source_color = vec4(1.0);
+varying vec2 ground_position;
+void vertex() { ground_position = VERTEX + chunk_origin; }
+float grain(vec2 p) {
+	vec2 cell = floor(p / 24.0);
+	vec2 f = smoothstep(vec2(0.0), vec2(1.0), fract(p / 24.0));
+	float a = fract(sin(dot(cell, vec2(127.1, 311.7))) * 43758.5453);
+	float b = fract(sin(dot(cell + vec2(1.0, 0.0), vec2(127.1, 311.7))) * 43758.5453);
+	float c = fract(sin(dot(cell + vec2(0.0, 1.0), vec2(127.1, 311.7))) * 43758.5453);
+	float d = fract(sin(dot(cell + vec2(1.0), vec2(127.1, 311.7))) * 43758.5453);
+	return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+void fragment() {
+	vec2 p = floor(ground_position) + vec2(0.5);
+	vec4 earth = texture(earth_texture, earth_region.xy + fract(p / earth_size) * earth_region.zw);
+	vec4 road = texture(road_texture, road_region.xy + fract(p / road_size) * road_region.zw);
+	earth.rgb = mix(vec3(0.16, 0.145, 0.125), earth.rgb, earth_contrast);
+	road.rgb = mix(vec3(0.16, 0.145, 0.125), road.rgb, road_contrast);
+	vec4 mask = texture(ground_mask, ((p - chunk_origin) / 8.0 + vec2(1.0)) / mask_size);
+	float wear = grain(p) - 0.5;
+	// Break a corridor shoulder into worn bays instead of a straight decal edge.
+	float shoulder_wear = grain(p * 0.21) - 0.5;
+	float road_mix = smoothstep(0.08, 0.92, mask.r + wear * 0.30 + shoulder_wear * 0.55);
+	// Worn paving is exposed in patches, not an uninterrupted carpet beneath props.
+	float paving_patches = 0.35 + smoothstep(0.24, 0.72, grain(p * 0.18)) * 0.65;
+	// Settled streets keep a readable spine; their shoulders still break into earth.
+	road_mix *= mix(paving_patches, max(paving_patches, paving_continuity), smoothstep(0.64, 0.96, mask.r));
+	road_mix *= 1.0 - mask.a * 0.66;
+	vec3 surface = mix(earth.rgb, road.rgb, road_mix) * region_tint.rgb;
+	surface *= 0.97 + grain(p * 0.11) * 0.06;
+	float basin = smoothstep(0.48, 0.73, mask.g + wear * 0.10);
+	float rim = smoothstep(0.22, 0.49, mask.g) * (1.0 - basin);
+	float kind = floor(mask.b * 5.0 + 0.5);
+	vec3 pool = vec3(0.085, 0.16, 0.13);
+	if (kind > 1.5 && kind < 2.5) { pool = vec3(0.055, 0.05, 0.075); }
+	if (kind > 2.5 && kind < 3.5) { pool = vec3(0.22, 0.115, 0.055); }
+	if (kind > 3.5 && kind < 4.5) {
+		// Dry yards expose scattered stone through the same earth. A solid basin
+		// fill/rim makes their authored bounds look like a detached paving mat.
+		float broken_edge = wear * 0.60 + (grain(p * 0.31) - 0.5) * 0.80;
+		basin = smoothstep(0.40, 0.92, mask.g + broken_edge);
+		basin *= smoothstep(0.38, 0.76, grain(p * 0.15)) * 0.42;
+		rim = 0.0;
+		pool = mix(earth.rgb, road.rgb, 0.24) * region_tint.rgb * 0.96;
+	}
+	if (kind > 4.5) { pool = vec3(0.055, 0.17, 0.19); }
+	vec3 worn_stone = mix(earth.rgb, road.rgb, 0.55) * vec3(0.76, 0.75, 0.69);
+	vec3 rim_color = worn_stone;
+	float rim_strength = rim * 0.85;
+	if (kind > 0.5 && kind < 1.5 && water_enabled > 0.5) {
+		float silt_break = mix(0.62, 1.0, grain(p * 0.31));
+		vec3 wet_silt = mix(earth.rgb, vec3(0.245, 0.235, 0.15), 0.38) * region_tint.rgb;
+		rim_color = mix(worn_stone, wet_silt, 0.76);
+		rim_strength *= silt_break;
+		vec3 marsh_water = texture(water_texture, water_region.xy + fract(p / water_size) * water_region.zw).rgb;
+		pool = mix(pool, marsh_water * region_tint.rgb, 0.72);
+	}
+	surface = mix(surface, rim_color, rim_strength);
+	pool *= 0.85 + grain(p + vec2(173.0, 89.0)) * 0.30 + earth.r * 0.14;
+	COLOR = vec4(mix(surface, pool, basin), 1.0);
+}
+"""
+	_ground_material = ShaderMaterial.new()
+	_ground_material.shader = _ground_shader
+	_ground_material.set_shader_parameter("earth_texture", textures[0])
+	_ground_material.set_shader_parameter("road_texture", textures[1])
+	_ground_material.set_shader_parameter("water_texture", water_texture)
+	_ground_material.set_shader_parameter("earth_region", regions[0])
+	_ground_material.set_shader_parameter("road_region", regions[1])
+	_ground_material.set_shader_parameter("water_region", water_region)
+	_ground_material.set_shader_parameter("earth_size", scales[0])
+	_ground_material.set_shader_parameter("road_size", scales[1])
+	_ground_material.set_shader_parameter("water_size", water_size)
+	_ground_material.set_shader_parameter("water_enabled", 1.0 if water_enabled else 0.0)
+	var earth_contrast := 0.68
+	var raw_contrast: Variant = region_config.get("earth_contrast", 0.68)
+	if typeof(raw_contrast) == TYPE_INT or typeof(raw_contrast) == TYPE_FLOAT:
+		if is_finite(float(raw_contrast)) and float(raw_contrast) >= 0.0 and float(raw_contrast) <= 1.0:
+			earth_contrast = float(raw_contrast)
+	_ground_material.set_shader_parameter("earth_contrast", earth_contrast)
+	_ground_material.set_shader_parameter("road_contrast", minf(1.0, earth_contrast + 0.04))
+	var continuity: Variant = region_config.get("paving_continuity", 0.0)
+	if (typeof(continuity) == TYPE_INT or typeof(continuity) == TYPE_FLOAT) and is_finite(float(continuity)):
+		_ground_material.set_shader_parameter("paving_continuity", clampf(float(continuity), 0.0, 1.0))
+	var tint := Color.WHITE
+	match route_id:
+		"toxic_marsh": tint = Color(0.90, 0.98, 0.88)
+		"crystal_scar": tint = Color(0.95, 0.90, 1.0)
+		"old_factory": tint = Color(1.0, 0.93, 0.87)
+		"ruined_metropolis": tint = Color(0.94, 0.95, 0.98)
+		"underground_facility": tint = Color(0.87, 0.97, 1.0)
+	var regional_tint: Variant = region_config.get("tint", [])
+	if regional_tint is Array and regional_tint.size() == 3:
+		var tint_valid := true
+		for value in regional_tint:
+			var value_type := typeof(value)
+			if value_type != TYPE_INT and value_type != TYPE_FLOAT:
+				tint_valid = false
+				break
+			var channel := float(value)
+			if not is_finite(channel) or channel < 0.0 or channel > 1.0:
+				tint_valid = false
+				break
+		if tint_valid:
+			tint = Color(float(regional_tint[0]), float(regional_tint[1]), float(regional_tint[2]))
+	_ground_material.set_shader_parameter("region_tint", tint)
+	if mode in ["village", "guild"]:
+		_load_hub_material_layout(manifest)
+		return
+	var route: Dictionary = DataRegistry.get_wasteland_route(route_id)
+	var paths: Array = route.get("exploration_paths", [])
+	var widths: Array = route.get("path_widths", [])
+	var world_extent := Vector2(map_size) * tile_size
+	for path_index in range(paths.size()):
+		var path: Array = paths[path_index]
+		var radius := (float(widths[path_index]) if path_index < widths.size() else 7.0) * tile_size * 0.5
+		for index in range(1, path.size()):
+			_material_roads.append({"a": Vector2(float(path[index - 1][0]), float(path[index - 1][1])) * world_extent, "b": Vector2(float(path[index][0]), float(path[index][1])) * world_extent, "radius": radius})
+	for point: Dictionary in route.get("exploration_points", []):
+		var position_array: Array = point.get("position", [0.5, 0.5])
+		_material_roads.append({"center": Vector2(float(position_array[0]), float(position_array[1])) * world_extent, "radii": Vector2(7, 5) * tile_size})
+	_material_mask_key = "%s:%s:%d:%d:0" % [route_id, map_size, tile_size, hash(_material_roads)]
+	var area_file := FileAccess.open("res://data/art/world_v2.json", FileAccess.READ)
+	if area_file == null:
+		return
+	var area_manifest: Variant = JSON.parse_string(area_file.get_as_text())
+	if not area_manifest is Dictionary:
+		return
+	var kinds := {"water": 1, "chasm": 2, "furnace": 3, "rubble": 4, "coolant": 5}
+	for area: Dictionary in area_manifest.get("routes", {}).get(route_id, {}).get("ground_areas", []):
+		var values: Array = area.get("rect", [])
+		if values.size() == 4:
+			var bounds := Rect2(Vector2(float(values[0]), float(values[1])) * world_extent, Vector2(float(values[2]), float(values[3])) * world_extent)
+			var area_data: Dictionary = {"rect": bounds, "kind": int(kinds.get(String(area.get("kind", "water")), 1))}
+			var outline := parse_ground_outline(area.get("outline", null), world_extent, bounds)
+			if not outline.is_empty():
+				area_data["outline"] = outline
+			_material_areas.append(area_data)
+	var modules: Dictionary = area_manifest.get("modules", {})
+	var composition: Dictionary = area_manifest.get("routes", {}).get(route_id, {})
+	for placement: Dictionary in composition.get("placements", []):
+		var raw_position: Array = placement.get("position", [0.5, 0.5])
+		if raw_position.size() != 2:
+			continue
+		var anchor := Vector2(float(raw_position[0]), float(raw_position[1])) * world_extent
+		var module: Dictionary = modules.get(String(placement.get("module", "")), {})
+		for raw_footprint: Array in module.get("footprints", []):
+			if raw_footprint.size() != 4:
+				continue
+			var footprint := Rect2(Vector2(float(raw_footprint[0]), float(raw_footprint[1])), Vector2(float(raw_footprint[2]), float(raw_footprint[3])))
+			if footprint.size.x > 0.0 and footprint.size.y > 0.0:
+				_material_architecture_feet.append(Rect2(anchor + footprint.position, footprint.size))
+	_material_mask_key = "%s:%s:%d:%d:%d:%d" % [route_id, map_size, tile_size, hash(_material_roads), hash(_material_areas), hash(_material_architecture_feet)]
+
+
+func has_material_ground() -> bool:
+	return _ground_material != null
+
+
+func get_map_road_segments() -> Array[Dictionary]:
+	# The hub map reads the same placed roads as the ground, never a second layout.
+	var segments: Array[Dictionary] = []
+	for road: Dictionary in _material_roads:
+		if road.has("a") and road.has("b"):
+			segments.append({"a": road.a, "b": road.b, "width": float(road.radius) * 2.0})
+	return segments
+
+
+func _load_hub_material_layout(manifest: Dictionary) -> void:
+	# Reuse the same world-space sampler/masks; hub lanes are presentation data.
+	var layout: Dictionary = manifest.get("hubs", {}).get(mode, {})
+	var continuity: Variant = layout.get("paving_continuity", 0.0)
+	if (typeof(continuity) == TYPE_INT or typeof(continuity) == TYPE_FLOAT) and is_finite(float(continuity)):
+		_ground_material.set_shader_parameter("paving_continuity", clampf(float(continuity), 0.0, 1.0))
+	for lane: Dictionary in layout.get("lanes", []):
+		var points: Array = lane.get("points", [])
+		var radius := maxf(8.0, float(lane.get("width", 96.0)) * 0.5)
+		for index in range(1, points.size()):
+			var a: Array = points[index - 1]
+			var b: Array = points[index]
+			if a.size() == 2 and b.size() == 2:
+				_material_roads.append({"a": Vector2(float(a[0]), float(a[1])), "b": Vector2(float(b[0]), float(b[1])), "radius": radius})
+	for plaza: Dictionary in layout.get("plazas", []):
+		var center: Array = plaza.get("center", [])
+		var radii: Array = plaza.get("radii", [])
+		if center.size() == 2 and radii.size() == 2:
+			_material_roads.append({"center": Vector2(float(center[0]), float(center[1])), "radii": Vector2(maxf(8.0, float(radii[0])), maxf(8.0, float(radii[1])))})
+	_material_mask_key = "%s:%s:%d:%d" % [mode, map_size, tile_size, hash(_material_roads)]
+
+
+func _make_ground_mask(origin: Vector2, extent: Vector2) -> ImageTexture:
+	# One eight-world-pixel mask per chunk, with shared-coordinate padding on all edges.
+	var cache_key := "%s:%s:%s" % [_material_mask_key, origin, extent]
+	if _ground_mask_cache.has(cache_key):
+		return _ground_mask_cache[cache_key] as ImageTexture
+	var size := Vector2i(ceili(extent.x / MATERIAL_MASK_STEP) + 2, ceili(extent.y / MATERIAL_MASK_STEP) + 2)
+	var image := Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+	var chunk_bounds := Rect2(origin, extent).grow(MATERIAL_MASK_STEP)
+	var roads: Array[Dictionary] = []
+	var areas: Array[Dictionary] = []
+	var architecture_feet: Array[Rect2] = []
+	for path: Dictionary in _material_roads:
+		var bounds: Rect2
+		if path.has("center"):
+			bounds = Rect2(path.center - path.radii, path.radii * 2.0)
+		else:
+			bounds = Rect2(path.a, Vector2.ZERO).expand(path.b).grow(float(path.radius))
+		if bounds.grow(32.0).intersects(chunk_bounds):
+			roads.append(path)
+	for area: Dictionary in _material_areas:
+		var area_rect: Rect2 = area.rect
+		if area_rect.grow(16.0).intersects(chunk_bounds):
+			areas.append(area)
+	for foot: Rect2 in _material_architecture_feet:
+		if foot.grow(24.0).intersects(chunk_bounds):
+			architecture_feet.append(foot)
+	for y in range(size.y):
+		for x in range(size.x):
+			var p := origin + (Vector2(x, y) - Vector2(0.5, 0.5)) * MATERIAL_MASK_STEP
+			var road := 0.0
+			for path: Dictionary in roads:
+				var depth: float
+				if path.has("center"):
+					depth = (1.0 - ((p - path.center) / path.radii).length()) * minf(path.radii.x, path.radii.y)
+				else:
+					depth = float(path.radius) - p.distance_to(Geometry2D.get_closest_point_to_segment(p, path.a, path.b))
+				road = maxf(road, clampf(0.5 + depth / 48.0, 0.0, 1.0))
+			var basin := 0.0
+			var kind := 0.0
+			for area: Dictionary in areas:
+				var rect: Rect2 = area.rect
+				if not rect.grow(16.0).has_point(p):
+					continue
+				var depth: float
+				if area.has("outline"):
+					depth = _ground_outline_depth(area.outline, p)
+				else:
+					# Keep the legacy rounded-rectangle field for entries without a valid outline.
+					var q := (p - rect.get_center()).abs() - rect.size * 0.5 + Vector2(12, 12)
+					depth = 12.0 - q.max(Vector2.ZERO).length() - minf(maxf(q.x, q.y), 0.0)
+				var value := clampf(0.45 + depth / 48.0, 0.0, 1.0)
+				if value > basin:
+					basin = value
+					kind = float(area.kind) / 5.0
+			var apron := 0.0
+			for foot: Rect2 in architecture_feet:
+				if not foot.grow(24.0).has_point(p):
+					continue
+				# Fade road coverage into the earth material at the foot perimeter.
+				var outside := ((p - foot.get_center()).abs() - foot.size * 0.5).max(Vector2.ZERO).length()
+				var edge_variation := sin((p.x + p.y * 0.37) * 0.075) * 2.0 + sin((p.y - p.x * 0.41) * 0.11) * 2.0
+				var shoulder_width := clampf(20.0 + edge_variation, 16.0, 24.0)
+				apron = maxf(apron, 1.0 - smoothstep(0.0, shoulder_width, outside))
+			image.set_pixel(x, y, Color(road, basin, kind, apron))
+	var texture := ImageTexture.create_from_image(image)
+	_ground_mask_cache[cache_key] = texture
+	return texture
+
+
+func _ground_outline_depth(outline: PackedVector2Array, point: Vector2) -> float:
+	var edge_distance := INF
+	for index in range(outline.size()):
+		var closest := Geometry2D.get_closest_point_to_segment(point, outline[index], outline[(index + 1) % outline.size()])
+		edge_distance = minf(edge_distance, point.distance_to(closest))
+	return edge_distance if Geometry2D.is_point_in_polygon(point, outline) else -edge_distance
+
+
+func register_ground_contacts(contacts: Array[Rect2]) -> void:
+	if _ground_material == null or contacts.is_empty():
+		return
+	# Once after scene population: actual placed feet wear into the same ground.
+	_material_architecture_feet.append_array(contacts)
+	_material_mask_key += ":props:%d" % hash(contacts)
+	for chunk: Node2D in _chunks:
+		var extent := Vector2(chunk.tile_end - chunk.tile_start) * tile_size
+		var bounds := Rect2(chunk.position, extent)
+		var affected := false
+		for foot: Rect2 in contacts:
+			if foot.grow(24.0).intersects(bounds):
+				affected = true
+				break
+		if not affected:
+			continue
+		var mask := _make_ground_mask(chunk.position, extent)
+		chunk.material.set_shader_parameter("ground_mask", mask)
+		chunk.material.set_shader_parameter("mask_size", Vector2(mask.get_width(), mask.get_height()))
+
+
+func _get_wasteland_surface_texture(biome: String) -> Texture2D:
+	if _wasteland_surface_cache.has(biome):
+		return _wasteland_surface_cache[biome] as Texture2D
+	var image := Image.create(WASTELAND_SURFACE_SIZE, WASTELAND_SURFACE_SIZE, false, Image.FORMAT_RGBA8)
+	var broad_noise := FastNoiseLite.new()
+	broad_noise.seed = absi(biome.hash()) + 1201
+	broad_noise.frequency = 0.075
+	var grain_noise := FastNoiseLite.new()
+	grain_noise.seed = absi(biome.hash()) + 9413
+	grain_noise.frequency = 0.42
+	for y in range(WASTELAND_SURFACE_SIZE):
+		for x in range(WASTELAND_SURFACE_SIZE):
+			var value := clampf(0.94 + broad_noise.get_noise_2d(x, y) * 0.10 + grain_noise.get_noise_2d(x, y) * 0.035, 0.78, 1.12)
+			image.set_pixel(x, y, Color(value, value, value, 1.0))
+	var texture := ImageTexture.create_from_image(image)
+	_wasteland_surface_cache[biome] = texture
+	return texture
 
 
 func _rebuild_chunks() -> void:
@@ -57,7 +622,8 @@ func _rebuild_chunks() -> void:
 	if map_size.x <= 0 or map_size.y <= 0:
 		_tile_rng_states.clear()
 		return
-	_build_tile_rng_states()
+	if _ground_material == null:
+		_build_tile_rng_states()
 	for y in range(0, map_size.y, CHUNK_TILE_SIZE):
 		for x in range(0, map_size.x, CHUNK_TILE_SIZE):
 			var chunk := DrawChunk.new()
@@ -65,6 +631,14 @@ func _rebuild_chunks() -> void:
 			chunk.tile_start = Vector2i(x, y)
 			chunk.tile_end = Vector2i(mini(x + CHUNK_TILE_SIZE, map_size.x), mini(y + CHUNK_TILE_SIZE, map_size.y))
 			chunk.position = Vector2(x * tile_size, y * tile_size)
+			if _ground_material != null:
+				var extent := Vector2(chunk.tile_end - chunk.tile_start) * tile_size
+				var mask := _make_ground_mask(chunk.position, extent)
+				var chunk_material := _ground_material.duplicate() as ShaderMaterial
+				chunk_material.set_shader_parameter("chunk_origin", chunk.position)
+				chunk_material.set_shader_parameter("ground_mask", mask)
+				chunk_material.set_shader_parameter("mask_size", Vector2(mask.get_width(), mask.get_height()))
+				chunk.material = chunk_material
 			chunk.name = "BackdropChunk_%d_%d" % [x, y]
 			add_child(chunk)
 			_chunks.append(chunk)
@@ -82,6 +656,10 @@ func _build_tile_rng_states() -> void:
 
 
 func _draw_chunk(target: CanvasItem, tile_start: Vector2i, tile_end: Vector2i) -> void:
+	if _ground_material != null:
+		# One ordered opaque surface: legacy queued kerbs and basin rectangles cannot cover it.
+		target.draw_rect(Rect2(Vector2.ZERO, Vector2(tile_end - tile_start) * tile_size), Color.WHITE)
+		return
 	if _tile_rng_states.size() != map_size.x * map_size.y:
 		return
 	_batch_rects.clear()
@@ -106,29 +684,25 @@ func _draw_chunk(target: CanvasItem, tile_start: Vector2i, tile_end: Vector2i) -
 
 
 func _draw_tile(target: CanvasItem, rng: RandomNumberGenerator, x: int, y: int, tile_origin: Vector2i) -> void:
+	var road_strength := _road_strength(x, y)
 	var base := _base_color()
 	var alt := _alt_color()
 	var stain := _stain_color()
 	var accent := _accent_color()
 	var rect := Rect2(Vector2((x - tile_origin.x) * tile_size, (y - tile_origin.y) * tile_size), Vector2(tile_size, tile_size))
-	var c := base.lerp(alt, rng.randf_range(0.0, 0.42))
-	if mode == "wasteland":
-		c = c.lerp(_wasteland_zone_color(x, y), _wasteland_zone_strength(x, y))
-		c = c.lerp(_route_noise_color(x, y), _route_noise_strength(x, y))
-	elif mode == "village":
+	var c := _wasteland_surface_color(road_strength, x, y) if mode == "wasteland" else base.lerp(alt, rng.randf_range(0.0, 0.42))
+	if mode == "village":
 		c = c.lerp(_village_patch_color(x, y), _village_patch_strength(x, y))
-	var road_strength := _road_strength(x, y)
-	if road_strength > 0.0:
+	if mode != "wasteland" and road_strength > 0.0:
 		c = c.lerp(_road_color(), road_strength)
-	if mode == "wasteland" and rng.randf() < 0.11:
-		c = c.lerp(stain, 0.42)
 	var texture := _texture_for_tile(x, y, road_strength)
 	if texture != null:
-		_draw_texture_variant(target, texture, rect, x, y, road_strength)
-		var tint_alpha := 0.08 + road_strength * 0.06
-		if mode == "village":
-			tint_alpha = 0.09 + road_strength * 0.05
-		_draw_rect(target, rect, Color(c.r, c.g, c.b, tint_alpha))
+		_draw_texture_variant(target, texture, rect, x, y, road_strength, c if mode == "wasteland" else Color.WHITE)
+		if mode != "wasteland":
+			var tint_alpha := 0.08 + road_strength * 0.06
+			if mode == "village":
+				tint_alpha = 0.09 + road_strength * 0.05
+			_draw_rect(target, rect, Color(c.r, c.g, c.b, tint_alpha))
 	else:
 		_draw_rect(target, rect, c)
 	if road_strength > 0.0:
@@ -137,94 +711,174 @@ func _draw_tile(target: CanvasItem, rng: RandomNumberGenerator, x: int, y: int, 
 		_draw_village_organic_detail(target, rect, x, y, road_strength, rng)
 	if mode == "wasteland":
 		_draw_biome_signature_detail(target, rect, x, y, road_strength, accent, stain, rng)
-		if rng.randf() < 0.055:
-			var crack_start := rect.position + Vector2(rng.randf_range(4, 12), rng.randf_range(6, 24))
-			var crack_end := crack_start + Vector2(rng.randf_range(8, 24), rng.randf_range(-8, 10))
-			_draw_line(target, crack_start, crack_end, Color(0.04, 0.035, 0.03, 0.38), 1.0)
-		if rng.randf() < 0.025:
-			_draw_circle(target, rect.position + Vector2(rng.randf_range(8, 24), rng.randf_range(8, 24)), rng.randf_range(2.0, 5.0), Color(stain.r, stain.g, stain.b, 0.46))
-		if rng.randf() < 0.018:
-			_draw_rect(target, rect.grow(-rng.randf_range(8.0, 13.0)), Color(accent.r, accent.g, accent.b, 0.18), true)
+		_draw_authored_road_edges(target, rect, x, y)
+		_draw_authored_ground_detail(target, rect, x, y)
+
+
+func _draw_authored_road_edges(target: CanvasItem, rect: Rect2, x: int, y: int) -> void:
+	if target == null or _authored_road_tiles.size() != map_size.x * map_size.y:
+		return
+	var tile_index := y * map_size.x + x
+	var road := _authored_road_tiles[tile_index]
+	var hash_value := absi(x * 374761 + y * 668265 + world_seed)
+	hash_value = absi(hash_value ^ (hash_value >> 13) ^ (x * y * 224682251))
+	if road == 1:
+		for index in range(3):
+			var chip := Vector2(3 + (hash_value / (index + 1)) % 25, 4 + (hash_value / (index + 3)) % 23)
+			_draw_rect(target, Rect2(rect.position + chip, Vector2(3 + index, 2)), Color8(118, 108, 83, 165))
+		return
+	if road < 2:
+		return
+	var horizontal := _authored_road_directions[tile_index] == 1
+	if route_id == "toxic_marsh":
+		for plank in [7, 17, 27]:
+			var plank_rect := Rect2(rect.position + Vector2(plank, 1), Vector2(5, 30)) if horizontal else Rect2(rect.position + Vector2(1, plank), Vector2(30, 5))
+			_draw_rect(target, plank_rect, Color8(112, 106, 76, 220))
+		if (x + y) % 3 == 0:
+			_draw_rect(target, Rect2(rect.position + Vector2(3, 3), Vector2(3, 3)), Color8(152, 150, 115))
+	elif route_id == "scrap_highway":
+		if absf(_authored_road_offsets[tile_index] - 2.5) < 0.6:
+			var track := Rect2(rect.position + Vector2(0, 9), Vector2(32, 7)) if horizontal else Rect2(rect.position + Vector2(9, 0), Vector2(7, 32))
+			_draw_rect(target, track, Color8(22, 23, 23, 74))
+		if hash_value % 19 == 0:
+			var sign_y := -1.0 if hash_value % 2 == 0 else 1.0
+			var start := Vector2(3 + hash_value % 6, 9 + (hash_value >> 4) % 14)
+			var bend := start + Vector2(8 + (hash_value >> 6) % 8, sign_y * float(2 + (hash_value >> 8) % 5))
+			var end := bend + Vector2(5 + (hash_value >> 10) % 8, sign_y * (-3.0 if hash_value % 3 == 0 else 2.0))
+			if hash_value % 4 == 0:
+				start = Vector2(start.y, start.x)
+				bend = Vector2(bend.y, bend.x)
+				end = Vector2(end.y, end.x)
+			_draw_line(target, rect.position + start, rect.position + bend, Color8(19, 20, 20, 175), 1.5)
+			_draw_line(target, rect.position + bend, rect.position + end, Color8(19, 20, 20, 175), 1.5)
+			if hash_value % 3 == 0:
+				_draw_line(target, rect.position + bend, rect.position + bend + Vector2(-4, 7), Color8(19, 20, 20, 145), 1.0)
+	var edge_color := Color8(120, 114, 97)
+	if route_id == "toxic_marsh":
+		edge_color = Color8(160, 145, 98)
+	elif route_id == "crystal_scar":
+		edge_color = Color8(129, 112, 143)
+	elif route_id == "underground_facility":
+		edge_color = Color8(95, 142, 147)
+	for offset: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+		var neighbor := Vector2i(x, y) + offset
+		if neighbor.x < 0 or neighbor.y < 0 or neighbor.x >= map_size.x or neighbor.y >= map_size.y:
+			continue
+		if _authored_road_tiles[neighbor.y * map_size.x + neighbor.x] >= 2:
+			continue
+		var edge := Rect2(rect.position + Vector2(0 if offset.x <= 0 else 27, 0 if offset.y <= 0 else 27), Vector2(32 if offset.y != 0 else 5, 32 if offset.x != 0 else 5))
+		_draw_rect(target, edge.grow(2.0), Color8(25, 26, 24, 200))
+		_draw_rect(target, edge, edge_color.darkened(0.16 if hash_value % 4 == 0 else 0.0))
+
+
+func _draw_authored_ground_detail(target: CanvasItem, rect: Rect2, x: int, y: int) -> void:
+	if target == null or _authored_ground_tiles.size() != map_size.x * map_size.y:
+		return
+	var kind := _authored_ground_tiles[y * map_size.x + x]
+	if kind == 0:
+		return
+	var rim := Color8(88, 102, 91)
+	if kind == 2:
+		rim = Color8(91, 78, 107)
+	elif kind == 3:
+		rim = Color8(190, 103, 39)
+	elif kind == 5:
+		rim = Color8(49, 141, 158)
+	for offset: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+		var neighbor := Vector2i(x, y) + offset
+		if neighbor.x < 0 or neighbor.y < 0 or neighbor.x >= map_size.x or neighbor.y >= map_size.y:
+			continue
+		if _authored_ground_tiles[neighbor.y * map_size.x + neighbor.x] == kind:
+			continue
+		var edge := Rect2(rect.position + Vector2(0 if offset.x <= 0 else 27, 0 if offset.y <= 0 else 27), Vector2(32 if offset.y != 0 else 5, 32 if offset.x != 0 else 5))
+		_draw_rect(target, edge, rim)
+	if kind in [1, 5] and (x * 3 + y) % 6 == 0:
+		_draw_line(target, rect.position + Vector2(6, 16), rect.position + Vector2(23, 16), Color(rim, 0.32), 2.0)
+	elif kind == 2 and x % 3 == 0:
+		_draw_line(target, rect.position + Vector2(16, 0), rect.position + Vector2(16, 32), Color8(35, 30, 42), 3.0)
+	elif kind == 3 and (x + y) % 4 == 0:
+		_draw_rect(target, Rect2(rect.position + Vector2(8, 8), Vector2(18, 3)), Color8(225, 127, 42, 140))
 
 
 func _draw_biome_signature_detail(target: CanvasItem, rect: Rect2, x: int, y: int, road_strength: float, accent: Color, stain: Color, rng: RandomNumberGenerator) -> void:
-	var roll_a := rng.randf()
-	var roll_b := rng.randf()
 	if target == null:
 		return
+	var roll_a := rng.randf()
+	var roll_b := rng.randf()
 	match route_id:
 		"scrap_highway":
-			# Cracked multi-lane highway median stripes & concrete curb blocks
-			if road_strength >= 0.55 and x % 4 < 2:
-				_draw_rect(target, Rect2(rect.position.x + 4, rect.position.y + 14, 20, 3), Color(0.96, 0.78, 0.22, 0.65), true)
-			elif road_strength > 0.15 and road_strength < 0.55:
-				_draw_rect(target, Rect2(rect.position.x + 2, rect.position.y + 2, 28, 4), Color(0.68, 0.62, 0.52, 0.50), true)
-			if roll_a < 0.05:
-				# Tire skid mark or blast scorch ring
-				_draw_line(target, rect.position + Vector2(3, 6), rect.position + Vector2(28, 24), Color(0.08, 0.07, 0.06, 0.55), 2.0)
+			var tile_index := y * map_size.x + x
+			var road_mark := _authored_road_tiles[tile_index]
+			var horizontal := _authored_road_directions[tile_index] == 1
+			if road_mark == 3 and (x if horizontal else y) % 7 < 3:
+				var marking := Rect2(rect.position + Vector2(0, 14), Vector2(32, 3)) if horizontal else Rect2(rect.position + Vector2(14, 0), Vector2(3, 32))
+				_draw_rect(target, marking, Color8(175, 147, 86, 170), true)
+			if roll_b < 0.025:
+				_draw_line(target, rect.position + Vector2(7, 20), rect.position + Vector2(19, 16), Color(0.14, 0.13, 0.12, 0.28), 1.0)
 		"toxic_marsh":
-			# Metal grate boardwalk planks on road, bubbling acid pools off-road
 			if road_strength > 0.3:
-				_draw_rect(target, Rect2(rect.position.x + 2, rect.position.y + 3, 28, 26), Color(0.25, 0.36, 0.28, 0.45), false)
-				_draw_line(target, rect.position + Vector2(4, 16), rect.position + Vector2(28, 16), Color(0.38, 0.58, 0.38, 0.48), 1.0)
-			elif roll_a < 0.14:
-				_draw_circle(target, rect.position + Vector2(16, 16), 5.0 + roll_b * 6.0, Color(0.35, 0.92, 0.25, 0.45))
-				_draw_circle(target, rect.position + Vector2(14, 14), 2.0 + roll_b * 2.5, Color(0.78, 1.0, 0.48, 0.60))
+				var causeway: bool = abs(x - int(map_size.x * 0.46) - int(sin(float(y) * 0.10) * 5.0)) <= 2
+				if (causeway and x % 4 == 0) or (not causeway and y % 4 == 0):
+					_draw_line(target, rect.position + Vector2(3, 29), rect.position + Vector2(29, 29), Color(0.42, 0.45, 0.39, 0.34), 1.0)
+			elif roll_a < 0.035:
+				var puddle := rect.position + Vector2(rng.randf_range(7, 25), rng.randf_range(7, 25))
+				_draw_circle(target, puddle, 3.0 + roll_b * 4.0, Color(0.12, 0.23, 0.15, 0.42))
+				if roll_b < 0.42:
+					_draw_circle(target, puddle + Vector2(1, -1), 1.2, Color(0.43, 0.55, 0.31, 0.40))
 		"crystal_scar":
-			# Glowing violet/magenta crystal veins & fracture lines
-			if roll_a < 0.12:
-				var p1 := rect.position + Vector2(4, 26)
-				var p2 := rect.position + Vector2(16, 12)
-				var p3 := rect.position + Vector2(28, 6)
-				_draw_line(target, p1, p2, Color(0.88, 0.42, 1.0, 0.60), 1.5)
-				_draw_line(target, p2, p3, Color(0.38, 0.92, 0.98, 0.55), 1.0)
-			if (x + y) % 9 == 0 and roll_b < 0.40:
-				_draw_rect(target, Rect2(rect.position.x + 12, rect.position.y + 10, 8, 12), Color(0.95, 0.55, 1.0, 0.52), true)
+			if roll_a < 0.045:
+				var p1 := rect.position + Vector2(rng.randf_range(4, 11), rng.randf_range(10, 27))
+				var p2 := p1 + Vector2(rng.randf_range(5, 11), rng.randf_range(-7, -1))
+				var p3 := p2 + Vector2(rng.randf_range(5, 10), rng.randf_range(-4, 4))
+				_draw_line(target, p1, p2, Color(0.48, 0.35, 0.57, 0.50), 1.0)
+				_draw_line(target, p2, p3, Color(0.46, 0.55, 0.58, 0.38), 1.0)
+			elif roll_b < 0.018:
+				_draw_circle(target, rect.position + Vector2(rng.randf_range(8, 24), rng.randf_range(8, 24)), 1.5, Color(0.62, 0.51, 0.68, 0.42))
 		"old_factory":
-			# Industrial steel floor plate seams & yellow-black hazard stripes
-			if (x % 4 == 0 or y % 4 == 0) and road_strength > 0.0:
-				_draw_rect(target, Rect2(rect.position.x + 1, rect.position.y + 1, 30, 30), Color(0.14, 0.16, 0.18, 0.45), false)
-			if road_strength > 0.4 and (x + y) % 5 == 0:
-				_draw_rect(target, Rect2(rect.position.x + 2, rect.position.y + 26, 12, 4), Color(0.96, 0.72, 0.18, 0.70), true)
-				_draw_rect(target, Rect2(rect.position.x + 16, rect.position.y + 26, 12, 4), Color(0.12, 0.12, 0.14, 0.70), true)
-			elif roll_a < 0.07:
-				# Glowing heat vent slit
-				_draw_rect(target, Rect2(rect.position.x + 6, rect.position.y + 14, 20, 3), Color(1.0, 0.48, 0.18, 0.65), true)
+			if road_strength > 0.4 and (x % 8 == 0 or y % 8 == 0):
+				_draw_line(target, rect.position + Vector2(5, 29), rect.position + Vector2(27, 29), Color(0.31, 0.33, 0.34, 0.40), 1.0)
+			if road_strength > 0.4 and (x + y) % 13 == 0:
+				_draw_rect(target, Rect2(rect.position.x + 8, rect.position.y + 26, 8, 2), Color(0.67, 0.51, 0.29, 0.48), true)
+			elif roll_a < 0.018:
+				_draw_rect(target, Rect2(rect.position.x + 8, rect.position.y + 15, 16, 1.5), Color(0.63, 0.35, 0.22, 0.42), true)
 		"ruined_metropolis":
-			# Urban intersection crosswalk bars & shattered concrete slabs
-			if road_strength > 0.4 and x % 6 == 0:
-				_draw_rect(target, Rect2(rect.position.x + 6, rect.position.y + 4, 6, 24), Color(0.82, 0.80, 0.74, 0.36), true)
-				_draw_rect(target, Rect2(rect.position.x + 18, rect.position.y + 4, 6, 24), Color(0.82, 0.80, 0.74, 0.36), true)
-			elif roll_a < 0.06:
-				_draw_rect(target, Rect2(rect.position.x + 5, rect.position.y + 6, 18, 14), Color(0.32, 0.30, 0.34, 0.34), true)
+			if road_strength > 0.4 and (x % 28 == 12 or y % 24 == 10) and (x + y) % 4 < 2:
+				_draw_rect(target, Rect2(rect.position.x + 6, rect.position.y + 15, 12, 1.3), Color(0.58, 0.57, 0.54, 0.40), true)
+			elif roll_a < 0.035:
+				var start := rect.position + Vector2(rng.randf_range(5, 12), rng.randf_range(8, 22))
+				_draw_line(target, start, start + Vector2(rng.randf_range(7, 14), rng.randf_range(-4, 4)), Color(0.24, 0.24, 0.25, 0.46), 1.0)
 		"underground_facility":
-			# High-tech cyan energy conduits & containment floor grid
-			if road_strength > 0.35:
-				_draw_line(target, rect.position + Vector2(0, 16), rect.position + Vector2(32, 16), Color(0.24, 0.88, 0.96, 0.42), 1.5)
-			if (x % 5 == 0 and y % 5 == 0) or roll_a < 0.04:
-				_draw_rect(target, Rect2(rect.position.x + 8, rect.position.y + 8, 16, 16), Color(0.18, 0.76, 0.88, 0.26), false)
+			if road_strength > 0.35 and (x % 5 == 0 or y % 5 == 0):
+				var conduit := Color(0.25, 0.47, 0.50, 0.42)
+				if y % 5 == 0:
+					_draw_line(target, rect.position + Vector2(3, 16), rect.position + Vector2(29, 16), conduit, 1.2)
+				else:
+					_draw_line(target, rect.position + Vector2(16, 3), rect.position + Vector2(16, 29), conduit, 1.2)
+			if roll_a < 0.018:
+				_draw_circle(target, rect.position + Vector2(16, 16), 2.0, Color(0.38, 0.61, 0.61, 0.42))
 		_:
 			if roll_a < 0.03:
-				_draw_circle(target, rect.position + Vector2(16, 16), 3.0, Color(accent.r, accent.g, accent.b, 0.25))
+				_draw_circle(target, rect.position + Vector2(16, 16), 2.0, Color(accent.r, accent.g, accent.b, 0.25))
 
 
 func _draw_road_detail(target: CanvasItem, rect: Rect2, x: int, y: int, road_strength: float, rng: RandomNumberGenerator) -> void:
+	if mode == "wasteland":
+		if rng.randf() < 0.07:
+			var scuff := rect.position + Vector2(rng.randf_range(5, 27), rng.randf_range(5, 27))
+			_draw_circle(target, scuff, rng.randf_range(1.0, 2.2), Color(0.27, 0.27, 0.26, 0.22))
+		if rng.randf() < 0.05:
+			var start := rect.position + Vector2(rng.randf_range(4, 12), rng.randf_range(8, 24))
+			_draw_line(target, start, start + Vector2(rng.randf_range(8, 15), rng.randf_range(-3, 3)), Color(0.18, 0.18, 0.17, 0.22), 1.0)
+		return
 	var edge := _road_edge_color()
 	_draw_rect(target, rect, Color(0.10, 0.09, 0.08, 0.12 + road_strength * 0.16), true)
-	if mode == "wasteland":
-		if rng.randf() < 0.16:
-			_draw_circle(target, rect.position + Vector2(rng.randf_range(4, 28), rng.randf_range(4, 28)), rng.randf_range(1.5, 3.5), Color(edge.r, edge.g, edge.b, 0.12 + road_strength * 0.12))
-		if x % 8 == 0 and rng.randf() < 0.65:
-			_draw_rect(target, Rect2(rect.position.x + rect.size.x * 0.47, rect.position.y + 9, 2, 9), Color(edge.r, edge.g, edge.b, 0.24), true)
-		if rng.randf() < 0.28:
-			_draw_line(target, rect.position + Vector2(rng.randf_range(4, 12), rng.randf_range(8, 24)), rect.position + Vector2(rng.randf_range(18, 28), rng.randf_range(10, 28)), Color(0.05, 0.045, 0.04, 0.42), 1.0)
-	else:
-		if rng.randf() < 0.12:
-			_draw_circle(target, rect.position + Vector2(rng.randf_range(5, 27), rng.randf_range(5, 27)), rng.randf_range(1.0, 2.4), Color(edge.r, edge.g, edge.b, 0.08))
-		if rng.randf() < 0.22:
-			var start := rect.position + Vector2(rng.randf_range(4, 12), rng.randf_range(7, 23))
-			var end := start + Vector2(rng.randf_range(9, 24), rng.randf_range(-6, 8))
-			_draw_line(target, start, end, Color(0.13, 0.11, 0.08, 0.28), 1.0)
+	if rng.randf() < 0.12:
+		_draw_circle(target, rect.position + Vector2(rng.randf_range(5, 27), rng.randf_range(5, 27)), rng.randf_range(1.0, 2.4), Color(edge.r, edge.g, edge.b, 0.08))
+	if rng.randf() < 0.22:
+		var start := rect.position + Vector2(rng.randf_range(4, 12), rng.randf_range(7, 23))
+		var end := start + Vector2(rng.randf_range(9, 24), rng.randf_range(-6, 8))
+		_draw_line(target, start, end, Color(0.13, 0.11, 0.08, 0.28), 1.0)
+
 
 func _draw_village_organic_detail(target: CanvasItem, rect: Rect2, x: int, y: int, road_strength: float, rng: RandomNumberGenerator) -> void:
 	if road_strength <= 0.0:
@@ -241,6 +895,8 @@ func _draw_village_organic_detail(target: CanvasItem, rect: Rect2, x: int, y: in
 		_draw_line(target, start, end, Color(0.34, 0.24, 0.13, 0.28), 1.0)
 
 func _road_strength(x: int, y: int) -> float:
+	if mode == "wasteland" and _authored_road_tiles.size() == map_size.x * map_size.y and _authored_road_tiles[y * map_size.x + x] > 0:
+		return 0.28 if _authored_road_tiles[y * map_size.x + x] == 1 else 0.94
 	if mode == "village":
 		var cx := float(map_size.x) * 0.5
 		var cy := float(map_size.y) * 0.5
@@ -257,6 +913,8 @@ func _road_strength(x: int, y: int) -> float:
 		var cross: bool = (x >= 23 and x <= 27) or (y >= 14 and y <= 17)
 		return 0.65 if hall and cross else 0.0
 	if mode == "wasteland":
+		if _has_authored_paths:
+			return 0.0
 		if route_id == "scrap_highway":
 			var highway: bool = abs(y - int(map_size.y * 0.55) - int(sin(float(x) * 0.08) * 3.0)) <= 3
 			var north_south_spur: bool = abs(x - int(map_size.x * 0.50)) <= 2 and y >= int(map_size.y * 0.52)
@@ -273,7 +931,9 @@ func _road_strength(x: int, y: int) -> float:
 		if route_id == "ruined_metropolis":
 			var ave_x: bool = (x % 28 >= 12 and x % 28 <= 15)
 			var ave_y: bool = (y % 24 >= 10 and y % 24 <= 13)
-			return 0.62 if (ave_x or ave_y) else 0.0
+			var arrival_spine: bool = abs(float(x) - map_size.x * 0.5) <= 2.2 and y >= int(map_size.y * 0.46)
+			var archive_approach: bool = abs(float(y) - map_size.y * 0.50) <= 2.2 and x >= map_size.x * 0.30 and x <= map_size.x * 0.70
+			return 0.62 if (ave_x or ave_y or arrival_spine or archive_approach) else 0.0
 		if route_id == "underground_facility":
 			var ring_dist := Vector2(float(x) - map_size.x * 0.5, float(y) - map_size.y * 0.46).length()
 			var ring: bool = abs(ring_dist - 24.0) <= 2.0
@@ -366,6 +1026,38 @@ func _route_noise_strength(x: int, y: int) -> float:
 	var wave := sin(float(x) * 0.11 + float(y) * 0.07)
 	var broad := sin(float(x) * 0.025 - float(y) * 0.031)
 	return clampf(0.14 + wave * 0.08 + broad * 0.11, 0.0, 0.36)
+
+func _wasteland_surface_color(road_strength: float, x := 0, y := 0) -> Color:
+	if _authored_ground_tiles.size() == map_size.x * map_size.y:
+		match _authored_ground_tiles[y * map_size.x + x]:
+			1: return Color8(24, 43, 39)
+			2: return Color8(15, 17, 25)
+			3: return Color8(49, 26, 19)
+			4: return Color8(78, 73, 70)
+			5: return Color8(13, 40, 52)
+	var ground := Color8(74, 68, 59)
+	var path := Color8(60, 61, 61)
+	match route_id:
+		"scrap_highway":
+			ground = Color8(76, 69, 57)
+			path = Color8(43, 44, 43)
+		"toxic_marsh":
+			ground = Color8(43, 51, 39)
+			path = Color8(91, 85, 66)
+		"crystal_scar":
+			ground = Color8(46, 42, 51)
+			path = Color8(79, 68, 84)
+		"old_factory":
+			ground = Color8(50, 53, 52)
+			path = Color8(87, 79, 61)
+		"ruined_metropolis":
+			ground = Color8(66, 64, 60)
+			path = Color8(40, 43, 45)
+		"underground_facility":
+			ground = Color8(39, 47, 50)
+			path = Color8(64, 75, 72)
+	return ground.lerp(path, clampf(road_strength, 0.0, 0.88))
+
 
 func _road_color() -> Color:
 	match route_id:
@@ -477,48 +1169,28 @@ func _load_tile_texture() -> Texture2D:
 
 func _texture_for_tile(x: int, y: int, road_strength: float) -> Texture2D:
 	if mode == "wasteland":
-		if road_strength > 0.0:
-			match route_id:
-				"scrap_highway":
-					return road_texture if road_texture != null else tile_texture
-				"toxic_marsh":
-					return toxic_path_texture if toxic_path_texture != null else road_texture
-				"crystal_scar":
-					return crystal_path_texture if crystal_path_texture != null else crystal_texture
-				"old_factory":
-					return factory_path_texture if factory_path_texture != null else factory_texture
-				_:
-					return road_texture if road_texture != null else tile_texture
-		else:
-			match route_id:
-				"toxic_marsh":
-					return toxic_texture if toxic_texture != null else tile_texture
-				"crystal_scar":
-					return crystal_texture if crystal_texture != null else tile_texture
-				"old_factory":
-					return factory_texture if factory_texture != null else tile_texture
-				"scrap_highway":
-					return tile_texture
-				_:
-					var zone := _wasteland_zone_color(x, y)
-					if toxic_texture != null and zone.g > zone.r and zone.g > zone.b and _wasteland_zone_strength(x, y) >= 0.38:
-						return toxic_texture
-					return tile_texture
+		return wasteland_surface_texture
 	return tile_texture
 
-func _draw_texture_variant(target: CanvasItem, texture: Texture2D, rect: Rect2, x: int, y: int, road_strength := 0.0) -> void:
+
+func _draw_texture_variant(target: CanvasItem, texture: Texture2D, rect: Rect2, x: int, y: int, road_strength := 0.0, modulate := Color.WHITE) -> void:
 	if target == null:
+		return
+	if texture == wasteland_surface_texture:
+		var sample_hash: int = absi(int(world_seed) + x * 374761 + y * 668265)
+		var source := Rect2(sample_hash % (WASTELAND_SURFACE_SIZE - tile_size + 1), int(sample_hash / 37) % (WASTELAND_SURFACE_SIZE - tile_size + 1), tile_size, tile_size)
+		target.draw_texture_rect_region(texture, rect, source, modulate)
 		return
 	if texture.get_width() >= 512 and texture.get_height() >= 128:
 		var macro_idx := _macro_block_index(texture, x, y, road_strength)
 		var src_2d := Rect2(macro_idx * 128 + (x % 4) * tile_size, (y % 4) * tile_size, tile_size, tile_size)
-		target.draw_texture_rect_region(texture, rect, src_2d)
+		target.draw_texture_rect_region(texture, rect, src_2d, modulate)
 		return
 	var variants: int = max(1, int(texture.get_width() / tile_size))
 	var raw := sin(float(x * 928371 + y * 6173 + world_seed * 101))
 	var variant := int(abs(raw) * 100000.0) % variants
 	var src := Rect2(variant * tile_size, 0, tile_size, tile_size)
-	target.draw_texture_rect_region(texture, rect, src)
+	target.draw_texture_rect_region(texture, rect, src, modulate)
 
 func _macro_block_index(texture: Texture2D, x: int, y: int, road_strength: float) -> int:
 	var block_hash: int = absi(int(world_seed) + int(x / 4) * 374761 + int(y / 4) * 668265)
@@ -529,7 +1201,8 @@ func _macro_block_index(texture: Texture2D, x: int, y: int, road_strength: float
 	if texture == road_texture or texture == toxic_path_texture or texture == crystal_path_texture or texture == factory_path_texture:
 		match route_id:
 			"scrap_highway":
-				return 0 if block_hash % 3 != 0 else 1
+				# Atlas block 1 is factory grating, so it breaks the asphalt route theme.
+				return 0
 			"toxic_marsh":
 				return 0 if block_hash % 4 != 0 else 1
 			"crystal_scar":

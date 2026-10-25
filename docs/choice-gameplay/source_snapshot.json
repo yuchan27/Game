@@ -1,0 +1,829 @@
+{
+  "kind": "ordinary_frozen_choice_presentation_not_QA",
+  "recorded_utc": "2026-10-24T11:56:17.468127+00:00",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "scope": "Native Wasteland disabled before entry, actor physics disabled, paused tree; current outing/previous results/selected choice and elapsed1.5 staged in RAM. Existing HUD sync and action presentation helpers only. No choice selection, action update/completion, input, reward, extraction, payload save/load, collision, pacing, performance or QA. Scene readiness can populate layout RAM. Later quest-layout HUD edits are outside this snapshot.",
+  "inputs": [
+    {
+      "path": "assets/world_v4/architecture/ash-street-workshop-v4-01.png",
+      "rendered_mirror_sha256": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909",
+      "root_sha256_at_record": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/broken-viaduct-v4-01.png",
+      "rendered_mirror_sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+      "root_sha256_at_record": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/crystal-buttress-v4-01.png",
+      "rendered_mirror_sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+      "root_sha256_at_record": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+      "rendered_mirror_sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+      "root_sha256_at_record": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/guild-entrance-v4-03.png",
+      "rendered_mirror_sha256": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+      "root_sha256_at_record": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+      "rendered_mirror_sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+      "root_sha256_at_record": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/roadwarden-gate-v4-01.png",
+      "rendered_mirror_sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+      "root_sha256_at_record": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+      "rendered_mirror_sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+      "root_sha256_at_record": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/ruined-forge-v4-01.png",
+      "rendered_mirror_sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+      "root_sha256_at_record": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/sealed-cistern-v4-01.png",
+      "rendered_mirror_sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+      "root_sha256_at_record": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/slate-boundary-wall-v4-01.png",
+      "rendered_mirror_sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+      "root_sha256_at_record": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/architecture/stone-service-crossing-v4-01.png",
+      "rendered_mirror_sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+      "root_sha256_at_record": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/buried-slate-cobbles-v4-01.png",
+      "rendered_mirror_sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21",
+      "root_sha256_at_record": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/buried-slate-cobbles-v4-02.png",
+      "rendered_mirror_sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+      "root_sha256_at_record": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/cold-fractured-shale-v4-01.png",
+      "rendered_mirror_sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8",
+      "root_sha256_at_record": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/cold-silt-shale-v4-02.png",
+      "rendered_mirror_sha256": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a",
+      "root_sha256_at_record": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/damp-cut-slate-v4-01.png",
+      "rendered_mirror_sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+      "root_sha256_at_record": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/packed-umber-earth-v4-01.png",
+      "rendered_mirror_sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+      "root_sha256_at_record": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/stagnant-silt-water-v4-01.png",
+      "rendered_mirror_sha256": "e8dbf2876a3075837fff31301645d4893132fe2692839cf2534fce1a0a1b04d4",
+      "root_sha256_at_record": "e8dbf2876a3075837fff31301645d4893132fe2692839cf2534fce1a0a1b04d4",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/ground/stagnant-silt-water-v4-02.png",
+      "rendered_mirror_sha256": "fba65c8f1cc160a9113c7dceb998a1c5d9724c1fea3d8b3b582d3e7cf6659c2b",
+      "root_sha256_at_record": "fba65c8f1cc160a9113c7dceb998a1c5d9724c1fea3d8b3b582d3e7cf6659c2b",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "rendered_mirror_sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+      "root_sha256_at_record": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/landmarks/evacuation-bus-v4-01.png",
+      "rendered_mirror_sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+      "root_sha256_at_record": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/landmarks/resonance-outcrop-v4-02.png",
+      "rendered_mirror_sha256": "7bc4e97535f0386a4cc8f741ab58180442fd7fcf2a4a8736d2fb3e203ee85e4b",
+      "root_sha256_at_record": "7bc4e97535f0386a4cc8f741ab58180442fd7fcf2a4a8736d2fb3e203ee85e4b",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/convoy-remnants-v4-01.png",
+      "rendered_mirror_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "root_sha256_at_record": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/field-mechanisms-v4-01.png",
+      "rendered_mirror_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "root_sha256_at_record": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/grounded-hazards-v4-01.png",
+      "rendered_mirror_sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+      "root_sha256_at_record": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+      "rendered_mirror_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+      "root_sha256_at_record": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "rendered_mirror_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "root_sha256_at_record": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/hub-workstations-v4-02.png",
+      "rendered_mirror_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+      "root_sha256_at_record": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "rendered_mirror_sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+      "root_sha256_at_record": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+      "same_at_record": true
+    },
+    {
+      "path": "data/art/player_animation_manifest.json",
+      "rendered_mirror_sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17",
+      "root_sha256_at_record": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17",
+      "same_at_record": true
+    },
+    {
+      "path": "data/art/r17_presentation_v2.json",
+      "rendered_mirror_sha256": "40c44691d78bf2ce7966ff1e8d5a2c84d6839aaa5dba1bb3e98dc5996076aaa8",
+      "root_sha256_at_record": "40c44691d78bf2ce7966ff1e8d5a2c84d6839aaa5dba1bb3e98dc5996076aaa8",
+      "same_at_record": true
+    },
+    {
+      "path": "data/art/r17_weapon_families_v2.json",
+      "rendered_mirror_sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+      "root_sha256_at_record": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+      "same_at_record": true
+    },
+    {
+      "path": "data/art/visual_assets.json",
+      "rendered_mirror_sha256": "7838f7c3b2f3b44a6bc0e7ed9f5440d324989db66cc093c29c0c66f67ef120ab",
+      "root_sha256_at_record": "7838f7c3b2f3b44a6bc0e7ed9f5440d324989db66cc093c29c0c66f67ef120ab",
+      "same_at_record": true
+    },
+    {
+      "path": "data/art/world_materials_v3.json",
+      "rendered_mirror_sha256": "d231b6790b43e9f1ef648d2ca41184f367ee14df28720c8f89e92ed9232eae4e",
+      "root_sha256_at_record": "d231b6790b43e9f1ef648d2ca41184f367ee14df28720c8f89e92ed9232eae4e",
+      "same_at_record": true
+    },
+    {
+      "path": "data/art/world_v2.json",
+      "rendered_mirror_sha256": "6e636e20b5761319d981af98346ae62521141d6a92e32aebadb2e8b967fd9d19",
+      "root_sha256_at_record": "6e636e20b5761319d981af98346ae62521141d6a92e32aebadb2e8b967fd9d19",
+      "same_at_record": true
+    },
+    {
+      "path": "data/enemies/enemies.json",
+      "rendered_mirror_sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6",
+      "root_sha256_at_record": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6",
+      "same_at_record": true
+    },
+    {
+      "path": "data/items/equipment.json",
+      "rendered_mirror_sha256": "b64f235cf7e57df765421e3aaf2dffa730c284798367d594ae75d3eac83be2a0",
+      "root_sha256_at_record": "b64f235cf7e57df765421e3aaf2dffa730c284798367d594ae75d3eac83be2a0",
+      "same_at_record": true
+    },
+    {
+      "path": "data/items/recipes.json",
+      "rendered_mirror_sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c",
+      "root_sha256_at_record": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c",
+      "same_at_record": true
+    },
+    {
+      "path": "data/maps/events.json",
+      "rendered_mirror_sha256": "c6453efcbcf84b94072e54c51a5bf860464f1e3013edb8914a600b24a4fdb1d6",
+      "root_sha256_at_record": "c6453efcbcf84b94072e54c51a5bf860464f1e3013edb8914a600b24a4fdb1d6",
+      "same_at_record": true
+    },
+    {
+      "path": "data/maps/npcs.json",
+      "rendered_mirror_sha256": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+      "root_sha256_at_record": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+      "same_at_record": true
+    },
+    {
+      "path": "data/maps/quests.json",
+      "rendered_mirror_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+      "root_sha256_at_record": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+      "same_at_record": true
+    },
+    {
+      "path": "data/maps/wasteland_params.json",
+      "rendered_mirror_sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798",
+      "root_sha256_at_record": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798",
+      "same_at_record": true
+    },
+    {
+      "path": "data/maps/wasteland_routes.json",
+      "rendered_mirror_sha256": "2bc6634952fdc75c21a68f12b2f3ebb60f1a1e840d3c029bb864a271703b5b05",
+      "root_sha256_at_record": "2bc6634952fdc75c21a68f12b2f3ebb60f1a1e840d3c029bb864a271703b5b05",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/levels/guild/Guild.gd",
+      "rendered_mirror_sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62",
+      "root_sha256_at_record": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/levels/guild/Guild.tscn",
+      "rendered_mirror_sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955",
+      "root_sha256_at_record": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/levels/village/Village.gd",
+      "rendered_mirror_sha256": "3469b19d8c5cd8555e5775229460a8b86c63ba2bd14e77c4a9202b8e8f4ee4a2",
+      "root_sha256_at_record": "3469b19d8c5cd8555e5775229460a8b86c63ba2bd14e77c4a9202b8e8f4ee4a2",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/levels/village/Village.tscn",
+      "rendered_mirror_sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c",
+      "root_sha256_at_record": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.gd",
+      "rendered_mirror_sha256": "e4363fdb05a11f3ac9c320f24cfe74a0c4466daf4231c5f6bc6cc7b4a5e54a76",
+      "root_sha256_at_record": "e4363fdb05a11f3ac9c320f24cfe74a0c4466daf4231c5f6bc6cc7b4a5e54a76",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.tscn",
+      "rendered_mirror_sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565",
+      "root_sha256_at_record": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/main/Main.gd",
+      "rendered_mirror_sha256": "97fca98846b900c9021d0967109ff42fd80e0bebae5cbae2861f157100a794a0",
+      "root_sha256_at_record": "97fca98846b900c9021d0967109ff42fd80e0bebae5cbae2861f157100a794a0",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/main/Main.tscn",
+      "rendered_mirror_sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0",
+      "root_sha256_at_record": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/player/Player.gd",
+      "rendered_mirror_sha256": "6b5dbb255df45f41f45ba9146eddd2104a7ad7765dc4be583f22c0016ef09ecb",
+      "root_sha256_at_record": "6b5dbb255df45f41f45ba9146eddd2104a7ad7765dc4be583f22c0016ef09ecb",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/player/player.tscn",
+      "rendered_mirror_sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e",
+      "root_sha256_at_record": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/AutomatedPlaytestRunner.tscn",
+      "rendered_mirror_sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf",
+      "root_sha256_at_record": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/CollisionRegressionRunner.tscn",
+      "rendered_mirror_sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71",
+      "root_sha256_at_record": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/DirectionalPresentationRegression.tscn",
+      "rendered_mirror_sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163",
+      "root_sha256_at_record": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/GameplayRegressionRunner.tscn",
+      "rendered_mirror_sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42",
+      "root_sha256_at_record": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/PerformanceRunner.tscn",
+      "rendered_mirror_sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24",
+      "root_sha256_at_record": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/PixelAssetBaker.tscn",
+      "rendered_mirror_sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e",
+      "root_sha256_at_record": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/SceneEntranceRegression.tscn",
+      "rendered_mirror_sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310",
+      "root_sha256_at_record": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/ValidationRunner.tscn",
+      "rendered_mirror_sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005",
+      "root_sha256_at_record": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/VisualReviewRunner.tscn",
+      "rendered_mirror_sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b",
+      "root_sha256_at_record": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/WorldAtlasRegression.tscn",
+      "rendered_mirror_sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee",
+      "root_sha256_at_record": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/tests/WorldExpansionRunner.tscn",
+      "rendered_mirror_sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc",
+      "root_sha256_at_record": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/ui/HUD.gd",
+      "rendered_mirror_sha256": "a0cf19872ca15f8de005bbf6e629cf34e730992ddb22257dc316a03fbe64b7e3",
+      "root_sha256_at_record": "a0cf19872ca15f8de005bbf6e629cf34e730992ddb22257dc316a03fbe64b7e3",
+      "same_at_record": true
+    },
+    {
+      "path": "scenes/ui/HUD.tscn",
+      "rendered_mirror_sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6",
+      "root_sha256_at_record": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/autoload/AudioManager.gd",
+      "rendered_mirror_sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f",
+      "root_sha256_at_record": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/autoload/DataRegistry.gd",
+      "rendered_mirror_sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+      "root_sha256_at_record": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/autoload/GameState.gd",
+      "rendered_mirror_sha256": "502c79484fd19bd83977af540a1cb0113e486ae6f13538a91081db82e0812645",
+      "root_sha256_at_record": "502c79484fd19bd83977af540a1cb0113e486ae6f13538a91081db82e0812645",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/autoload/SaveManager.gd",
+      "rendered_mirror_sha256": "651187a906e038b8d73f9935ee398d486f244ae949f2c131afb9c4cdf90a6a92",
+      "root_sha256_at_record": "651187a906e038b8d73f9935ee398d486f244ae949f2c131afb9c4cdf90a6a92",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/autoload/SceneRouter.gd",
+      "rendered_mirror_sha256": "5d29a46aa862ab99878e5c430e4cd595da9876ed69ba9658999e53883d86c81d",
+      "root_sha256_at_record": "5d29a46aa862ab99878e5c430e4cd595da9876ed69ba9658999e53883d86c81d",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/AnimatedNpc.gd",
+      "rendered_mirror_sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299",
+      "root_sha256_at_record": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/AttackFlash.gd",
+      "rendered_mirror_sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c",
+      "root_sha256_at_record": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/DamagePopup.gd",
+      "rendered_mirror_sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825",
+      "root_sha256_at_record": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/DialogueNpc.gd",
+      "rendered_mirror_sha256": "9f96e9c2f726aa7f0495cfaa6eab281642c0a7cfd7e03bb95b7bc426868e74be",
+      "root_sha256_at_record": "9f96e9c2f726aa7f0495cfaa6eab281642c0a7cfd7e03bb95b7bc426868e74be",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/Enemy.gd",
+      "rendered_mirror_sha256": "22588b30a5a91f5b18a800156be452a21a8f2787fb5f021a39f5496c5a32eb1d",
+      "root_sha256_at_record": "22588b30a5a91f5b18a800156be452a21a8f2787fb5f021a39f5496c5a32eb1d",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/EnemyHealthBar.gd",
+      "rendered_mirror_sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef",
+      "root_sha256_at_record": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/HitEffect.gd",
+      "rendered_mirror_sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94",
+      "root_sha256_at_record": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/Interactable.gd",
+      "rendered_mirror_sha256": "f08662efe1bc6104783cff7042311a8f92ccc3e641dfbd416bca2d7d506c0d7d",
+      "root_sha256_at_record": "f08662efe1bc6104783cff7042311a8f92ccc3e641dfbd416bca2d7d506c0d7d",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/Pickup.gd",
+      "rendered_mirror_sha256": "b9acc973c155a047c1f074fa3a5c71af88bf8b185b990acb618c5ab0ba3c0a50",
+      "root_sha256_at_record": "b9acc973c155a047c1f074fa3a5c71af88bf8b185b990acb618c5ab0ba3c0a50",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/Projectile.gd",
+      "rendered_mirror_sha256": "2b10be60a11b6364b55db2bcb78e96477206088e846ef14a8d4c36723386ed0e",
+      "root_sha256_at_record": "2b10be60a11b6364b55db2bcb78e96477206088e846ef14a8d4c36723386ed0e",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/RouteGate.gd",
+      "rendered_mirror_sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1",
+      "root_sha256_at_record": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/WastelandAtmosphere.gd",
+      "rendered_mirror_sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+      "root_sha256_at_record": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/WorldProp.gd",
+      "rendered_mirror_sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de",
+      "root_sha256_at_record": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/ExpeditionLedger.gd",
+      "rendered_mirror_sha256": "2d904833e3699c0cb9a5e55352df5f45c1377a0332a43457738698f08b327366",
+      "root_sha256_at_record": "2d904833e3699c0cb9a5e55352df5f45c1377a0332a43457738698f08b327366",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/InventorySystem.gd",
+      "rendered_mirror_sha256": "248becdbe039f9f729150fc6c4170ffd617345b4923fc1eda0faa14f14a8c3b9",
+      "root_sha256_at_record": "248becdbe039f9f729150fc6c4170ffd617345b4923fc1eda0faa14f14a8c3b9",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/LevelGenerator.gd",
+      "rendered_mirror_sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357",
+      "root_sha256_at_record": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/ProjectilePool.gd",
+      "rendered_mirror_sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67",
+      "root_sha256_at_record": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/VillageTileMap.gd",
+      "rendered_mirror_sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0",
+      "root_sha256_at_record": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/WorldBackdrop.gd",
+      "rendered_mirror_sha256": "a5b200a054a4605d9d64286d93a15dd2b7242fd72b66ffe0630277e115b80969",
+      "root_sha256_at_record": "a5b200a054a4605d9d64286d93a15dd2b7242fd72b66ffe0630277e115b80969",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/AutomatedPlaytestRunner.gd",
+      "rendered_mirror_sha256": "267cbb1f67c6ecc3a8aa2a323686c779e2e15d00b30f9d5bbf4e4223a5a3bbae",
+      "root_sha256_at_record": "267cbb1f67c6ecc3a8aa2a323686c779e2e15d00b30f9d5bbf4e4223a5a3bbae",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/CollisionRegressionRunner.gd",
+      "rendered_mirror_sha256": "5a9e409b22a6401ad464c6761d7c941f12faf84fc1a14f0317165d614124d313",
+      "root_sha256_at_record": "5a9e409b22a6401ad464c6761d7c941f12faf84fc1a14f0317165d614124d313",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/DirectionalPresentationRegression.gd",
+      "rendered_mirror_sha256": "85b5e0f3030c5e0d48663b20e282b35f24628c484779c975242cf1a2e421f13f",
+      "root_sha256_at_record": "85b5e0f3030c5e0d48663b20e282b35f24628c484779c975242cf1a2e421f13f",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/GameplayRegressionRunner.gd",
+      "rendered_mirror_sha256": "b880d57abbf6a81208c1ee67040d77c32d6ee25723d8538ccd4be84f8ca61970",
+      "root_sha256_at_record": "b880d57abbf6a81208c1ee67040d77c32d6ee25723d8538ccd4be84f8ca61970",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/PerformanceRunner.gd",
+      "rendered_mirror_sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a",
+      "root_sha256_at_record": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/SceneEntranceRegression.gd",
+      "rendered_mirror_sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc",
+      "root_sha256_at_record": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/VerticalSliceVerifier.gd",
+      "rendered_mirror_sha256": "a44e2be12574a07c3fee72af71dffaeff2acff39804536ef17b9a7c334a11b5a",
+      "root_sha256_at_record": "a44e2be12574a07c3fee72af71dffaeff2acff39804536ef17b9a7c334a11b5a",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/VisualReviewRunner.gd",
+      "rendered_mirror_sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda",
+      "root_sha256_at_record": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/WorldAtlasRegression.gd",
+      "rendered_mirror_sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e",
+      "root_sha256_at_record": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/WorldExpansionRegression.gd",
+      "rendered_mirror_sha256": "30c6b9cae6ceb8d07e93bd659b7586cf4bde9748dc03870df37451b3bc98fab5",
+      "root_sha256_at_record": "30c6b9cae6ceb8d07e93bd659b7586cf4bde9748dc03870df37451b3bc98fab5",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tests/WorldExpansionRunner.gd",
+      "rendered_mirror_sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203",
+      "root_sha256_at_record": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/tools/PixelAssetBaker.gd",
+      "rendered_mirror_sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75",
+      "root_sha256_at_record": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/ui/SceneEntrance.gd",
+      "rendered_mirror_sha256": "d2be1a2effca601eb6485a0ca03137658ccbb298d987dafdf93cbac2b89f9074",
+      "root_sha256_at_record": "d2be1a2effca601eb6485a0ca03137658ccbb298d987dafdf93cbac2b89f9074",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/ui/WorldAtlasPanel.gd",
+      "rendered_mirror_sha256": "735b14a5984357316bfe4a886442c8bd9cdf686dd34d47feee68f17ed3d4dc60",
+      "root_sha256_at_record": "735b14a5984357316bfe4a886442c8bd9cdf686dd34d47feee68f17ed3d4dc60",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/ui/WorldMapView.gd",
+      "rendered_mirror_sha256": "8fccfb51b0b53b8b22529db3476a239aa3dd8abd7899dab281d8d326b18b57bc",
+      "root_sha256_at_record": "8fccfb51b0b53b8b22529db3476a239aa3dd8abd7899dab281d8d326b18b57bc",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/utils/PixelArtFactory.gd",
+      "rendered_mirror_sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5",
+      "root_sha256_at_record": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/utils/RuntimeAssetLoader.gd",
+      "rendered_mirror_sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f",
+      "root_sha256_at_record": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/components/CampaignAction.gd",
+      "rendered_mirror_sha256": "a289d06c00f63f72039485ed8da50a5e8dfea3ed4d471d52dc05067ad27d696f",
+      "root_sha256_at_record": "a289d06c00f63f72039485ed8da50a5e8dfea3ed4d471d52dc05067ad27d696f",
+      "same_at_record": true
+    },
+    {
+      "path": "scripts/systems/CampaignProgress.gd",
+      "rendered_mirror_sha256": "ea4b8867b035f23859d3005d0153f2da60f3bcc671c0d83d0d5b8759c1097c77",
+      "root_sha256_at_record": "ea4b8867b035f23859d3005d0153f2da60f3bcc671c0d83d0d5b8759c1097c77",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/sprites/items/materials/broken_coil.png",
+      "rendered_mirror_sha256": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f",
+      "root_sha256_at_record": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/sprites/items/materials/precision_chip.png",
+      "rendered_mirror_sha256": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b",
+      "root_sha256_at_record": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b",
+      "same_at_record": true
+    },
+    {
+      "path": "assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_idle_e11_25_v019.png",
+      "rendered_mirror_sha256": "b738ba7663f9f2774a8434b0dc56648134de35da04621513db23a7b76e859e0a",
+      "root_sha256_at_record": "b738ba7663f9f2774a8434b0dc56648134de35da04621513db23a7b76e859e0a",
+      "same_at_record": true
+    }
+  ],
+  "product_changes": [
+    {
+      "path": "scripts/autoload/GameState.gd",
+      "before_sha256": "3700c62974debd180c60f826d5d2aab8c307d708a345fe343b8058eb94f3d211",
+      "after_sha256": "502c79484fd19bd83977af540a1cb0113e486ae6f13538a91081db82e0812645"
+    },
+    {
+      "path": "scripts/components/CampaignAction.gd",
+      "before_sha256": "2c3c20b9756221332ac93fa64aee6d0c3c82ff6dd2d603ae746b49b1eb682764",
+      "after_sha256": "a289d06c00f63f72039485ed8da50a5e8dfea3ed4d471d52dc05067ad27d696f"
+    },
+    {
+      "path": "scripts/systems/CampaignProgress.gd",
+      "before_sha256": "74933194c89889e4b2e33b66bfc7d370976a61c5eb09c1a84c0fbf9f38c1ecbd",
+      "after_sha256": "ea4b8867b035f23859d3005d0153f2da60f3bcc671c0d83d0d5b8759c1097c77"
+    },
+    {
+      "path": "data/maps/quests.json",
+      "before_sha256": "d4112485fecd64bf3e2753061c407fb004e216631fc4834eaf0e3ec812142ad6",
+      "after_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a"
+    },
+    {
+      "path": "scenes/player/Player.gd",
+      "before_sha256": "c060b3ea8c0199bf28e225d2a2c6571da0cfa499d612afd9590865c152db4cac",
+      "after_sha256": "6b5dbb255df45f41f45ba9146eddd2104a7ad7765dc4be583f22c0016ef09ecb"
+    },
+    {
+      "path": "data/art/r17_presentation_v2.json",
+      "before_sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764",
+      "after_sha256": "40c44691d78bf2ce7966ff1e8d5a2c84d6839aaa5dba1bb3e98dc5996076aaa8"
+    },
+    {
+      "path": "scripts/tools/prepare_r17_facing_batch.py",
+      "before_sha256": "1fbe56d7ed089d5e67d119d74ec7d78290ba680e883e191e8575dbc9f36878da",
+      "after_sha256": "41d893c48ca16d8165db8097106b2589c67bf51268c249ae1e56b37d9607f579"
+    }
+  ],
+  "recipes": [
+    {
+      "path": "docs/choice-gameplay/ChoiceGameplayPreview.gd.txt",
+      "sha256": "819967aa3b5b7d3b76aa72a7a69e962c547f13c2a8e611ed09251fe4a1541f8a"
+    },
+    {
+      "path": "docs/choice-gameplay/ChoiceGameplayPreview.tscn.txt",
+      "sha256": "1497654172301206b4effc84eb3979391331e29ca84f489596e3b0c7511e7226"
+    }
+  ],
+  "images": [
+    {
+      "path": "docs/choice-gameplay/narrow/ch1b-choice.png",
+      "sha256": "83c28ca0fecd47cf5d2af3f20af3a9f15935d3d62bf6cc6ef023449de8fb9b4c"
+    },
+    {
+      "path": "docs/choice-gameplay/narrow/ch2b-choice.png",
+      "sha256": "b55ff2417628fb112d06fb92d2ce379a5863c323417f4021c45876d5426ff7de"
+    },
+    {
+      "path": "docs/choice-gameplay/narrow/ch2b-purge.png",
+      "sha256": "2d2f12c7faee20cb16ca2b7e9aa8936548d00456f54bcbd0decf9d3a1ed0e6ad"
+    },
+    {
+      "path": "docs/choice-gameplay/narrow/ch2b-settling.png",
+      "sha256": "2082195fd035ea7c7675b40f109a452e191b47a667e912b045f061ee783041c7"
+    },
+    {
+      "path": "docs/choice-gameplay/wide/ch1b-choice.png",
+      "sha256": "43437e590963b63b77f654f986683905eeedeced899e39dac7a4fa90c3f54ef3"
+    },
+    {
+      "path": "docs/choice-gameplay/wide/ch2b-choice.png",
+      "sha256": "f535f6177080b7b7d2b82b744e0ebe5abc7cf1524576f8418adcd659c5115a27"
+    },
+    {
+      "path": "docs/choice-gameplay/wide/ch2b-purge.png",
+      "sha256": "857a6fd46022f818217373b217b4f95a804268a7b36cbcf44683c6f0a77b3de7"
+    },
+    {
+      "path": "docs/choice-gameplay/wide/ch2b-settling.png",
+      "sha256": "f4de265616a785f38ee0fc94a2617dce96eee348a2d3a27dfdf6f919d240bd73"
+    }
+  ],
+  "render_processes": [
+    {
+      "resolution": "1280x720",
+      "session": 60847,
+      "exit_code": 0,
+      "exit_evidence": "Root observed final terminal completion.",
+      "log": {
+        "path": "docs/choice-gameplay/wide.log",
+        "sha256": "b679a383ecdad4d974fa5c2a222d8cc1300aae36286e8ac224539d0f4db6950c"
+      },
+      "frame_records": [
+        "ART_CHOICE_FRAME: ch1b-choice/(1280.0, 720.0)/0",
+        "ART_CHOICE_FRAME: ch2b-choice/(1280.0, 720.0)/0",
+        "ART_CHOICE_FRAME: ch2b-settling/(1280.0, 720.0)/0",
+        "ART_CHOICE_FRAME: ch2b-purge/(1280.0, 720.0)/0"
+      ],
+      "layout_records": [
+        "ART_CHOICE_LAYOUT: ch1b-choice scene=Wasteland panel_visible=true panel_rect=[P: (230.0, 110.0), S: (820.0, 500.0)] options_rect=[P: (240.0, 196.0), S: (800.0, 380.0)] option_count=2 choice=ch1b_return_route",
+        "ART_CHOICE_LAYOUT: ch2b-choice scene=Wasteland panel_visible=true panel_rect=[P: (230.0, 110.0), S: (820.0, 500.0)] options_rect=[P: (240.0, 196.0), S: (800.0, 380.0)] option_count=2 choice=ch2b_flush_plan",
+        "ART_CHOICE_LAYOUT: ch2b-settling scene=Wasteland action_position=(3061.76, 3235.0) status_rect=[P: (2913.76, 3079.0), S: (296.0, 54.0)] status_visible=true status_text=開啟受控回流閥",
+        "ART_CHOICE_LAYOUT: ch2b-purge scene=Wasteland action_position=(3061.76, 3235.0) status_rect=[P: (2913.76, 3079.0), S: (296.0, 54.0)] status_visible=true status_text=開啟受控回流閥"
+      ],
+      "action_records": [
+        "ART_CHOICE_ACTION: ch2b-settling action_state={ \"action_id\": \"ch2b_open_return_valve\", \"name\": \"開啟受控回流閥\", \"status\": \"active\", \"text\": \"按住 E 1.5／8.0 秒\", \"waiting\": false, \"progress_text\": \"按住 E 1.5／8.0 秒\", \"value\": 1.5, \"maximum\": 8.0 } selected_choice=ch2b_settle_sample label_visible=true; presentation only, no input or action callback",
+        "ART_CHOICE_ACTION: ch2b-purge action_state={ \"action_id\": \"ch2b_open_return_valve\", \"name\": \"開啟受控回流閥\", \"status\": \"active\", \"text\": \"按住 E 1.5／3.5 秒\", \"waiting\": false, \"progress_text\": \"按住 E 1.5／3.5 秒\", \"value\": 1.5, \"maximum\": 3.5 } selected_choice=ch2b_purge_air label_visible=true; presentation only, no input or action callback"
+      ],
+      "observed_error_or_warning_lines": []
+    },
+    {
+      "resolution": "1024x768",
+      "session": 57853,
+      "exit_code": null,
+      "exit_evidence": "Session handle later unavailable; process confirmed absent and all four PNG records present. Final exit code was not observed.",
+      "log": {
+        "path": "docs/choice-gameplay/narrow.log",
+        "sha256": "3aa2aed5b6a6e4683f0fb9dbdf70bbaaf553fd195313d92607e861bd0a497c13"
+      },
+      "frame_records": [
+        "ART_CHOICE_FRAME: ch1b-choice/(1024.0, 768.0)/0",
+        "ART_CHOICE_FRAME: ch2b-choice/(1024.0, 768.0)/0",
+        "ART_CHOICE_FRAME: ch2b-settling/(1024.0, 768.0)/0",
+        "ART_CHOICE_FRAME: ch2b-purge/(1024.0, 768.0)/0"
+      ],
+      "layout_records": [
+        "ART_CHOICE_LAYOUT: ch1b-choice scene=Wasteland panel_visible=true panel_rect=[P: (102.0, 134.0), S: (820.0, 500.0)] options_rect=[P: (112.0, 220.0), S: (800.0, 380.0)] option_count=2 choice=ch1b_return_route",
+        "ART_CHOICE_LAYOUT: ch2b-choice scene=Wasteland panel_visible=true panel_rect=[P: (102.0, 134.0), S: (820.0, 500.0)] options_rect=[P: (112.0, 220.0), S: (800.0, 380.0)] option_count=2 choice=ch2b_flush_plan",
+        "ART_CHOICE_LAYOUT: ch2b-settling scene=Wasteland action_position=(3061.76, 3235.0) status_rect=[P: (2913.76, 3079.0), S: (296.0, 54.0)] status_visible=true status_text=開啟受控回流閥",
+        "ART_CHOICE_LAYOUT: ch2b-purge scene=Wasteland action_position=(3061.76, 3235.0) status_rect=[P: (2913.76, 3079.0), S: (296.0, 54.0)] status_visible=true status_text=開啟受控回流閥"
+      ],
+      "action_records": [
+        "ART_CHOICE_ACTION: ch2b-settling action_state={ \"action_id\": \"ch2b_open_return_valve\", \"name\": \"開啟受控回流閥\", \"status\": \"active\", \"text\": \"按住 E 1.5／8.0 秒\", \"waiting\": false, \"progress_text\": \"按住 E 1.5／8.0 秒\", \"value\": 1.5, \"maximum\": 8.0 } selected_choice=ch2b_settle_sample label_visible=true; presentation only, no input or action callback",
+        "ART_CHOICE_ACTION: ch2b-purge action_state={ \"action_id\": \"ch2b_open_return_valve\", \"name\": \"開啟受控回流閥\", \"status\": \"active\", \"text\": \"按住 E 1.5／3.5 秒\", \"waiting\": false, \"progress_text\": \"按住 E 1.5／3.5 秒\", \"value\": 1.5, \"maximum\": 3.5 } selected_choice=ch2b_purge_air label_visible=true; presentation only, no input or action callback"
+      ],
+      "observed_error_or_warning_lines": []
+    }
+  ],
+  "review": "Root opened all8 final PNGs. Independent review pending at record time.",
+  "real_save_stat_only": {
+    "size_bytes": 1203,
+    "mtime_ns": 1792682904815624900,
+    "payload_read_or_written": false
+  }
+}

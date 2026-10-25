@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-23",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "renderer": "OpenGL Compatibility, Intel Arc 140V",
+  "viewport": [
+    1280,
+    720
+  ],
+  "camera_zoom": [
+    1.15,
+    1.15
+  ],
+  "kind": "ordinary isolated screenshot preview, no test runner or assertions",
+  "exit_code": 0,
+  "runtime_errors_observed_in_final_log": 0,
+  "real_player_save_used": false,
+  "transient_notice": "hidden; actual HUD retained",
+  "current_hero": "integrated slim R-17 blade presentation copied from root checkpoint",
+  "sha256_of_captured_sources": {
+    "scripts/systems/WorldBackdrop.gd": "97fb49e2ab8d7b6763dcdf7a863059fce9385018909c5e8d4e6ed3081fdac8a5",
+    "scenes/levels/wasteland/Wasteland.gd": "8a48af1d6b77803b20023d24c045b338f29738c7d87b8d8d464435d7904f3406",
+    "scenes/player/Player.gd": "38d71b90cdf4a44c2cc4747bc5fa1f2022b0edd95ce9e0b3609fd58a39ff87c8",
+    "data/maps/wasteland_routes.json": "49c226607e95e90fe843204f89401a4a0d04218696591a25610a55923df83a87",
+    "data/art/world_v2.json": "024fb4463d8ac10d90df15ce454118f86c817fef56a5a1d4b59d7620e11cbe4a",
+    "data/art/r17_presentation_v2.json": "893402090c3e3d0c987280ff24336dde950df566912c8d898580482c80290df6",
+    "data/art/r17_weapon_families_v2.json": "8caaa329b24b67af9c50244b8586a0b63e29f0a6e481e280df1c10c787717ff2",
+    "assets/world_v2/kits/highway-architecture-v2-01.png": "ad8eca0f3cf364b0fba26775127f249a7b0753d16468dd1f2d5cf763440d22c9",
+    "assets/world_v2/kits/region-architecture-v2-01.png": "57e6128a66eb29f67687e2b1da7df5cbb61f149624d05dc978cbb3e751b62c64"
+  }
+}

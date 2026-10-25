@@ -28,6 +28,7 @@ GODOT_ERROR_RE = re.compile(
 IGNORED_DIRS = {
     ".git",
     ".godot",
+    ".codebase-memory",
     ".qa-venv",
     ".venv",
     ".cache",
@@ -55,7 +56,11 @@ VISUAL_IMAGES = (
     "full_map.png",
     "dialogue.png",
     "pause.png",
+    "pause_resize_800x600.png",
     "death.png",
+    "death_1024x768.png",
+    "death_resize_800x600.png",
+    "new_game_existing_save_confirmation.png",
     "village_hud.png",
     "guild_hud.png",
     "player_walk.png",
@@ -69,10 +74,57 @@ VISUAL_IMAGES = (
     "main_title_1024x768.png",
     "intro_1024x768.png",
     "inventory_1024x768.png",
+    "inventory_resize_960x768.png",
     "dialogue_1024x768.png",
     "full_map_1024x768.png",
     "continue_load_failure.png",
     "quest_progress.png",
+    "quest_progress_1024x768.png",
+    "contract.png",
+    "contract_1024x768.png",
+    "contract_resize_800x600.png",
+    "contract_open_800x600.png",
+    "contract_resize_960x600.png",
+    "cold_narrow/main_title_cold_800x600.png",
+    "expedition_draft.png",
+    "expedition_draft_960x768.png",
+    "campaign_choice.png",
+    "campaign_choice_960x768.png",
+    "workshop.png",
+    "workshop_1024x768.png",
+    "terminal.png",
+    "terminal_1024x768.png",
+    "pause_save_success.png",
+    "pause_save_success_1024x768.png",
+    "pause_save_failure.png",
+    "pause_save_failure_1024x768.png",
+    "pause_load_pending_presentation.png",
+    "pause_load_pending_presentation_1024x768.png",
+    "pause_load_failure.png",
+    "pause_load_failure_1024x768.png",
+    "story_journal.png",
+    "story_journal_1024x768.png",
+    "story_discovery.png",
+    "story_ending.png",
+    "route_ruined_metropolis.png",
+    "route_underground_facility.png",
+    "story_site_scrap_highway.png",
+    "story_site_toxic_marsh.png",
+    "story_site_crystal_scar.png",
+    "story_site_old_factory.png",
+    "story_site_ruined_metropolis.png",
+    "story_site_underground_facility.png",
+    "world_atlas.png",
+    "world_atlas_1024x768.png",
+    "exploration_scrap.png",
+    "exploration_crystal.png",
+    "scene_entrance.png",
+)
+EXPANSION_RUNNERS = (
+    ("world expansion regression", "WorldExpansionRunner", "world_expansion_regression_report.json"),
+    ("directional presentation regression", "DirectionalPresentationRegression", "directional_presentation_regression_report.json"),
+    ("world atlas regression", "WorldAtlasRegression", "world_atlas_regression_report.json"),
+    ("scene entrance regression", "SceneEntranceRegression", "scene_entrance_regression_report.json"),
 )
 
 
@@ -176,7 +228,7 @@ def ignore_copy(directory: str, names: list[str]) -> set[str]:
             relative = name
         if relative in IGNORED_FILES:
             ignored.add(name)
-        if relative.startswith("docs/") and name.startswith("visual_review_") and name.lower().endswith(".png"):
+        if relative.startswith("docs/") and relative.lower().endswith((".png", ".png.import")):
             ignored.add(name)
         if name.endswith(".pyc") or name.endswith(".pyo"):
             ignored.add(name)
@@ -212,6 +264,23 @@ def extract_godot_errors(stdout: str, stderr: str) -> list[str]:
 
 def supports_godot_version(version: str) -> bool:
     return re.match(r"^4\.6\.3\.stable(?:\.|$)", version.strip()) is not None
+
+
+def missing_visual_images(visual_dir: Path, expected_images: tuple[str, ...] = VISUAL_IMAGES) -> list[str]:
+    return [name for name in expected_images if not (visual_dir / name).is_file()]
+
+
+def regression_report_passed(report: dict[str, Any]) -> bool:
+    if not isinstance(report, dict):
+        return False
+    checks = report.get("checks")
+    return (
+        report.get("status") == "passed"
+        and isinstance(checks, list)
+        and bool(checks)
+        and all(isinstance(check, dict) and check.get("passed") is True for check in checks)
+        and report.get("failures") == []
+    )
 
 
 def _terminate_process_tree(process: subprocess.Popen[Any]) -> None:
@@ -369,6 +438,12 @@ def parser() -> argparse.ArgumentParser:
         description="Run project data, asset, gameplay, visual, and performance QA in an isolated copy."
     )
     result.add_argument("--profile", choices=("core", "visual", "performance", "all", "docs"), default="core")
+    result.add_argument(
+        "--visual-resolution",
+        choices=("1280x720", "1024x768", "800x600"),
+        default="1280x720",
+        help="Run the complete rendered screen review at this cold window size.",
+    )
     result.add_argument("--godot", help="Godot executable; defaults to GODOT_BIN or an executable on PATH.")
     result.add_argument("--python", help="Python executable with requirements-qa.txt installed; defaults to this QA venv if present.")
     result.add_argument("--output", help="External output root. Defaults to the system temporary directory.")
@@ -559,6 +634,16 @@ def run_profile(args: argparse.Namespace) -> int:
                         and int(collision_report.get("failure_count", 0)) == 0,
                         str(collision_path),
                     )
+            for name, scene_name, report_name in EXPANSION_RUNNERS:
+                regression = run_godot_step(
+                    qa, name, project_copy, f"res://scenes/tests/{scene_name}.tscn",
+                    user_args=["--qa-save-path", str(save_dir / f"{scene_name}.json"), "--qa-output", str(artifact_dir)],
+                )
+                if regression is not None:
+                    regression_report, regression_path = qa.read_json_report(name + " report", [artifact_dir / report_name])
+                    if regression_report is not None:
+                        add_report_check(qa, name + " report status", regression_report,
+                                         regression_report_passed(regression_report), str(regression_path))
         elif godot is None:
             qa.check("Godot runner suite", False, "Godot executable not found; no test runner was skipped silently")
         else:
@@ -567,20 +652,105 @@ def run_profile(args: argparse.Namespace) -> int:
     if "visual" in selected_profiles:
         visual_dir = artifact_dir / "visual"
         visual_dir.mkdir()
-        visual_run = run_godot_step(qa, "rendered visual review", project_copy, "res://scenes/tests/VisualReviewRunner.tscn", headless=False, user_args=["--qa-output", str(visual_dir)]) if supports_godot_version(str(report.get("godot_version", ""))) else None
+        visual_user_args = ["--qa-output", str(visual_dir)]
+        visual_extra_args: list[str] = []
+        if args.visual_resolution != "1280x720":
+            visual_user_args.extend(["--qa-review-size", args.visual_resolution])
+            visual_extra_args = ["--resolution", args.visual_resolution]
+        visual_run = run_godot_step(
+            qa,
+            "rendered visual review",
+            project_copy,
+            "res://scenes/tests/VisualReviewRunner.tscn",
+            headless=False,
+            user_args=visual_user_args,
+            extra_args=visual_extra_args,
+        ) if supports_godot_version(str(report.get("godot_version", ""))) else None
         if visual_run is None:
             qa.check("rendered visual review", False, "not run because the exact Godot 4.6.3 stable engine is unavailable")
-            qa.check("visual capture coverage", False, "not run; visual captures were not silently skipped")
         if visual_run is not None:
             visual_report, visual_path = qa.read_json_report("visual review report", [visual_dir / "visual_review_report.json"])
             if visual_report is not None:
+                visual_profile = visual_report.get("launch_profile", {})
+                visual_profile = visual_profile if isinstance(visual_profile, dict) else {}
+                visual_capture_size = visual_report.get("capture_size", {})
+                visual_capture_size = visual_capture_size if isinstance(visual_capture_size, dict) else {}
+                visual_captures = visual_report.get("captures", [])
+                first_visual_capture = visual_captures[0] if isinstance(visual_captures, list) and visual_captures else {}
+                first_visual_capture = first_visual_capture if isinstance(first_visual_capture, dict) else {}
+                expected_width, expected_height = (int(part) for part in args.visual_resolution.split("x"))
+                sized_review_passed = (
+                    args.visual_resolution == "1280x720"
+                    or (
+                        visual_profile.get("name") == "sized_review"
+                        and visual_profile.get("first_capture_uses_launch_window") is True
+                        and int(visual_profile.get("initial_window_width", 0)) == expected_width
+                        and int(visual_profile.get("initial_window_height", 0)) == expected_height
+                        and int(visual_capture_size.get("width", 0)) == expected_width
+                        and int(visual_capture_size.get("height", 0)) == expected_height
+                        and int(first_visual_capture.get("width", 0)) == expected_width
+                        and int(first_visual_capture.get("height", 0)) == expected_height
+                        and int(first_visual_capture.get("window_width", 0)) == expected_width
+                        and int(first_visual_capture.get("window_height", 0)) == expected_height
+                    )
+                )
                 add_report_check(qa, "visual review report status", visual_report,
                                  visual_report.get("success") is True
                                  and int(visual_report.get("failure_count", 0)) == 0
                                  and int(visual_report.get("error_count", 0)) == 0
-                                 and int(visual_report.get("runtime_check_failure_count", 0)) == 0,
-                                 str(visual_path))
-            missing_images = [name for name in VISUAL_IMAGES if not (visual_dir / name).is_file()]
+                                 and int(visual_report.get("runtime_check_failure_count", 0)) == 0
+                                 and sized_review_passed,
+                                 f"{visual_path}; requested={args.visual_resolution}; first_capture={first_visual_capture}")
+        cold_narrow_dir = visual_dir / "cold_narrow"
+        cold_narrow_run = run_godot_step(
+            qa,
+            "cold narrow title launch",
+            project_copy,
+            "res://scenes/tests/VisualReviewRunner.tscn",
+            headless=False,
+            user_args=["--qa-cold-narrow", "--qa-output", str(cold_narrow_dir)],
+            extra_args=["--resolution", "800x600"],
+        ) if supports_godot_version(str(report.get("godot_version", ""))) else None
+        if cold_narrow_run is None:
+            qa.check("cold narrow title report status", False, "not run because the exact Godot 4.6.3 stable engine is unavailable")
+        else:
+            cold_report, cold_report_path = qa.read_json_report(
+                "cold narrow title report",
+                [cold_narrow_dir / "visual_review_report.json"],
+            )
+            profile = cold_report.get("launch_profile", {}) if isinstance(cold_report, dict) else {}
+            profile = profile if isinstance(profile, dict) else {}
+            captures = cold_report.get("captures", []) if isinstance(cold_report, dict) else []
+            first_capture = captures[0] if isinstance(captures, list) and captures else {}
+            first_capture = first_capture if isinstance(first_capture, dict) else {}
+            cold_report_passed = (
+                isinstance(cold_report, dict)
+                and cold_report.get("success") is True
+                and int(cold_report.get("failure_count", -1)) == 0
+                and int(cold_report.get("error_count", -1)) == 0
+                and int(cold_report.get("runtime_check_failure_count", -1)) == 0
+                and profile.get("name") == "cold_narrow"
+                and profile.get("cold_start") is True
+                and profile.get("first_capture_uses_launch_window") is True
+                and int(profile.get("initial_window_width", 0)) == 800
+                and int(profile.get("initial_window_height", 0)) == 600
+                and first_capture.get("name") == "main_title_cold_800x600"
+                and first_capture.get("success") is True
+                and int(first_capture.get("width", 0)) == 800
+                and int(first_capture.get("height", 0)) == 600
+                and int(first_capture.get("window_width", 0)) == 800
+                and int(first_capture.get("window_height", 0)) == 600
+            )
+            qa.check(
+                "cold narrow title report status",
+                cold_report_passed,
+                "800x600 cold launch and first title capture verified" if cold_report_passed else f"report={cold_report_path}; profile={profile}; first_capture={first_capture}",
+            )
+
+        if visual_run is None:
+            qa.check("visual capture coverage", False, "not run; visual captures were not silently skipped")
+        else:
+            missing_images = missing_visual_images(visual_dir)
             qa.check("visual capture coverage", not missing_images, "all expected screenshots present" if not missing_images else "missing: " + ", ".join(missing_images))
 
     if "performance" in selected_profiles:

@@ -1,8 +1,13 @@
 # Godot 4+ specific ignores
 .godot/
+.codebase-memory/
 /android/
 /builds/
 __pycache__/
 *.pyc
 
 *.log
+
+# Generated reports belong in an external QA run, not in source history.
+/docs/automated_playtest_report.json
+/docs/performance_report.json

@@ -1,8 +1,15 @@
 extends Node
 
+signal load_finished(succeeded: bool)
+
 const SAVE_PATH := "user://save_game.json"
 
 var default_save_path := SAVE_PATH
+var _load_pending := false
+var _load_show_notice := true
+
+func is_load_pending() -> bool:
+	return _load_pending
 
 func has_save(save_path := "") -> bool:
 	return FileAccess.file_exists(_resolve_path(save_path))
@@ -50,6 +57,10 @@ func save_game(show_notice := true, save_path := "", save_spawn_point := true) -
 	return true
 
 func load_game(change_scene := true, show_notice := true, save_path := "") -> bool:
+	if _load_pending or SceneRouter.is_transition_pending():
+		if show_notice:
+			GameState.notify("場景切換中，請稍後再讀取進度。")
+		return false
 	var resolved_path := _resolve_path(save_path)
 	if not FileAccess.file_exists(resolved_path):
 		if show_notice:
@@ -82,15 +93,43 @@ func load_game(change_scene := true, show_notice := true, save_path := "") -> bo
 			GameState.notify("讀檔失敗：checksum 驗證未通過。")
 		return false
 	var payload_parser := JSON.new()
-	if payload_parser.parse(payload_text) != OK or typeof(payload_parser.data) != TYPE_DICTIONARY or not GameState.load_save_data(payload_parser.data):
+	if payload_parser.parse(payload_text) != OK or typeof(payload_parser.data) != TYPE_DICTIONARY or not GameState.is_save_data_valid(payload_parser.data):
 		if show_notice:
 			GameState.notify("讀檔失敗：資料缺漏或版本不相容。")
 		return false
+	if change_scene:
+		# Connect when requesting travel, after the autoloads have entered the tree.
+		if not SceneRouter.load_finished.is_connected(_on_load_transition_finished):
+			SceneRouter.load_finished.connect(_on_load_transition_finished)
+		_load_pending = true
+		_load_show_notice = show_notice
+		if not SceneRouter.load_saved_game(payload_parser.data, resolved_path):
+			_load_pending = false
+			if show_notice:
+				GameState.notify("暫時無法開始讀檔；目前進度仍保留，請稍後再試。")
+			return false
+		# True means queued. Only load_finished confirms eventual scene entry.
+		return true
+	# Data-only callers keep their synchronous compatibility contract.
+	if not GameState.load_save_data(payload_parser.data):
+		return false
 	if show_notice:
 		GameState.notify("已讀取存檔。")
-	if change_scene:
-		SceneRouter.change_to(GameState.current_scene_id, GameState.active_spawn_point, resolved_path)
 	return true
+
+func _on_load_transition_finished(succeeded: bool, save_succeeded: bool) -> void:
+	if not _load_pending:
+		return
+	var show_notice := _load_show_notice
+	_load_pending = false
+	_load_show_notice = true
+	if show_notice:
+		if not succeeded:
+			GameState.notify("存檔場景載入失敗；已保留原本進度，可再次讀取。")
+		elif save_succeeded:
+			# Keep an existing autosave-failure warning visible when entry succeeded.
+			GameState.notify("已讀取存檔。")
+	load_finished.emit(succeeded)
 
 func load_or_new(save_path := "") -> bool:
 	if has_save(save_path):

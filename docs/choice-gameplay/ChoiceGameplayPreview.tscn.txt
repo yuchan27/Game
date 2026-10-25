@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ChoiceGameplayPreview.gd" id="1_choice_gameplay_preview"]
+
+[node name="ChoiceGameplayPreview" type="Node"]
+script = ExtResource("1_choice_gameplay_preview")

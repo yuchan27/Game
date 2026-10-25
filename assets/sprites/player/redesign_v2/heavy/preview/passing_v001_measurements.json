@@ -1,0 +1,257 @@
+{
+  "alpha_cutoff": 0.65,
+  "directions": [
+    {
+      "direction": "E",
+      "helmet_to_sole_height": 393.0,
+      "rect": [
+        0,
+        0,
+        410,
+        512
+      ],
+      "scale_96": 0.244274809160305,
+      "sole": [
+        214.770492553711,
+        466.0
+      ],
+      "solid_bbox": [
+        29,
+        74,
+        332,
+        393
+      ],
+      "runtime_ground_root": [
+        269.04,
+        466
+      ],
+      "hand": [
+        234,
+        260
+      ],
+      "ready_belt_x": 211,
+      "passing_belt_x": 209
+    },
+    {
+      "direction": "SE",
+      "helmet_to_sole_height": 398.0,
+      "rect": [
+        410,
+        0,
+        390,
+        512
+      ],
+      "scale_96": 0.241206030150754,
+      "sole": [
+        607.5,
+        471.0
+      ],
+      "solid_bbox": [
+        414,
+        74,
+        336,
+        398
+      ],
+      "runtime_ground_root": [
+        616.97,
+        471
+      ],
+      "hand": [
+        562,
+        253
+      ],
+      "ready_belt_x": 606,
+      "passing_belt_x": 594
+    },
+    {
+      "direction": "S",
+      "helmet_to_sole_height": 398.0,
+      "rect": [
+        800,
+        0,
+        360,
+        512
+      ],
+      "scale_96": 0.241206030150754,
+      "sole": [
+        938.5,
+        471.0
+      ],
+      "solid_bbox": [
+        815,
+        74,
+        311,
+        398
+      ],
+      "runtime_ground_root": [
+        926.58,
+        471
+      ],
+      "hand": [
+        919,
+        257
+      ],
+      "ready_belt_x": 960,
+      "passing_belt_x": 956
+    },
+    {
+      "direction": "SW",
+      "helmet_to_sole_height": 397.0,
+      "rect": [
+        1160,
+        0,
+        376,
+        512
+      ],
+      "scale_96": 0.241813602015113,
+      "sole": [
+        1315.5,
+        471.0
+      ],
+      "solid_bbox": [
+        1182,
+        75,
+        323,
+        397
+      ],
+      "runtime_ground_root": [
+        1282.37,
+        471
+      ],
+      "hand": [
+        1288,
+        275
+      ],
+      "ready_belt_x": 1320,
+      "passing_belt_x": 1320
+    },
+    {
+      "direction": "W",
+      "helmet_to_sole_height": 393.0,
+      "rect": [
+        0,
+        512,
+        384,
+        512
+      ],
+      "scale_96": 0.244274809160305,
+      "sole": [
+        162.180328369141,
+        936.0
+      ],
+      "solid_bbox": [
+        24,
+        544,
+        334,
+        393
+      ],
+      "runtime_ground_root": [
+        129.94,
+        936
+      ],
+      "hand": [
+        139,
+        730
+      ],
+      "ready_belt_x": 185,
+      "passing_belt_x": 185
+    },
+    {
+      "direction": "NW",
+      "helmet_to_sole_height": 396.0,
+      "rect": [
+        384,
+        512,
+        416,
+        512
+      ],
+      "scale_96": 0.242424242424242,
+      "sole": [
+        594.0,
+        937.0
+      ],
+      "solid_bbox": [
+        401,
+        542,
+        352,
+        396
+      ],
+      "runtime_ground_root": [
+        596.37,
+        937
+      ],
+      "hand": [
+        506,
+        731
+      ],
+      "ready_belt_x": 580,
+      "passing_belt_x": 576
+    },
+    {
+      "direction": "N",
+      "helmet_to_sole_height": 402.0,
+      "rect": [
+        800,
+        512,
+        360,
+        512
+      ],
+      "scale_96": 0.238805970149254,
+      "sole": [
+        948.5,
+        942.0
+      ],
+      "solid_bbox": [
+        817,
+        541,
+        313,
+        402
+      ],
+      "runtime_ground_root": [
+        933.07,
+        942
+      ],
+      "hand": [
+        1018,
+        705
+      ],
+      "ready_belt_x": 959,
+      "passing_belt_x": 955
+    },
+    {
+      "direction": "NE",
+      "helmet_to_sole_height": 397.0,
+      "rect": [
+        1160,
+        512,
+        376,
+        512
+      ],
+      "scale_96": 0.241813602015113,
+      "sole": [
+        1332.0,
+        937.0
+      ],
+      "solid_bbox": [
+        1179,
+        541,
+        341,
+        397
+      ],
+      "runtime_ground_root": [
+        1315.34,
+        937
+      ],
+      "hand": [
+        1430,
+        729
+      ],
+      "ready_belt_x": 1368,
+      "passing_belt_x": 1366
+    }
+  ],
+  "path": "C:/Code/Game/first-game/assets/sprites/player/redesign_v2/heavy/r17_heavy_passing_v001.png",
+  "sha256": "5a2094209991afe346b8799e060094d4da128182929a5abcffbebbf5335ed6bf",
+  "source_preserved": true,
+  "root_registration": "Source sole is measured visible-foot center; runtime_ground_root x preserves the ready torso/belt projection under per-key scale, y uses planted ground."
+}

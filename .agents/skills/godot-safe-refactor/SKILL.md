@@ -15,4 +15,13 @@ Output: reversible, behavior-preserving diff verified by characterization tests.
 2. **Preserve Contracts**:
    - Keep node names, group memberships (`player`, `enemy`, `boss`, `interactable`, `dialogue_npc`, `equipment_panel`, `tutorial_panel`, `minimap_panel`, `gameplay_input_blocker`), signal signatures, and `SaveManager` JSON keys backward-compatible.
 3. **Incremental Verification**:
-   - Apply one bounded refactor step at a time and run `python scripts/tools/run_qa.py --godot <engine> --profile core` after each step.
+   - Apply one bounded step at a time, run affected characterization checks, then run `python scripts/tools/run_qa.py --godot <engine> --profile core` after integration.
+
+## Acceptance and failure handling
+
+Require unchanged characterized behavior, valid scene/resource paths, compatible
+serialized data and a reviewed consumer diff. Use before/after measurements for
+performance claims. If a contract breaks, repair the current step before widening
+scope; preserve unrelated changes and never reset the checkout to hide failures.
+When characterization is insufficient, add an observable test before extracting
+the behavior. The group names above are project configuration, not portable rules.

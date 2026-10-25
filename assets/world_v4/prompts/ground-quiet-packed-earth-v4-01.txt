@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: one opaque seamless repeating ground texture for the 2.5D pixel-art medieval wasteland game.
+Primary request: a quiet surface of packed umber and charcoal earth. Broad, low-contrast, flat dusty shapes should define the ground. Add only very sparse tiny grains and a few fine hairline dry roots. Keep the earth visually calm and open so characters, buildings and props read clearly over it.
+Style/medium: original hand-authored 2D pixel art with hard, deliberate stepped clusters and a limited dark-earth palette. At intended use, this whole square source covers 512 world pixels; compose the source so two source pixels correspond to one world pixel. Use flat color ramps and crisp clusters, not smooth rendering.
+Composition/framing: square texture filled edge to edge with uninterrupted top-down ground plane; a truly seamless repeat, with every shape and color transition continuing naturally across opposite edges. Even restrained density over the whole tile, with no central focal area.
+Lighting/mood: flat diffuse overcast light, dark medieval wasteland, subdued and worn.
+Color palette: packed dark umber, warm charcoal, ash-brown and muted gray-brown; keep neighboring values close and avoid bright accents.
+Materials/textures: large quiet dusty earth patches with simple flat interiors; tiny grains are rare and small; hairline roots are rare and thin. No distinct rock may exceed 2% of the source width. Preserve broad calm areas between details.
+Constraints: exactly one square, fully opaque PNG texture; flat top-down material only; no objects or horizon; designed to tile invisibly at a 512-world-pixel repeat size.
+Avoid: salt-and-pepper detail, dense speckles, high-frequency noise, dithering, gravel carpet, cobble field, large stones, any rock larger than 2% of the source width, bright bevels, outlines, deep cracks, strong shadows, perspective, isometric view, 3D rendering, photorealism, painterly brush texture, grass, plants, props, scenery, text, border, vignette, transparency, watermark.

@@ -1,0 +1,5 @@
+Use case: background-extraction
+Edit target: the attached r17_combined_pose_design_v002.png.
+Perform ONLY precise background removal. Preserve every existing knight, weapon, hand, pose, pixel color, scale and placement exactly.
+The input contains unwanted diffuse red, bluegray and black halos in its transparent-looking background. Remove those halos completely. Cut every one of the nine body+weapon figures out to crisp pixel-art exterior silhouettes. All space between figures and all background beyond each exterior contour must be fully transparent, alpha exactly zero. Character interior must be opaque. No dark backing, no gray field, no colored glow, no smoke, no floor shadow, no new outlines, no smoothing and no antialiasing fringe.
+Keep the original 1536x1024 sheet layout with nine separate full body poses. Do not redraw the knight, rescale weapons, change grips or add content. Output a real clean alpha PNG on a fully transparent background. This is an extraction operation, not a new illustration.
