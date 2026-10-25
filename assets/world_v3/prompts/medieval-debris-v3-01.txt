@@ -1,0 +1,17 @@
+Use case: stylized-concept
+Asset type: transparent-background modular pixel art environment prop atlas, ONE 1536x1024 PNG with genuine alpha transparency.
+Primary request: EIGHT separate original medieval wasteland props belonging to ONE shared game world, arranged 4 columns x 2 rows with ample transparent gutters. Full uncropped isolated silhouettes, no background scene, no text/labels. Uniform grounded oblique game camera about 30 degrees downward, visible tops and fronts, screen-vertical uprights. Every prop sits on the same ground plane.
+Input image roles: Image 1 is exact approved shared slate/soil material palette; Image 2 is same-world worn slate road reference; Image 3 is active armored hero pixel-art/style/scale reference only. Do not draw ground tiles or characters. Reference hero is displayed at 96 world pixels tall; props must fit plausible corresponding dimensions.
+Style: crisp coherent dark-fantasy PIXEL ART with solid stepped silhouettes, defined native 2-pixel clusters, broad material planes, restricted ramps, nearest-neighbor look; no painterly blur, no photoreal fragments, no smooth antialias gradients. Soft diffuse upper-left light, short tight dark contact pixels at feet, no large floating shadow. Avoid black hard sticker contours; soften bottom silhouettes with a few same-palette rubble chips/dust pixels.
+Shared materials: charcoal blue-gray slate/basalt #44464a #56534c, umber earth #49413b #38342f matching the two ground references; desaturated weathered dark oak, oxidized dark iron. Restrained moss-free brown dry plants. Gray-brown debris echoes the ground.
+EXACT positions in reading order:
+Top left: low broad broken basalt rubble cluster of 5-7 angular slate stones, world width 112, height about 48.
+Top second: different flatter small basalt rubble cluster, world width 88, height about 34.
+Top third: medieval broken masonry wall stub made of the SAME charcoal slate stones, uneven ruined top with missing corner, approximately world width 168, height 108; no flat concrete or rebar.
+Top right: collapsed wooden medieval supply wagon wreck, iron-rimmed large broken spoked wheel, bent iron struts, dark rotten timber planks, world width 184, height 100; recognizably horse cart, no car parts.
+Bottom left: bare dead thorn bush, sparse thick brown twig silhouette, world width 78, height 64.
+Bottom second: low loose dry umber grass clump, world width 60, height 32.
+Bottom third: one small iron-bound dark oak supply cluster, broken wooden crate and weathered medieval barrel together, world width 108, height 76; no hazard stripes.
+Bottom right: crooked broken old royal-road milepost, stone pedestal with splintered timber sign arm and faded unreadable mark, world width 66, height 88.
+Atlas layout: row1 around y=270, row2 around y=800; column centers x=192,576,960,1344. Each object occupies comfortably less than 340x400 source pixels with TRANSPARENT SPACE on all sides and at least 48px between different objects. Feet are independently centered below each silhouette. No sharing ground islands, no tile platforms, no touching or overlap between props. Use actual transparent alpha, not black/white/checkerboard painted background.
+Avoid: modern vehicles, industrial concrete, pipes, electric wires, orange lamps, game logos, commercial game copies, gold decoration, saturated green grass, grayscale monochrome, tiny shiny highlights, lighting halos, colored backdrop, square floor panels. All eight must appear authored by the same pixel artist for these exact two ground materials.

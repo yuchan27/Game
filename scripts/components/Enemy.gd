@@ -7,6 +7,10 @@ const DAMAGE_POPUP_SCRIPT := preload("res://scripts/components/DamagePopup.gd")
 const HEALTH_BAR_SCRIPT := preload("res://scripts/components/EnemyHealthBar.gd")
 const HIT_EFFECT_SCRIPT := preload("res://scripts/components/HitEffect.gd")
 const ENEMY_ATLAS_PATH := "res://assets/sprites/enemies/polluted_enemy_six_types.png"
+const TARGET_ACQUIRE_RANGE := 720.0
+const TARGET_RELEASE_RANGE := 900.0
+const HOME_ARRIVAL_RADIUS := 24.0
+static var _directional_art_cache: Dictionary = {}
 
 var enemy_id := "scrap_biter"
 var enemy_name := "污染體"
@@ -35,6 +39,20 @@ var _base_sprite_pos := Vector2.ZERO
 var _base_scale := Vector2.ONE
 var knockback_velocity := Vector2.ZERO
 var stagger_timer := 0.0
+var facing_direction := Vector2.RIGHT
+var facing_index := 0
+var pending_attack := ""
+var windup_timer := 0.0
+var windup_duration := 0.0
+var recovery_timer := 0.0
+var _attack_direction := Vector2.RIGHT
+var _hit_flash_timer := 0.0
+var _directional_frames: Array = []
+var _directional_offsets: Array = []
+var _directional_scale := 1.0
+var _directional_source := ""
+var _spawn_anchor_position := Vector2.ZERO
+var _is_alerted := false
 
 func setup(id: String, data: Dictionary, player_ref: Node2D) -> void:
 	enemy_id = id
@@ -50,6 +68,8 @@ func setup(id: String, data: Dictionary, player_ref: Node2D) -> void:
 	_configure_behavior()
 
 func _ready() -> void:
+	_spawn_anchor_position = global_position
+	_is_alerted = enemy_type == "boss"
 	add_to_group("enemy")
 	add_to_group("map_enemy")
 	set_meta("map_label", enemy_name)
@@ -78,6 +98,7 @@ func _ready() -> void:
 	add_child(shadow)
 	_sprite = Sprite2D.new()
 	_sprite.texture = _enemy_texture(enemy_type)
+	_load_directional_art()
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if enemy_type == "boss":
 		_sprite.scale = Vector2(1.9, 1.9)
@@ -85,6 +106,8 @@ func _ready() -> void:
 	_base_sprite_pos = _sprite.position
 	_base_scale = _sprite.scale
 	add_child(_sprite)
+	_update_facing(Vector2.RIGHT)
+	_update_presentation()
 	_health_bar = HEALTH_BAR_SCRIPT.new()
 	_health_bar.setup(116.0 if enemy_type == "boss" else 54.0)
 	_health_bar.position = Vector2(0, -90 if enemy_type == "boss" else -54)
@@ -95,30 +118,182 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 	_phase += delta * _animation_speed()
-	if _sprite != null:
-		_sprite.position = _base_sprite_pos + Vector2(0, sin(_phase) * (3.5 if enemy_type == "flying" else 1.6))
-		_sprite.scale = _base_scale * (1.0 + sin(_phase * 0.7) * 0.025)
+	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	ranged_cooldown = maxf(0.0, ranged_cooldown - delta)
+	dash_cooldown = maxf(0.0, dash_cooldown - delta)
+	dash_time = maxf(0.0, dash_time - delta)
+	recovery_timer = maxf(0.0, recovery_timer - delta)
+	_hit_flash_timer = maxf(0.0, _hit_flash_timer - delta)
 	if target == null or not is_instance_valid(target):
+		pending_attack = ""
+		_update_presentation()
+		queue_redraw()
 		return
 	var offset := target.global_position - global_position
 	var distance := offset.length()
-	var desired := _desired_direction(offset, distance)
-	if _sprite != null and abs(offset.x) > 4.0:
-		_sprite.flip_h = offset.x < 0.0
 	stagger_timer = max(0.0, stagger_timer - delta)
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 880.0 * delta)
+	if not _should_chase_target(distance):
+		pending_attack = ""
+		windup_timer = 0.0
+		var home_offset := _spawn_anchor_position - global_position
+		if home_offset.length() > HOME_ARRIVAL_RADIUS:
+			_update_facing(home_offset)
+			velocity = home_offset.normalized() * _current_speed() * 0.65 + knockback_velocity
+		else:
+			velocity = knockback_velocity
+		move_and_slide()
+		_update_presentation()
+		queue_redraw()
+		return
+	var desired := _desired_direction(offset, distance)
+	if pending_attack.is_empty() and dash_time <= 0.0:
+		_update_facing(offset)
+	if not pending_attack.is_empty():
+		windup_timer = maxf(0.0, windup_timer - delta)
+		if windup_timer <= 0.0:
+			_resolve_attack()
 	var move_mult := 0.25 if stagger_timer > 0.0 else 1.0
+	if not pending_attack.is_empty():
+		move_mult *= 0.18
+	if dash_time > 0.0:
+		desired = _attack_direction
 	velocity = desired * _current_speed() * move_mult + knockback_velocity
 	move_and_slide()
-	attack_cooldown = max(0.0, attack_cooldown - delta)
-	ranged_cooldown = max(0.0, ranged_cooldown - delta)
-	dash_cooldown = max(0.0, dash_cooldown - delta)
-	dash_time = max(0.0, dash_time - delta)
-	if can_fire_projectiles and distance <= ranged_range and ranged_cooldown <= 0.0:
-		_fire_pollution_shot(offset.normalized())
-	if distance < contact_range and attack_cooldown <= 0.0:
+	if pending_attack.is_empty() and recovery_timer <= 0.0 and stagger_timer <= 0.0:
+		if distance < contact_range and attack_cooldown <= 0.0:
+			_begin_attack("contact", offset)
+		elif can_fire_projectiles and distance <= ranged_range and ranged_cooldown <= 0.0:
+			_begin_attack("ranged", offset)
+	_update_presentation()
+	queue_redraw()
+
+func _begin_attack(kind: String, direction: Vector2) -> void:
+	pending_attack = kind
+	_attack_direction = direction.normalized() if direction.length() > 0.1 else facing_direction
+	_update_facing(_attack_direction)
+	windup_duration = 0.42 if enemy_type == "boss" else (0.34 if enemy_type == "heavy" else 0.2)
+	if kind == "ranged":
+		windup_duration = 0.32
+	windup_timer = windup_duration
+	if kind == "contact":
 		attack_cooldown = _contact_cooldown()
-		GameState.take_damage(damage)
+	elif kind == "dash":
+		dash_cooldown = 1.2
+	queue_redraw()
+
+func _resolve_attack() -> void:
+	var kind := pending_attack
+	pending_attack = ""
+	recovery_timer = 0.18 if enemy_type not in ["heavy", "boss"] else 0.3
+	if kind == "dash":
+		dash_time = 0.18
+	elif kind == "ranged":
+		_fire_pollution_shot(_attack_direction)
+	elif kind == "contact" and is_instance_valid(target):
+		# Leaving the marked reach during anticipation cleanly avoids the hit.
+		if global_position.distance_to(target.global_position) < contact_range:
+			GameState.take_damage(damage)
+
+func _load_directional_art() -> void:
+	var asset := DataRegistry.get_visual_asset("enemy_" + enemy_id)
+	var path := String(asset.get("directional_path", "res://assets/sprites/enemies/%s_8dir.png" % enemy_id))
+	if not _directional_art_cache.has(path):
+		var atlas := _load_atlas_texture(path)
+		var art := {"frames": [], "offsets": [], "scale": 1.0}
+		var rects: Array = asset.get("directional_rects", [])
+		var feet: Array = asset.get("directional_feet", [])
+		if atlas != null and (rects.size() == 8 or (atlas.get_width() % 4 == 0 and atlas.get_height() % 2 == 0)):
+			var cell := Vector2i(atlas.get_width() / 4, atlas.get_height() / 2)
+			var source_image := atlas.get_image()
+			var largest := Vector2.ONE
+			if source_image != null:
+				for index in range(8):
+					var origin := Vector2i(index % 4, index / 4) * cell
+					var source_rect := Rect2i(origin, cell)
+					if rects.size() == 8:
+						var coordinates: Array = rects[index]
+						if coordinates.size() != 4:
+							art["frames"].clear()
+							break
+						source_rect = Rect2i(int(coordinates[0]), int(coordinates[1]), int(coordinates[2]), int(coordinates[3]))
+					if not Rect2i(Vector2i.ZERO, source_image.get_size()).encloses(source_rect) or not source_rect.has_area():
+						art["frames"].clear()
+						break
+					var used := source_image.get_region(source_rect).get_used_rect()
+					if not used.has_area():
+						art["frames"].clear()
+						break
+					var texture := AtlasTexture.new()
+					texture.atlas = atlas
+					texture.region = Rect2(source_rect.position + used.position, used.size)
+					art["frames"].append(texture)
+					var anchor := Vector2(texture.region.get_center().x, texture.region.end.y)
+					if feet.size() == 8 and (feet[index] as Array).size() == 2:
+						anchor = Vector2(float(feet[index][0]), float(feet[index][1]))
+					art["offsets"].append(texture.region.get_center() - anchor)
+					largest = largest.max(Vector2(used.size))
+				art["scale"] = minf(88.0 / largest.x, 68.0 / largest.y)
+		_directional_art_cache[path] = art
+	var cached: Dictionary = _directional_art_cache[path]
+	_directional_frames = cached["frames"]
+	_directional_offsets = cached["offsets"]
+	_directional_scale = float(cached["scale"])
+	_directional_source = path if _directional_frames.size() == 8 else ENEMY_ATLAS_PATH
+	set_meta("directional_art_source", _directional_source)
+	set_meta("directional_art_views", 8 if _directional_frames.size() == 8 else 1)
+	set_meta("directional_art_mode", "authored_8view" if _directional_frames.size() == 8 else "single_view_mirrored_fallback")
+
+func _update_facing(direction: Vector2) -> void:
+	if direction.length() < 0.1:
+		return
+	facing_direction = direction.normalized()
+	facing_index = int(round(facing_direction.angle() / (PI / 4.0))) & 7
+	if _sprite == null:
+		return
+	if _directional_frames.size() == 8:
+		_sprite.texture = _directional_frames[facing_index]
+		_sprite.flip_h = false
+	else:
+		_sprite.flip_h = facing_direction.x < -0.1
+	set_meta("facing_index", facing_index)
+
+func _update_presentation() -> void:
+	if _sprite == null:
+		return
+	var bob := sin(_phase) * (3.5 if enemy_type == "flying" else 1.2)
+	var lean := Vector2.ZERO
+	var squash := Vector2.ONE
+	if not pending_attack.is_empty():
+		var charge := 1.0 - windup_timer / maxf(0.01, windup_duration)
+		lean = -_attack_direction * charge * 4.0
+		squash = Vector2(1.0 + charge * 0.04, 1.0 - charge * 0.04)
+	elif recovery_timer > 0.0:
+		lean = _attack_direction * sin(recovery_timer * 9.0) * 4.0
+	var art_scale := _directional_scale if _directional_frames.size() == 8 else 1.0
+	var feet_offset := Vector2.ZERO
+	if _directional_frames.size() == 8:
+		var ground_y := 24.0 if enemy_type == "boss" else 18.0
+		feet_offset = (_directional_offsets[facing_index] as Vector2) * art_scale * _base_scale + Vector2(0, ground_y - _base_sprite_pos.y)
+	_sprite.position = _base_sprite_pos + feet_offset + Vector2(0, bob) + lean
+	_sprite.scale = _base_scale * art_scale * squash
+	_sprite.rotation = -facing_direction.x * 0.025 if dash_time > 0.0 else 0.0
+	_sprite.modulate = Color.WHITE.lerp(Color(1.0, 0.5, 0.35), clampf(_hit_flash_timer / 0.12, 0.0, 1.0))
+
+func _draw() -> void:
+	if is_dead or pending_attack.is_empty():
+		return
+	var charge := 1.0 - windup_timer / maxf(0.01, windup_duration)
+	var radius := contact_range if pending_attack == "contact" else (64.0 if pending_attack == "dash" else 46.0)
+	var origin := Vector2.ZERO
+	var points := PackedVector2Array([origin])
+	for index in range(11):
+		var angle := _attack_direction.angle() + lerpf(-0.5, 0.5, float(index) / 10.0)
+		points.append((origin + Vector2(cos(angle), sin(angle)) * radius).round())
+	draw_colored_polygon(points, Color(0.56, 0.14, 0.08, 0.08 + charge * 0.16))
+	draw_polyline(points.slice(1), Color(0.96, 0.48, 0.2, 0.35 + charge * 0.55), 2.0)
+	var tip := origin + _attack_direction * (radius * charge)
+	draw_rect(Rect2(tip.round() - Vector2(2, 2), Vector2(4, 4)), Color(1.0, 0.74, 0.4, 0.85))
 
 func apply_knockback(impulse: Vector2) -> void:
 	if is_dead:
@@ -130,6 +305,7 @@ func apply_knockback(impulse: Vector2) -> void:
 func take_damage(amount: int, melee := false) -> void:
 	if is_dead:
 		return
+	_is_alerted = true
 	hp -= amount
 	AudioManager.play_sfx("hit")
 	GameState.request_feedback("enemy_hit", 0.08 if melee else 0.04)
@@ -150,18 +326,17 @@ func _show_damage_feedback(amount: int, melee: bool) -> void:
 	effect.global_position = global_position + Vector2(0, -16)
 	get_tree().current_scene.add_child(effect)
 	if _sprite != null:
-		_sprite.modulate = Color(1.0, 0.55, 0.45)
-		var tween := create_tween()
-		tween.set_parallel(true)
-		tween.tween_property(_sprite, "position", _base_sprite_pos + Vector2(randf_range(-8, 8), -4), 0.04)
-		tween.tween_property(_sprite, "modulate", Color.WHITE, 0.12)
+		_hit_flash_timer = 0.12
+		_update_presentation()
 
 func _die(_melee: bool) -> void:
 	if is_dead:
 		return
 	is_dead = true
+	pending_attack = ""
+	queue_redraw()
 	AudioManager.play_sfx("death")
-	GameState.record_enemy_defeated(enemy_type == "boss")
+	GameState.record_enemy_defeated(enemy_type == "boss", String(get_meta("expedition_source_key", "")))
 	if enemy_type == "boss":
 		GameState.notify("Boss 已被擊破，污染核心掉落。")
 	for child in get_children():
@@ -273,9 +448,8 @@ func _desired_direction(offset: Vector2, distance: float) -> Vector2:
 		if distance < preferred_distance:
 			desired = -desired * 0.35
 	elif enemy_type == "fast":
-		if distance < 190.0 and dash_cooldown <= 0.0:
-			dash_time = 0.18
-			dash_cooldown = 1.2
+		if distance < 190.0 and dash_cooldown <= 0.0 and pending_attack.is_empty() and recovery_timer <= 0.0 and stagger_timer <= 0.0:
+			_begin_attack("dash", offset)
 	elif enemy_type == "flying":
 		var orbit := desired.rotated(PI * 0.5) * 0.45
 		desired = (desired + orbit).normalized()
@@ -287,6 +461,15 @@ func _desired_direction(offset: Vector2, distance: float) -> Vector2:
 		else:
 			desired *= 0.58
 	return desired
+
+func _should_chase_target(distance: float) -> bool:
+	if enemy_type == "boss":
+		return true
+	if _is_alerted:
+		_is_alerted = distance <= TARGET_RELEASE_RANGE
+	else:
+		_is_alerted = distance <= TARGET_ACQUIRE_RANGE
+	return _is_alerted
 
 func _current_speed() -> float:
 	if enemy_type == "fast" and dash_time > 0.0:

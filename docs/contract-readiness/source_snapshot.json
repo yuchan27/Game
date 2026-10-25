@@ -1,0 +1,741 @@
+{
+  "kind": "ordinary_staged_contract_presentation_not_QA",
+  "recorded_utc": "2026-10-23T16:20:41.147654+00:00",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "backend": "OpenGL 3.3 Compatibility; Intel Arc 140V",
+  "scope": "Quest/run/inventory/discovery state assigned directly; destination scenes initialized paused; existing J/G views opened directly. Read-only readiness and hint copy logged. No actual hand-in, action/choice, reward, extraction, death, save/load/migration, collision, pacing/performance or QA. Listed inputs are bounded, not all assets.",
+  "render_processes": [
+    {
+      "resolution": "1280x720",
+      "log": "wide.log",
+      "sha256": "16f7848abfddaf8484f3b1e58a84434e7fc23b64e8c463759926d31fbc4baa55",
+      "exit_code": 0,
+      "exit_evidence": "Parent observed final terminal completion; session 47876.",
+      "frame_records": [
+        "CONTRACT_PRESENTATION_FRAME: city-bank-short viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-provisional viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-atlas viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-clue-pending viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: factory-boss viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: legacy-ready viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-ready viewport=(1280.0, 720.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-last-outing-short viewport=(1280.0, 720.0) image_result=0"
+      ],
+      "copy_records": [
+        "CONTRACT_PRESENTATION_COPY: city-bank-short ready=false hint=兩趟行動已帶回；還需軍用精密晶片 x1；交付前請保留材料。 原路線：東南：崩塌都心區 [M]。 checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜都心檔案：避難名冊與斷水街區（已帶回） | 已達成｜擊倒本區污染體 5/5 | 待完成｜交付軍用精密晶片 1/2；尚缺 1",
+        "CONTRACT_PRESENTATION_COPY: city-provisional ready=false hint=本趟與原委託目標齊備；從返村門帶回後，按 [J] 交付本章 [M]。 checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5（含本趟 2） | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1）",
+        "CONTRACT_PRESENTATION_COPY: city-atlas ready=false hint=本趟與原委託目標齊備；從返村門帶回後，按 [J] 交付本章 [M]。 checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5（含本趟 2） | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1）",
+        "CONTRACT_PRESENTATION_COPY: city-clue-pending ready=false hint=兩趟行動已帶回；紀錄已讀，仍須從「東南：崩塌都心區」成功返村。 原路線：東南：崩塌都心區 [M]。 checklist=已達成｜章節行動已帶回 2/2 趟 | 待完成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2",
+        "CONTRACT_PRESENTATION_COPY: factory-boss ready=false hint=兩趟行動已帶回；擊敗本區 Boss 0/1；其餘條件按 [J]。 原路線：東門：舊工廠外圍 [M]。 checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜擊倒本區污染體 8/8 | 待完成｜擊敗本區 Boss 0/1 | 已達成｜交付異變核心 2/2 | 選讀，不影響交付｜舊工廠封鎖黑盒（未調查）",
+        "CONTRACT_PRESENTATION_COPY: legacy-ready ready=true hint=按 [J] 交付目前委託，領取報酬。 checklist=已達成｜擊倒本區污染體 5/5 | 已達成｜交付廢鐵 12/12 | 選讀，不影響交付｜巴士殘骸上的撤離名冊（未調查）",
+        "CONTRACT_PRESENTATION_COPY: city-ready ready=true hint=按 [J] 交付目前委託，領取報酬。 checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜都心檔案：避難名冊與斷水街區（已帶回） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2",
+        "CONTRACT_PRESENTATION_COPY: city-last-outing-short ready=false hint=本趟行動齊備；還需軍用精密晶片 x1；交付前請保留材料。 可先補齊再返村，或先撤離保留成果 [M]。 checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5（含本趟 2） | 待完成｜交付軍用精密晶片 1/2；尚缺 1"
+      ],
+      "observed_error_or_warning_lines": []
+    },
+    {
+      "resolution": "1024x768",
+      "log": "narrow.log",
+      "sha256": "d37dc7ff218e6258613f638ebb59ce7c2b505e0af5abeea5a60a40cffd2aa23d",
+      "exit_code": 0,
+      "exit_evidence": "Parent observed final terminal completion; session 37336.",
+      "frame_records": [
+        "CONTRACT_PRESENTATION_FRAME: city-bank-short viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-provisional viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-atlas viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-clue-pending viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: factory-boss viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: legacy-ready viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-ready viewport=(1024.0, 768.0) image_result=0",
+        "CONTRACT_PRESENTATION_FRAME: city-last-outing-short viewport=(1024.0, 768.0) image_result=0"
+      ],
+      "copy_records": [
+        "CONTRACT_PRESENTATION_COPY: city-bank-short ready=false hint=兩趟行動已帶回；還需軍用精密晶片 x1；交付前請保留材料。 原路線：東南：崩塌都心區 [M]。 checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜都心檔案：避難名冊與斷水街區（已帶回） | 已達成｜擊倒本區污染體 5/5 | 待完成｜交付軍用精密晶片 1/2；尚缺 1",
+        "CONTRACT_PRESENTATION_COPY: city-provisional ready=false hint=本趟與原委託目標齊備；從返村門帶回後，按 [J] 交付本章 [M]。 checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5（含本趟 2） | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1）",
+        "CONTRACT_PRESENTATION_COPY: city-atlas ready=false hint=本趟與原委託目標齊備；從返村門帶回後，按 [J] 交付本章 [M]。 checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5（含本趟 2） | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1）",
+        "CONTRACT_PRESENTATION_COPY: city-clue-pending ready=false hint=兩趟行動已帶回；紀錄已讀，仍須從「東南：崩塌都心區」成功返村。 原路線：東南：崩塌都心區 [M]。 checklist=已達成｜章節行動已帶回 2/2 趟 | 待完成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2",
+        "CONTRACT_PRESENTATION_COPY: factory-boss ready=false hint=兩趟行動已帶回；擊敗本區 Boss 0/1；其餘條件按 [J]。 原路線：東門：舊工廠外圍 [M]。 checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜擊倒本區污染體 8/8 | 待完成｜擊敗本區 Boss 0/1 | 已達成｜交付異變核心 2/2 | 選讀，不影響交付｜舊工廠封鎖黑盒（未調查）",
+        "CONTRACT_PRESENTATION_COPY: legacy-ready ready=true hint=按 [J] 交付目前委託，領取報酬。 checklist=已達成｜擊倒本區污染體 5/5 | 已達成｜交付廢鐵 12/12 | 選讀，不影響交付｜巴士殘骸上的撤離名冊（未調查）",
+        "CONTRACT_PRESENTATION_COPY: city-ready ready=true hint=按 [J] 交付目前委託，領取報酬。 checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜都心檔案：避難名冊與斷水街區（已帶回） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2",
+        "CONTRACT_PRESENTATION_COPY: city-last-outing-short ready=false hint=本趟行動齊備；還需軍用精密晶片 x1；交付前請保留材料。 可先補齊再返村，或先撤離保留成果 [M]。 checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5（含本趟 2） | 待完成｜交付軍用精密晶片 1/2；尚缺 1"
+      ],
+      "observed_error_or_warning_lines": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "assets/world_v4/architecture/ash-street-workshop-v4-01.png",
+      "sha256": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909",
+      "mirror_sha256": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909"
+    },
+    {
+      "path": "assets/world_v4/architecture/broken-viaduct-v4-01.png",
+      "sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+      "mirror_sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73"
+    },
+    {
+      "path": "assets/world_v4/architecture/crystal-buttress-v4-01.png",
+      "sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+      "mirror_sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c"
+    },
+    {
+      "path": "assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+      "sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+      "mirror_sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c"
+    },
+    {
+      "path": "assets/world_v4/architecture/guild-entrance-v4-03.png",
+      "sha256": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+      "mirror_sha256": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9"
+    },
+    {
+      "path": "assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+      "sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+      "mirror_sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d"
+    },
+    {
+      "path": "assets/world_v4/architecture/roadwarden-gate-v4-01.png",
+      "sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+      "mirror_sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf"
+    },
+    {
+      "path": "assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+      "sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+      "mirror_sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8"
+    },
+    {
+      "path": "assets/world_v4/architecture/ruined-forge-v4-01.png",
+      "sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+      "mirror_sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc"
+    },
+    {
+      "path": "assets/world_v4/architecture/sealed-cistern-v4-01.png",
+      "sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+      "mirror_sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b"
+    },
+    {
+      "path": "assets/world_v4/architecture/slate-boundary-wall-v4-01.png",
+      "sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+      "mirror_sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11"
+    },
+    {
+      "path": "assets/world_v4/architecture/stone-service-crossing-v4-01.png",
+      "sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+      "mirror_sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12"
+    },
+    {
+      "path": "assets/world_v4/ground/buried-slate-cobbles-v4-01.png",
+      "sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21",
+      "mirror_sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21"
+    },
+    {
+      "path": "assets/world_v4/ground/buried-slate-cobbles-v4-02.png",
+      "sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+      "mirror_sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2"
+    },
+    {
+      "path": "assets/world_v4/ground/cold-fractured-shale-v4-01.png",
+      "sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8",
+      "mirror_sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8"
+    },
+    {
+      "path": "assets/world_v4/ground/cold-silt-shale-v4-02.png",
+      "sha256": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a",
+      "mirror_sha256": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a"
+    },
+    {
+      "path": "assets/world_v4/ground/damp-cut-slate-v4-01.png",
+      "sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+      "mirror_sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1"
+    },
+    {
+      "path": "assets/world_v4/ground/packed-umber-earth-v4-01.png",
+      "sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+      "mirror_sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf"
+    },
+    {
+      "path": "assets/world_v4/ground/stagnant-silt-water-v4-01.png",
+      "sha256": "e8dbf2876a3075837fff31301645d4893132fe2692839cf2534fce1a0a1b04d4",
+      "mirror_sha256": "e8dbf2876a3075837fff31301645d4893132fe2692839cf2534fce1a0a1b04d4"
+    },
+    {
+      "path": "assets/world_v4/ground/stagnant-silt-water-v4-02.png",
+      "sha256": "fba65c8f1cc160a9113c7dceb998a1c5d9724c1fea3d8b3b582d3e7cf6659c2b",
+      "mirror_sha256": "fba65c8f1cc160a9113c7dceb998a1c5d9724c1fea3d8b3b582d3e7cf6659c2b"
+    },
+    {
+      "path": "assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+      "sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+      "mirror_sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c"
+    },
+    {
+      "path": "assets/world_v4/landmarks/evacuation-bus-v4-01.png",
+      "sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+      "mirror_sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c"
+    },
+    {
+      "path": "assets/world_v4/landmarks/resonance-outcrop-v4-02.png",
+      "sha256": "7bc4e97535f0386a4cc8f741ab58180442fd7fcf2a4a8736d2fb3e203ee85e4b",
+      "mirror_sha256": "7bc4e97535f0386a4cc8f741ab58180442fd7fcf2a4a8736d2fb3e203ee85e4b"
+    },
+    {
+      "path": "assets/world_v4/props/convoy-remnants-v4-01.png",
+      "sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "mirror_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c"
+    },
+    {
+      "path": "assets/world_v4/props/field-mechanisms-v4-01.png",
+      "sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "mirror_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160"
+    },
+    {
+      "path": "assets/world_v4/props/grounded-hazards-v4-01.png",
+      "sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+      "mirror_sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9"
+    },
+    {
+      "path": "assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+      "sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+      "mirror_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4"
+    },
+    {
+      "path": "assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "mirror_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9"
+    },
+    {
+      "path": "assets/world_v4/props/hub-workstations-v4-02.png",
+      "sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+      "mirror_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082"
+    },
+    {
+      "path": "assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+      "sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+      "mirror_sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b"
+    },
+    {
+      "path": "data/art/player_animation_manifest.json",
+      "sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17",
+      "mirror_sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17"
+    },
+    {
+      "path": "data/art/r17_presentation_v2.json",
+      "sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764",
+      "mirror_sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764"
+    },
+    {
+      "path": "data/art/r17_weapon_families_v2.json",
+      "sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+      "mirror_sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5"
+    },
+    {
+      "path": "data/art/visual_assets.json",
+      "sha256": "7838f7c3b2f3b44a6bc0e7ed9f5440d324989db66cc093c29c0c66f67ef120ab",
+      "mirror_sha256": "7838f7c3b2f3b44a6bc0e7ed9f5440d324989db66cc093c29c0c66f67ef120ab"
+    },
+    {
+      "path": "data/art/world_materials_v3.json",
+      "sha256": "d231b6790b43e9f1ef648d2ca41184f367ee14df28720c8f89e92ed9232eae4e",
+      "mirror_sha256": "d231b6790b43e9f1ef648d2ca41184f367ee14df28720c8f89e92ed9232eae4e"
+    },
+    {
+      "path": "data/art/world_v2.json",
+      "sha256": "293e2fea12501ad53cd9e70037afec41189a18ce1943d320715e28f14ff617db",
+      "mirror_sha256": "293e2fea12501ad53cd9e70037afec41189a18ce1943d320715e28f14ff617db"
+    },
+    {
+      "path": "data/enemies/enemies.json",
+      "sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6",
+      "mirror_sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6"
+    },
+    {
+      "path": "data/items/equipment.json",
+      "sha256": "5555c755e2d43910e64d1feead8eb6d554cd74ae27e50ad46fa1d10b5c16e529",
+      "mirror_sha256": "5555c755e2d43910e64d1feead8eb6d554cd74ae27e50ad46fa1d10b5c16e529"
+    },
+    {
+      "path": "data/items/recipes.json",
+      "sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c",
+      "mirror_sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c"
+    },
+    {
+      "path": "data/maps/events.json",
+      "sha256": "b69d6cdce60dfc2798a4d6c8a5f7d7d973689e146af978285f0745e5fbeb028a",
+      "mirror_sha256": "b69d6cdce60dfc2798a4d6c8a5f7d7d973689e146af978285f0745e5fbeb028a"
+    },
+    {
+      "path": "data/maps/npcs.json",
+      "sha256": "5051b358a0f0f5f0344d3e6f9a4fff7cf2f5cad9baf3850778b61ea58d32f9f0",
+      "mirror_sha256": "5051b358a0f0f5f0344d3e6f9a4fff7cf2f5cad9baf3850778b61ea58d32f9f0"
+    },
+    {
+      "path": "data/maps/quests.json",
+      "sha256": "7d67e9977badde9ae8d5692e8e4db19329703bc439c7e4941b01465abe22db57",
+      "mirror_sha256": "7d67e9977badde9ae8d5692e8e4db19329703bc439c7e4941b01465abe22db57"
+    },
+    {
+      "path": "data/maps/wasteland_params.json",
+      "sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798",
+      "mirror_sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798"
+    },
+    {
+      "path": "data/maps/wasteland_routes.json",
+      "sha256": "ecbd3ad21572c4c567ad1401064e5d6f7446661a99a45e96253472315dcdfba1",
+      "mirror_sha256": "ecbd3ad21572c4c567ad1401064e5d6f7446661a99a45e96253472315dcdfba1"
+    },
+    {
+      "path": "scenes/levels/guild/Guild.gd",
+      "sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62",
+      "mirror_sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62"
+    },
+    {
+      "path": "scenes/levels/guild/Guild.tscn",
+      "sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955",
+      "mirror_sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955"
+    },
+    {
+      "path": "scenes/levels/village/Village.gd",
+      "sha256": "3469b19d8c5cd8555e5775229460a8b86c63ba2bd14e77c4a9202b8e8f4ee4a2",
+      "mirror_sha256": "3469b19d8c5cd8555e5775229460a8b86c63ba2bd14e77c4a9202b8e8f4ee4a2"
+    },
+    {
+      "path": "scenes/levels/village/Village.tscn",
+      "sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c",
+      "mirror_sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c"
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.gd",
+      "sha256": "12efa1a6c572f019c8817ca850fd7b7af6c0c39067ec17aae3afa58bf5d7bc87",
+      "mirror_sha256": "12efa1a6c572f019c8817ca850fd7b7af6c0c39067ec17aae3afa58bf5d7bc87"
+    },
+    {
+      "path": "scenes/levels/wasteland/Wasteland.tscn",
+      "sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565",
+      "mirror_sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565"
+    },
+    {
+      "path": "scenes/main/Main.gd",
+      "sha256": "d2b83f61fcb11bd3a8856249d082f3e25e6741b19f93ac359161c2237232cc50",
+      "mirror_sha256": "d2b83f61fcb11bd3a8856249d082f3e25e6741b19f93ac359161c2237232cc50"
+    },
+    {
+      "path": "scenes/main/Main.tscn",
+      "sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0",
+      "mirror_sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0"
+    },
+    {
+      "path": "scenes/player/Player.gd",
+      "sha256": "1a8c662526ccd47f00babb8259c4a49cbdfa306528e29ae1424a4404de0bd0ad",
+      "mirror_sha256": "1a8c662526ccd47f00babb8259c4a49cbdfa306528e29ae1424a4404de0bd0ad"
+    },
+    {
+      "path": "scenes/player/player.tscn",
+      "sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e",
+      "mirror_sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e"
+    },
+    {
+      "path": "scenes/tests/AutomatedPlaytestRunner.tscn",
+      "sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf",
+      "mirror_sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf"
+    },
+    {
+      "path": "scenes/tests/CollisionRegressionRunner.tscn",
+      "sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71",
+      "mirror_sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71"
+    },
+    {
+      "path": "scenes/tests/DirectionalPresentationRegression.tscn",
+      "sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163",
+      "mirror_sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163"
+    },
+    {
+      "path": "scenes/tests/GameplayRegressionRunner.tscn",
+      "sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42",
+      "mirror_sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42"
+    },
+    {
+      "path": "scenes/tests/PerformanceRunner.tscn",
+      "sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24",
+      "mirror_sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24"
+    },
+    {
+      "path": "scenes/tests/PixelAssetBaker.tscn",
+      "sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e",
+      "mirror_sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e"
+    },
+    {
+      "path": "scenes/tests/SceneEntranceRegression.tscn",
+      "sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310",
+      "mirror_sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310"
+    },
+    {
+      "path": "scenes/tests/ValidationRunner.tscn",
+      "sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005",
+      "mirror_sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005"
+    },
+    {
+      "path": "scenes/tests/VisualReviewRunner.tscn",
+      "sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b",
+      "mirror_sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b"
+    },
+    {
+      "path": "scenes/tests/WorldAtlasRegression.tscn",
+      "sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee",
+      "mirror_sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee"
+    },
+    {
+      "path": "scenes/tests/WorldExpansionRunner.tscn",
+      "sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc",
+      "mirror_sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc"
+    },
+    {
+      "path": "scenes/ui/HUD.gd",
+      "sha256": "2fc0f20f94a9007864b37da5450a8c1140838e9d678bfbe2357068aa14d2a9cb",
+      "mirror_sha256": "2fc0f20f94a9007864b37da5450a8c1140838e9d678bfbe2357068aa14d2a9cb"
+    },
+    {
+      "path": "scenes/ui/HUD.tscn",
+      "sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6",
+      "mirror_sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6"
+    },
+    {
+      "path": "scripts/autoload/AudioManager.gd",
+      "sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f",
+      "mirror_sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f"
+    },
+    {
+      "path": "scripts/autoload/DataRegistry.gd",
+      "sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+      "mirror_sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f"
+    },
+    {
+      "path": "scripts/autoload/GameState.gd",
+      "sha256": "4279a2c3951af180b44b01bee14c646e97b44adac9ff6516bd97bde150e212b2",
+      "mirror_sha256": "4279a2c3951af180b44b01bee14c646e97b44adac9ff6516bd97bde150e212b2"
+    },
+    {
+      "path": "scripts/autoload/SaveManager.gd",
+      "sha256": "ddd906acffddfbf965c810763af0070cd26ef567bb7da531a426d4b6cfefdb4e",
+      "mirror_sha256": "ddd906acffddfbf965c810763af0070cd26ef567bb7da531a426d4b6cfefdb4e"
+    },
+    {
+      "path": "scripts/autoload/SceneRouter.gd",
+      "sha256": "61cd7ef23a776ed391c6e85825582f88099791f5fb5094290ff3353701354944",
+      "mirror_sha256": "61cd7ef23a776ed391c6e85825582f88099791f5fb5094290ff3353701354944"
+    },
+    {
+      "path": "scripts/components/AnimatedNpc.gd",
+      "sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299",
+      "mirror_sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299"
+    },
+    {
+      "path": "scripts/components/AttackFlash.gd",
+      "sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c",
+      "mirror_sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c"
+    },
+    {
+      "path": "scripts/components/DamagePopup.gd",
+      "sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825",
+      "mirror_sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825"
+    },
+    {
+      "path": "scripts/components/DialogueNpc.gd",
+      "sha256": "3cfdaae55d135dc52da9a2403c035e83c4a26435758711fa92c704c2ecf4023f",
+      "mirror_sha256": "3cfdaae55d135dc52da9a2403c035e83c4a26435758711fa92c704c2ecf4023f"
+    },
+    {
+      "path": "scripts/components/Enemy.gd",
+      "sha256": "22588b30a5a91f5b18a800156be452a21a8f2787fb5f021a39f5496c5a32eb1d",
+      "mirror_sha256": "22588b30a5a91f5b18a800156be452a21a8f2787fb5f021a39f5496c5a32eb1d"
+    },
+    {
+      "path": "scripts/components/EnemyHealthBar.gd",
+      "sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef",
+      "mirror_sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef"
+    },
+    {
+      "path": "scripts/components/HitEffect.gd",
+      "sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94",
+      "mirror_sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94"
+    },
+    {
+      "path": "scripts/components/Interactable.gd",
+      "sha256": "f08662efe1bc6104783cff7042311a8f92ccc3e641dfbd416bca2d7d506c0d7d",
+      "mirror_sha256": "f08662efe1bc6104783cff7042311a8f92ccc3e641dfbd416bca2d7d506c0d7d"
+    },
+    {
+      "path": "scripts/components/Pickup.gd",
+      "sha256": "b9acc973c155a047c1f074fa3a5c71af88bf8b185b990acb618c5ab0ba3c0a50",
+      "mirror_sha256": "b9acc973c155a047c1f074fa3a5c71af88bf8b185b990acb618c5ab0ba3c0a50"
+    },
+    {
+      "path": "scripts/components/Projectile.gd",
+      "sha256": "2b10be60a11b6364b55db2bcb78e96477206088e846ef14a8d4c36723386ed0e",
+      "mirror_sha256": "2b10be60a11b6364b55db2bcb78e96477206088e846ef14a8d4c36723386ed0e"
+    },
+    {
+      "path": "scripts/components/RouteGate.gd",
+      "sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1",
+      "mirror_sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1"
+    },
+    {
+      "path": "scripts/components/WastelandAtmosphere.gd",
+      "sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+      "mirror_sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a"
+    },
+    {
+      "path": "scripts/components/WorldProp.gd",
+      "sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de",
+      "mirror_sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de"
+    },
+    {
+      "path": "scripts/systems/ExpeditionLedger.gd",
+      "sha256": "2d904833e3699c0cb9a5e55352df5f45c1377a0332a43457738698f08b327366",
+      "mirror_sha256": "2d904833e3699c0cb9a5e55352df5f45c1377a0332a43457738698f08b327366"
+    },
+    {
+      "path": "scripts/systems/InventorySystem.gd",
+      "sha256": "248becdbe039f9f729150fc6c4170ffd617345b4923fc1eda0faa14f14a8c3b9",
+      "mirror_sha256": "248becdbe039f9f729150fc6c4170ffd617345b4923fc1eda0faa14f14a8c3b9"
+    },
+    {
+      "path": "scripts/systems/LevelGenerator.gd",
+      "sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357",
+      "mirror_sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357"
+    },
+    {
+      "path": "scripts/systems/ProjectilePool.gd",
+      "sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67",
+      "mirror_sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67"
+    },
+    {
+      "path": "scripts/systems/VillageTileMap.gd",
+      "sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0",
+      "mirror_sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0"
+    },
+    {
+      "path": "scripts/systems/WorldBackdrop.gd",
+      "sha256": "a5b200a054a4605d9d64286d93a15dd2b7242fd72b66ffe0630277e115b80969",
+      "mirror_sha256": "a5b200a054a4605d9d64286d93a15dd2b7242fd72b66ffe0630277e115b80969"
+    },
+    {
+      "path": "scripts/tests/AutomatedPlaytestRunner.gd",
+      "sha256": "de22b52057cfbe035c530bf98532564b47699bd49ee889c6d94a9627f877b63f",
+      "mirror_sha256": "de22b52057cfbe035c530bf98532564b47699bd49ee889c6d94a9627f877b63f"
+    },
+    {
+      "path": "scripts/tests/CollisionRegressionRunner.gd",
+      "sha256": "045dba3ecc18bb59ef3796c2bbeecc6af324703a70d358b5b2f2fe8beab57534",
+      "mirror_sha256": "045dba3ecc18bb59ef3796c2bbeecc6af324703a70d358b5b2f2fe8beab57534"
+    },
+    {
+      "path": "scripts/tests/DirectionalPresentationRegression.gd",
+      "sha256": "dd87fecd62dd60852cd33a9da2b7b3a199be3f8643edbff15a71a4923aeccbdb",
+      "mirror_sha256": "dd87fecd62dd60852cd33a9da2b7b3a199be3f8643edbff15a71a4923aeccbdb"
+    },
+    {
+      "path": "scripts/tests/GameplayRegressionRunner.gd",
+      "sha256": "ba7045d93f16eafd43d41d65ddacc92b22589ac6b3cbbdee37388f30f78bcb23",
+      "mirror_sha256": "ba7045d93f16eafd43d41d65ddacc92b22589ac6b3cbbdee37388f30f78bcb23"
+    },
+    {
+      "path": "scripts/tests/PerformanceRunner.gd",
+      "sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a",
+      "mirror_sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a"
+    },
+    {
+      "path": "scripts/tests/SceneEntranceRegression.gd",
+      "sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc",
+      "mirror_sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc"
+    },
+    {
+      "path": "scripts/tests/VerticalSliceVerifier.gd",
+      "sha256": "c03c96dffaf19cea3214e9628c3aa4538e7ab455cb17d9bb84bbc06526a1101e",
+      "mirror_sha256": "c03c96dffaf19cea3214e9628c3aa4538e7ab455cb17d9bb84bbc06526a1101e"
+    },
+    {
+      "path": "scripts/tests/VisualReviewRunner.gd",
+      "sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda",
+      "mirror_sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda"
+    },
+    {
+      "path": "scripts/tests/WorldAtlasRegression.gd",
+      "sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e",
+      "mirror_sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e"
+    },
+    {
+      "path": "scripts/tests/WorldExpansionRegression.gd",
+      "sha256": "7db41c9b9e960b3f0b8ee84657dff528b5abd206d23c55d6bb20a1559ab47838",
+      "mirror_sha256": "7db41c9b9e960b3f0b8ee84657dff528b5abd206d23c55d6bb20a1559ab47838"
+    },
+    {
+      "path": "scripts/tests/WorldExpansionRunner.gd",
+      "sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203",
+      "mirror_sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203"
+    },
+    {
+      "path": "scripts/tools/PixelAssetBaker.gd",
+      "sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75",
+      "mirror_sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75"
+    },
+    {
+      "path": "scripts/ui/SceneEntrance.gd",
+      "sha256": "d2be1a2effca601eb6485a0ca03137658ccbb298d987dafdf93cbac2b89f9074",
+      "mirror_sha256": "d2be1a2effca601eb6485a0ca03137658ccbb298d987dafdf93cbac2b89f9074"
+    },
+    {
+      "path": "scripts/ui/WorldAtlasPanel.gd",
+      "sha256": "735b14a5984357316bfe4a886442c8bd9cdf686dd34d47feee68f17ed3d4dc60",
+      "mirror_sha256": "735b14a5984357316bfe4a886442c8bd9cdf686dd34d47feee68f17ed3d4dc60"
+    },
+    {
+      "path": "scripts/ui/WorldMapView.gd",
+      "sha256": "fcb66863da7b4e2b10cb44ff7cb9b258406b1684b47fc89c5b8472bb638ccfc8",
+      "mirror_sha256": "fcb66863da7b4e2b10cb44ff7cb9b258406b1684b47fc89c5b8472bb638ccfc8"
+    },
+    {
+      "path": "scripts/utils/PixelArtFactory.gd",
+      "sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5",
+      "mirror_sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5"
+    },
+    {
+      "path": "scripts/utils/RuntimeAssetLoader.gd",
+      "sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f",
+      "mirror_sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f"
+    },
+    {
+      "path": "scripts/components/CampaignAction.gd",
+      "sha256": "d069987ff3efb6b8fbebc41dd1eff5d6e3431a085b8ba49e1b94046645d48739",
+      "mirror_sha256": "d069987ff3efb6b8fbebc41dd1eff5d6e3431a085b8ba49e1b94046645d48739"
+    },
+    {
+      "path": "scripts/systems/CampaignProgress.gd",
+      "sha256": "74933194c89889e4b2e33b66bfc7d370976a61c5eb09c1a84c0fbf9f38c1ecbd",
+      "mirror_sha256": "74933194c89889e4b2e33b66bfc7d370976a61c5eb09c1a84c0fbf9f38c1ecbd"
+    },
+    {
+      "path": "assets/sprites/items/materials/broken_coil.png",
+      "sha256": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f",
+      "mirror_sha256": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f"
+    },
+    {
+      "path": "assets/sprites/items/materials/precision_chip.png",
+      "sha256": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b",
+      "mirror_sha256": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b"
+    }
+  ],
+  "images": [
+    {
+      "path": "1280x720/city-atlas.png",
+      "sha256": "0680aa20aa817830b2ca56b7b1610e4d7613e0db6e94159e981f692a702af37a",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/city-bank-short.png",
+      "sha256": "e0cfb3269449dccfd52593a756193f3afd96b5d0e7806ccd8e07ba1b310bb1d6",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/city-clue-pending.png",
+      "sha256": "517dcbd63d725f55dc04e1f694046d4ace591eeb8119d72e6d2fbc2089a1a8ad",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/city-last-outing-short.png",
+      "sha256": "0a1465c25f98ad60b3a0f0b183c653a1b51bda6844608c57ee3786f2089f3ad2",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/city-provisional.png",
+      "sha256": "cafb6ecf6687a992dbe9732acdb01b18cee8d3ee99e457000fc984960ddea007",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/city-ready.png",
+      "sha256": "119d1dc602b1db23eb982c9a005ca5d14f46d5a49e2bb45df9cddf74f664a710",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/factory-boss.png",
+      "sha256": "07127010be29de0190029c52f4d44dc1daf5f21974d34fbeac13ee63096930c4",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1280x720/legacy-ready.png",
+      "sha256": "d5c69ae7f1d5a9a274d559c696eb90de78753140ec998600bce5402a38933699",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "1024x768/city-atlas.png",
+      "sha256": "250f55087f76133722c2a9de0c2193a822f7b8d6a41bb9bd4b8325e92b2d3894",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/city-bank-short.png",
+      "sha256": "7d55aac0ec0cf76eb1dad4c403abf27a930138b4e89e616069d34c92515a0dd5",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/city-clue-pending.png",
+      "sha256": "ff0d758aa254306fae68538e85ecfb9420e9716caaa38880527c5234ee53bb56",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/city-last-outing-short.png",
+      "sha256": "ec6b9d3b202fb3ee16ee0774c62893096c89b7fb1aad037dfa1d1195c5fbf119",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/city-provisional.png",
+      "sha256": "2cb210887ee742127a1f23e1a27b626bc7cba7c06d386eae77fbe8eb53bd5620",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/city-ready.png",
+      "sha256": "e52338a51ec05b5cf744378513f1092ed2ba02eec8ccb9fa8231ebe35cef5882",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/factory-boss.png",
+      "sha256": "7a6cb4c9d4e13f823aa3a5e8517a82d4749afe11430cfd86733743be6604a67a",
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "path": "1024x768/legacy-ready.png",
+      "sha256": "d2816df97eefd066da03209a0844c0f850c47587843805d6ec16859b6838cbe9",
+      "width": 1024,
+      "height": 768
+    }
+  ],
+  "recipe": {
+    "path": "ContractReadinessPreview.gd.txt",
+    "sha256": "856f2c96c7fbf6b2c05802b01fb8fb9a7fda75420211732d8ad93182d94617a5",
+    "mirror_sha256": "856f2c96c7fbf6b2c05802b01fb8fb9a7fda75420211732d8ad93182d94617a5",
+    "mirror_scene_sha256": "9d59d37b34941453a4402d4c5e263cec69bc75194b6ec54605f20d6cf96091e1"
+  },
+  "project_settings": {
+    "source_sha256": "3d47319f2dedc0fa31a68606348dda4aefb155cee45ad50e6321888ae1d1dcee",
+    "mirror_sha256": "6ea04d3b107eb3f98d5228af455c64b0761d9096541ec563b9e6a00718de7bcc",
+    "mirror_custom_user_dir": "R17-Ordinary-Art-Preview-20261023"
+  },
+  "real_save_metadata": {
+    "size": 1203,
+    "mtime_ns": 1792682904815624900,
+    "same_as_before": true
+  }
+}

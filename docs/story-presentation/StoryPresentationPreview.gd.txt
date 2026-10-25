@@ -1,0 +1,96 @@
+extends Node
+
+# Ordinary isolated presentation states. No contract actions, rewards or saves.
+func _ready() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false):
+        push_error("Use an isolated project with dedicated custom user data.")
+        get_tree().quit(2)
+        return
+    var output := ""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--story-output="):
+            output = argument.trim_prefix("--story-output=")
+    if output.is_empty() or not output.is_absolute_path():
+        push_error("Pass an absolute --story-output directory.")
+        get_tree().quit(2)
+        return
+    DirAccess.make_dir_recursive_absolute(output)
+    var chapter_ids := ["clear_scrap_route", "toxic_sample", "crystal_scar_recon", "old_factory_core", "metropolis_archive", "facility_memory"]
+    var views := ["title", "prologue", "village-dry", "village-trickle", "village-stable", "highway-bypass-pending", "guild-contract", "journal-city", "journal-ending", "alan-opening"]
+    for view: String in views:
+        get_tree().paused = false
+        GameState.active_quest_id = ""
+        GameState.quest_progress = {}
+        GameState.route_states = {}
+        GameState.completed_quests.clear()
+        GameState.discovered_events.clear()
+        GameState.current_route_id = "scrap_highway"
+        GameState.active_spawn_point = "default"
+        GameState.hp = GameState.get_max_hp()
+        GameState.ep = GameState.get_max_ep()
+        if view == "village-trickle":
+            GameState.completed_quests.append("clear_scrap_route")
+        elif view == "village-stable" or view == "journal-city" or view == "journal-ending":
+            var count := 5 if view == "journal-city" else 6
+            for index in range(count):
+                GameState.completed_quests.append(chapter_ids[index])
+            if view == "journal-city" or view == "journal-ending":
+                for event: Dictionary in DataRegistry.events:
+                    if bool(event.get("story", false)) and int(event.get("chapter", 0)) <= count:
+                        GameState.discovered_events.append("%s:%s" % [String(event.get("route", "")), String(event.get("id", ""))])
+        if view == "highway-bypass-pending" or view == "guild-contract":
+            GameState.active_quest_id = "clear_scrap_route"
+            GameState.quest_progress = {"defeat_enemy": 0, "field_objective_version": 1}
+        var is_main := view == "title" or view == "prologue"
+        var scene_path := "res://scenes/main/Main.tscn" if is_main else "res://scenes/levels/village/Village.tscn"
+        if view == "highway-bypass-pending":
+            scene_path = "res://scenes/levels/wasteland/Wasteland.tscn"
+        elif view == "guild-contract":
+            scene_path = "res://scenes/levels/guild/Guild.tscn"
+        var scene = load(scene_path).instantiate()
+        if is_main:
+            scene.force_fullscreen_on_start = false
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        for frame in range(4):
+            await get_tree().process_frame
+        if view == "prologue":
+            scene.call("_show_intro")
+        var actor = get_tree().get_first_node_in_group("map_player")
+        if actor != null:
+            actor.global_position = Vector2(1380, 970)
+            if view == "highway-bypass-pending":
+                actor.global_position = Vector2(3500, 3510)
+            actor.reset_physics_interpolation()
+            var camera = actor.get_node("Camera2D")
+            camera.position_smoothing_enabled = false
+            camera.reset_smoothing()
+            camera.force_update_scroll()
+            for frame in range(16):
+                await get_tree().physics_frame
+            var notice = scene.find_child("NoticeLabel", true, false)
+            if notice != null:
+                notice.hide()
+            var hud = get_tree().get_first_node_in_group("hud")
+            if view == "guild-contract":
+                hud.call("_set_contract_visible", true)
+            elif view == "journal-city" or view == "journal-ending":
+                hud.call("_set_codex_visible", true)
+            elif view == "alan-opening":
+                for npc: Dictionary in DataRegistry.npcs:
+                    if String(npc.get("id", "")) == "wasteland_survivor":
+                        GameState.dialogue_requested.emit(String(npc.get("name", "艾倫")), String(npc.get("role", "")), GameState.story_dialogue_for_npc(npc) if not GameState.story_dialogue_for_npc(npc).is_empty() else String(npc.get("line", "")))
+            print("STORY_PRESENTATION_STATE: ", view, " water=", GameState.get_village_water_stage(), " next=", GameState.get_journey_hint())
+        for frame in range(3):
+            await get_tree().process_frame
+        get_tree().paused = true
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        var result := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+        print("STORY_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", result)
+        scene.queue_free()
+        await get_tree().process_frame
+    get_tree().quit(0)

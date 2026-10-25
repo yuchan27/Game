@@ -51,6 +51,8 @@ static func craft_next_from_order(recipe_ids: Array[String], done_message: Strin
 	return false
 
 static func craft_recipe(recipe_id: String) -> bool:
+	if not GameState.can_use_hub_services():
+		return false
 	var recipe := DataRegistry.get_recipe(recipe_id)
 	if recipe.is_empty():
 		GameState.notify("找不到配方：%s" % recipe_id)

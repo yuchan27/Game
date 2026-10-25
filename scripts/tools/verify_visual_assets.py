@@ -61,7 +61,7 @@ def verify_manifest(failures: list[str]) -> None:
     if len(assets) < 35:
         fail("visual asset manifest has too few entries", failures)
 
-    seen_paths: dict[str, str] = {}
+    seen_paths: dict[object, str] = {}
     hashes: dict[str, str] = {}
     for asset_id, asset in assets.items():
         path = str(asset.get("path", ""))
@@ -69,17 +69,18 @@ def verify_manifest(failures: list[str]) -> None:
         if not path:
             fail(f"{asset_id} has no path", failures)
             continue
-        if bool(asset.get("unique_required", False)) and path in seen_paths:
-            fail(f"{asset_id} shares exact path with {seen_paths[path]}: {path}", failures)
+        unique_key = (path, tuple(asset["source_rect"])) if asset.get("source_rect") else path
+        if bool(asset.get("unique_required", False)) and unique_key in seen_paths:
+            fail(f"{asset_id} shares exact path with {seen_paths[unique_key]}: {path}", failures)
         if bool(asset.get("unique_required", False)):
-            seen_paths[path] = asset_id
+            seen_paths[unique_key] = asset_id
 
         raw = check_image(resolve(path), asset_id, failures)
         if raw is not None and asset.get("source_sha256"):
             if hashlib.sha256(raw).hexdigest() != asset["source_sha256"]:
                 fail(f"{asset_id} source image differs from its recorded SHA-256", failures)
             source_image = Image.open(resolve(path)).convert("RGBA")
-            if source_image.getchannel("A").getextrema()[0] != 0:
+            if asset.get("transparent_background", True) and source_image.getchannel("A").getextrema()[0] != 0:
                 fail(f"{asset_id} requires a transparent background", failures)
             if list(source_image.size) != asset.get("source_dimensions"):
                 fail(f"{asset_id} source dimensions disagree with manifest", failures)

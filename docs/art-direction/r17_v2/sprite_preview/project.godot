@@ -1,0 +1,16 @@
+config_version=5
+
+[application]
+config/name="R17 Sprite Art Preview"
+run/main_scene="res://preview.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="R17-Private-Art-Preview"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+environment/defaults/default_clear_color=Color(0.075,0.085,0.10,1)

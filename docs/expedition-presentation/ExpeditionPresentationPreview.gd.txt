@@ -1,0 +1,109 @@
+extends Node
+
+# Ordinary in-memory UI presentation. No input actions, settlement, save or load.
+func _ready() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+        push_error("Use the dedicated external presentation mirror and user directory.")
+        get_tree().quit(2)
+        return
+    var output := ""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--expedition-output="):
+            output = argument.trim_prefix("--expedition-output=")
+    if output.is_empty() or not output.is_absolute_path():
+        push_error("Pass an absolute --expedition-output directory.")
+        get_tree().quit(2)
+        return
+    DirAccess.make_dir_recursive_absolute(output)
+    var bank: Dictionary = GameState.inventory.duplicate(true)
+    var views := ["new-run-hud", "haul-inventory", "ready-to-extract", "field-contract", "pending-clue-journal", "legacy-inventory", "extracted-report", "lost-report", "unsaved-report"]
+    for view: String in views:
+        get_tree().paused = false
+        GameState._expedition.clear()
+        GameState._last_ammo_spend.clear()
+        GameState.inventory = bank.duplicate(true)
+        GameState.active_quest_id = "clear_scrap_route"
+        GameState.quest_progress = {"defeat_enemy": 0, "field_objective_version": 1}
+        GameState.route_states = {}
+        GameState.completed_quests.clear()
+        GameState.discovered_events.clear()
+        GameState.current_route_id = "scrap_highway"
+        GameState.active_spawn_point = "default"
+        GameState.hp = GameState.get_max_hp()
+        GameState.ep = GameState.get_max_ep()
+        GameState.death_pending = false
+        GameState.player_position = Vector2.ZERO
+        var report := view.ends_with("-report")
+        if view == "legacy-inventory":
+            GameState._expedition.legacy_trip = true
+        if report:
+            GameState.current_scene_id = "village"
+            GameState._expedition.last_result = {
+                "id": "presentation-only-result", "route": "scrap_highway", "quest_id": "clear_scrap_route",
+                "outcome": "lost" if view == "lost-report" else "extracted",
+                "haul": {"scrap": 18, "ammo": 9, "broken_coil": 2, "breaker_hammer": 1},
+                "counters": {"defeat_enemy": 5}, "fields": {"highway_bypass_repair": true}
+            }
+            if view != "lost-report":
+                GameState.inventory["scrap"] += 18
+                GameState.inventory["ammo"] += 9
+                GameState.inventory["broken_coil"] = 2
+                GameState.inventory["breaker_hammer"] = 1
+                GameState.quest_progress["defeat_enemy"] = 5
+                GameState.route_states = {"scrap_highway": {"field_objectives": {"highway_bypass_repair": true}}}
+        else:
+            GameState.current_scene_id = "wasteland"
+        var scene_path := "res://scenes/levels/village/Village.tscn" if report else "res://scenes/levels/wasteland/Wasteland.tscn"
+        var scene = load(scene_path).instantiate()
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        for frame in range(4):
+            await get_tree().process_frame
+        if view in ["haul-inventory", "ready-to-extract", "field-contract"]:
+            GameState._expedition.active["haul"] = {"scrap": 18, "ammo": 9, "broken_coil": 2, "breaker_hammer": 1}
+            GameState._expedition.active["counters"] = {"defeat_enemy": 3 if view == "haul-inventory" else 5}
+            GameState._expedition.active["fields"] = {"highway_bypass_repair": true}
+        if view == "pending-clue-journal" or view == "lost-report":
+            GameState.discovered_events.append("scrap_highway:story_scrap_manifest")
+            GameState._expedition.uncommitted_clues.append("scrap_highway:story_scrap_manifest")
+        GameState._sync_resource_counters()
+        GameState.stats_changed.emit()
+        var actor = get_tree().get_first_node_in_group("map_player")
+        if actor != null:
+            actor.global_position = Vector2(1380, 970) if report else Vector2(3500, 3510)
+            actor.set_physics_process(false)
+            actor.reset_physics_interpolation()
+            var camera = actor.get_node("Camera2D")
+            camera.position_smoothing_enabled = false
+            camera.reset_smoothing()
+            camera.force_update_scroll()
+        for enemy: Node in get_tree().get_nodes_in_group("enemies"):
+            enemy.set_physics_process(false)
+        for frame in range(16):
+            await get_tree().physics_frame
+        var hud = get_tree().get_first_node_in_group("hud")
+        if view == "haul-inventory" or view == "legacy-inventory":
+            hud.call("_set_inventory_visible", true)
+        elif view == "field-contract":
+            hud.call("_set_contract_visible", true)
+        elif view == "pending-clue-journal":
+            hud.call("_set_codex_visible", true)
+        elif report:
+            GameState.show_expedition_result(GameState._expedition.last_result, view != "unsaved-report")
+        var notice = scene.find_child("NoticeLabel", true, false)
+        if notice != null:
+            notice.hide()
+        print("EXPEDITION_PRESENTATION_STATE: ", view, " mode=", GameState.expedition_summary(), " quest=", GameState.active_quest_summary())
+        for frame in range(4):
+            await get_tree().process_frame
+        get_tree().paused = true
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        var result := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+        print("EXPEDITION_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", result)
+        scene.queue_free()
+        await get_tree().process_frame
+    get_tree().quit(0)

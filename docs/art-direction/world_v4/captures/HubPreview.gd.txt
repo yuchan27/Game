@@ -1,0 +1,98 @@
+extends Node
+
+# Ordinary isolated art states only: no interactions, resets, rewards or saves.
+func _ready() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false):
+        push_error("Use an isolated art project with dedicated custom user data.")
+        get_tree().quit(2)
+        return
+    var output := ""
+    var selected := PackedStringArray()
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--art-output="):
+            output = argument.trim_prefix("--art-output=")
+        elif argument.begins_with("--art-view="):
+            selected = argument.trim_prefix("--art-view=").split(",", false)
+    if output.is_empty() or not output.is_absolute_path():
+        push_error("Pass an absolute --art-output directory.")
+        get_tree().quit(2)
+        return
+    DirAccess.make_dir_recursive_absolute(output)
+    print("HUB_ART_VIEWPORT: ", get_viewport().get_visible_rect().size)
+    var views = [
+        ["village-centre", "village", Vector2(1248,920)],
+        ["village-forge", "village", Vector2(1148,450)],
+        ["village-craft", "village", Vector2(580,730)],
+        ["village-shop", "village", Vector2(1710,730)],
+        ["village-mod", "village", Vector2(620,1210)],
+        ["village-recycle", "village", Vector2(1148,1260)],
+        ["village-save", "village", Vector2(1660,1210)],
+        ["village-guild-entrance", "village", Vector2(1960,980)],
+        ["village-north-route", "village", Vector2(1148,250)],
+        ["village-west-route", "village", Vector2(330,980)],
+        ["village-water-dry", "village", Vector2(1410,1020)],
+        ["village-water-restored-staged", "village", Vector2(1410,1020), true],
+        ["guild-centre", "guild", Vector2(660,470)],
+        ["guild-contract", "guild", Vector2(360,470)],
+        ["guild-reward", "guild", Vector2(580,355)],
+        ["guild-departure", "guild", Vector2(980,620)],
+        ["guild-return", "guild", Vector2(660,800)],
+        ["highway-convoy-control", "wasteland", Vector2(0.5,0.60453869), false, "scrap_highway"],
+        ["marsh-yard-control", "wasteland", Vector2(0.37445913,0.85358696), false, "toxic_marsh"],
+        ["factory-yard-control", "wasteland", Vector2(0.39628348,0.87020952), false, "old_factory"]
+    ]
+    for view: Array in views:
+        if not selected.is_empty() and not view[0] in selected:
+            continue
+        get_tree().paused = false
+        GameState.active_quest_id = ""
+        GameState.quest_progress = {}
+        GameState.completed_quests.clear()
+        if view.size() > 3 and view[3]:
+            GameState.completed_quests.append("facility_memory")
+        GameState.active_spawn_point = "default"
+        GameState.current_route_id = "scrap_highway"
+        if view.size() > 4:
+            GameState.current_route_id = view[4]
+        var scene = load("res://scenes/levels/%s/%s.tscn" % [view[1], String(view[1]).capitalize()]).instantiate()
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        var actor = get_tree().get_first_node_in_group("map_player")
+        if actor == null:
+            push_error("Hub art scene did not create its player: " + String(view[0]))
+            get_tree().quit(2)
+            return
+        actor.global_position = view[2] * scene.world_size + Vector2(-100,-100) if view[1] == "wasteland" else view[2]
+        actor.reset_physics_interpolation()
+        var camera = actor.get_node("Camera2D")
+        camera.position_smoothing_enabled = false
+        camera.reset_smoothing()
+        camera.force_update_scroll()
+        # Allow broadphase overlap notifications to settle before freezing the art state.
+        for frame in range(4):
+            await get_tree().physics_frame
+        await get_tree().process_frame
+        if not String(view[0]).ends_with("centre"):
+            var notice = scene.find_child("NoticeLabel", true, false)
+            if notice != null:
+                notice.hide()
+        get_tree().paused = true
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png(output.path_join(String(view[0]) + ".png"))
+        print("HUB_ART_FRAME: ", view[0], " camera=", camera.get_screen_center_position(), " zoom=", camera.zoom)
+        if view[1] == "wasteland":
+            print("HUB_CONTROL_ROUTE: ", scene.route_id)
+        for station in get_tree().get_nodes_in_group("map_station"):
+            var source_id = String(station.get_meta("structure_asset_id", ""))
+            for child in station.get_children():
+                if child is Sprite2D:
+                    print("HUB_SOURCE: ", source_id, " atlas=", child.texture is AtlasTexture,
+                        " crop=", child.texture.region if child.texture is AtlasTexture else Rect2(),
+                        " contact=", child.material.get_shader_parameter("ground_contact_enabled") if child.material is ShaderMaterial else false)
+        scene.queue_free()
+        await get_tree().process_frame
+    get_tree().quit()

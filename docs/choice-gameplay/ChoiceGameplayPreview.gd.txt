@@ -1,0 +1,321 @@
+extends Node
+
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const OUTPUT_ARGUMENT_PREFIX := "--choice-output="
+const VIEWS_ARGUMENT_PREFIX := "--choice-views="
+const WASTELAND_SCENE_PATH := "res://scenes/levels/wasteland/Wasteland.tscn"
+const CAMPAIGN_SCRIPT := preload("res://scripts/systems/CampaignProgress.gd")
+const CHOICE_VIEWS: Array[String] = ["ch1b-choice", "ch2b-choice"]
+const ACTION_VIEWS: Array[String] = ["ch2b-settling", "ch2b-purge"]
+const ALL_VIEWS: Array[String] = [
+	"ch1b-choice",
+	"ch2b-choice",
+	"ch2b-settling",
+	"ch2b-purge"
+]
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+
+func _capture() -> void:
+	# Capture native game UI with synthetic RAM only; keep the real save location isolated.
+	SceneRouter.transition_active = false
+	get_tree().paused = true
+
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this choice presentation fixture only from its isolated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_dir := _read_argument(OUTPUT_ARGUMENT_PREFIX)
+	if output_dir.is_empty() or not output_dir.is_absolute_path():
+		push_error("Pass an absolute --choice-output= directory as a user argument.")
+		get_tree().quit(2)
+		return
+
+	var selected_views := _read_views()
+	if not bool(selected_views.get("ok", false)):
+		push_error(String(selected_views.get("error", "Invalid choice gameplay view selection.")))
+		get_tree().quit(2)
+		return
+
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_dir)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested choice presentation directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	var views: Array[String] = selected_views["views"]
+	for view_name: String in views:
+		get_tree().paused = true
+		var capture_ok := await _capture_view(view_name, output_dir)
+		get_tree().paused = true
+		if not capture_ok:
+			get_tree().quit(3)
+			return
+
+	get_tree().quit(0)
+
+
+func _read_argument(prefix: String) -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(prefix):
+			return argument.trim_prefix(prefix)
+	return ""
+
+
+func _read_views() -> Dictionary:
+	var raw_selection := _read_argument(VIEWS_ARGUMENT_PREFIX)
+	if raw_selection.is_empty():
+		return {"ok": true, "views": ALL_VIEWS.duplicate()}
+
+	var views: Array[String] = []
+	for raw_name: String in raw_selection.split(",", false):
+		var view_name := raw_name.strip_edges()
+		if not ALL_VIEWS.has(view_name):
+			return {"ok": false, "error": "Unknown choice gameplay view: %s" % view_name}
+		if not views.has(view_name):
+			views.append(view_name)
+	if views.is_empty():
+		return {"ok": false, "error": "The --choice-views= list is empty."}
+	return {"ok": true, "views": views}
+
+
+func _capture_view(view_name: String, output_dir: String) -> bool:
+	if not _stage_gameplay_memory(view_name):
+		return false
+
+	var packed_scene := load(WASTELAND_SCENE_PATH) as PackedScene
+	if packed_scene == null:
+		push_error("Could not load the native wasteland scene for choice presentation.")
+		return false
+	var scene_root: Node = packed_scene.instantiate()
+	scene_root.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(scene_root)
+	get_tree().current_scene = scene_root
+	var disabled_actor_count := _disable_actor_physics(scene_root)
+	await _wait_process_frames(4)
+
+	var hud := scene_root.find_child("HUD", true, false)
+	var player := scene_root.find_child("Player", true, false) as Node2D
+	if hud == null or player == null:
+		push_error("The frozen native wasteland scene did not create its HUD and player for %s." % view_name)
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	_prepare_hud_notice(hud)
+
+	var presentation_ok := false
+	if CHOICE_VIEWS.has(view_name):
+		presentation_ok = await _present_choice_view(view_name, scene_root, hud, player)
+	else:
+		presentation_ok = _present_action_view(view_name, scene_root, player)
+	if not presentation_ok:
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	print("ART_CHOICE_STATE: ", view_name, " synthetic_ram_only=true; native_scene_frozen=true; actor_physics_disabled=", disabled_actor_count, "; no selection input, action update/completion, reward, settlement, or SaveManager IO")
+	await _wait_process_frames(2)
+	_print_layout(view_name, hud, scene_root)
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	scene_root.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+
+func _stage_gameplay_memory(view_name: String) -> bool:
+	GameState._expedition.clear()
+	GameState.completed_quests.clear()
+	GameState.talked_npcs.clear()
+	GameState.route_states = {}
+	GameState.death_pending = false
+	GameState.hp = GameState.get_max_hp()
+	GameState.ep = GameState.get_max_ep()
+	GameState.active_spawn_point = "saved"
+
+	var quest_id := "clear_scrap_route" if view_name == "ch1b-choice" else "toxic_sample"
+	var outing_id := "ch1b_route_coupling" if view_name == "ch1b-choice" else "ch2b_first_flush"
+	var choice_action_id := "ch1b_return_route" if view_name == "ch1b-choice" else "ch2b_flush_plan"
+	var selected_choice_id := ""
+	var runtime_action_id := choice_action_id
+	if view_name == "ch2b-settling":
+		selected_choice_id = "ch2b_settle_sample"
+		runtime_action_id = "ch2b_open_return_valve"
+	elif view_name == "ch2b-purge":
+		selected_choice_id = "ch2b_purge_air"
+		runtime_action_id = "ch2b_open_return_valve"
+
+	var quest := DataRegistry.get_quest(quest_id)
+	var outings: Array = quest.get("campaign_outings", [])
+	var current_outing: Dictionary = outings[1] if outings.size() > 1 and outings[1] is Dictionary else {}
+	if quest.is_empty() or current_outing.is_empty() or String(current_outing.get("id", "")) != outing_id:
+		push_error("The authored campaign data is missing the requested second outing: %s." % outing_id)
+		return false
+	var route_id := String(quest.get("route", ""))
+	if route_id.is_empty():
+		push_error("The authored campaign quest has no route: %s." % quest_id)
+		return false
+
+	var campaign_state: Dictionary = CAMPAIGN_SCRIPT.new_state()
+	campaign_state["outing_index"] = 1
+	var previous_outing: Dictionary = outings[0]
+	var committed_actions: Dictionary = campaign_state.get("actions", {})
+	for raw_action in previous_outing.get("actions", []):
+		if raw_action is Dictionary:
+			committed_actions[String(raw_action.get("id", ""))] = "done"
+	campaign_state["actions"] = committed_actions
+	GameState.active_quest_id = quest_id
+	GameState.quest_progress = {"campaign": campaign_state}
+	GameState.current_route_id = route_id
+	GameState.current_scene_id = "wasteland"
+	GameState._expedition.begin(route_id, quest_id)
+	GameState._expedition.active["campaign_outing"] = outing_id
+	var provisional_actions: Dictionary = {}
+	var runtime_progress := {"started": true}
+	if ACTION_VIEWS.has(view_name):
+		provisional_actions[choice_action_id] = selected_choice_id
+		runtime_progress["elapsed"] = 1.5
+	var campaign_runtime: Dictionary = {}
+	campaign_runtime[runtime_action_id] = runtime_progress
+	GameState._expedition.active["campaign_actions"] = provisional_actions
+	GameState._expedition.active["campaign_runtime"] = campaign_runtime
+	GameState._expedition.active["haul"] = {}
+
+	var route := DataRegistry.get_wasteland_route(route_id)
+	var params: Dictionary = DataRegistry.map_params
+	var tile_size := int(params.get("tile_size", 32))
+	var size_tiles: Array = route.get("size_tiles", [180, 140])
+	GameState.player_position = Vector2(float(int(size_tiles[0]) * tile_size) * 0.5, float(int(size_tiles[1]) * tile_size) * 0.62)
+	print("ART_CHOICE_STAGE: ", view_name, " quest=", quest_id, " outing=", outing_id, " outing_index=1 (display ordinal 2/", outings.size(), ") action=", runtime_action_id, " selected=", selected_choice_id, " elapsed=", 1.5 if ACTION_VIEWS.has(view_name) else 0.0, "; previous outing staged done in RAM only; no SaveManager IO")
+	return true
+
+
+func _present_choice_view(view_name: String, scene_root: Node, hud: Node, player: Node2D) -> bool:
+	var action_id := "ch1b_return_route" if view_name == "ch1b-choice" else "ch2b_flush_plan"
+	var action := _find_campaign_action(scene_root, action_id)
+	if action == null:
+		push_error("The frozen wasteland scene did not create choice action %s." % action_id)
+		return false
+	_position_player_near_action(player, action)
+	_prepare_player_camera(player, player.global_position)
+	if not hud.has_method("_sync_campaign_choice"):
+		push_error("The native HUD choice presentation helper is unavailable.")
+		return false
+	hud.call("_sync_campaign_choice")
+	await _wait_process_frames(2)
+	var choice_panel := hud.get("campaign_choice_panel") as Control
+	if choice_panel == null or not choice_panel.visible:
+		push_error("The native campaign choice panel did not become visible for %s." % action_id)
+		return false
+	return true
+
+
+func _present_action_view(view_name: String, scene_root: Node, player: Node2D) -> bool:
+	var action := _find_campaign_action(scene_root, "ch2b_open_return_valve")
+	if action == null:
+		push_error("The frozen wasteland scene did not create campaign action ch2b_open_return_valve.")
+		return false
+	_position_player_near_action(player, action)
+	_prepare_player_camera(player, player.global_position)
+	if action.has_method("_refresh_status_display"):
+		action.call("_refresh_status_display")
+	if not action.has_method("presentation_state"):
+		push_error("The native CampaignAction presentation helper is unavailable.")
+		return false
+	var progress_state: Dictionary = action.call("presentation_state")
+	var status_label := action.get("_status_label") as Label
+	var selected_choice := GameState.campaign_selected_choice("ch2b_flush_plan")
+	print("ART_CHOICE_ACTION: ", view_name, " action_state=", progress_state, " selected_choice=", selected_choice, " label_visible=", status_label.visible if status_label != null else false, "; presentation only, no input or action callback")
+	return true
+
+
+func _find_campaign_action(scene_root: Node, action_id: String) -> Node:
+	for candidate: Node in get_tree().get_nodes_in_group("campaign_action"):
+		if scene_root.is_ancestor_of(candidate) and String(candidate.get_meta("campaign_action_id", "")) == action_id:
+			return candidate
+	return null
+
+
+func _position_player_near_action(player: Node2D, action: Node) -> void:
+	if not (action is Node2D):
+		return
+	player.global_position = (action as Node2D).global_position + Vector2(-76.0, 54.0)
+	player.reset_physics_interpolation()
+
+
+func _prepare_player_camera(player: Node2D, player_position: Vector2) -> void:
+	player.global_position = player_position
+	player.reset_physics_interpolation()
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera != null:
+		camera.process_mode = Node.PROCESS_MODE_ALWAYS
+		camera.position_smoothing_enabled = false
+		camera.make_current()
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+
+
+func _disable_actor_physics(scene_root: Node) -> int:
+	var count := 0
+	for actor: Node in scene_root.find_children("*", "CharacterBody2D", true, false):
+		actor.set_physics_process(false)
+		count += 1
+	return count
+
+
+func _prepare_hud_notice(hud: Node) -> void:
+	var notice_timer := hud.get("notice_timer") as Timer
+	if notice_timer != null:
+		notice_timer.stop()
+	if hud.has_method("_update_notice_visibility"):
+		hud.call("_update_notice_visibility")
+	var notice_label := hud.get("notice_label") as Label
+	if notice_label != null:
+		notice_label.visible = false
+
+
+func _print_layout(view_name: String, hud: Node, scene_root: Node) -> void:
+	if CHOICE_VIEWS.has(view_name):
+		var panel := hud.get("campaign_choice_panel") as Control
+		var scroll := panel.find_child("CampaignChoiceOptionsScroll", true, false) as ScrollContainer if panel != null else null
+		var options := hud.get("campaign_choice_options") as Control
+		var panel_rect := panel.get_global_rect() if panel != null else Rect2()
+		var scroll_rect := scroll.get_global_rect() if scroll != null else Rect2()
+		print("ART_CHOICE_LAYOUT: ", view_name, " scene=", scene_root.name, " panel_visible=", panel.visible if panel != null else false, " panel_rect=", panel_rect, " options_rect=", scroll_rect, " option_count=", options.get_child_count() if options != null else 0, " choice=", GameState.campaign_choice_state().get("action_id", ""))
+		return
+
+	var action := _find_campaign_action(scene_root, "ch2b_open_return_valve")
+	var progress_state: Dictionary = action.call("presentation_state") if action != null and action.has_method("presentation_state") else {}
+	var status_label := action.get("_status_label") as Label if action != null else null
+	var label_rect := status_label.get_global_rect() if status_label != null else Rect2()
+	var action_position := (action as Node2D).global_position if action is Node2D else Vector2.ZERO
+	print("ART_CHOICE_LAYOUT: ", view_name, " scene=", scene_root.name, " action_position=", action_position, " status_rect=", label_rect, " status_visible=", status_label.visible if status_label != null else false, " status_text=", status_label.text if status_label != null else "", " elapsed=", progress_state.get("value", 0.0), " maximum=", progress_state.get("maximum", 0.0), " progress_text=", progress_state.get("progress_text", ""), " selected=", GameState.campaign_selected_choice("ch2b_flush_plan"))
+
+
+func _wait_process_frames(count: int) -> void:
+	for frame_index in range(count):
+		await get_tree().process_frame
+
+
+func _write_view_image(view_name: String, output_dir: String) -> bool:
+	await _wait_process_frames(8)
+	await RenderingServer.frame_post_draw
+	var viewport := get_viewport()
+	var image := viewport.get_texture().get_image()
+	var output_path := output_dir.path_join(view_name + ".png")
+	var save_error := image.save_png(output_path)
+	print("ART_CHOICE_FRAME: ", view_name, "/", viewport.get_visible_rect().size, "/", save_error)
+	if save_error != OK:
+		push_error("Could not save choice gameplay presentation frame %s: %s" % [view_name, save_error])
+		return false
+	return true

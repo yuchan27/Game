@@ -2,11 +2,40 @@
   "npcs": [
     {
       "id": "forge_master",
+      "voice_enabled": false,
       "scene": "village",
       "name": "鍛造老陳",
       "role": "鍛造師",
-      "line": "喂！老兄弟，你總算動起來了！瞧瞧這爐膛……廢鐵要是再斷供，別說你的外骨架，整座村子今晚就得凍僵！別急著去工廠送死，先把二階武裝跟防護甲做出來。至於那些能把巨獸骨頭砸碎的高階重槌，得去公會揭榜！帶上這盒穿甲彈，聽好了……一定要給我活著滾回來！",
-      "repeat_line": "合成台配方：終端操作器＝合金板 x2 + 超導線圈 x2 + 廢鐵 x15（完成後解鎖古代終端 [T] 操作！）；初階護甲＝廢鐵 x12；火花切割斧＝廢鐵 x20 + 污染晶核 x1；中階護甲＝廢鐵 x26 + 污染晶核 x2。",
+      "line": "泵軸和護具都要用料，爐裡的合金不會自己長出來。先接通南門旁路，把能用的廢鐵帶回來；修泵和備戰都得省著用料。",
+      "repeat_line": "配方看工坊清單。想換裝先核對材料，留些能修泵的料。",
+      "story_lines": [
+        {
+          "requires_completed": [
+            "facility_memory"
+          ],
+          "text": "水壓穩住了，流量仍有限。我先把泵軸修到能撐住供水；護具也得留料，不能全拿去打新武器。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_ready": true,
+          "text": "旁路修復條件都齊了，回村或公會交付；艾達只會驗這一小股水，整條舊水路還沒查清。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_campaign_outing": "ch1a_escort_repair",
+          "text": "南門回收隊得先安全抵達，旁路才有機會試運。護送他們到繼電器，再接通旁路；艾達只會測這一小股水。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_campaign_finished": true,
+          "requires_ready": false,
+          "text": "兩趟旁路行動都完成了，不用重接繼電器。原委託若還缺清剿或廢鐵，按【J】核對；巴士名冊是選讀。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "text": "南門旁路要清出道路、帶回廢鐵並接通中繼器。按【J】看進度，別把修泵的料先熔掉。"
+        }
+      ],
       "reward": {
         "ammo": 3
       },
@@ -20,11 +49,28 @@
     },
     {
       "id": "scrap_merchant",
+      "voice_enabled": false,
       "scene": "village",
       "name": "補給商阿洛",
       "role": "商人",
-      "line": "哎唷喂！這不是剛出艙的大英雄嗎？來來來，看看我剛淘到的好貨！荒野上的規矩我只講一次：子彈比命貴，但沒子彈你連半個小時都撐不過去！異變核心我高價拆成晶片，零件彈藥應有盡有。把廢鐵帶夠再出村，我可不想明天在變異怪獸的肚子裡收購你的骨架，聽懂了吧？",
-      "repeat_line": "補給站：廢鐵 x4 → 彈藥 x8。拆解機：異變核心 x1 → 廢鐵 x14 + 污染晶核 x1。改裝站目前只做線圈步槍：廢鐵 x28 + 異變核心 x2。高階外骨架、核心裝甲、酸蝕噴射器和重型拆解槌都不是商店貨。",
+      "line": "庫存我一件件記，不是從荒地憑空變出來。出門前先看彈藥和材料；少帶一份，回程就多一分麻煩。",
+      "repeat_line": "補給站、拆解機和改裝站都在村裡；看交易清單再動手，拆核心前先想想還要不要交任務。",
+      "story_lines": [
+        {
+          "requires_completed": [
+            "facility_memory"
+          ],
+          "text": "水井有水了，貨架可不會跟著補滿。彈藥和零件照庫存算，下一趟出門前先清點。"
+        },
+        {
+          "requires_ready": true,
+          "text": "委託條件都齊了，交付物先別拆解或換掉；回村或公會交件，報酬到手再補你缺的貨。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "text": "南門委託要交十二份廢鐵；先留在背包，別拿去拆解或強化。其他缺項按【J】查看。"
+        }
+      ],
       "reward": {
         "scrap": 6
       },
@@ -38,11 +84,145 @@
     },
     {
       "id": "repair_robot",
+      "voice_enabled": false,
       "scene": "village",
       "name": "醫療維修中樞 艾達",
       "role": "維修智能系統",
-      "line": "系統自檢完成。R-17 先鋒核心體溫穩定，生物神經鏈接已恢復。守護者，如果不幸在外受損，緊急醫療傳送協議會將您安全帶回。存檔信標已經與您的動力源同頻，隨時能為您補充護甲結構。荒原非常危險……請務必平安歸來。",
-      "repeat_line": "操作提醒：按 [Tab]、[C]、[T] 或 [H] 隨時開啟整合面板。村莊古代終端機台因 R-17 神經通訊陣列毀損暫時鎖定；請先至工坊合成【終端操作器】建立同頻協議，方可解鎖全域生態遙測與物資調度！",
+      "line": "我是艾達，村莊的醫療維護智能。R-17 的機體已能行動；我不知道你缺失的記憶。先接通南門旁路，回來讓我驗水。",
+      "repeat_line": "水面清澈不能證明能喝。帶回樣本和採樣位置，我先比對讀數；未驗前，村井仍照配水表取用。",
+      "story_lines": [
+        {
+          "requires_completed": [
+            "facility_memory"
+          ],
+          "text": "中樞修復後，井邊終於能按表穩定接水；水量仍有限，配水表先別撤。你帶回的紀錄只補上一段；我不會把缺失的部分猜成 R-17 的記憶。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "metropolis_archive",
+          "text": "都心底圖和名冊已把受影響街區、缺水戶號與舊供水線對上；艾倫只決定自己的姓名是否公開，柳青姓名留在受限副本。公開本仍列戶號、不列住戶姓名，缺水不再只是一個總數。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "old_factory_core",
+          "text": "污染警報支線已隔離，命令要求複測後重開，卻沒有期限或覆核人；洩壓通道也恢復可控。舊紀錄說明當年處置，不能替今天的水質背書。我會把缺欄如實留在紀錄裡。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "crystal_scar_recon",
+          "text": "南側端點已校準，中繼器也守到回波副本保存。那段訊號只核對了你撐住門扇的時刻；我知道你還想多聽一點，其餘記憶仍缺著，我不能用雜訊補答案。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "toxic_sample",
+          "text": "上游與回流水樣已封存比對，受控回流只取得限量水樣；這些資料只反映取樣時的水路狀況，尚不能判定歷史分流或整線安全。村井配給照舊。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "requires_ready": true,
+          "text": "紀錄、守衛和動力核心的條件都齊了。回村或公會交付後，我才能檢驗重啟後這股有限水流。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "requires_campaign_outing": "ch6a_sensor_review",
+          "text": "先把保存艙警報門檻和新水樣逐項比對，再檢查舊封鎖旗標的複測日期與覆核欄；把缺漏標給我，後續才能按實測決定旁路。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "requires_campaign_outing": "ch6b_supply_test",
+          "text": "上一趟只比對了樣本與舊警報門檻，也標出缺少覆核人的封鎖旗標。這趟再啟動受控旁路、守住取樣時的水壓，並選診療所或蓄水槽優先；交付前配給照舊。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "requires_campaign_finished": true,
+          "requires_ready": false,
+          "text": "警報複測與供水行動都完成了，不用重啟旁路測試。原委託若還缺設施紀錄、首領或動力核心，按【J】核對；交付前村井仍按配水表輪供。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "text": "這趟要讀取中樞紀錄、擊倒守衛並帶回動力核心。按【J】看還缺哪項；交付前，我不能說水已恢復。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "text": "都心委託要找名冊並帶回精密晶片；受影響住戶的配水去向，得和泵站紀錄對照。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "text": "工廠委託要帶回異變核心並擊倒守衛；黑盒是選讀線索，警報紀錄仍要和水路資料分開核對。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "text": "裂隙委託要帶回三枚污染晶核；求救回波是選讀線索，不能代替水質檢測。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "requires_ready": true,
+          "text": "兩枚污染晶核與清剿條件已齊，回村或公會交付。這些材料能修設備；舊帳本與晶核都不能代替水質檢測。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "requires_campaign_outing": "ch2a_sample_taps",
+          "text": "泵站上游與回流端還缺可比對的樣本。先封存上游讀數，再校準回流水樣，把兩處結果帶回來核對分流；村井配給暫時不變。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "requires_campaign_outing": "ch2b_first_flush",
+          "text": "上一趟已封存上游與回流水樣；兩處讀數只能反映取樣時的狀況，不能判定歷史分流或整線安全。這次選沉降或快排，再開回流閥取小樣；村井配給不會改變。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "requires_campaign_finished": true,
+          "requires_ready": false,
+          "text": "兩趟取樣與回流行動都完成了，不必再操作閥門。原委託若還缺晶核或清剿，按【J】核對；帳本是選讀。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "text": "先帶回兩枚污染晶核，清退泵站周邊污染體。晶核用來修設備，帳本能補查分流去向；水質還得另外檢驗。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_ready": true,
+          "text": "旁路條件都齊了，回村或公會交付；我只會確認這一小股水，不會因此判定整條水路安全。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "text": "先接通南門旁路。回村後我會檢驗這一小股水；結果出來前，村井仍照配水表取用。"
+        },
+        {
+          "requires_discovered": {
+            "route": "ruined_metropolis",
+            "event": "story_metropolis_archive"
+          },
+          "text": "都心名冊記下柳青與艾倫抵達避難所，也列出外圍住戶和配水去向。我能把這些名字與泵站紀錄逐項對照。"
+        },
+        {
+          "requires_discovered": {
+            "route": "old_factory",
+            "event": "story_factory_blackbox"
+          },
+          "text": "污染警報後，操作員把處理過的水留給地下避難所；封閉外圍支線的命令沒有指定複測期限與覆核責任，也沒有後續複測紀錄。今天的水質仍要重新檢查。"
+        },
+        {
+          "requires_discovered": {
+            "route": "crystal_scar",
+            "event": "story_crystal_echo"
+          },
+          "text": "回波裡你讓孩子往亮處走，關門訊號到了，門卻仍沒閉合。這補上撤離那一刻；水質與封鎖原因還得各自查清。"
+        },
+        {
+          "requires_discovered": {
+            "route": "toxic_marsh",
+            "event": "story_marsh_ledger"
+          },
+          "text": "手寫帳本記下人員手動分流並關閉外圍支線，沒有後續複測紀錄。我今天仍要重新取樣，才能判斷水質。"
+        },
+        {
+          "requires_completed": [
+            "clear_scrap_route"
+          ],
+          "text": "南門旁路測出一小股安全水，村井壓力緩了些；只驗過這一段，配水表先別撤。下一步查毒沼泵站。"
+        }
+      ],
       "reward": {
         "bio_crystal": 1
       },
@@ -56,11 +236,162 @@
     },
     {
       "id": "wasteland_survivor",
+      "voice_enabled": false,
       "scene": "village",
       "name": "倖存者小隊長 艾倫",
       "role": "前線先鋒",
-      "line": "長官！我是前線巡邏隊長艾倫！看到您重新站起來，弟兄們總算看到了曙光！外圍的毒沼和紫晶裂隙正不斷往村莊壓迫，出發前務必按 M 鍵確認地圖與撤離路線。千萬別在狹窄路口被獸群合圍！我們所有人的身後……全指望您了！",
-      "repeat_line": "裝備路線：村莊能合成二階武器與前三階護甲；要拿三階武器、磁吸拆解器或後三階護甲，就去冒險公會接委託。M 可開地圖確認出口、Boss 與重要事件。",
+      "line": "R-17，我一眼認出你。撤離時你替我和我媽柳青撐住避難門；外圍住戶為何被斷水，我不知道。先接通南門旁路；名冊能補查，記得和不記得的都如實告訴我。",
+      "repeat_line": "我記得你守住那扇門，也記得門外還有人。查清他們後來怎樣了；想不起來的部分，不必硬湊答案。",
+      "story_lines": [
+        {
+          "requires_completed": [
+            "facility_memory"
+          ],
+          "text": "水壓穩了，輪供不用像以前那麼緊。可其他街區還等著查；我們不能只記得自己得救。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "metropolis_archive",
+          "text": "名冊把受影響街區、缺水戶號和舊供水線對上；我的姓名照我自己的選擇處理，媽和其他住戶的姓名留在受限副本。至少那些人不再只是總數；我仍不知道他們後來如何，也不想讓他們的遭遇從紀錄裡消失。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "old_factory_core",
+          "text": "封鎖令把處理水留給避難所、隔離外線，卻沒寫複測期限或覆核人；洩壓通道如今恢復可控。我懂當時的急迫，門外的人卻不能只剩空白；我不會讓這件事再被略過。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "crystal_scar_recon",
+          "text": "我早就知道你救過我們；回波只核對了你撐住門扇、讓我和媽通過的那一刻，沒有補回你的其他記憶。謝謝你一直查，我也想讓門外的人留下可追查的住戶紀錄。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "toxic_sample",
+          "text": "兩處水樣只記下取樣時的水路狀況，不能回答當年如何分流。我和媽得救了；我想知道門外的人後來如何，不想讓他們只剩空白。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "requires_ready": true,
+          "text": "紀錄、守衛和動力核心條件都齊了，回村交付，讓艾達驗水。我想知道你記得的部分；想不起來的事別替誰編答案。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "requires_ready": true,
+          "text": "名冊和委託條件都齊了，回村交付。名冊要補的是被隔離街區的住戶；我早知道自己和媽進了避難所。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "requires_campaign_outing": "ch5b_household_record",
+          "text": "地圖已把缺水街區、戶號和舊供水線對起來。我同意把自己的姓名對回戶號，也由我決定是否公開；現有檔案沒有媽本人同意公開姓名的紀錄，她的姓名留在受限副本。受影響街區、配水線與戶號仍須公開。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "requires_ready": true,
+          "text": "核心和清剿條件都齊了，回村交付；黑盒是選讀線索。下一步還得查外圍街區的名冊。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_ready": true,
+          "text": "南門旁路條件齊了，回來交付，讓艾達驗這股水。名冊能補查，不必把它當成通水的門檻。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_campaign_outing": "ch1b_route_coupling",
+          "text": "上一趟的旁路讀數已帶回，回收隊也在村裡待命。選暴露短路或掩蔽繞道，把替換接頭搬回來；整章交付後，艾達才能驗水並確認村端是否有細流。"
+        },
+        {
+          "requires_ready": true,
+          "text": "委託條件到齊了，回來交付。記得的如實說，想不起來的就留白；外圍住戶還在等答案。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "text": "這趟要讀取中樞紀錄、擊倒守衛並帶回動力核心。把你記得的部分說清楚，缺失的地方不用猜。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "text": "都心委託要核對撤離名冊、受影響街區與配水去向。我和媽的經過我早已說過，這次把其他住戶也查清。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "text": "先清退工廠守衛、帶回核心。若能找到黑盒，把當年的封鎖命令也帶回來；我們還不知道門外住戶經歷了什麼。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "requires_campaign_outing": "ch3a_resonator_sync",
+          "text": "我記得你讓我和媽先過門，卻不知道當時門控收到什麼訊號。到裂隙校準南側端點，再重播關門回波；這只能補上那一刻，不能替你恢復整段記憶。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "requires_campaign_outing": "ch3b_relay_defense",
+          "text": "回波核對了你撐住門讓我和媽通過的那刻，卻沒補回其他記憶；警報來源仍在舊工廠。現在把充能中繼器搬到南側入口，守到回波穩定再撤出。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "requires_campaign_finished": true,
+          "requires_ready": false,
+          "text": "共振校準與中繼器行動都完成了，不必重播回波。原委託若還缺清剿或晶核，按【J】核對；回波仍是選讀。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "text": "裂隙回波是選讀線索；它能核對封門警報，卻不會告訴我們外圍住戶後來如何。別把守門記憶和水路決定混成一件事。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "text": "先把樣本帶回來；分流帳本是選讀線索，可補查外圍支線為何被關，沒找到也能交付委託。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "text": "先接通南門旁路，名冊能之後補查。通水是急事；我的過去不是這份委託的門檻。"
+        },
+        {
+          "requires_discovered": {
+            "route": "underground_facility",
+            "event": "story_facility_memory"
+          },
+          "text": "我聽見你記得的那一段了：你撐住門讓我和媽先走。我還想知道外面住戶後來怎麼了，別替想不起來的事補答案。"
+        },
+        {
+          "requires_discovered": {
+            "route": "ruined_metropolis",
+            "event": "story_metropolis_archive"
+          },
+          "text": "名冊把我和媽抵達避難所的日期，和被封線街區的住戶列在一起。我早知道我們得救；現在終於知道誰被留在外面。"
+        },
+        {
+          "requires_discovered": {
+            "route": "old_factory",
+            "event": "story_factory_blackbox"
+          },
+          "text": "原來警報時先把處理過的水留給避難所，救了裡面的人。可外圍線關上後，沒人回來核對；我得知道門外還有誰。"
+        },
+        {
+          "requires_discovered": {
+            "route": "crystal_scar",
+            "event": "story_crystal_echo"
+          },
+          "text": "我記得那句「門在我這邊」。我當時只顧著等媽媽過來，沒看見你接到了什麼命令。這回我們把兩邊都記下來。"
+        },
+        {
+          "requires_discovered": {
+            "route": "toxic_marsh",
+            "event": "story_marsh_ledger"
+          },
+          "text": "帳本記下手動分流和外圍封線。避難所得救了；失去水的人也不是頁邊的註腳。"
+        },
+        {
+          "requires_discovered": {
+            "route": "scrap_highway",
+            "event": "story_scrap_manifest"
+          },
+          "text": "巴士名冊補了你的護送班次和配水編號；我早在村裡認出你。它還沒寫外圍住戶後來如何。"
+        },
+        {
+          "requires_completed": [
+            "clear_scrap_route"
+          ],
+          "text": "南門旁路帶回一小股安全水，今晚不用再把最後一杯分成兩份。其他街區還等著查，我們不能停在這裡。"
+        }
+      ],
       "reward": {
         "mutant_core": 1
       },
@@ -74,11 +405,162 @@
     },
     {
       "id": "guild_clerk",
+      "voice_enabled": false,
       "scene": "guild",
       "name": "公會職員 米婭",
       "role": "委託管理員",
-      "line": "您好，R-17 閣下！冒險公會的大門永遠為您敞開。外圍的威脅正在急遽升級，失控工廠裡正沉睡著最危險的巨神兵。公會金庫裡封存著前代文明的磁吸拆解器與高階外骨骼，只要您完成獵殺委託，這些就是屬於您的功勳。願榮耀伴隨您的每一步！",
-      "repeat_line": "紫晶裂隙偵查可得中階防護甲；舊工廠核心討伐可得重型拆解槌與高階外骨架；排水站救援訊號可得磁吸拆解器；工廠外圍破壞任務可得酸蝕噴射器與高階核心裝甲。",
+      "line": "我是米婭，管委託，也管路線回報。回程風險沒講清，我不會把水路當安全捷徑；先從南門旁路開始。",
+      "repeat_line": "按【J】核對目前委託；條件到齊後回村或公會交付。路線問赫伯，水樣和讀值交艾達。",
+      "story_lines": [
+        {
+          "requires_completed": [
+            "facility_memory"
+          ],
+          "text": "水路穩住了，配給仍有上限。我會把供水來源和受影響街區一起記進公會檔案，讓村裡知道水從哪來，也記得誰曾失去它。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "metropolis_archive",
+          "text": "都心底圖與名冊已把街區、缺水戶號及舊供水線對上；艾倫的姓名依本人選擇列入公開或受限副本，柳青及其他住戶姓名留在受限副本。公開本仍保留街區、配水線與戶號。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "old_factory_core",
+          "text": "警報支線已隔離；封鎖令把處理水留給避難所並隔離外線，卻沒訂複測期限或覆核人。洩壓通道已恢復可控，我會把舊命令和檢測結果分開記，不將舊令當作水質證明。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "crystal_scar_recon",
+          "text": "共振端點校準與中繼器防守都完成，回波副本核對了門扇關閉前的求救時序。它只留下那一刻的紀錄，不能補回 R-17 其餘記憶；公會會留存原始資料。"
+        },
+        {
+          "requires_active": "",
+          "requires_campaign_completed": "toxic_sample",
+          "text": "上游與回流水樣已完成對照，受控回流只取得限量樣本；這些資料只反映取樣時的水路狀況，不能證明歷史分流或整線安全。公會會保存採樣位置與讀值，供水安全仍待另行檢測。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "requires_ready": true,
+          "text": "設施紀錄、守衛和動力核心的條件都齊了，回村或公會交付。交件後艾達才能檢查水質；水量仍有限。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "requires_ready": true,
+          "text": "名冊、清剿和晶片條件都齊了，回村或公會交付。艾倫早已說過自己的經歷；名冊要補的是受影響街區的住戶。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "requires_campaign_outing": "ch5a_district_map",
+          "text": "受影響戶數只有總數，看不出哪些街區被切斷供水。接通都心底圖，逐戶標出缺水欄和舊供水線，公會才能把求援對上路線。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "requires_campaign_finished": true,
+          "requires_ready": false,
+          "text": "配水圖和名冊行動都完成了，不必重畫或重封存。原委託若還缺都心檔案、清剿或精密晶片，按【J】核對；街區、配水線與戶號仍公開，只有艾倫能決定自己的姓名是否列名，柳青及其他住戶姓名留在受限副本。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "requires_ready": true,
+          "text": "守衛、敵群和兩枚核心的條件都齊了，回村或公會交付。黑盒是選讀線索，沒找到也不會卡住結案。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "requires_campaign_outing": "ch4a_isolate_alarm",
+          "text": "工廠警報支線仍在運作，但舊讀值不能替今天的水質下結論。先隔離分支並保留設定，再讀命令時間與覆核欄，公會才知道這份封鎖有沒有被重新檢查。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "requires_campaign_outing": "ch4b_vent_defense",
+          "text": "上一趟的命令把處理水留給避難所、封住外線，卻沒有複測期限或覆核人；守衛仍照舊程序行動。現在打開洩壓通道並守住，讓旁路水壓回到可控範圍。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "requires_campaign_finished": true,
+          "requires_ready": false,
+          "text": "警報與洩壓行動都完成了，不用重做。原委託若還缺敵群、首領或核心材料，按【J】核對；黑盒是選讀。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "requires_ready": true,
+          "text": "晶核和清剿條件都齊了，回村或公會交付；回波是選讀線索，找到了再帶回來核對。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "requires_ready": true,
+          "text": "兩枚污染晶核與清剿條件已齊，回村或公會交付；帳本是選讀線索，沒找到也能結案。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "requires_ready": true,
+          "text": "南門清路、廢鐵和旁路條件都齊了，回村或公會交付。這股水只供有限應急，還不是全線驗收。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "text": "設施委託要讀取中樞紀錄、擊倒守衛並帶回動力核心；按【J】看目前缺項。交付後艾達才會檢查水質。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "text": "都心委託要核對受影響住戶和配水路線，並完成清剿、晶片條件；按【J】查看還缺哪項。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "text": "工廠委託要清退機械污染體、擊倒核心守衛並交兩枚異變核心；黑盒是選讀，進度按【J】查。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "text": "裂隙委託要帶回三枚污染晶核並清退污染體；求救回波是選讀線索，按【J】核對必做目標。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "text": "毒沼委託要交兩枚污染晶核並清退污染體。分流帳本可補充線索；先按【J】核對材料和清剿進度。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "text": "南門委託要清路、回收廢鐵並接通旁路。巴士名冊是選讀線索；按【J】看交付條件和缺項。"
+        },
+        {
+          "requires_discovered": {
+            "route": "ruined_metropolis",
+            "event": "story_metropolis_archive"
+          },
+          "text": "名冊對上柳青和艾倫抵達避難所，也記下被隔離街區和配水去向。艾倫早已認出 R-17；這次總算能把其他住戶的缺水戶號與配水紀錄補回公會檔案。"
+        },
+        {
+          "requires_discovered": {
+            "route": "old_factory",
+            "event": "story_factory_blackbox"
+          },
+          "text": "黑盒記下操作員在污染警報下先把處理過的水留給避難所，外圍封線沒有指定覆核期限與責任，也沒有後續複測紀錄。這兩件事都得寫進報告。"
+        },
+        {
+          "requires_discovered": {
+            "route": "crystal_scar",
+            "event": "story_crystal_echo"
+          },
+          "text": "回波把孩子的求救聲和工廠封門警報留在同一刻；它核對了你守門，沒說你當時知道多少住戶會斷水。"
+        },
+        {
+          "requires_discovered": {
+            "route": "toxic_marsh",
+            "event": "story_marsh_ledger"
+          },
+          "text": "帳本記下手動分流和外圍支線隔離。接著把分流與受影響住戶對上，免得只剩下一筆晶核回收。"
+        },
+        {
+          "requires_discovered": {
+            "route": "scrap_highway",
+            "event": "story_scrap_manifest"
+          },
+          "text": "巴士名冊核對了 R-17 的護送班次和配水編號；艾倫早已認出你。真正還缺的是外圍住戶後來的紀錄。"
+        },
+        {
+          "requires_completed": [
+            "clear_scrap_route"
+          ],
+          "text": "南門旁路送回一小股艾達測過的安全水，暫時緩解村井壓力；外圍支線是否安全，還沒查完。"
+        }
+      ],
       "reward": {
         "ammo": 4
       },
@@ -92,11 +574,82 @@
     },
     {
       "id": "route_scout",
+      "voice_enabled": false,
       "scene": "guild",
       "name": "路線斥候 赫伯",
       "role": "老斥候",
-      "line": "噓……壓低身子，荒原的風裡到處都是怪物的喘息。聽清楚了，先鋒：南邊的廢鐵公路適合獵殺落單目標，但要是沒穿上中階防護甲、沒備足線圈重箭，千萬不要踏進舊工廠半步！那裡的機械巨獸……一口就能把重甲咬碎。隨時注意你的能量，走吧！",
-      "repeat_line": "推薦流程：先在村裡做火花切割斧、線圈步槍與中階護甲，再接北門或東門任務。北門適合找污染晶核；舊工廠常出現機械污染體與 Boss。高階獎勵不能合成，必須靠公會任務解鎖。",
+      "line": "我看的是去程和回程。按【M】先看出口與標記；進窄道前留意掩體，別讓一包廢料害你找不到回村的路。",
+      "repeat_line": "出發前核對目標和出口。橘色事件標記不是安全訊號；先看掩體，再決定要不要靠近。",
+      "story_lines": [
+        {
+          "requires_completed": [
+            "facility_memory"
+          ],
+          "text": "守衛停了，水壓也穩了些；水量有限，返程仍照標記走。最後一段紀錄不等於全區安全。"
+        },
+        {
+          "requires_ready": true,
+          "text": "委託條件齊了，回村或公會交付；沿走過的路回去，別再為了多清幾隻繞遠。"
+        },
+        {
+          "requires_active": "facility_memory",
+          "text": "設施記錄點和守衛標記分開；兩個都要處理，按【J】看動力核心是否已帶齊。回程出口先看清。"
+        },
+        {
+          "requires_active": "metropolis_archive",
+          "text": "都心委託要核對名冊、清退路上敵人並回收晶片；按【J】看還缺哪項，別偏離回程線。"
+        },
+        {
+          "requires_active": "old_factory_core",
+          "text": "工廠核心守衛有獨立標記；黑盒是選讀線索。先守住回程方向，別為找一段紀錄走進死路。"
+        },
+        {
+          "requires_active": "crystal_scar_recon",
+          "text": "裂隙沿晶脈走；三枚晶核和清剿才是委託條件，求救回波可稍後補查。"
+        },
+        {
+          "requires_active": "toxic_sample",
+          "text": "毒沼先沿棧道看清來路；晶核和清剿是必做，泵站帳本是選讀，別為它繞丟回程。"
+        },
+        {
+          "requires_active": "clear_scrap_route",
+          "text": "南門旁路、清路和廢鐵是必做；巴士名冊能補查。記住進來的路，回程別追著廢料走。"
+        },
+        {
+          "requires_discovered": {
+            "route": "old_factory",
+            "event": "story_factory_blackbox"
+          },
+          "text": "黑盒記下人員的緊急封鎖命令；守衛到現在還照舊規則巡邏。那規矩過時了，鐵拳可沒有。"
+        },
+        {
+          "requires_discovered": {
+            "route": "crystal_scar",
+            "event": "story_crystal_echo"
+          },
+          "text": "裂隙回波把孩子的求救聲和工廠警報留在同一刻；它能指路，卻沒說外圍支線後來如何。"
+        },
+        {
+          "requires_discovered": {
+            "route": "toxic_marsh",
+            "event": "story_marsh_ledger"
+          },
+          "text": "帳本標出被關的外圍支線和泵站去向。路線有了，水樣還得交艾達確認。"
+        },
+        {
+          "requires_discovered": {
+            "route": "scrap_highway",
+            "event": "story_scrap_manifest"
+          },
+          "text": "巴士上的配水編號指向西門泵站；線索帶回村，交艾達和米婭接著查。"
+        },
+        {
+          "requires_completed": [
+            "clear_scrap_route"
+          ],
+          "text": "南門委託已交付，返程標記留下來給下一隊用。接新委託前先核對路線；廢料再多，也不值得繞丟退路。"
+        }
+      ],
       "reward": {
         "scrap": 8
       },

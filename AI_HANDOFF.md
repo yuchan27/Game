@@ -1,36 +1,43 @@
-# Current Technical Handoff (`AI_HANDOFF.md`)
+# Current technical handoff
 
-Updated: 2026-10-21 (Asia/Taipei). This is a bounded snapshot of the completed rework.
+Updated: 2026-10-25 (Asia/Taipei). Read `AGENTS.md` before editing.
 
-## Current Status
+## Goal and workspace
 
-The AAA-Quality Rework and modernization of **廢土回收商 (`Wasteland Recycler`)** on `codex/modernize-wasteland` (Godot `4.6.3.stable.official.7d41c59c4`) is **complete and verified**.
-The integrated 23-step QA pipeline (`scripts/tools/run_qa.py --profile all`) passed 100% (`23 / 23` steps green, exit code `0`, `0` Godot errors) in run `20261021T035004Z-ea851a73`.
+The user wants a coherent story and enjoyable, playable expedition loop before the next broad art pass. Preserve the existing Godot game and complete the current plan incrementally. A final GitHub upload is explicitly authorized, but only after the changed scope and validation are reviewed; never force-push.
 
-## Latest Verified Changes
+- Git/Godot root: `C:\Code\Game\first-game` (`C:\Code\Game` is only the parent workspace).
+- Branch: `codex/story-and-scene-pass`; starting HEAD: `4ab05f086f720273fc78db34d50d423997deb301`.
+- Verified engine: Godot `4.6.3.stable.official.7d41c59c4`.
+- The tree contains extensive existing modifications, deletions, untracked game assets and visual-review history. Preserve it; do not reset, clean, or stage everything with `git add .`.
+- Never read or write the real player save. All journeys use Temp profiles.
+- User project instructions require task subagents to use `gpt-6-luna` / `max`; do not use Gemini or create user-facing side chats.
 
-1. **Documentation & Architecture Specs (`docs/`)**:
-   - Added `docs/REWORK_PLAN.md`, `docs/ASSET_INVENTORY.md`, `docs/ART_BIBLE.md`, `docs/ANIMATION_SPEC.md`, `docs/BIOME_DESIGN.md`, `docs/UI_DESIGN_SYSTEM.md`, `docs/QA_REPORT.md`, and updated `docs/RELEASE_READINESS.md`.
-   - Added project-local subagent definitions in `.agents/agents/` (`art-director`, `lead-developer`, `qa-engineer`).
-2. **Protagonist & 2.5D Pixel-Art Asset Overhaul (`assets/sprites/`)**:
-   - Created 3 protagonist turnaround concepts in `docs/concepts/` and selected **Concept B: R-17 Vanguard (Evolved)**.
-   - Rebuilt `assets/sprites/player/r17_wasteland_8dir_actions.png` (`8064x1024`, 576 unique frames across 8 directions x 9 actions x 8 frames) via `scripts/tools/build_r17_vanguard_8dir_atlas.py`, fixing the static back-row (`up_left`, `up`, `up_right`) leg animation defect.
-   - Overhauled all camp structures, gates, interactive world props, 7 survivor NPCs, 6 mutant enemies + `Waste Titan` boss (`waste_titan.png` and `polluted_enemy_six_types.png` at `672x72`), and 22 weapon/armor/tool icons via `scripts/tools/overhaul_all_visual_assets.py`.
-3. **Biomes, Combat, Weapons & UI/UX (`data/`, `scenes/`, `scripts/`)**:
-   - Expanded `data/maps/wasteland_routes.json` to 6 biomes (`scrap_highway`, `toxic_marsh`, `crystal_scar`, `old_factory`, `ruined_metropolis`, `underground_facility`) with bespoke procedural ground decals in `WorldBackdrop.gd` and landmarks in `Wasteland.gd`.
-   - Expanded `data/items/equipment.json` and `data/items/recipes.json` to 14 melee/ranged weapons with `Lv.1–Lv.5` forging (`weapon_levels` in `GameState.gd`).
-   - Re-enabled 8-directional `WeaponOverlay` and `AttackFlash` in `Player.gd`, added multi-pellet shotgun/acid spread, enemy knockback/stagger (`Enemy.gd`), projectile tracer trails (`Projectile.gd`), and active Dodge/Roll (`dash`).
-   - Upgraded `AudioManager.gd` with 26 synthesized procedural sound profiles, pitch variance, and anti-clipping cooldowns.
-   - Upgraded `HUD.gd`, `Main.gd`, and `WorldMapView.gd` with Wasteland Tactical Pixel UI styling and weapon forging buttons (`鍛造近戰` / `鍛造遠程`).
+## Design contracts
 
-## Validation Evidence
+- Six contracts and twelve authored outings. Chapters 1–4 are available in free order; Chapter 5 follows the first four; Chapter 6 follows Chapter 5.
+- Keep quest/action IDs, prerequisites, reward amounts, one-active-contract behavior, save shape, and settlement rules stable. Preserve optional, discovery-gated evidence.
+- First outings bank haul only on safe extraction; Guild hand-in completes the contract and prevents duplicate rewards.
+- Current story centers on rationed village water, staged sample evidence, Alan's consent-limited archive decision, and a finite-water ending. Do not reveal optional findings before discovery.
+- Continue story/gameplay acceptance before broad art replacement. Do not call target expedition pacing measured.
 
-- **Engine**: `Godot v4.6.3.stable.official.7d41c59c4`
-- **Full QA Pipeline (`run_qa.py --profile all`)**:
-  - Run ID: `20261021T035004Z-ea851a73`
-  - Report: `C:\Users\wuwu6\AppData\Local\Temp\first-game-qa\20261021T035004Z-ea851a73\qa-report.json`
-  - Result: **23 / 23 steps passed** (including headless import, vertical-slice validation, playtest flow, combat/world/UI/save/soak regressions, rendered performance baseline, 11 rendered visual review captures, visual asset audit, and packaged Windows `.exe` verification).
+## Latest verified evidence
 
-## Next Action
+- Current Godot 4.6.3 `visual` QA: **29/29 steps**, source-tree SHA-256 `01b5f899e0f433a7c806eb1b2bcfe38b236fe169dc9c5a25ec316584bf172711`. Visual review **77/77 captures, 320/320 checks**, 0 failures/errors. Cold-narrow output **11/11 captures, 53/53 checks**. Pause and staged death recovery were live-resized from 1280×720 to 800×600; original-size captures reviewed. 800×600 remains candidate physical-window evidence; its content viewport is 1024×768. Report and captures are linked from `docs/SCREEN_STATE_MATRIX.md`.
+- Latest docs/Skills profile before the Chapter 4 wording clarification: `20261025T021833Z-cb858328`, **3/3 steps**, tool tests **25/25**, project-data tests **35/35**, documentation/Skill frontmatter **0 issues**. Report is in `C:\Users\wuwu6\AppData\Local\Temp\first-game-qa\20261025T021833Z-cb858328\qa-report.json`; the later wording and driver bookkeeping edits have not been rerun per the no-new-tests instruction.
+- First-contract isolated GUI journey `FirstChapterCurrentCopy-20261025T002852Z-40e59065`: **109/109 checks** for both Scrap Highway trips, extraction, one-time Guild delivery, isolated checksummed save reload and duplicate-reward prevention. It is an older source snapshot, covers only the covered-long route, and is not human playtesting.
+- Chapter 2 isolated GUI journey `20261025T025900Z-rerun`: **50/50 checks, zero failures**. It completed two outings, the physical purge-air choice, E-held actions, both extractions, return to Guild, optional-ledger readiness without revealing its result, exact hand-in rewards, isolated checksummed save reload, and duplicate-reward prevention. Report: `C:\Users\wuwu6\AppData\Local\Temp\chapter2-journey\20261025T025900Z-rerun\chapter2-journey-report.json`; source-tree hash `67b7cce96b9c60c31ff8ae1144d530e1b1ba5deb43438a2688dd1314f9b939b7`. It used an isolated Temp profile; the real player save was untouched. The report's derived `unverified_branches` field conflicts with the passing optional-ledger checks; that metadata bookkeeping is corrected in the current tree but has not been rerun. The alternate settle-sample choice remains untested.
+- The Chapter 4 factory contract description now explicitly marks its black-box discovery as optional; the required order-reading action remains separate. This player-facing wording edit has not been validated in a fresh run.
+- Detailed current QA and chronological evidence: `docs/QA_REPORT.md`; release limits: `docs/RELEASE_READINESS.md`; current screen coverage: `docs/SCREEN_STATE_MATRIX.md`.
 
-Ready for user review or release tagging. Do not push unless explicitly instructed by the user.
+## Current architecture and safety
+
+Data-driven JSON defines route, action and story progression. `GameState` owns campaign transactions and persistence; `SceneRouter` owns scene transitions; the HUD exposes journal, contract, inventory, workshop, terminal, map and recovery panels. `SaveManager` checksums the encoded JSON payload. Preserve those owners and compatibility while fixing only demonstrated behavior.
+
+`assets/world_v3/` is not used as current runtime data, but current art-direction documents and source snapshots reference it as provenance; retain it unless those records are deliberately migrated. QA copies now skip PNGs and `.png.import` files under `docs/` only; runtime `assets/` PNGs remain included.
+
+## Next actions
+
+1. Continue end-to-end journeys for Chapters 3–6, alternate outcomes, death/partial-return behavior and legacy saves; make further changes only against source evidence.
+2. When tests are authorized again, rerun the Chapter 2 report-bookkeeping correction and Chapter 4 story-copy change, then cover the remaining gameplay and save/IO paths.
+3. Keep full campaign acceptance, human pacing, Windows export, supported-size policy, comparable performance and broad art acceptance open. This is a development checkpoint, not release-ready.

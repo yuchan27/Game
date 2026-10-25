@@ -1,0 +1,121 @@
+extends Node
+
+# Ordinary staged presentation, not a campaign, save/load or input test.
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the isolated presentation project.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--chapter-output="):
+			output = argument.trim_prefix("--chapter-output=")
+	if output.is_empty() or not output.is_absolute_path():
+		push_error("Pass an absolute --chapter-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	for view: String in ["chapter-2", "ending", "journal", "alan", "restored-story", "restored-draft"]:
+		get_tree().paused = true
+		GameState.reset_new_run(false)
+		_stage(view)
+		var restoring := view.begins_with("restored-")
+		SceneRouter.transition_active = restoring
+		var scene = load(SceneRouter.SCENES[GameState.current_scene_id]).instantiate()
+		# Keep actors disabled even while simulating release of the curtain pause.
+		scene.process_mode = Node.PROCESS_MODE_DISABLED
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		var actor = get_tree().get_first_node_in_group("map_player")
+		if actor != null:
+			var camera = actor.get_node("Camera2D")
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+		var hud = get_tree().get_first_node_in_group("hud")
+		for frame in range(4):
+			await get_tree().process_frame
+		if restoring:
+			print("CHAPTER_STAGED_CURTAIN: ", view, " story_visible=", hud.campaign_choice_panel.visible, " draft_visible=", hud.expedition_draft_panel.visible)
+			# Direct completion notification; no scene travel, skip key or disk load.
+			SceneRouter.transition_active = false
+			get_tree().paused = false
+			SceneRouter.transition_finished.emit(true)
+			print("CHAPTER_STAGED_RESTORE: ", view, " paused=", get_tree().paused, " story_owner=", hud._campaign_choice_paused_tree, " draft_owner=", hud._draft_paused_tree)
+		elif view == "journal":
+			hud.call("_set_codex_visible", true)
+			var toggle = hud.codex_list.get_node("ChapterNotes_crystal_scar_recon")
+			toggle.button_pressed = true
+		elif view == "alan":
+			var npc := DataRegistry.get_npc("wasteland_survivor")
+			hud.call("_show_dialogue", npc["name"], npc["role"], GameState.story_dialogue_for_npc(npc) + GameState.campaign_npc_record("wasteland_survivor"))
+		else:
+			var quest_id := "toxic_sample" if view == "chapter-2" else "facility_memory"
+			hud.call("_show_dialogue", "米婭", "委託回報", GameState.quest_completion_report(quest_id))
+		for frame in range(8):
+			await get_tree().process_frame
+		await _image(output, view)
+		if view == "ending":
+			var scroll = hud.dialogue_body.get_parent()
+			scroll.scroll_vertical = int((scroll.get_v_scroll_bar().max_value - scroll.get_v_scroll_bar().page) * 0.5)
+			for frame in range(3):
+				await get_tree().process_frame
+			await _image(output, "ending-consent")
+			scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+			for frame in range(3):
+				await get_tree().process_frame
+			await _image(output, "ending-tail")
+		if view == "journal":
+			var scroll = hud.codex_list.get_parent()
+			scroll.ensure_control_visible(hud.codex_list.get_node("ChapterFieldNotes_crystal_scar_recon"))
+			for frame in range(3):
+				await get_tree().process_frame
+			await _image(output, "journal-chapter")
+		scene.queue_free()
+		await get_tree().process_frame
+	get_tree().quit(0)
+
+func _image(output: String, view: String) -> void:
+	await RenderingServer.frame_post_draw
+	var error := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+	print("CHAPTER_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", error)
+
+func _stage(view: String) -> void:
+	GameState.current_scene_id = "village"
+	var chapter := 2 if view == "chapter-2" else (3 if view == "journal" else (4 if view == "alan" or view.begins_with("restored-") else 6))
+	for quest: Dictionary in DataRegistry.quests:
+		if not bool(quest.get("main_campaign", false)) or int(quest.get("chapter", 0)) > chapter:
+			continue
+		GameState.completed_quests.append(String(quest["id"]))
+		for objective: Dictionary in quest.get("objectives", []):
+			if objective.get("type", "") == "discover" and not bool(objective.get("optional", false)):
+				GameState.discovered_events.append(String(objective["route"]) + ":" + String(objective["event"]))
+		var choices := {}
+		for outing: Dictionary in quest["campaign_outings"]:
+			for action: Dictionary in outing["actions"]:
+				if action.get("type", "") == "choice":
+					choices[action["id"]] = action["options"][1 if quest["id"] == "metropolis_archive" else 0]["id"]
+		var state := {"campaign_completed": quest["id"], "campaign_choices": choices}
+		if quest.has("field_objective"):
+			state["field_objectives"] = {quest["field_objective"]["id"]: true}
+		GameState.route_states[quest["route"]] = state
+	if not view.begins_with("restored-"):
+		return
+	GameState.current_scene_id = "wasteland"
+	GameState.current_route_id = "ruined_metropolis"
+	GameState.active_quest_id = "metropolis_archive"
+	var quest := DataRegistry.get_quest(GameState.active_quest_id)
+	var actions := {}
+	for action: Dictionary in quest["campaign_outings"][0]["actions"]:
+		actions[action["id"]] = "done"
+	GameState.quest_progress = {"campaign": {"version": 1, "outing_index": 1, "actions": actions}}
+	GameState._expedition.begin(GameState.current_route_id, GameState.active_quest_id)
+	GameState._expedition.active["campaign_outing"] = quest["campaign_outings"][1]["id"]
+	GameState._expedition.active["campaign_actions"] = {"ch5b_copy_archive": "done"}
+	if view == "restored-story":
+		GameState._expedition.active["campaign_runtime"] = {"ch5b_record_family": {"started": true}}
+	GameState._expedition.active["pending_draft"] = DataRegistry.get_wasteland_route(GameState.current_route_id)["exploration_points"][0]["draft_id"]

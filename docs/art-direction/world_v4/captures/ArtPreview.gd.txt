@@ -1,0 +1,68 @@
+extends Node
+
+func _ready() -> void:
+    call_deferred("_capture")
+
+func _capture() -> void:
+    # Run only in a mirror with a dedicated application custom user directory.
+    if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false):
+        push_error("World art capture requires an isolated custom user directory.")
+        get_tree().quit(2)
+        return
+    var output_root := ""
+    var requested_view := ""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--art-output="):
+            output_root = argument.trim_prefix("--art-output=")
+        elif argument.begins_with("--art-view="):
+            requested_view = argument.trim_prefix("--art-view=")
+    if output_root.is_empty() or not output_root.is_absolute_path():
+        push_error("Pass --art-output=<absolute output directory> after --.")
+        get_tree().quit(2)
+        return
+    DirAccess.make_dir_recursive_absolute(output_root)
+    print("WORLD_V4_ART: corrected ground scale and oblique rooted architecture")
+    var views = [
+        ["highway-entry", "scrap_highway", Vector2(3584, 4580)],
+        ["highway-convoy", "scrap_highway", Vector2(3584, 3250)],
+        ["toxic-marsh-architecture", "toxic_marsh", Vector2(3061, 3003)],
+        ["crystal-scar-architecture", "crystal_scar", Vector2(4015, 3304)],
+        ["old-factory-architecture", "old_factory", Vector2(4102, 1801)],
+        ["ruined-metropolis-architecture", "ruined_metropolis", Vector2(4333, 2103)],
+        ["underground-facility-architecture", "underground_facility", Vector2(3723, 2164)],
+        ["marsh-pump-landmark", "toxic_marsh", Vector2(3122, 3113)],
+        ["crystal-spire-landmark", "crystal_scar", Vector2(3156, 3701)],
+        ["factory-turbine-landmark", "old_factory", Vector2(3817, 2532)],
+        ["city-archive-landmark", "ruined_metropolis", Vector2(3817, 3192)],
+        ["memory-vault-landmark", "underground_facility", Vector2(3433, 2946)]
+    ]
+    print("WORLD_V4_VIEWPORT: ",get_viewport().get_visible_rect().size)
+    for view in views:
+        if not requested_view.is_empty() and view[0] != requested_view:
+            continue
+        get_tree().paused = false
+        GameState.current_route_id = view[1]
+        GameState.active_spawn_point = "default"
+        var scene = load("res://scenes/levels/wasteland/Wasteland.tscn").instantiate()
+        get_tree().root.add_child(scene)
+        get_tree().current_scene = scene
+        scene.player.position = view[2]
+        scene.player.reset_physics_interpolation()
+        var camera = scene.player.get_node("Camera2D")
+        camera.position_smoothing_enabled = false
+        camera.enabled = false
+        scene._refresh_architecture_occlusion()
+        var notice = scene.find_child("NoticeLabel", true, false)
+        if notice != null:
+            notice.hide()
+        await get_tree().process_frame
+        get_tree().paused = true
+        if notice != null:
+            notice.hide()
+        get_viewport().canvas_transform = Transform2D(Vector2(1.15, 0), Vector2(0, 1.15), get_viewport().get_visible_rect().size * 0.5 - view[2] * 1.15)
+        await get_tree().process_frame
+        await RenderingServer.frame_post_draw
+        get_viewport().get_texture().get_image().save_png(output_root.path_join(view[0] + ".png"))
+        scene.queue_free()
+        await get_tree().process_frame
+    get_tree().quit()

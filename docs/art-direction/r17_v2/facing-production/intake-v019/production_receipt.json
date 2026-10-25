@@ -1,0 +1,170 @@
+{
+  "kind": "built_in_imagegen_and_native_art_production_not_QA",
+  "recorded_utc": "2026-10-24T11:56:17.472531+00:00",
+  "owner": "Codex lead with GPT-6-Luna/max in-session workers; no Gemini",
+  "prompt_record": {
+    "path": "docs/art-direction/r17_v2/facing-production/intake-v019/generation_prompts.json",
+    "sha256": "281938531eb34318831a3f3789387a806e9293ac852b8317adf8d9aa87d6637c"
+  },
+  "raw_source_records": [
+    {
+      "path": "assets/sprites/player/redesign_v2/source/r17_blade_idle_v011.png",
+      "sha256": "adbcab372fca9809574afc90f46d43b0159c8bdbb1bf1d7cb28a16ec2a509604"
+    },
+    {
+      "path": "assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_idle_e22_5_v017.png",
+      "sha256": "b4df7433c2ba92d90e96ecf21188f8621e2042329052ee1a0fc1f8ca8e583a70"
+    },
+    {
+      "path": "assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_idle_e11_25_v019.png",
+      "sha256": "b738ba7663f9f2774a8434b0dc56648134de35da04621513db23a7b76e859e0a"
+    }
+  ],
+  "selected": {
+    "source": "assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_idle_e11_25_v019.png",
+    "source_pixels_unchanged": true,
+    "native_alpha_cutoff": 0.96,
+    "filter": "nearest",
+    "cell": [
+      0,
+      0,
+      1024,
+      1536,
+      616,
+      1337,
+      545,
+      839,
+      1123
+    ],
+    "action": "blade.idle",
+    "nominal_angle": 11.25,
+    "exact_azimuth_certified": false,
+    "root_review": "Opened comparison at288px/96px and actual Player96px/144px, accepted silhouette/grip/body scale for idle only."
+  },
+  "rejected_v018": {
+    "raw_retained_external": true,
+    "image_tool_output_id": "exec-e7e207f8-8366-481a-b7df-08c383db10e4",
+    "sha256": "6207af06a2f24e6e45584a5402e2f4a9bfd86400b7dbf0ec1d2e37cb962151ed",
+    "reason": "Too similar to inactive v017 reference; insufficient shallow perspective change; not registered."
+  },
+  "v019_image_tool_output_id": "exec-8211e7ce-fb10-4277-a2c7-e92b46940922",
+  "coverage": {
+    "shared_complete_base": 8,
+    "blade_idle": 9,
+    "blade_idle_missing": 23,
+    "other_actions_unchanged": true,
+    "full32_and11_actions_complete": false
+  },
+  "comparison_manifest_before_registration_sha256": "9dcba24ddfba5e9366998bd76da2501d956579c4fa59880a1613f7eec323b764",
+  "registered_manifest_sha256": "40c44691d78bf2ce7966ff1e8d5a2c84d6839aaa5dba1bb3e98dc5996076aaa8",
+  "player_source_sha256": "6b5dbb255df45f41f45ba9146eddd2104a7ad7765dc4be583f22c0016ef09ecb",
+  "art_inputs_snapshot": "../../../../choice-gameplay/source_snapshot.json",
+  "renders": [
+    {
+      "image": {
+        "path": "docs/art-direction/r17_v2/facing-production/intake-v019/comparison.png",
+        "sha256": "1856a7359c21056f0552d97dcf259fd4eb1307a0075311df714a0727a8a1f9f4"
+      },
+      "log": {
+        "path": "docs/art-direction/r17_v2/facing-production/intake-v019/comparison.log",
+        "sha256": "5ca77516165106d94707ab351e6514b017953d9fc73bb392080cb9fb58fa8daf"
+      },
+      "exit_code": 0,
+      "exit_observed": true,
+      "scope": "Source-only4columns,288px/96px; labels still describe pre-registration intake."
+    },
+    {
+      "image": {
+        "path": "docs/art-direction/r17_v2/facing-production/intake-v019/actual_player.png",
+        "sha256": "315afce7a31519ec913554fd8f4c7809de14ee85732faee20af32ee97e6a82ed"
+      },
+      "log": {
+        "path": "docs/art-direction/r17_v2/facing-production/intake-v019/actual_player.log",
+        "sha256": "64123d3bddaef553a186a50cda24594d6f342f70e671fad41b429f14a4c18122"
+      },
+      "exit_code": 0,
+      "exit_observed": true,
+      "scope": "Existing native Player frozen,24 figures/12 logged native states,blade idle9/walk8/rifle idle8; no gameplay."
+    }
+  ],
+  "earlier_draft_failures": [
+    {
+      "log": {
+        "path": "docs/art-direction/r17_v2/facing-production/intake-v019/comparison_parse_error.log",
+        "sha256": "c8727633ccbd5b3478e3ef9d1188b78b6de7b8cb4fbe753c50439e7d69ff585c"
+      },
+      "reason": "Undefined preview helper call; removed, blank viewer explicitly stopped; final source after repair retained, failed source snapshot not retained."
+    },
+    {
+      "log": {
+        "path": "docs/art-direction/r17_v2/facing-production/intake-v019/actual_player_parse_error.log",
+        "sha256": "a9c89e9fa0f21066ed5649c4cfb0309b33908a1fd364d66f2a533ecc111dfac8"
+      },
+      "reason": "Variant-inference warning treated as parse error in recipe label; explicit String conversion repaired; blank viewer explicitly stopped."
+    }
+  ],
+  "recipes": [
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/intake-v019/preview/project.godot",
+      "sha256": "427a90ee7a7e1d0b30d3a314e3a6a00296ce1cde89c171cf3f725703c5a7a334"
+    },
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/intake-v019/preview/comparison.gd",
+      "sha256": "a48cfbb36399ac31558c7d39a9da0effce6caa084ffbce6cfd4a25cbf9fdef86"
+    },
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/intake-v019/preview/comparison.tscn",
+      "sha256": "a6bcb8743b983c3a1071cbaccd0fa51846ec95185605c70806c8cfd1b265adf6"
+    },
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/intake-v019/actual_player.gd.txt",
+      "sha256": "06000684bb057f961b2efab7528113db144e38111e13c61d58e890ce24bc024f"
+    },
+    {
+      "path": "docs/art-direction/r17_v2/facing-production/intake-v019/actual_player.tscn.txt",
+      "sha256": "3ebba312d5d05a38d3f622f3b5befd7f1c45a5da5012eaffc2ccf6969e8f3f55"
+    }
+  ],
+  "builder_execution": {
+    "exit_code": 0,
+    "scope": "Actual blade idle request production, not a test suite or generation run. Bracketing uses base8; registered idle extras excluded.",
+    "builder": {
+      "path": "scripts/tools/prepare_r17_facing_batch.py",
+      "sha256": "41d893c48ca16d8165db8097106b2589c67bf51268c249ae1e56b37d9607f579"
+    },
+    "base_count": 8,
+    "active_idle_count": 9,
+    "missing_count": 23,
+    "missing_angles": [
+      22.5,
+      33.75,
+      56.25,
+      67.5,
+      78.75,
+      101.25,
+      112.5,
+      123.75,
+      146.25,
+      157.5,
+      168.75,
+      191.25,
+      202.5,
+      213.75,
+      236.25,
+      247.5,
+      258.75,
+      281.25,
+      292.5,
+      303.75,
+      326.25,
+      337.5,
+      348.75
+    ],
+    "runtime_count_delta": 0,
+    "external_output": "C:\\Users\\wuwu6\\AppData\\Local\\Temp\\r17-idle-remaining-v019-2cc71fb8",
+    "output_hashes": {
+      "batch_requests.json": "190ae9f646604451e1ac313ac0d3a8e15fad43eb7f5e1f20b49242852848843d",
+      "prompts.txt": "105b70ca57572b1a5e66ca4dd0ef9a9aff2bf13d91267f06f8904615b6243a21"
+    }
+  }
+}

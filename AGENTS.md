@@ -1,73 +1,121 @@
 # Wasteland Recycler — agent entrypoint
 
-Godot 4.6.3, PC-first single-player pixel-art pseudo-3D roguelike. Preserve the
-playable loop: village → guild contract → equipment → four wasteland routes →
-combat/events/loot → return → rewards/upgrades/save.
+## Project and policy
 
-## Navigate
+Wasteland Recycler is a PC-first, pixel-art 2.5D expedition roguelite built with Godot
+4.6.3. R-17 prepares in the village and Guild, explores wasteland routes, then returns
+to deliver contracts and keep earned progress.
 
-This directory is both the Git and Godot root. Verify root/status/branch before
-editing; preserve unrelated changes. Read `AI_HANDOFF.md`, `WORKFLOW.md`,
-`project.godot` and the files relevant to the task; discover actual paths.
+This file is the canonical, concise project policy. Current work and evidence live in
+the linked handoff and status documents; do not duplicate dated checkpoints here.
 
-- `scenes/main/`, `scenes/player/`, `scenes/ui/`: application, player and HUD.
-- `scenes/levels/{village,guild,wasteland}/`: shared gameplay loop.
-- `scripts/autoload/`: state, JSON registry, persistence, routing and audio.
-- `scripts/components/`, `scripts/systems/`, `scripts/ui/`: reusable behavior.
-- `data/`: gameplay/art contracts; `assets/`: authored art/audio.
-- `scripts/tests/`, `scenes/tests/`: runners; `scripts/tools/run_qa.py`: safe QA.
+## Start each task
 
-## Engineering and architectural invariants
+- Find the actual Git root and `project.godot`; verify branch, working-tree status, and
+  relevant diffs before editing. Preserve unrelated dirty and untracked work.
+- Read `AI_HANDOFF.md` and the design, workflow, or QA reference relevant to the task.
+  Rediscover the engine version, shell, tools, and local Skills after a checkout or host
+  change; do not assume machine-specific paths or capabilities.
+- Trace the current owner and callers before changing behavior. Use repository-relative
+  paths and Godot `res://` paths in durable source and documentation.
 
-- Use Ponytail: reuse existing code, native Godot features and standard libraries;
-  deliver the smallest complete fix. No speculative refactor or scene rewrite.
-- Preserve the five autoloads, signals and data-driven route/scene architecture.
-- Keep runtime art under `assets/`, preserve R-17 and current authored animation.
-  Art generation is an explicit production operation, not routine QA.
-- Retain save Base64/SHA-256 wrapping and legacy compatibility. Validate before
-  applying state; distinguish a saved position from a scene entrance.
-- One active quest; objective progress belongs to that contract and route;
-  rewards are granted once. Resource counters mirror inventory.
-- Keep PC keyboard/mouse controls. All player-visible text uses Traditional Chinese.
-- Canonical technical instructions/specifications and commit messages use English.
-  Traditional Chinese explanations translate them; never create two rule sources.
-
-## Skills and delegation
-
-Read `.agents/skills/<name>/SKILL.md` when its trigger applies. Invoke explicitly
-with `$godot-testing`, etc. Skills describe procedures; this file owns policy.
-
-| Skill | Trigger |
+| Area | Main contents |
 | --- | --- |
-| `godot-development` | Implement gameplay, UI, scene or data behavior. |
-| `godot-testing` | Diagnose failures and produce fresh validation evidence. |
-| `godot-visual-review` | Review art/animation, rendered UI, maps or screenshots. |
-| `godot-safe-refactor` | Change structure while preserving characterized behavior. |
+| `scenes/main`, `scenes/player`, `scenes/ui` | Startup, player, HUD, and screens |
+| `scenes/levels` | Village, Guild, and wasteland routes |
+| `scripts/autoload` | Shared state, data registry, saves, routing, and audio |
+| `scripts/components`, `scripts/systems`, `scripts/ui` | Gameplay behavior and presentation |
+| `data` and `assets` | Authored gameplay contracts and runtime art |
+| `scripts/tests`, `scenes/tests` | Existing validators and regression runners |
+| `docs` | Design, workflow, status, QA evidence, and handoff |
 
-For structural exploration use the installed `codebase-memory` skill; if there is
-no current index, inspect source and disclose the coverage limit. Delegate useful
-independent tasks with exclusive file ownership; integrate and test the combined
-state. All subagents use `gpt-6-luna` with `max` reasoning. Do not create additional
-user chats or change global Codex configuration.
+## Engineering and compatibility
 
-## Validation, safety and Definition of Done
+- Apply Ponytail: make the smallest complete change. Reuse current scenes, signals,
+  services, data contracts, and native Godot features. Avoid speculative refactors, duplicated
+  behavior, scene rewrites, and routine regeneration or overwriting of authored art.
+- Preserve the five autoload owners and the data-driven route/scene architecture. Keep
+  PC-first keyboard and mouse behavior unless the user requests otherwise; preserve
+  R-17's established identity and art direction.
+- Preserve quest, outing, and action IDs; prerequisites; campaign states; reward
+  quantities; and one-active-quest behavior. Rewards and expedition progress must follow
+  current transaction rules. Do not change these contracts to improve copy or
+  presentation.
+- Preserve the existing save format and legacy behavior. `SaveManager` wraps JSON
+  payloads in Base64 with a SHA-256 checksum, and `GameState` validates payloads before
+  applying them. Any format change requires backward compatibility or an explicit
+  migration plan.
+- Player-facing text is Traditional Chinese. Canonical technical rules, specifications,
+  and developer instructions are English; add Traditional Chinese explanations when
+  useful without creating a competing policy source.
+- Derive controls from the current `InputMap`. Read viewport settings from
+  `project.godot`; keep the screen/state inventory in `docs/SCREEN_STATE_MATRIX.md`
+  current when UI changes. Record reachability, input paths, viewport coverage,
+  evidence, and open gaps. A screenshot alone does not prove interaction or adaptation.
 
-Follow risk-based validation in `WORKFLOW.md`. Discover the installed executable
-and verify `--version`. Isolate QA saves/output; never run writing tests against
-player progress. Headless rendering cannot prove visual correctness. Record
-commands, exit statuses, runtime errors, failures and skipped checks honestly.
+## Skills and AI tools
 
-Never discard dirty work, expose/commit secrets, rewrite history, force push,
-regenerate/overwrite authored assets without authorization, modify other projects,
-or recursively delete directories/bulk-delete files. Delete at most one confirmed
-absolute file path at a time. Do not push without explicit user instruction and
-never rewrite remotes as routine setup. Commit only authorized, verified scoped
-changes; required validation failures block committing the affected change.
+- Check the current host's available-Skill catalog, then inspect and follow the
+  applicable `.agents/skills/<name>/SKILL.md`. Repository Skills are procedures, not
+  proof that another host auto-discovers or supports them.
+- For structural exploration, use the `codebase-memory` Skill when available: search the
+  graph, check exact-path coverage, and inspect current source directly if coverage is
+  stale or incomplete. If the tool is unavailable, continue with local source
+  inspection.
+- Use in-session subagents for independent, delegable work. Assign distinct file
+  ownership and use `gpt-6-luna` with `max` reasoning when task-level selection is
+  available. Do not create extra user chats or change global model/tool settings.
+- Do not send project content to external AI services, including Gemini or Antigravity,
+  unless the user explicitly authorizes that transfer.
 
-Done means acceptance criteria satisfied, integrated behavior exercised, relevant
-checks executed, no known critical regression, and concise evidence/limitations
-in `AI_HANDOFF.md`. A plan or generated code alone is incomplete.
+## Validation and evidence
 
-References: `WORKFLOW.md` (lifecycle), `docs/PROJECT_AUDIT.md` (starting evidence),
-`docs/GAMEPLAY_ROADMAP.md` (priorities), `docs/RELEASE_READINESS.md` (fresh results),
-`docs/DEVELOPER_GUIDE.zh-TW.md` (human guide), `docs/PLAYTEST_CHECKLIST.md` (manual QA).
+- Choose checks by risk. For documentation-only work, review the diff and linked
+  references, and run `python scripts/tools/run_qa.py --profile docs` or the specific
+  docs/Skill-frontmatter validator. Full Godot QA is not required for prose-only
+  changes.
+- For data, scenes, scripts, or assets, run the relevant existing validators and QA
+  profiles after edits settle. Inspect logs and reports even when the process exits
+  successfully.
+- The QA launcher uses an isolated project mirror and user-data directory. Never run
+  writing checks against the player's real `user://save_game.json`; do not overwrite
+  repository reports or authored assets during validation.
+- Verify the installed Godot version before engine checks. For visual acceptance, open
+  and inspect full-resolution captures and exercise the real player path. Headless
+  output or a staged UI preview cannot prove visual correctness or reachability.
+- Report exact commands, runtime, result, and limitations. Distinguish source review,
+  automated interaction, visual review, and release evidence. Never claim a check passed
+  if it did not run.
+
+## Safety and Definition of Done
+
+- Preserve dirty and untracked work; do not reset, clean, or discard it. Do not expose
+  secrets, rewrite Git history, force-push, alter unrelated projects, or change global settings to work around missing
+  tools.
+- Commit only reviewed, authorized paths. Do not push without explicit user
+  authorization. Avoid irreversible operations without authorization. For requested
+  cleanup, confirm references and delete only one confirmed
+  absolute file per operation; never bulk-delete files or directories.
+- A task is done when its acceptance criteria are implemented, relevant checks have run
+  in isolation, changed outputs and diffs have been reviewed, and handoff/status records
+  match actual behavior and remaining limitations. Do not label the full game complete
+  or release-ready while required work remains unverified.
+
+## Canonical references
+
+- [Development lifecycle](WORKFLOW.md)
+- [Current handoff](AI_HANDOFF.md)
+- [Production status and priorities](docs/PRODUCTION_STATUS.md)
+- [QA evidence](docs/QA_REPORT.md)
+- [Game design and campaign rules](docs/GAME_DESIGN.md)
+- [Story and scenes](docs/STORY_AND_SCENES.md)
+- [Screen/state acceptance inventory](docs/SCREEN_STATE_MATRIX.md)
+- [Release readiness](docs/RELEASE_READINESS.md)
+- [Art direction](docs/art-direction/README.md)
+
+### 繁體中文摘要
+
+本文件是精簡的英文技術規範入口；目前進度、流程與驗證證據請看連結文件。
+修改前先確認專案根目錄、Git 狀態與相關來源，保留其他未提交工作。
+維持現有玩法、資料契約、存檔相容性與繁體中文玩家文案；測試使用隔離副本。
+只依實際執行的檢查與可查看的證據回報結果，不把未驗收內容描述成完成。

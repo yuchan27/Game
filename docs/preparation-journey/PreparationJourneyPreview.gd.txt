@@ -1,0 +1,453 @@
+extends Node
+
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const OUTPUT_ARGUMENT_PREFIX := "--prep-output="
+const VIEWS_ARGUMENT_PREFIX := "--prep-views="
+const ROUTE_ID := "scrap_highway"
+const ALL_VIEWS: Array[String] = [
+	"inventory-hub-top",
+	"inventory-hub-tail",
+	"inventory-field-top",
+	"inventory-field-tail",
+	"inventory-legacy-top",
+	"workshop-craft-top",
+	"workshop-craft-tail",
+	"workshop-mod",
+	"workshop-forge",
+	"workshop-perks-top",
+	"workshop-perks-tail",
+	"workshop-recycle",
+	"contract-header",
+	"terminal-header",
+	"codex-header",
+	"recovery-pause",
+	"scan-targets"
+]
+const BASELINE_VIEWS: Array[String] = [
+	"inventory-hub-tail",
+	"workshop-craft-top",
+	"workshop-mod",
+	"workshop-forge",
+	"workshop-perks-top"
+]
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+
+func _capture() -> void:
+	# Clear only the in-memory route guard. No scene transition is requested.
+	SceneRouter.transition_active = false
+	get_tree().paused = true
+
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this presentation fixture only from its isolated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_dir := _read_argument(OUTPUT_ARGUMENT_PREFIX)
+	if output_dir.is_empty() or not output_dir.is_absolute_path():
+		push_error("Pass an absolute --prep-output= directory as a user argument.")
+		get_tree().quit(2)
+		return
+
+	var selected_views := _read_views()
+	if not bool(selected_views.get("ok", false)):
+		push_error(String(selected_views.get("error", "Invalid preparation view selection.")))
+		get_tree().quit(2)
+		return
+
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_dir)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested preparation image directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	var views: Array[String] = selected_views["views"]
+	for view_name: String in views:
+		get_tree().paused = true
+		var capture_ok := false
+		if view_name == "scan-targets":
+			capture_ok = await _capture_scan_view(view_name, output_dir)
+		else:
+			capture_ok = await _capture_village_view(view_name, output_dir)
+		get_tree().paused = true
+		if not capture_ok:
+			get_tree().quit(3)
+			return
+
+	get_tree().quit(0)
+
+
+func _read_argument(prefix: String) -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(prefix):
+			return argument.trim_prefix(prefix)
+	return ""
+
+
+func _read_views() -> Dictionary:
+	var raw_selection := _read_argument(VIEWS_ARGUMENT_PREFIX)
+	if raw_selection.is_empty():
+		return {"ok": true, "views": ALL_VIEWS.duplicate()}
+	if raw_selection == "baseline":
+		return {"ok": true, "views": BASELINE_VIEWS.duplicate()}
+
+	var views: Array[String] = []
+	for raw_name: String in raw_selection.split(",", false):
+		var view_name := raw_name.strip_edges()
+		if not ALL_VIEWS.has(view_name):
+			return {"ok": false, "error": "Unknown preparation view: %s" % view_name}
+		if not views.has(view_name):
+			views.append(view_name)
+	if views.is_empty():
+		return {"ok": false, "error": "The --prep-views= list is empty."}
+	return {"ok": true, "views": views}
+
+
+func _capture_village_view(view_name: String, output_dir: String) -> bool:
+	get_tree().paused = true
+	_stage_inventory_memory()
+
+	var packed_scene: PackedScene = load("res://scenes/levels/village/Village.tscn") as PackedScene
+	if packed_scene == null:
+		push_error("Could not load the native village scene for preparation presentation.")
+		return false
+	var village_scene: Node = packed_scene.instantiate()
+	village_scene.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(village_scene)
+	get_tree().current_scene = village_scene
+
+	# Village._ready() builds the actual player, camera, and HUD. The scene root
+	# stays frozen; the HUD is independently allowed to process while paused.
+	await _wait_process_frames(4)
+	var hud: Node = village_scene.find_child("HUD", true, false)
+	if hud == null:
+		push_error("The native village scene did not create its HUD.")
+		village_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	_prepare_hud_notice(hud)
+	_prepare_player_camera(village_scene, Vector2(1248, 920))
+
+	match view_name:
+		"inventory-field-top", "inventory-field-tail":
+			_stage_field_memory()
+			hud.call("_refresh")
+			hud.call("_set_inventory_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " direct RAM expedition/haul/draft preview; no gameplay interaction or save IO")
+			await _set_scroll_position(hud, "inventory_list", view_name.ends_with("tail"))
+		"inventory-legacy-top":
+			GameState.current_scene_id = "wasteland"
+			GameState._expedition.legacy_trip = true
+			hud.call("_refresh")
+			hud.call("_set_inventory_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " legacy_trip=true in RAM; no synthetic save file or save IO")
+			await _set_scroll_position(hud, "inventory_list", false)
+		"inventory-hub-top", "inventory-hub-tail":
+			hud.call("_set_inventory_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " hub inventory preview; no gameplay interaction or save IO")
+			await _set_scroll_position(hud, "inventory_list", view_name.ends_with("tail"))
+		"workshop-craft-top", "workshop-craft-tail", "workshop-mod", "workshop-forge", "workshop-perks-top", "workshop-perks-tail", "workshop-recycle":
+			var tab := _workshop_tab_for_view(view_name)
+			hud.call("open_workshop", tab)
+			print("PREPARATION_STAGED_STATE:", view_name, " native workshop tab=%s; actions untouched; no save IO" % tab)
+			await _set_scroll_position(hud, "workshop_list", view_name.ends_with("tail") or view_name == "workshop-recycle")
+		"contract-header":
+			hud.call("_set_contract_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " native empty-quest contract header; read-only presentation; no accept/supply/save action")
+			await _set_scroll_position(hud, "contract_list", false)
+		"terminal-header":
+			hud.call("_set_terminal_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " native terminal with available staged item and empty quest; read-only presentation; no supply/save action")
+			await _set_scroll_position(hud, "terminal_list", false)
+		"codex-header":
+			hud.call("_set_codex_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " native starter codex; read-only presentation; no selection/equip action")
+			await _set_scroll_position(hud, "codex_list", false)
+		"recovery-pause":
+			GameState.hp = 0
+			GameState.death_pending = true
+			hud.call("_refresh")
+			hud.call("_set_pause_visible", true)
+			print("PREPARATION_STAGED_STATE:", view_name, " direct RAM recovery/pause presentation; no damage, retry, route, or save callback")
+		_:
+			push_error("Unsupported village preparation view: %s" % view_name)
+			village_scene.queue_free()
+			await get_tree().process_frame
+			get_tree().paused = true
+			return false
+
+	await _wait_process_frames(2)
+	_print_layout(view_name, hud)
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	village_scene.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+
+func _stage_inventory_memory() -> void:
+	GameState._expedition.clear()
+	GameState._last_ammo_spend.clear()
+	GameState.active_quest_id = ""
+	GameState.quest_progress = {}
+	GameState.current_route_id = ROUTE_ID
+	GameState.current_scene_id = "village"
+	GameState.active_spawn_point = "default"
+	GameState.completed_quests.clear()
+	GameState.route_states = {}
+	GameState.discovered_events.clear()
+	GameState.death_pending = false
+	GameState.hp_upgrade_level = 0
+	GameState.ep_upgrade_level = 0
+	GameState.attack_upgrade_level = 0
+	GameState.defense_upgrade_level = 0
+	GameState.hp = GameState.get_max_hp()
+	GameState.ep = GameState.get_max_ep()
+	GameState.upgrade_points = 3
+	GameState.inventory = {
+		"scrap": 32,
+		"ammo": 26,
+		"mutant_core": 3,
+		"bio_crystal": 5,
+		"alloy_plate": 3,
+		"broken_coil": 2,
+		"mutant_herb": 3,
+		"acid_sac": 2,
+		"amethyst_gem": 1,
+		"precision_chip": 1,
+		"dynamo_core": 1,
+		"rust_blade": 1,
+		"spark_cutter": 2,
+		"pipe_rifle": 1,
+		"coil_launcher": 2,
+		"patched_armor": 1,
+		"crystal_guard": 1,
+		"recycler_glove": 1,
+		"terminal_controller": 1
+	}
+	GameState._sync_resource_counters()
+	GameState.equipment = GameState.DEFAULT_EQUIPMENT.duplicate(true)
+	GameState.quick_slots = ["rust_blade", "pipe_rifle", "recycler_glove", "ammo"]
+	GameState.active_quick_slot = 0
+	GameState.weapon_levels = {}
+	GameState.perks = {"arc_overload": 1, "nano_salvage": 1}
+
+
+func _stage_field_memory() -> void:
+	GameState.current_scene_id = "wasteland"
+	GameState._expedition.begin(ROUTE_ID, "")
+	GameState._expedition.active["haul"] = {"ammo": 9, "scrap": 7, "bio_crystal": 1}
+	var route_data: Dictionary = DataRegistry.get_wasteland_route(ROUTE_ID)
+	var draft_ids: Array[String] = []
+	for raw_point: Variant in route_data.get("exploration_points", []):
+		if not raw_point is Dictionary:
+			continue
+		var point: Dictionary = raw_point
+		var draft_id := String(point.get("draft_id", ""))
+		if not draft_id.is_empty():
+			draft_ids.append(draft_id)
+		if draft_ids.size() == 2:
+			break
+	var draft_choices: Dictionary = GameState._expedition.active.get("draft_choices", {})
+	if draft_ids.size() >= 2:
+		draft_choices[draft_ids[0]] = "arc"
+		draft_choices[draft_ids[1]] = "salvage"
+	GameState._expedition.active["draft_choices"] = draft_choices
+	GameState._sync_resource_counters()
+	print("PREPARATION_STAGED_BUILD: route=", ROUTE_ID, " draft_sites=", draft_ids, " packages=arc+salvage; persistent perks remain in GameState.perks")
+
+
+func _workshop_tab_for_view(view_name: String) -> String:
+	match view_name:
+		"workshop-mod":
+			return "mod"
+		"workshop-forge":
+			return "forge"
+		"workshop-perks-top", "workshop-perks-tail":
+			return "perks"
+		"workshop-recycle":
+			return "recycle"
+		_:
+			return "craft"
+
+
+func _prepare_hud_notice(hud: Node) -> void:
+	var notice_timer := hud.get("notice_timer") as Timer
+	if notice_timer != null:
+		notice_timer.stop()
+	if hud.has_method("_update_notice_visibility"):
+		hud.call("_update_notice_visibility")
+	var notice_label := hud.get("notice_label") as Label
+	if notice_label != null:
+		notice_label.visible = false
+
+
+func _prepare_player_camera(scene: Node, player_position: Vector2) -> void:
+	var player := scene.find_child("Player", true, false) as Node2D
+	if player == null:
+		return
+	player.global_position = player_position
+	player.reset_physics_interpolation()
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera != null:
+		camera.process_mode = Node.PROCESS_MODE_ALWAYS
+		camera.position_smoothing_enabled = false
+		camera.make_current()
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+
+
+func _set_scroll_position(hud: Node, list_property: String, to_tail: bool) -> void:
+	var content := hud.get(list_property) as Control
+	if content == null:
+		return
+	var scroll := content.get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	await _wait_process_frames(2)
+	var vertical_bar := scroll.get_v_scroll_bar()
+	var max_scroll := maxf(0.0, vertical_bar.max_value - vertical_bar.page)
+	scroll.scroll_vertical = int(round(max_scroll)) if to_tail else 0
+	await get_tree().process_frame
+
+
+func _capture_scan_view(view_name: String, output_dir: String) -> bool:
+	get_tree().paused = true
+	_stage_inventory_memory()
+	GameState.current_scene_id = "wasteland"
+	GameState.current_route_id = ROUTE_ID
+	GameState.active_quick_slot = 2
+
+	var packed_scene: PackedScene = load("res://scenes/levels/wasteland/Wasteland.tscn") as PackedScene
+	if packed_scene == null:
+		push_error("Could not load the native wasteland scene for scan presentation.")
+		return false
+	var wasteland_scene: Node = packed_scene.instantiate()
+	wasteland_scene.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(wasteland_scene)
+	get_tree().current_scene = wasteland_scene
+	await _wait_process_frames(4)
+
+	var hud: Node = wasteland_scene.find_child("HUD", true, false)
+	var player := wasteland_scene.find_child("Player", true, false) as Node2D
+	if hud == null or player == null:
+		push_error("The frozen native wasteland scene did not create its HUD and player.")
+		wasteland_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	_prepare_hud_notice(hud)
+	var harvest_target: Node2D
+	for candidate: Node in get_tree().get_nodes_in_group("harvestable_node"):
+		if not is_instance_valid(candidate) or not wasteland_scene.is_ancestor_of(candidate):
+			continue
+		if candidate.is_queued_for_deletion() or not candidate.is_visible_in_tree() or bool(candidate.get("harvested")):
+			continue
+		harvest_target = candidate as Node2D
+		break
+	if harvest_target == null:
+		push_error("The native wasteland scene did not provide a visible unharvested scan target.")
+		wasteland_scene.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	player.global_position = harvest_target.global_position + Vector2(120, 70)
+	player.reset_physics_interpolation()
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera != null:
+		camera.process_mode = Node.PROCESS_MODE_ALWAYS
+		camera.position_smoothing_enabled = false
+		camera.make_current()
+		camera.reset_smoothing()
+		camera.force_update_scroll()
+
+	# These native player helpers only find nearby nodes and draw scan flashes.
+	if wasteland_scene.has_method("_refresh_architecture_occlusion"):
+		wasteland_scene.call("_refresh_architecture_occlusion")
+	# No input, harvest, pickup, claim, or gameplay action callback is invoked.
+	var nearby_targets: Array[Node2D] = player.call("_nearby_salvage_targets")
+	player.call("_present_salvage_scan", nearby_targets)
+	var target_labels: Array[String] = []
+	for target: Node2D in nearby_targets:
+		target_labels.append(String(target.get_meta("map_label", "附近物資")))
+	var flashes: Variant = player.get("_salvage_scan_flashes")
+	if flashes is Array:
+		for raw_flash: Variant in flashes:
+			var flash := raw_flash as Node2D
+			if flash == null:
+				continue
+			flash.process_mode = Node.PROCESS_MODE_DISABLED
+			flash.set("age", float(flash.get("lifetime")) * 0.5)
+			flash.queue_redraw()
+	print("PREPARATION_STAGED_SCAN: selected=", nearby_targets.size(), " map_labels=", target_labels, "; RAM-only scene setup, no collection, loot, or claim")
+	await _wait_process_frames(2)
+	_print_layout(view_name, hud)
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	wasteland_scene.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+
+func _print_layout(view_name: String, hud: Node) -> void:
+	var panel: Control
+	var scroll: ScrollContainer
+	var content_list: Control
+	match view_name:
+		"inventory-hub-top", "inventory-hub-tail", "inventory-field-top", "inventory-field-tail", "inventory-legacy-top":
+			panel = hud.get("inventory_panel") as Control
+			content_list = hud.get("inventory_list") as Control
+		"workshop-craft-top", "workshop-craft-tail", "workshop-mod", "workshop-forge", "workshop-perks-top", "workshop-perks-tail", "workshop-recycle":
+			panel = hud.get("workshop_panel") as Control
+			content_list = hud.get("workshop_list") as Control
+		"contract-header":
+			panel = hud.get("contract_panel") as Control
+			content_list = hud.get("contract_list") as Control
+		"terminal-header":
+			panel = hud.get("terminal_panel") as Control
+			content_list = hud.get("terminal_list") as Control
+		"codex-header":
+			panel = hud.get("codex_panel") as Control
+			content_list = hud.get("codex_list") as Control
+		"recovery-pause":
+			panel = hud.get("pause_panel") as Control
+	if content_list != null:
+		scroll = content_list.get_parent() as ScrollContainer
+	if panel != null:
+		print("PREPARATION_LAYOUT:", view_name, " panel_rect=", panel.get_global_rect(), " panel_minimum=", panel.get_combined_minimum_size())
+	if content_list != null:
+		print("PREPARATION_LAYOUT:", view_name, " list_rect=", content_list.get_global_rect(), " list_minimum=", content_list.get_combined_minimum_size())
+	if scroll != null:
+		var vertical_bar := scroll.get_v_scroll_bar()
+		var horizontal_bar := scroll.get_h_scroll_bar()
+		var vertical_max := maxf(0.0, vertical_bar.max_value - vertical_bar.page)
+		var horizontal_max := maxf(0.0, horizontal_bar.max_value - horizontal_bar.page)
+		print("PREPARATION_LAYOUT:", view_name, " scroll_rect=", scroll.get_global_rect(), " clip=", scroll.clip_contents, " v=", scroll.scroll_vertical, "/", vertical_max, " h=", scroll.scroll_horizontal, "/", horizontal_max)
+
+
+func _wait_process_frames(count: int) -> void:
+	for frame_index in range(count):
+		await get_tree().process_frame
+
+
+func _write_view_image(view_name: String, output_dir: String) -> bool:
+	await _wait_process_frames(8)
+	await RenderingServer.frame_post_draw
+	var viewport := get_viewport()
+	var image := viewport.get_texture().get_image()
+	var output_path := output_dir.path_join(view_name + ".png")
+	var save_error := image.save_png(output_path)
+	print("PREPARATION_FRAME:", view_name, "/", viewport.get_visible_rect().size, "/", save_error)
+	if save_error != OK:
+		push_error("Could not save preparation presentation frame %s: %s" % [view_name, save_error])
+		return false
+	return true

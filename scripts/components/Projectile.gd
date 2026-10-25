@@ -27,7 +27,7 @@ func setup(start: Vector2, dir: Vector2, projectile_damage: int, new_target_grou
 	rotation = direction.angle()
 	hit_enemies.clear()
 	if target_group == "enemy":
-		pierce_remaining = GameState.get_perk_level("armor_piercer")
+		pierce_remaining = GameState.get_effective_perk_level("armor_piercer")
 	else:
 		pierce_remaining = 0
 	queue_redraw()
@@ -97,7 +97,7 @@ func _on_body_entered(body: Node) -> void:
 		hit_enemies.append(body)
 		if body.has_method("take_damage"):
 			body.take_damage(damage, false)
-			if target_group == "enemy" and GameState.has_perk("arc_overload"):
+			if target_group == "enemy" and GameState.has_effective_perk("arc_overload"):
 				_trigger_arc_discharge(body.global_position, body)
 		elif target_group == "player":
 			GameState.take_damage(damage)
@@ -110,7 +110,7 @@ func _on_body_entered(body: Node) -> void:
 		_release()
 
 func _trigger_arc_discharge(origin: Vector2, hit_enemy: Node) -> void:
-	var arc_dmg := 8 + GameState.get_perk_level("arc_overload") * 8
+	var arc_dmg := 8 + GameState.get_effective_perk_level("arc_overload") * 8
 	var struck := 0
 	for other in get_tree().get_nodes_in_group("enemy"):
 		if other == hit_enemy or not (other is Node2D):

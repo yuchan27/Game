@@ -1,0 +1,587 @@
+extends Node
+
+const PREVIEW_USER_DIR_NAME := "R17-Ordinary-Art-Preview-20261023"
+const OUTPUT_ARGUMENT_PREFIX := "--quest-output="
+const VIEWS_ARGUMENT_PREFIX := "--quest-views="
+const HUB_SCENE_PATH := "res://scenes/levels/village/Village.tscn"
+const FIELD_SCENE_PATH := "res://scenes/levels/wasteland/Wasteland.tscn"
+const CAMPAIGN_SCRIPT := preload("res://scripts/systems/CampaignProgress.gd")
+const CITY_QUEST_ID := "metropolis_archive"
+const CITY_CLUE_KEY := "ruined_metropolis:story_metropolis_archive"
+const CITY_CHOICE_ID := "ch5b_record_family"
+const CITY_CHOICE_OPTION_ID := "ch5b_publish_consent"
+const ALL_VIEWS: Array[String] = [
+	"no-active-hub",
+	"highway-first-outing",
+	"city-provisional-field",
+	"city-ready-hub",
+	"legacy-ready-hub",
+	"catalogue-bottom",
+	"expanded-rules"
+]
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_capture")
+
+
+func _input(_event: InputEvent) -> void:
+	get_viewport().set_input_as_handled()
+
+
+func _capture() -> void:
+	SceneRouter.transition_active = false
+	get_tree().paused = true
+
+	var custom_user_dir_enabled := bool(ProjectSettings.get_setting("application/config/use_custom_user_dir", false))
+	var custom_user_dir_name := String(ProjectSettings.get_setting("application/config/custom_user_dir_name", ""))
+	if not custom_user_dir_enabled or custom_user_dir_name != PREVIEW_USER_DIR_NAME:
+		push_error("Run this quest layout fixture only from its isolated custom user directory.")
+		get_tree().quit(2)
+		return
+
+	var output_dir := _read_argument(OUTPUT_ARGUMENT_PREFIX)
+	if output_dir.is_empty() or not output_dir.is_absolute_path():
+		push_error("Pass an absolute --quest-output= directory as a user argument.")
+		get_tree().quit(2)
+		return
+
+	var selected_views := _read_views()
+	if not bool(selected_views.get("ok", false)):
+		push_error(String(selected_views.get("error", "Invalid quest layout view selection.")))
+		get_tree().quit(2)
+		return
+
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(output_dir)
+	if mkdir_error != OK and mkdir_error != ERR_ALREADY_EXISTS:
+		push_error("Could not create the requested quest layout directory: %s" % mkdir_error)
+		get_tree().quit(2)
+		return
+
+	for view_name: String in selected_views["views"]:
+		get_tree().paused = true
+		var capture_ok := await _capture_view(view_name, output_dir)
+		get_tree().paused = true
+		if not capture_ok:
+			get_tree().quit(3)
+			return
+
+	get_tree().quit(0)
+
+
+func _read_argument(prefix: String) -> String:
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with(prefix):
+			return argument.trim_prefix(prefix)
+	return ""
+
+
+func _read_views() -> Dictionary:
+	var raw_selection := _read_argument(VIEWS_ARGUMENT_PREFIX)
+	if raw_selection.is_empty():
+		return {"ok": true, "views": ALL_VIEWS.duplicate()}
+
+	var views: Array[String] = []
+	for raw_name: String in raw_selection.split(",", false):
+		var view_name := raw_name.strip_edges()
+		if not ALL_VIEWS.has(view_name):
+			return {"ok": false, "error": "Unknown quest layout view: %s" % view_name}
+		if not views.has(view_name):
+			views.append(view_name)
+	if views.is_empty():
+		return {"ok": false, "error": "The --quest-views= list is empty."}
+	return {"ok": true, "views": views}
+
+
+func _capture_view(view_name: String, output_dir: String) -> bool:
+	if not _stage_memory(view_name):
+		return false
+
+	var scene_path := FIELD_SCENE_PATH if view_name == "city-provisional-field" else HUB_SCENE_PATH
+	var packed_scene := load(scene_path) as PackedScene
+	if packed_scene == null:
+		push_error("Could not load the native quest layout scene: %s" % scene_path)
+		return false
+
+	var scene_root: Node = packed_scene.instantiate()
+	scene_root.process_mode = Node.PROCESS_MODE_DISABLED
+	get_tree().root.add_child(scene_root)
+	get_tree().current_scene = scene_root
+	var disabled_actor_count := _disable_actor_physics(scene_root)
+	await _wait_process_frames(4)
+
+	var hud := _find_hud(scene_root)
+	var player := _find_player(scene_root)
+	if hud == null or player == null:
+		push_error("The frozen native scene did not create its HUD and player for %s." % view_name)
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	hud.process_mode = Node.PROCESS_MODE_ALWAYS
+	_prepare_hud_notice(hud)
+	_prepare_player_camera(player)
+	if not _show_contract_journal(hud):
+		push_error("The native HUD did not expose its contract/journal panel for %s." % view_name)
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	_make_preview_actions_inert(hud)
+
+	await _wait_process_frames(5)
+	var panel := _find_contract_panel(hud)
+	var scroll := _find_contract_scroll(panel) if panel != null else null
+	if panel == null or scroll == null or not panel.visible:
+		push_error("The native quest panel or its scroll container is unavailable for %s." % view_name)
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+
+	if view_name == "catalogue-bottom":
+		await _wait_process_frames(3)
+		_set_scroll_to_bottom(scroll)
+	else:
+		scroll.scroll_vertical = 0
+	if view_name == "expanded-rules" and not _expand_delivery_rules(panel):
+		push_error("The native contract delivery-rules expander is unavailable.")
+		scene_root.queue_free()
+		await get_tree().process_frame
+		get_tree().paused = true
+		return false
+	await _wait_process_frames(3)
+
+	_print_stage(view_name, disabled_actor_count)
+	_print_layout(view_name, panel, scroll)
+	var capture_ok := await _write_view_image(view_name, output_dir)
+	if get_tree().current_scene == scene_root:
+		get_tree().current_scene = null
+	scene_root.queue_free()
+	await get_tree().process_frame
+	get_tree().paused = true
+	return capture_ok
+
+
+func _stage_memory(view_name: String) -> bool:
+	GameState._expedition.clear()
+	GameState.completed_quests.clear()
+	GameState.discovered_events.clear()
+	GameState.talked_npcs.clear()
+	GameState.route_states.clear()
+	GameState.quest_progress.clear()
+	GameState.inventory.clear()
+	GameState._last_ammo_spend.clear()
+	GameState.death_pending = false
+	GameState.hp = GameState.get_max_hp()
+	GameState.ep = GameState.get_max_ep()
+	GameState.active_spawn_point = "default"
+	GameState.player_position = Vector2.ZERO
+	GameState.active_quest_id = ""
+	GameState.current_scene_id = "village"
+	GameState.current_route_id = ""
+	GameState.inventory["ammo"] = 18
+	GameState.inventory["scrap"] = 40
+
+	match view_name:
+		"no-active-hub", "catalogue-bottom", "expanded-rules":
+			return true
+		"highway-first-outing":
+			return _stage_highway_first_outing()
+		"city-provisional-field":
+			return _stage_city(true)
+		"city-ready-hub":
+			return _stage_city(false)
+		"legacy-ready-hub":
+			return _stage_legacy_ready()
+	return false
+
+
+func _stage_highway_first_outing() -> bool:
+	var quest := DataRegistry.get_quest("clear_scrap_route")
+	if quest.is_empty() or CAMPAIGN_SCRIPT.outings("clear_scrap_route").is_empty():
+		push_error("The authored first highway outing is unavailable.")
+		return false
+	GameState.active_quest_id = "clear_scrap_route"
+	GameState.current_scene_id = "village"
+	GameState.current_route_id = String(quest.get("route", ""))
+	GameState.quest_progress["defeat_enemy"] = 0
+	GameState.quest_progress["field_objective_version"] = 1
+	GameState.quest_progress["campaign"] = CAMPAIGN_SCRIPT.new_state()
+	return true
+
+
+func _stage_city(in_field: bool) -> bool:
+	var quest := DataRegistry.get_quest(CITY_QUEST_ID)
+	var outings: Array = CAMPAIGN_SCRIPT.outings(CITY_QUEST_ID)
+	if quest.is_empty() or outings.size() != 2:
+		push_error("The authored city campaign outings are unavailable.")
+		return false
+
+	_stage_completed_prerequisites()
+	GameState.active_quest_id = CITY_QUEST_ID
+	GameState.current_route_id = String(quest.get("route", ""))
+	GameState.current_scene_id = "wasteland" if in_field else "village"
+	GameState.active_spawn_point = "default"
+	GameState.quest_progress["defeat_enemy"] = 5
+	var campaign_state: Dictionary = CAMPAIGN_SCRIPT.new_state()
+	campaign_state["outing_index"] = 1 if in_field else outings.size()
+	var banked_actions: Dictionary = {}
+	for index in range(int(campaign_state["outing_index"])):
+		banked_actions.merge(_outing_results(outings[index]), true)
+	campaign_state["actions"] = banked_actions
+	GameState.quest_progress["campaign"] = campaign_state
+
+	var banked_chips := 1 if in_field else 2
+	GameState.inventory["precision_chip"] = banked_chips
+	GameState.discovered_events.append(CITY_CLUE_KEY)
+	if not in_field:
+		return true
+
+	var current_outing: Dictionary = outings[1]
+	GameState._expedition.active = _new_preview_expedition(
+		GameState.current_route_id,
+		CITY_QUEST_ID,
+		String(current_outing.get("id", ""))
+	)
+	GameState._expedition.active["haul"] = {"precision_chip": 1}
+	GameState._expedition.active["campaign_actions"] = _outing_results(current_outing)
+	GameState._expedition.uncommitted_clues.append(CITY_CLUE_KEY)
+	return true
+
+
+func _stage_completed_prerequisites() -> void:
+	for quest: Dictionary in DataRegistry.quests:
+		if not bool(quest.get("main_campaign", false)) or int(quest.get("chapter", 0)) >= 5:
+			continue
+		var quest_id := String(quest.get("id", ""))
+		var route_id := String(quest.get("route", ""))
+		if quest_id.is_empty() or route_id.is_empty():
+			continue
+		GameState.completed_quests.append(quest_id)
+		GameState.route_states[route_id] = {"campaign_completed": quest_id}
+
+
+func _stage_legacy_ready() -> bool:
+	var quest := DataRegistry.get_quest("clear_scrap_route")
+	if quest.is_empty():
+		push_error("The first legacy contract is unavailable.")
+		return false
+	GameState.active_quest_id = "clear_scrap_route"
+	GameState.current_scene_id = "village"
+	GameState.current_route_id = String(quest.get("route", ""))
+	GameState.quest_progress["defeat_enemy"] = 5
+	GameState.inventory["scrap"] = 12
+	# Deliberately omit both field_objective_version and campaign for the legacy view.
+	return true
+
+
+func _outing_results(outing: Dictionary) -> Dictionary:
+	var results: Dictionary = {}
+	for definition: Dictionary in outing.get("actions", []):
+		var action_id := String(definition.get("id", ""))
+		if action_id.is_empty():
+			continue
+		if String(definition.get("type", "")) == "choice":
+			var options: Array = definition.get("options", [])
+			if action_id == CITY_CHOICE_ID:
+				results[action_id] = CITY_CHOICE_OPTION_ID
+			elif not options.is_empty():
+				results[action_id] = String(options[0].get("id", ""))
+		else:
+			results[action_id] = "done"
+	return results
+
+
+func _new_preview_expedition(route_id: String, quest_id: String, outing_id: String) -> Dictionary:
+	return {
+		"id": "quest-layout-preview",
+		"route": route_id,
+		"quest_id": quest_id,
+		"haul": {},
+		"counters": {},
+		"fields": {},
+		"claims": [],
+		"sources": [],
+		"layout": {},
+		"draft_choices": {},
+		"pending_draft": "",
+		"campaign_outing": outing_id,
+		"campaign_actions": {},
+		"campaign_runtime": {}
+	}
+
+
+func _find_hud(scene_root: Node) -> Node:
+	for candidate: Node in get_tree().get_nodes_in_group("hud"):
+		if scene_root.is_ancestor_of(candidate):
+			return candidate
+	var named_hud := scene_root.find_child("HUD", true, false)
+	return named_hud
+
+
+func _find_player(scene_root: Node) -> Node2D:
+	for candidate: Node in get_tree().get_nodes_in_group("map_player"):
+		if scene_root.is_ancestor_of(candidate) and candidate is Node2D:
+			return candidate as Node2D
+	var named_player := scene_root.find_child("Player", true, false) as Node2D
+	return named_player
+
+
+func _show_contract_journal(hud: Node) -> bool:
+	if hud.has_method("_set_contract_visible"):
+		hud.call("_set_contract_visible", true)
+	elif hud.has_method("_set_journal_visible"):
+		hud.call("_set_journal_visible", true)
+	else:
+		var panel := _find_contract_panel(hud)
+		if panel == null:
+			return false
+		panel.visible = true
+		for refresh_method: String in ["_refresh_contracts", "_refresh_journal", "_refresh_quest_panel"]:
+			if hud.has_method(refresh_method):
+				hud.call(refresh_method)
+				break
+	return true
+
+
+func _make_preview_actions_inert(hud: Node) -> void:
+	hud.set_process(false)
+	hud.set_process_input(false)
+	var removed_callbacks := 0
+	for control: Control in _descendant_controls(hud):
+		if not control is Button:
+			continue
+		var button := control as Button
+		for connection: Dictionary in button.pressed.get_connections():
+			var callback: Callable = connection.get("callable", Callable())
+			if callback.is_valid():
+				button.pressed.disconnect(callback)
+				removed_callbacks += 1
+	print("ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=", removed_callbacks)
+
+
+func _expand_delivery_rules(panel: Control) -> bool:
+	var toggle := _find_named_control(panel, ["ContractNotes_DeliveryRules"]) as Button
+	var notes := _find_named_control(panel, ["ContractFieldNotes_DeliveryRules"])
+	if toggle == null or notes == null:
+		return false
+	toggle.set_pressed_no_signal(true)
+	toggle.text = "收合交付、撤離與工坊規則"
+	notes.visible = true
+	return true
+
+
+func _find_contract_panel(hud: Node) -> Control:
+	for property_name: String in ["contract_panel", "journal_panel", "quest_journal_panel"]:
+		if _has_property(hud, property_name):
+			var property_value = hud.get(property_name)
+			if property_value is Control:
+				return property_value as Control
+	for group_name: String in ["contract_panel", "quest_journal_panel"]:
+		for candidate: Node in get_tree().get_nodes_in_group(group_name):
+			if hud.is_ancestor_of(candidate) and candidate is Control:
+				return candidate as Control
+	return _find_named_control(hud, ["ContractPanel", "QuestJournalPanel", "JournalPanel", "ContractJournal"])
+
+
+func _find_contract_scroll(panel: Control) -> ScrollContainer:
+	var scrolls := panel.find_children("*", "ScrollContainer", true, false)
+	var preferred: ScrollContainer
+	for candidate: Node in scrolls:
+		if not candidate is ScrollContainer:
+			continue
+		var scroll := candidate as ScrollContainer
+		if _find_named_control(scroll, ["ContractCatalog_Available", "ContractCatalog_Locked", "ContractRequirements", "QuestRequirements"]) != null:
+			return scroll
+		var scroll_name := String(scroll.name).to_lower()
+		if preferred == null and (scroll_name.contains("contract") or scroll_name.contains("journal") or scroll_name.contains("quest")):
+			preferred = scroll
+		elif preferred == null:
+			preferred = scroll
+	return preferred
+
+
+func _find_named_control(root: Node, names: Array[String]) -> Control:
+	for control_name: String in names:
+		var candidate := root.find_child(control_name, true, false)
+		if candidate is Control:
+			return candidate as Control
+	return null
+
+
+func _has_property(object: Object, property_name: String) -> bool:
+	for property_info: Dictionary in object.get_property_list():
+		if String(property_info.get("name", "")) == property_name:
+			return true
+	return false
+
+
+func _prepare_hud_notice(hud: Node) -> void:
+	if _has_property(hud, "notice_timer"):
+		var notice_timer = hud.get("notice_timer")
+		if notice_timer is Timer:
+			(notice_timer as Timer).stop()
+	if hud.has_method("_update_notice_visibility"):
+		hud.call("_update_notice_visibility")
+	var notice := _find_named_control(hud, ["notice_label", "NoticeLabel", "HUDNoticeLabel"])
+	if notice != null:
+		notice.visible = false
+
+
+func _prepare_player_camera(player: Node2D) -> void:
+	var camera := player.get_node_or_null("Camera2D") as Camera2D
+	if camera == null:
+		return
+	camera.process_mode = Node.PROCESS_MODE_ALWAYS
+	camera.position_smoothing_enabled = false
+	camera.make_current()
+	camera.reset_smoothing()
+	camera.force_update_scroll()
+
+
+func _disable_actor_physics(scene_root: Node) -> int:
+	var count := 0
+	for actor: Node in scene_root.find_children("*", "CharacterBody2D", true, false):
+		actor.set_physics_process(false)
+		count += 1
+	return count
+
+
+func _set_scroll_to_bottom(scroll: ScrollContainer) -> void:
+	var bar := scroll.get_v_scroll_bar()
+	scroll.scroll_vertical = int(ceil(bar.max_value))
+	await get_tree().process_frame
+	scroll.scroll_vertical = int(ceil(scroll.get_v_scroll_bar().max_value))
+
+
+func _print_stage(view_name: String, disabled_actor_count: int) -> void:
+	var outing := GameState.campaign_outing()
+	var expedition: Dictionary = GameState._expedition.active
+	var checklist := GameState.active_quest_requirements_text().replace("\n", " | ")
+	print(
+		"ART_QUEST_LAYOUT_STAGE: ", view_name,
+		" quest=", GameState.active_quest_id,
+		" scene=", GameState.current_scene_id,
+		" route=", GameState.current_route_id,
+		" outing=", String(outing.get("id", "")),
+		" outing_index=", GameState.quest_progress.get("campaign", {}).get("outing_index", -1),
+		" ready=", GameState.is_active_quest_ready(),
+		" checklist=", checklist,
+		" campaign_actions=", expedition.get("campaign_actions", {}),
+		" haul=", expedition.get("haul", {}),
+		" uncommitted_clues=", GameState._expedition.uncommitted_clues,
+		" completed=", GameState.completed_quests,
+		" disabled_actor_physics=", disabled_actor_count,
+		" native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO"
+	)
+
+
+func _print_layout(view_name: String, panel: Control, scroll: ScrollContainer) -> void:
+	var navigation := _find_named_control(panel, ["ModalNavigation", "ContractNavigation", "JournalNavigation", "QuestNavigation"])
+	var close_button := _find_close_button(panel)
+	var claim_button := _find_claim_button(panel)
+	var full_minimum := _find_checklist_control(panel)
+	var scroll_bar := scroll.get_v_scroll_bar()
+	var relevant_controls: Array[String] = []
+	for control: Control in _descendant_controls(panel):
+		var control_name := String(control.name)
+		var lowered := control_name.to_lower()
+		if lowered.contains("require") or lowered.contains("check") or lowered.contains("progress") or lowered.contains("claim") or lowered.contains("catalog") or lowered.contains("navigation") or lowered.contains("close"):
+			relevant_controls.append("%s:%s" % [control_name, control.get_class()])
+	var full_min_text := _control_text(full_minimum)
+	print(
+		"ART_QUEST_LAYOUT_CONTROLS: ", view_name,
+		" panel=", panel.name,
+		" panel_rect=", panel.get_global_rect(),
+		" panel_combined_min=", panel.get_combined_minimum_size(),
+		" nav=", _control_name(navigation),
+		" nav_rect=", _control_rect(navigation),
+		" close=", _control_name(close_button),
+		" close_rect=", _control_rect(close_button),
+		" scroll=", scroll.name,
+		" scroll_rect=", scroll.get_global_rect(),
+		" scroll_value=", scroll.scroll_vertical,
+		" scroll_max=", scroll_bar.max_value,
+		" scroll_page=", scroll_bar.page,
+		" claim=", _control_name(claim_button),
+		" claim_rect=", _control_rect(claim_button),
+		" fullmin=", _control_name(full_minimum),
+		" fullmin_rect=", _control_rect(full_minimum),
+		" fullmin_combined_min=", full_minimum.get_combined_minimum_size() if full_minimum != null else Vector2.ZERO,
+		" fullmin_text=", full_min_text.replace("\n", " | "),
+		" checklist_and_layout_controls=", relevant_controls
+	)
+
+
+func _find_close_button(root: Node) -> Control:
+	for control: Control in _descendant_controls(root):
+		if not control is Button:
+			continue
+		var name_lower := String(control.name).to_lower()
+		var text_lower := _control_text(control).to_lower()
+		if name_lower.contains("close") or text_lower.contains("關閉") or text_lower.contains("esc"):
+			return control
+	return null
+
+
+func _find_claim_button(root: Node) -> Control:
+	for control: Control in _descendant_controls(root):
+		var name_lower := String(control.name).to_lower()
+		var text_value := _control_text(control)
+		if name_lower.contains("claim") or text_value.contains("交付") or text_value.contains("領取"):
+			return control
+	return null
+
+
+func _find_checklist_control(root: Node) -> Control:
+	for control: Control in _descendant_controls(root):
+		var name_lower := String(control.name).to_lower()
+		if name_lower.contains("require") or name_lower.contains("checklist") or name_lower.contains("progress"):
+			return control
+	return null
+
+
+func _descendant_controls(root: Node) -> Array[Control]:
+	var controls: Array[Control] = []
+	for candidate: Node in root.find_children("*", "Control", true, false):
+		if candidate is Control:
+			controls.append(candidate as Control)
+	return controls
+
+
+func _control_text(control: Control) -> String:
+	if control == null:
+		return ""
+	for property_info: Dictionary in control.get_property_list():
+		if String(property_info.get("name", "")) == "text":
+			return String(control.get("text"))
+	return ""
+
+
+func _control_name(control: Control) -> String:
+	return String(control.name) if control != null else "<missing>"
+
+
+func _control_rect(control: Control) -> Rect2:
+	return control.get_global_rect() if control != null else Rect2()
+
+
+func _wait_process_frames(count: int) -> void:
+	for frame_index in range(count):
+		await get_tree().process_frame
+
+
+func _write_view_image(view_name: String, output_dir: String) -> bool:
+	await _wait_process_frames(6)
+	await RenderingServer.frame_post_draw
+	var viewport := get_viewport()
+	var image := viewport.get_texture().get_image()
+	var save_error := image.save_png(output_dir.path_join(view_name + ".png"))
+	print("ART_QUEST_LAYOUT_FRAME: ", view_name, " viewport=", viewport.get_visible_rect().size, " image_result=", save_error)
+	if save_error != OK:
+		push_error("Could not save quest layout presentation frame %s: %s" % [view_name, save_error])
+		return false
+	return true

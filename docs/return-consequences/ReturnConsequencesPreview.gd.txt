@@ -1,0 +1,115 @@
+extends Node
+
+# Ordinary staged presentation. No settlement, rewards, quest hand-in or save/load.
+const CAMPAIGN := preload("res://scripts/systems/CampaignProgress.gd")
+
+func _ready() -> void:
+	call_deferred("_capture")
+
+func _capture() -> void:
+	if not ProjectSettings.get_setting("application/config/use_custom_user_dir", false) or ProjectSettings.get_setting("application/config/custom_user_dir_name", "") != "R17-Ordinary-Art-Preview-20261023":
+		push_error("Use the dedicated external presentation mirror and user directory.")
+		get_tree().quit(2)
+		return
+	var output := ""
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--return-output="):
+			output = argument.trim_prefix("--return-output=")
+	if output.is_empty() or not output.is_absolute_path():
+		push_error("Pass an absolute --return-output directory.")
+		get_tree().quit(2)
+		return
+	DirAccess.make_dir_recursive_absolute(output)
+	var views := ["partial-return", "empty-return", "lost-carry", "side-return", "side-loss", "report-journal", "private-ending", "public-ending", "legacy-ending", "private-journal", "unsaved-handin"]
+	for view: String in views:
+		get_tree().paused = false
+		GameState.reset_new_run(false)
+		GameState.current_scene_id = "village"
+		var result := _stage(view)
+		var scene = load("res://scenes/levels/village/Village.tscn").instantiate()
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		scene.set_process(false)
+		var actor = get_tree().get_first_node_in_group("map_player")
+		if actor != null:
+			actor.set_physics_process(false)
+			actor.global_position = Vector2(1380, 970)
+			actor.reset_physics_interpolation()
+			var camera = actor.get_node("Camera2D")
+			camera.position_smoothing_enabled = false
+			camera.reset_smoothing()
+			camera.force_update_scroll()
+		for frame in range(16):
+			await get_tree().physics_frame
+		var hud = get_tree().get_first_node_in_group("hud")
+		GameState.stats_changed.emit()
+		if view in ["report-journal", "private-journal"]:
+			hud.call("_set_codex_visible", true)
+		elif view.ends_with("ending") or view == "unsaved-handin":
+			GameState.dialogue_requested.emit("米婭", "委託回報", GameState.quest_completion_report("facility_memory", view != "unsaved-handin"))
+		else:
+			GameState.show_expedition_result(result)
+		for frame in range(5):
+			await get_tree().process_frame
+		if view == "report-journal":
+			var toggle: Button = hud.find_child("ExpeditionNotes_Latest", true, false)
+			if toggle != null: toggle.button_pressed = true
+		var notice = scene.find_child("NoticeLabel", true, false)
+		if notice != null: notice.hide()
+		for frame in range(4):
+			await get_tree().process_frame
+		print("RETURN_PRESENTATION_STATE: ", view, " hint=", GameState.get_journey_hint(), " receipt=", CAMPAIGN.action_receipt(String(result.get("quest_id", "")), String(result.get("campaign_outing", "")), result.get("campaign_actions", {})).replace("\n", " | "))
+		get_tree().paused = true
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var error := get_viewport().get_texture().get_image().save_png(output.path_join(view + ".png"))
+		print("RETURN_PRESENTATION_FRAME: ", view, " viewport=", get_viewport().get_visible_rect().size, " image_result=", error)
+		scene.queue_free()
+		await get_tree().process_frame
+	get_tree().quit(0)
+
+func _stage(view: String) -> Dictionary:
+	if view.ends_with("ending") or view in ["private-journal", "unsaved-handin"]:
+		for quest: Dictionary in DataRegistry.quests:
+			if bool(quest.get("main_campaign", false)):
+				GameState.completed_quests.append(String(quest["id"]))
+				for objective: Dictionary in quest.get("objectives", []):
+					if objective.get("type", "") == "discover" and not bool(objective.get("optional", false)):
+						GameState.discovered_events.append("%s:%s" % [String(objective["route"]), String(objective["event"])])
+		GameState.active_quest_id = ""
+		GameState.quest_progress = {}
+		GameState.current_route_id = "underground_facility"
+		if view != "legacy-ending":
+			var choice := "ch5b_publish_consent" if view == "public-ending" else "ch5b_seal_family_names"
+			GameState.route_states["ruined_metropolis"] = {"campaign_completed": "metropolis_archive", "campaign_choices": {"ch5b_record_family": choice}}
+			GameState.route_states["underground_facility"] = {"campaign_completed": "facility_memory", "campaign_choices": {"ch6b_reserve_choice": "ch6b_clinic_first"}}
+		return {}
+	var quest_id := "factory_sabotage" if view == "side-return" else ("drainage_rescue" if view == "side-loss" else "clear_scrap_route")
+	var quest := DataRegistry.get_quest(quest_id)
+	GameState.active_quest_id = quest_id
+	GameState.current_route_id = String(quest["route"])
+	var result := {"id": "staged-" + view, "route": GameState.current_route_id, "quest_id": quest_id, "outcome": "lost" if view in ["lost-carry", "side-loss"] else "extracted", "haul": {"scrap": 4}, "counters": {"defeat_enemy": 1}, "fields": {}, "draft_choices": {}, "campaign_outing": "", "campaign_actions": {}}
+	GameState.quest_progress = {"field_objective_version": 1, "defeat_enemy": 1}
+	if view in ["side-return", "side-loss"]:
+		var field_id := String(quest["field_objective"]["id"])
+		result["fields"][field_id] = true
+		if view == "side-return":
+			GameState.route_states[GameState.current_route_id] = {"field_objectives": {field_id: true}}
+	else:
+		var index := 1 if view == "lost-carry" else 0
+		var banked: Dictionary = {}
+		var outings: Array = quest["campaign_outings"]
+		if index == 1:
+			for definition: Dictionary in outings[0]["actions"]: banked[definition["id"]] = "done"
+			GameState.route_states[GameState.current_route_id] = {"field_objectives": {"highway_bypass_repair": true}}
+		result["campaign_outing"] = outings[index]["id"]
+		if view == "lost-carry":
+			result["campaign_actions"] = {"ch1b_return_route": "ch1b_covered_long", "ch1b_carry_coupling": "done"}
+		elif view != "empty-return":
+			result["campaign_actions"] = {"ch1a_escort_crew": "done"}
+		if result["outcome"] == "extracted":
+			banked.merge(result["campaign_actions"], false)
+			result["campaign_report"] = CAMPAIGN.return_report(quest_id, result["campaign_outing"], banked, result["campaign_actions"])
+		GameState.quest_progress["campaign"] = {"version": 1, "outing_index": index, "actions": banked}
+	GameState._expedition.last_result = result.duplicate(true)
+	return result

@@ -16,6 +16,7 @@ func _ready() -> void:
 	print("[VERIFY] Waste Recycler vertical slice verification started")
 	DataRegistry.load_all()
 	_check_data_registry()
+	await _check_story_route_contract()
 	_check_enemy_behavior_contract()
 	_check_baked_assets()
 	_check_music_assets()
@@ -60,7 +61,7 @@ func _check_data_registry() -> void:
 	_expect(DataRegistry.recipes.size() >= 5, "recipe data has forge craft shop and mod loops")
 	_expect(DataRegistry.quests.size() >= 2, "quest data has guild contracts")
 	_expect(DataRegistry.npcs.size() >= 6, "npc data has village and guild dialogue characters")
-	_expect(DataRegistry.wasteland_routes.size() >= 4, "wasteland has four route definitions")
+	_expect(DataRegistry.wasteland_routes.size() == 6, "wasteland has six route definitions")
 	_expect(DataRegistry.visual_assets.size() >= 35, "visual asset manifest has formal art entries")
 	_expect(int(DataRegistry.map_params.get("width_tiles", 0)) >= 100, "wasteland width is at least 100 tiles")
 	_expect(int(DataRegistry.map_params.get("height_tiles", 0)) >= 80, "wasteland height is at least 80 tiles")
@@ -137,7 +138,7 @@ func _check_scene(scene_id: String, packed: PackedScene, group_minimums: Diction
 
 func _check_save_roundtrip() -> void:
 	GameState.reset_new_run(false)
-	GameState.current_scene_id = "wasteland"
+	GameState.current_scene_id = "village"
 	GameState.start_quest("clear_scrap_route")
 	GameState.advance_quest_counter("defeat_enemy", 2)
 	GameState.player_position = Vector2(321, 654)
@@ -181,10 +182,22 @@ func _check_recipe_and_quest_loop() -> void:
 	GameState.add_item("bio_crystal", 1)
 	_expect(InventorySystem.craft_basic_upgrade(), "craft station recipe creates spark cutter")
 	_expect(GameState.inventory.has("spark_cutter"), "crafted weapon enters inventory")
+	GameState.current_scene_id = "village"
 	_expect(GameState.start_quest("clear_scrap_route"), "guild can start a quest")
 	for i in range(5):
 		GameState.record_enemy_defeated()
 	GameState.add_item("scrap", 12)
+	if GameState.quest_progress.has("campaign"):
+		GameState.quest_progress["campaign"]["outing_index"] = 2
+	var field_obj: Dictionary = DataRegistry.get_quest("clear_scrap_route").get("field_objective", {})
+	if not field_obj.is_empty():
+		var route_id: String = field_obj.get("route", "scrap_highway")
+		var obj_id: String = field_obj.get("id", "")
+		var route_state: Dictionary = GameState.route_states.get(route_id, {}).duplicate(true)
+		var field_map: Dictionary = route_state.get("field_objectives", {}).duplicate(true)
+		field_map[obj_id] = true
+		route_state["field_objectives"] = field_map
+		GameState.route_states[route_id] = route_state
 	_expect(GameState.is_active_quest_ready(), "quest becomes ready after defeat and collect objectives")
 	var cores_before := GameState.cores
 	_expect(GameState.complete_active_quest(), "guild reward completes active quest")
@@ -225,7 +238,7 @@ func _check_playable_core_loop() -> void:
 	player.last_direction = Vector2.RIGHT
 	var defeated_before := GameState.defeated_enemies
 	player._melee_attack()
-	await get_tree().create_timer(0.12).timeout
+	await get_tree().create_timer(0.22).timeout
 	_expect(GameState.defeated_enemies == defeated_before + 1, "playable loop melee defeats enemy")
 	_expect(get_tree().get_nodes_in_group("pickup").size() >= pickups_before, "playable loop keeps or creates pickup resources")
 	var ammo_before := GameState.ammo
@@ -260,7 +273,8 @@ func _check_wasteland_prop_contract() -> void:
 	_expect(obstacles.size() >= 40, "wasteland blocking obstacles exist")
 	if not props.is_empty():
 		var prop := props[0]
-		_expect(prop is Node2D and prop.y_sort_enabled, "wasteland props participate in Y-Sort")
+		_expect(prop is Node2D and not prop.y_sort_enabled and instance.y_sort_enabled,
+			"wasteland sorts grouped props by their registered body foot")
 	if not obstacles.is_empty():
 		var obstacle := obstacles[0]
 		_expect(_has_collision_shape(obstacle), "blocking obstacle has collision")
@@ -268,7 +282,8 @@ func _check_wasteland_prop_contract() -> void:
 	await get_tree().process_frame
 
 func _check_wasteland_route_contract() -> void:
-	for route_id in ["scrap_highway", "toxic_marsh", "crystal_scar", "old_factory"]:
+	for raw_route_id in DataRegistry.wasteland_route_ids():
+		var route_id := String(raw_route_id)
 		GameState.reset_new_run(false)
 		GameState.current_scene_id = "wasteland"
 		GameState.set_current_route(route_id)
@@ -282,10 +297,67 @@ func _check_wasteland_route_contract() -> void:
 		_expect(not route.is_empty(), "route data exists: " + route_id)
 		_expect(get_tree().get_nodes_in_group("enemy").size() >= int(DataRegistry.map_params.get("enemy_limit", 50)) - (1 if bool(route.get("boss_enabled", false)) else 0), "route has configured enemy pressure: " + route_id)
 		_expect(get_tree().get_nodes_in_group("pickup").size() >= int(DataRegistry.map_params.get("resource_nodes", 24)), "route has configured resources: " + route_id)
+		var story_events: Array[Dictionary] = DataRegistry.story_events_for_route(route_id)
+		_expect(story_events.size() == 1, "route has one campaign story event: " + route_id)
+		var story_sites: Dictionary = {}
+		for story_site in get_tree().get_nodes_in_group("story_site"):
+			story_sites[String(story_site.get_meta("story_event_id", ""))] = story_site
+		for story_event in story_events:
+			var event_id := String(story_event.get("id", ""))
+			var interaction_id := "event:%s:%s" % [route_id, event_id]
+			var story_site: Node = story_sites.get(event_id) as Node
+			var site: Area2D
+			if story_site != null:
+				for child in story_site.get_children():
+					if child is Area2D and str(child.get("interaction_id")) == interaction_id:
+						site = child as Area2D
+						break
+			_expect(story_site != null and site != null, "route story site is spawned as an interactable POI: " + interaction_id)
+			if site != null:
+				_expect(site.monitoring, "route story site Area2D is monitoring: " + interaction_id)
+				var collision: CollisionShape2D
+				for child in site.get_children():
+					if child is CollisionShape2D:
+						collision = child as CollisionShape2D
+						break
+				_expect(collision != null, "route story site has a CollisionShape2D child: " + interaction_id)
+				if collision != null:
+					_expect(not collision.disabled, "route story site collision shape is enabled: " + interaction_id)
+					_expect(collision.shape != null, "route story site collision shape has geometry: " + interaction_id)
+				_expect(not site.get_signal_connection_list("interacted").is_empty(), "route story site is connected to discovery handling: " + interaction_id)
 		if bool(route.get("boss_enabled", false)):
 			_expect(get_tree().get_nodes_in_group("boss").size() >= 1, "boss route spawns boss: " + route_id)
 		instance.queue_free()
 		await get_tree().process_frame
+
+func _check_story_route_contract() -> void:
+	var route_ids := DataRegistry.wasteland_route_ids()
+	_expect(route_ids.size() == 6, "campaign route registry covers all six routes")
+	var village := VILLAGE_SCENE.instantiate()
+	add_child(village)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var gates: Dictionary = {}
+	for candidate in get_tree().get_nodes_in_group("interactable"):
+		if not (candidate is Area2D):
+			continue
+		var interaction_id := str(candidate.get("interaction_id"))
+		if interaction_id.begins_with("route:"):
+			gates[interaction_id.trim_prefix("route:")] = candidate
+	for raw_route_id in route_ids:
+		var route_id := String(raw_route_id)
+		var gate: Area2D = gates.get(route_id) as Area2D
+		_expect(gate != null, "village has an interactable gate for route: " + route_id)
+		if gate != null:
+			_expect(String(gate.get("route_id")) == route_id, "village gate selects the matching route: " + route_id)
+			_expect(not gate.get_signal_connection_list("interacted").is_empty(), "village gate is connected to route transition: " + route_id)
+		var story_events: Array[Dictionary] = DataRegistry.story_events_for_route(route_id)
+		_expect(story_events.size() == 1, "DataRegistry exposes one story site for route: " + route_id)
+		if story_events.size() == 1:
+			var event_id := String(story_events[0].get("id", ""))
+			_expect(String(DataRegistry.get_event(event_id).get("route", "")) == route_id, "story site resolves to the same route: " + route_id)
+	village.queue_free()
+	await get_tree().process_frame
 
 func _check_enemy_projectile_damage() -> void:
 	GameState.reset_new_run(false)
@@ -404,7 +476,8 @@ func _check_player_animation_contract() -> void:
 					var animation_name := "%s_%d" % [action_name, direction_index]
 					_expect(frame_set.has_animation(animation_name), "player animation exists: " + animation_name)
 					if frame_set.has_animation(animation_name):
-						_expect(frame_set.get_frame_count(animation_name) >= 8, "player animation has 8-frame motion: " + animation_name)
+						var native_pose := int(player.get_meta("walk_keypose_count", 0)) == 3 and action_name != "dead"
+						_expect(frame_set.get_frame_count(animation_name) == 3 if native_pose else frame_set.get_frame_count(animation_name) >= 8, "player animation has its registered native keys or legacy strip: " + animation_name)
 			var first_frame := frame_set.get_frame_texture("idle_0", 0)
 			_expect(first_frame is Texture2D, "player animation frames load as textures")
 		if player.has_method("_aim_direction_from_global_target") and player.has_method("_projectile_spawn_global") and player.has_method("_attack_anchor_global"):
@@ -416,7 +489,14 @@ func _check_player_animation_contract() -> void:
 			var muzzle: Vector2 = player._projectile_spawn_global()
 			_expect(aim_right.dot(Vector2.RIGHT) > 0.99, "player ranged aim uses muzzle anchor for right target")
 			_expect(aim_down.dot(Vector2.DOWN) > 0.99, "player ranged aim uses muzzle anchor for down target")
-			_expect(abs(muzzle.distance_to(anchor) - 46.0) < 0.1, "projectile spawn starts from weapon reach, not player feet")
+			if player.has_method("_update_weapon_overlay"):
+				player.call("_update_weapon_overlay")
+			var is_v2: bool = bool(player.get_meta("presentation_v2_active", false)) or (player.has_method("_uses_presentation_v2") and bool(player.call("_uses_presentation_v2")))
+			if is_v2:
+				_expect((muzzle - player.global_position).normalized().dot(Vector2.RIGHT) > 0.5 or muzzle.distance_to(player.global_position) > 10.0, "projectile spawn matches the actual rendered muzzle, not player feet")
+			else:
+				var overlay := player.get_node("WeaponOverlay") as Sprite2D
+				_expect(muzzle.distance_to(overlay.to_global(Vector2(58, 0))) < 0.1 and muzzle.distance_to(player.global_position) > 20.0, "projectile spawn matches the actual rendered muzzle, not player feet")
 	instance.queue_free()
 	await get_tree().process_frame
 

@@ -4,6 +4,8 @@ class_name WorldMapView
 signal expand_requested
 
 var full_screen := false
+var _redraw_remaining := 0.0
+var _hovered_map_label := ""
 
 const MARKER_COLORS := {
 	"player": Color(0.35, 0.95, 0.95, 1.0),
@@ -20,16 +22,21 @@ const MARKER_COLORS := {
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
-	custom_minimum_size = Vector2(210, 116)
+	custom_minimum_size = Vector2(110, 100)
 	gui_input.connect(_on_gui_input)
 
 func set_full_screen(enabled: bool) -> void:
 	full_screen = enabled
-	custom_minimum_size = Vector2(900, 560) if full_screen else Vector2(210, 116)
+	custom_minimum_size = Vector2(900, 560) if full_screen else Vector2(110, 100)
 	queue_redraw()
 
-func _process(_delta: float) -> void:
-	queue_redraw()
+func _process(delta: float) -> void:
+	if not is_visible_in_tree():
+		return
+	_redraw_remaining -= delta
+	if _redraw_remaining <= 0.0:
+		_redraw_remaining = 0.08
+		queue_redraw()
 
 func _draw() -> void:
 	if full_screen:
@@ -160,18 +167,59 @@ func _draw_fullscreen_map() -> void:
 
 
 func _draw_route_frame(origin: Vector2, map_size: Vector2) -> void:
+	var scene := _map_scene()
+	if scene != null and scene.has_meta("map_paths"):
+		var world := _world_size()
+		var map_scale := map_size.x / maxf(1.0, world.x)
+		for raw_path in scene.get_meta("map_paths", []):
+			var points := PackedVector2Array()
+			for point: Vector2 in raw_path:
+				points.append(origin + point * map_scale)
+			if points.size() >= 2:
+				draw_polyline(points, Color(0.44, 0.35, 0.23, 0.9), 4.0)
+				draw_polyline(points, Color(0.70, 0.58, 0.37, 0.8), 1.0)
+		for region: Dictionary in scene.get_meta("map_regions", []):
+			var center_values: Array = region.get("center", [0.5, 0.5])
+			var position := origin + Vector2(float(center_values[0]), float(center_values[1])) * map_size
+			var named_site_nearby := false
+			for site: Node in get_tree().get_nodes_in_group("map_event"):
+				if site is Node2D and (site.has_meta("exploration_event") or site.has_meta("story_event_id") or site.has_meta("field_objective_id")):
+					var site_position: Vector2 = origin + site.global_position * map_scale
+					named_site_nearby = named_site_nearby or site_position.distance_to(position) < 30.0
+			if named_site_nearby:
+				continue # Its more specific site label already names this location.
+			draw_string(ThemeDB.fallback_font, position + Vector2(-35, -16), String(region.get("name", "")), HORIZONTAL_ALIGNMENT_LEFT, 160.0, 12, Color(0.73, 0.65, 0.49))
+		return
 	var center := origin + map_size * 0.5
 	for i in range(1, 4):
 		var gx := origin.x + map_size.x * (float(i) * 0.25)
 		var gy := origin.y + map_size.y * (float(i) * 0.25)
 		draw_line(Vector2(gx, origin.y + 4), Vector2(gx, origin.y + map_size.y - 4), Color(0.24, 0.34, 0.36, 0.32), 1.0)
 		draw_line(Vector2(origin.x + 4, gy), Vector2(origin.x + map_size.x - 4, gy), Color(0.24, 0.34, 0.36, 0.32), 1.0)
+	var hub_scale := map_size.x / maxf(1.0, _world_size().x)
+	if scene != null:
+		for child in scene.get_children():
+			if not child.has_method("get_map_road_segments"):
+				continue
+			var segments: Array = child.call("get_map_road_segments")
+			if segments.is_empty():
+				continue
+			for segment: Dictionary in segments:
+				var thickness := clampf(float(segment.width) * hub_scale * 0.25, 1.5, 5.5)
+				draw_line(origin + Vector2(segment.a) * hub_scale, origin + Vector2(segment.b) * hub_scale, Color(0.48, 0.43, 0.31, 0.65), thickness)
+			return
 	draw_line(Vector2(center.x, origin.y + 8), Vector2(center.x, origin.y + map_size.y - 8), Color(0.48, 0.43, 0.31, 0.55), 2.0)
 	draw_line(Vector2(origin.x + 8, center.y), Vector2(origin.x + map_size.x - 8, center.y), Color(0.48, 0.43, 0.31, 0.55), 2.0)
 
 func _draw_group_markers(origin: Vector2, scale: float) -> void:
 	var map_rect := Rect2(origin, _world_size() * scale)
+	var label_area := Rect2(Vector2(24.0, 56.0), size - Vector2(48.0, 112.0))
 	var drawn_nodes: Dictionary = {}
+	var important_marker_rects: Array[Rect2] = []
+	var label_rects: Array[Rect2] = []
+	var labels: Array[Dictionary] = []
+	var hover_distance := 12.0
+	_hovered_map_label = ""
 	for group_name: String in _visible_marker_groups():
 		for node in get_tree().get_nodes_in_group(group_name):
 			if not is_instance_valid(node) or not (node is Node2D):
@@ -191,16 +239,141 @@ func _draw_group_markers(origin: Vector2, scale: float) -> void:
 			var radius := _marker_radius(marker)
 			draw_circle(pos, radius, color)
 			draw_circle(pos, max(1.5, radius * 0.42), Color(1.0, 1.0, 0.78, 0.9))
-			if full_screen and marker not in ["prop", "pickup", "enemy"]:
-				var label := String(node.get_meta("map_label", ""))
-				if not label.is_empty():
-					draw_string(ThemeDB.fallback_font, pos + Vector2(8, -6), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color.WHITE)
+			if not full_screen:
+				continue
+			var key_site := node.has_meta("story_event_id") or node.has_meta("field_objective_id") or node.has_meta("exploration_event")
+			if marker in ["gate", "boss", "npc", "station", "player"] or key_site:
+				important_marker_rects.append(Rect2(pos - Vector2(radius, radius), Vector2(radius * 2.0, radius * 2.0)))
+			var label := String(node.get_meta("map_label", ""))
+			var distance := pos.distance_to(get_local_mouse_position())
+			if not label.is_empty() and distance < hover_distance:
+				hover_distance = distance
+				_hovered_map_label = label
+			if not label.is_empty() and (key_site or marker in ["gate", "boss", "npc", "station"]):
+				var is_waypoint := bool(node.get_meta("campaign_waypoint", false))
+				var short_label := label if is_waypoint else (label.get_slice("｜", 1) if node.has_meta("story_event_id") else label.get_slice("｜", 0))
+				var priority := 7
+				if node.has_meta("campaign_action_id"):
+					var ca_id := String(node.get_meta("campaign_action_id", ""))
+					if not ca_id.is_empty():
+						var status := GameState.campaign_action_status(ca_id)
+						if status == "active":
+							priority = -1 if is_waypoint else 0
+						elif status == "ready":
+							priority = 1
+				if priority > 1:
+					if marker == "gate":
+						priority = 2
+					elif marker == "boss":
+						priority = 3
+					elif node.has_meta("story_event_id"):
+						priority = 4
+					elif node.has_meta("field_objective_id"):
+						priority = 5
+					elif node.has_meta("exploration_event"):
+						priority = 6
+					else:
+						priority = 7
+				labels.append({
+					"position": pos,
+					"text": short_label,
+					"radius": radius,
+					"priority": priority,
+					"instance_id": instance_id
+				})
+	if not full_screen:
+		return
+	labels.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if a.priority != b.priority:
+			return a.priority < b.priority
+		return a.instance_id < b.instance_id
+	)
+	var map_center_x := map_rect.get_center().x
+	var font: Font = ThemeDB.fallback_font
+	var placements: Array[Dictionary] = []
+	for entry: Dictionary in labels:
+		var display_text: String = entry.text
+		var text_size := font.get_string_size(display_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13)
+		var max_label_w := minf(280.0, label_area.size.x - 8.0)
+		if text_size.x + 8.0 > max_label_w:
+			while display_text.length() > 2 and font.get_string_size(display_text + "…", HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x + 8.0 > max_label_w:
+				display_text = display_text.substr(0, display_text.length() - 1)
+			display_text += "…"
+			text_size = font.get_string_size(display_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13)
+		var label_size := Vector2(text_size.x + 8.0, 22.0)
+		var pos: Vector2 = entry.position
+		var m_dist := maxf(entry.radius + 4.0, 12.0)
+		var near_side_x: float = label_area.position.x + 4.0 if pos.x <= map_center_x else label_area.end.x - label_size.x - 4.0
+		var far_side_x: float = label_area.end.x - label_size.x - 4.0 if pos.x <= map_center_x else label_area.position.x + 4.0
+		var candidates: Array[Vector2] = [
+			pos + Vector2(m_dist, -11.0),
+			pos + Vector2(-label_size.x - m_dist, -11.0),
+			pos + Vector2(m_dist, -label_size.y - 2.0),
+			pos + Vector2(m_dist, 2.0),
+			pos + Vector2(-label_size.x - m_dist, -label_size.y - 2.0),
+			pos + Vector2(-label_size.x - m_dist, 2.0),
+			pos + Vector2(-label_size.x * 0.5, -label_size.y - m_dist),
+			pos + Vector2(-label_size.x * 0.5, m_dist),
+			Vector2(near_side_x, pos.y - 11.0),
+			Vector2(near_side_x, pos.y - 35.0),
+			Vector2(near_side_x, pos.y + 13.0),
+			Vector2(near_side_x, pos.y - 59.0),
+			Vector2(far_side_x, pos.y - 11.0),
+			Vector2(far_side_x, pos.y - 35.0),
+			Vector2(far_side_x, pos.y + 13.0),
+			Vector2(far_side_x, pos.y - 59.0)
+		]
+		for i: int in candidates.size():
+			var raw_anchor: Vector2 = candidates[i]
+			var anchor := Vector2(
+				clampf(raw_anchor.x, label_area.position.x + 2.0, label_area.end.x - label_size.x - 2.0),
+				clampf(raw_anchor.y, label_area.position.y + 2.0, label_area.end.y - label_size.y - 2.0)
+			)
+			var bounds := Rect2(anchor, label_size)
+			var overlaps := false
+			for occupied: Rect2 in label_rects:
+				if occupied.grow(3.0).intersects(bounds):
+					overlaps = true
+					break
+			if overlaps:
+				continue
+			for marker_box: Rect2 in important_marker_rects:
+				if marker_box.grow(1.5).intersects(bounds):
+					overlaps = true
+					break
+			if overlaps:
+				continue
+			var label_center := bounds.get_center()
+			var dir := (label_center - pos).normalized()
+			var line_start: Vector2 = pos + dir * (entry.radius + 2.0)
+			var line_end := Vector2(
+				clampf(pos.x, bounds.position.x, bounds.end.x),
+				clampf(pos.y, bounds.position.y, bounds.end.y)
+			)
+			var has_line := i >= 8 or line_start.distance_to(line_end) > 16.0
+			placements.append({
+				"bounds": bounds,
+				"anchor": anchor,
+				"text": display_text,
+				"label_width": label_size.x - 8.0,
+				"has_line": has_line,
+				"line_start": line_start,
+				"line_end": line_end
+			})
+			label_rects.append(bounds)
+			break
+	for item: Dictionary in placements:
+		if item.has_line:
+			draw_line(item.line_start, item.line_end, Color(0.94, 0.89, 0.76, 0.42), 1.0)
+	for item: Dictionary in placements:
+		draw_rect(item.bounds, Color(0.06, 0.065, 0.055, 0.92))
+		draw_string(font, item.anchor + Vector2(4, 16), item.text, HORIZONTAL_ALIGNMENT_LEFT, item.label_width, 13, Color(0.94, 0.89, 0.76))
 
 func _visible_marker_groups() -> Array[String]:
 	if GameState.current_scene_id == "wasteland":
 		if full_screen:
 			return ["map_gate", "map_event", "map_boss", "map_enemy", "map_pickup", "map_player"]
-		return ["map_gate", "map_boss", "map_player"]
+		return ["map_gate", "map_event", "map_boss", "map_player"]
 	return ["map_station", "map_gate", "map_npc", "map_player"]
 
 func _should_draw_marker(marker: String) -> bool:
@@ -208,15 +381,24 @@ func _should_draw_marker(marker: String) -> bool:
 		return marker in ["player", "npc", "station", "gate"]
 	if full_screen:
 		return marker in ["player", "gate", "event", "boss", "enemy", "pickup"]
-	return marker in ["player", "gate", "boss"]
+	return marker in ["player", "gate", "event", "boss"]
 
 func _draw_viewport_box(origin: Vector2, scale: float, world: Vector2) -> void:
 	var player_nodes := get_tree().get_nodes_in_group("map_player")
 	if player_nodes.is_empty() or not (player_nodes[0] is Node2D):
 		return
+	var camera_center: Vector2 = (player_nodes[0] as Node2D).global_position
 	var viewport_size := get_viewport_rect().size
-	var player_pos: Vector2 = (player_nodes[0] as Node2D).global_position
-	var camera_rect := Rect2(player_pos - viewport_size * 0.5, viewport_size).intersection(Rect2(Vector2.ZERO, world))
+	var camera := get_viewport().get_camera_2d()
+	var zoom := Vector2.ONE
+	if camera != null:
+		camera_center = camera.get_screen_center_position()
+		zoom = camera.zoom.abs()
+	var camera_size := Vector2(
+		viewport_size.x / maxf(zoom.x, 0.001),
+		viewport_size.y / maxf(zoom.y, 0.001)
+	)
+	var camera_rect := Rect2(camera_center - camera_size * 0.5, camera_size).intersection(Rect2(Vector2.ZERO, world))
 	draw_rect(Rect2(origin + camera_rect.position * scale, camera_rect.size * scale), Color(0.65, 0.82, 1.0, 0.28), false, 1.0)
 
 func _draw_legend() -> void:
@@ -245,15 +427,26 @@ func _draw_legend() -> void:
 		draw_circle(Vector2(x, y), 5.0, MARKER_COLORS.get(marker, Color.WHITE))
 		draw_string(ThemeDB.fallback_font, Vector2(x + 10, y + 5), String(item[1]), HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color.WHITE)
 		x += 82.0
+	var detail := _hovered_map_label if not _hovered_map_label.is_empty() else "游標移到標記可查看名稱與狀態；出口與重要據點優先顯示。"
+	draw_string(ThemeDB.fallback_font, Vector2(28, size.y - 9.0), detail, HORIZONTAL_ALIGNMENT_LEFT, size.x - 56.0, 12, Color(0.80, 0.75, 0.65))
 
 func _draw_title() -> void:
 	var route := DataRegistry.get_wasteland_route(GameState.current_route_id)
 	var route_name := String(route.get("name", "村莊")) if GameState.current_scene_id == "wasteland" else _scene_label()
-	var title := "%s｜Seed:%d｜任務：%s" % [route_name, GameState.seed, GameState.active_quest_summary()]
-	draw_string(ThemeDB.fallback_font, Vector2(28, 28), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(0.96, 0.94, 0.88))
+	var title := "%s｜道路與探索據點　[M] 關閉　[G] 世界紀行" % route_name
+	draw_string(ThemeDB.fallback_font, Vector2(28, 28), title, HORIZONTAL_ALIGNMENT_LEFT, size.x - 56.0, 18, Color(0.96, 0.94, 0.88))
+
+func _map_scene() -> Node:
+	# The HUD may belong to a mounted review scene rather than current_scene.
+	var parent := get_parent()
+	while parent != null:
+		if parent.has_meta("map_world_size"):
+			return parent
+		parent = parent.get_parent()
+	return get_tree().current_scene
 
 func _world_size() -> Vector2:
-	var scene := get_tree().current_scene
+	var scene := _map_scene()
 	if scene != null and scene.has_meta("map_world_size"):
 		var meta_size = scene.get_meta("map_world_size")
 		if meta_size is Vector2:
@@ -261,7 +454,7 @@ func _world_size() -> Vector2:
 	return get_viewport_rect().size
 
 func _scene_label() -> String:
-	var scene := get_tree().current_scene
+	var scene := _map_scene()
 	if scene != null and scene.has_meta("map_scene_label"):
 		return String(scene.get_meta("map_scene_label"))
 	match GameState.current_scene_id:

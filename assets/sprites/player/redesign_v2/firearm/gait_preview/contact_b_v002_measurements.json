@@ -1,0 +1,208 @@
+{
+  "alpha_cutoff": 0.65,
+  "directions": [
+    {
+      "direction": "E",
+      "helmet_to_sole_height": 359.0,
+      "rect": [
+        0,
+        0,
+        410,
+        512
+      ],
+      "scale_96": 0.267409470752089,
+      "sole": [
+        287.0,
+        471.0
+      ],
+      "solid_bbox": [
+        14,
+        113,
+        391,
+        359
+      ],
+      "supporting_sole": [
+        268.333343505859,
+        471.0
+      ]
+    },
+    {
+      "direction": "SE",
+      "helmet_to_sole_height": 366.0,
+      "rect": [
+        410,
+        0,
+        390,
+        512
+      ],
+      "scale_96": 0.262295081967213,
+      "sole": [
+        583.0,
+        475.0
+      ],
+      "solid_bbox": [
+        427,
+        110,
+        337,
+        366
+      ],
+      "supporting_sole": [
+        671.0,
+        475.0
+      ]
+    },
+    {
+      "direction": "S",
+      "helmet_to_sole_height": 376.0,
+      "rect": [
+        800,
+        0,
+        340,
+        512
+      ],
+      "scale_96": 0.25531914893617,
+      "sole": [
+        936.0,
+        485.0
+      ],
+      "solid_bbox": [
+        816,
+        110,
+        280,
+        376
+      ],
+      "supporting_sole": [
+        938.0,
+        485.0
+      ]
+    },
+    {
+      "direction": "SW",
+      "helmet_to_sole_height": 364.0,
+      "rect": [
+        1140,
+        0,
+        396,
+        512
+      ],
+      "scale_96": 0.263736263736264,
+      "sole": [
+        1331.0,
+        475.0
+      ],
+      "solid_bbox": [
+        1160,
+        112,
+        353,
+        364
+      ],
+      "supporting_sole": [
+        1241.5,
+        475.0
+      ]
+    },
+    {
+      "direction": "W",
+      "helmet_to_sole_height": 364.0,
+      "rect": [
+        0,
+        512,
+        425,
+        512
+      ],
+      "scale_96": 0.263736263736264,
+      "sole": [
+        149.0,
+        934.0
+      ],
+      "solid_bbox": [
+        25,
+        571,
+        392,
+        364
+      ],
+      "supporting_sole": [
+        130.33332824707,
+        934.0
+      ]
+    },
+    {
+      "direction": "NW",
+      "helmet_to_sole_height": 378.0,
+      "rect": [
+        425,
+        512,
+        375,
+        512
+      ],
+      "scale_96": 0.253968253968254,
+      "sole": [
+        616.0,
+        948.0
+      ],
+      "solid_bbox": [
+        431,
+        571,
+        365,
+        378
+      ],
+      "supporting_sole": [
+        668.5,
+        948.0
+      ]
+    },
+    {
+      "direction": "N",
+      "helmet_to_sole_height": 382.0,
+      "rect": [
+        800,
+        512,
+        340,
+        512
+      ],
+      "scale_96": 0.25130890052356,
+      "sole": [
+        947.0,
+        951.0
+      ],
+      "solid_bbox": [
+        823,
+        570,
+        293,
+        382
+      ],
+      "supporting_sole": [
+        982.0,
+        951.0
+      ]
+    },
+    {
+      "direction": "NE",
+      "helmet_to_sole_height": 382.0,
+      "rect": [
+        1140,
+        512,
+        396,
+        512
+      ],
+      "scale_96": 0.25130890052356,
+      "sole": [
+        1311.0,
+        951.0
+      ],
+      "solid_bbox": [
+        1158,
+        570,
+        356,
+        382
+      ],
+      "supporting_sole": [
+        1281.5,
+        951.0
+      ]
+    }
+  ],
+  "path": "C:/Code/Game/first-game/assets/sprites/player/redesign_v2/firearm/r17_firearm_contact_b_v002.png",
+  "sha256": "36a37e00263e9cf16464df381dfef05d2da4f6385762d1b4ddf70636e593f243",
+  "source_preserved": true
+}

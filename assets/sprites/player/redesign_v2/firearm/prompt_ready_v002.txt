@@ -1,0 +1,14 @@
+Use case: precise-object-edit
+Edit target: the attached R-17 eight-view rifle sprite sheet.
+Preserve the excellent character identity, slim human body, armor proportions, cape, sprite sizes, cell positions, exact 1536x1024 four-column two-row layout and native pixel-art style. Change ONLY arm/hand/rifle aiming direction where needed so every rifle aims strictly in the SAME direction that its body faces.
+Exact reading order:
+top row cell1 EAST: unchanged true side view, rifle points screen-right.
+top row cell2 SOUTH-EAST: front-right three-quarter, barrel points diagonally lower-right in ground projection with correct slight foreshortening.
+top row cell3 SOUTH: true front, rifle points DIRECTLY TOWARD CAMERA, not horizontally across chest. Strong axial foreshortening: visible round muzzle opening in front of sternum/upper abdomen, narrow barrel recedes to shoulder behind it, two hands support same rifle. Gun is about .70 of body height in actual physical size but projected length is short because viewed down barrel.
+top row cell4 SOUTH-WEST: front-left three-quarter, rifle points diagonally lower-left with foreshortening.
+bottom row cell1 WEST: unchanged true side view, rifle points screen-left.
+bottom row cell2 NORTH-WEST: rear-left three-quarter, rifle points diagonally upper-left, no front visor.
+bottom row cell3 NORTH: true rear; rifle points directly AWAY FROM CAMERA, mostly occluded by shoulder/body with only its far barrel visible above/beside right shoulder, no sideways barrel sticking left, no front visor.
+bottom row cell4 NORTH-EAST: rear-right three-quarter, rifle points diagonally upper-right.
+Stock seated against right shoulder, right trigger hand and left fore-end support must stay physically attached in every view. Same compact brown-stock dark-steel rifle in every cell, same length and thickness relative to body; no extra weapon.
+Keep complete isolated silhouettes and generous gutters. Crisp small pixel clusters and dark stepped outline, same lighting. Genuinely transparent alpha zero outside exact contours. Remove background diffuse halos entirely without changing interior art. No shadows, glow, smoke, text, borders or watermark.

@@ -1,0 +1,1032 @@
+{
+  "kind": "ordinary_frozen_native_quest_ui_presentation_not_qa",
+  "recorded_date": "2026-10-24",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "renderer": "D3D12 12_0; Intel Arc 140V",
+  "isolated_mirror": "C:\\Users\\wuwu6\\AppData\\Local\\Temp\\first-game-art-preview\\r17_v2_current",
+  "mirror_custom_user_dir": "R17-Ordinary-Art-Preview-20261023",
+  "source_hashes": {
+    "HUD_gd": "b97e094a5574986f17b87e757acb4865c0035f1a28daad797a6daa682982c3d2",
+    "HUD_gd_before_layout": "a0cf19872ca15f8de005bbf6e629cf34e730992ddb22257dc316a03fbe64b7e3",
+    "preview_gd_txt": "33f2307cf45ed14d3fb589c967879a7ffb797c490a3704bc58417b38475c21b9",
+    "preview_tscn_txt": "5f6e15e3c1906490071755759a6927f1cf38dbf8edb303851cfe300a38b4f579"
+  },
+  "matched_project_inputs": {
+    "source_input_list": "docs/choice-gameplay/source_snapshot.json",
+    "count": 113,
+    "mismatch_count": 0,
+    "inputs": [
+      {
+        "path": "assets/world_v4/architecture/ash-street-workshop-v4-01.png",
+        "root_sha256": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909",
+        "mirror_sha256": "cbe7d1b7399b0c8775c261315b006142bc363311dc526ff371b7705807350909",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/broken-viaduct-v4-01.png",
+        "root_sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+        "mirror_sha256": "f3d8c7e18f9d7d574d5349eb0e8831292f22994e9678f9f30a3c661ecb8b0b73",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/crystal-buttress-v4-01.png",
+        "root_sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+        "mirror_sha256": "6a42b41f02ea57a763101f762b6a10cdd3a86130548033ff2f1f175b0453900c",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/fallen-bell-sanctuary-v4-01.png",
+        "root_sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+        "mirror_sha256": "a342e5547ec3c0d69d97ad01d189c5a84eda8643b2d2d77c8a074ff8b7aa091c",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/guild-entrance-v4-03.png",
+        "root_sha256": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+        "mirror_sha256": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/marsh-pumphouse-v4-01.png",
+        "root_sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+        "mirror_sha256": "c4512511be1fc5f3b6d17c35813f4e2020cdc6d695ac114c8ad8b53dc2effe2d",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/roadwarden-gate-v4-01.png",
+        "root_sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+        "mirror_sha256": "a8e1de60cc341e56d3e0d900c750ec9176d3357ce935a460abcecf3f938257bf",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/roadwarden-shelter-v4-01.png",
+        "root_sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+        "mirror_sha256": "bd9f0f6ee3b909e07a5e7682eecfb2574aadc3292a45a86b3dd095c8b73cd0b8",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/ruined-forge-v4-01.png",
+        "root_sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+        "mirror_sha256": "db35a69962b03eeed374398ad714d61abeeee556ebe5802e90c142d7526625fc",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/sealed-cistern-v4-01.png",
+        "root_sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+        "mirror_sha256": "43c5481b9a181085f85558d37f2a4792c4f466e84c75657b3467000bdb36824b",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/slate-boundary-wall-v4-01.png",
+        "root_sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+        "mirror_sha256": "d8717504dc6b2d2690dd1eab3e6fad2f5ecbd2bd6acf4f5d40a1bfb664532e11",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/architecture/stone-service-crossing-v4-01.png",
+        "root_sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+        "mirror_sha256": "78cc113e377a16d1df90a84f2f12aff36707df59bc35ce0cbd3deaae50096c12",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/buried-slate-cobbles-v4-01.png",
+        "root_sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21",
+        "mirror_sha256": "1b739736f7c35d859102a87bf7c3f0446f6392e13b10d29786385d61eb7aaf21",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/buried-slate-cobbles-v4-02.png",
+        "root_sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+        "mirror_sha256": "56c1c0dbcd5d5a6ea1bb88f48572da8c26649bf2b02923fda3b81c7ee7eef3d2",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/cold-fractured-shale-v4-01.png",
+        "root_sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8",
+        "mirror_sha256": "1dacd0b113d5881c34c42db71fdf1a01f2935186b1588acefc4f55d9c87b6ab8",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/cold-silt-shale-v4-02.png",
+        "root_sha256": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a",
+        "mirror_sha256": "98d0ed0b99a6d20f66a324f24155f2082e15c808a8664b6093db691acf95923a",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/damp-cut-slate-v4-01.png",
+        "root_sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+        "mirror_sha256": "0f3de8e194c2460d98118884e7c178a62deb184f486717f35b7f6421561263a1",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/packed-umber-earth-v4-01.png",
+        "root_sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+        "mirror_sha256": "1f786a1d6006edc0974052653f5e4b6c3a9ed5c21179aec56c724d499ae8abbf",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/stagnant-silt-water-v4-01.png",
+        "root_sha256": "e8dbf2876a3075837fff31301645d4893132fe2692839cf2534fce1a0a1b04d4",
+        "mirror_sha256": "e8dbf2876a3075837fff31301645d4893132fe2692839cf2534fce1a0a1b04d4",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/ground/stagnant-silt-water-v4-02.png",
+        "root_sha256": "fba65c8f1cc160a9113c7dceb998a1c5d9724c1fea3d8b3b582d3e7cf6659c2b",
+        "mirror_sha256": "fba65c8f1cc160a9113c7dceb998a1c5d9724c1fea3d8b3b582d3e7cf6659c2b",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/landmarks/ancient-salvage-landmarks-v4-01.png",
+        "root_sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+        "mirror_sha256": "dcabc5a757e3054f53bcd666806445fc4536067df877de37af31e40a4323a87c",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/landmarks/evacuation-bus-v4-01.png",
+        "root_sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+        "mirror_sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/landmarks/resonance-outcrop-v4-02.png",
+        "root_sha256": "7bc4e97535f0386a4cc8f741ab58180442fd7fcf2a4a8736d2fb3e203ee85e4b",
+        "mirror_sha256": "7bc4e97535f0386a4cc8f741ab58180442fd7fcf2a4a8736d2fb3e203ee85e4b",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/convoy-remnants-v4-01.png",
+        "root_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+        "mirror_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/field-mechanisms-v4-01.png",
+        "root_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+        "mirror_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/grounded-hazards-v4-01.png",
+        "root_sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+        "mirror_sha256": "181fabe736f2e1150742da1e1df568a7f900647c62e5f7d7c302972c795143a9",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+        "root_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+        "mirror_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+        "root_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+        "mirror_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/hub-workstations-v4-02.png",
+        "root_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "mirror_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "matches": true
+      },
+      {
+        "path": "assets/world_v4/props/rooted-medieval-debris-v4-01.png",
+        "root_sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+        "mirror_sha256": "e8923b08796484959dbf1a65b6b894f8b3aacffd4abc99a2e3ec118f3a82dd5b",
+        "matches": true
+      },
+      {
+        "path": "data/art/player_animation_manifest.json",
+        "root_sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17",
+        "mirror_sha256": "adac6bc735cc8b3ac8d5be229bdfc42003f5060b17e51817eaddf4603915bb17",
+        "matches": true
+      },
+      {
+        "path": "data/art/r17_presentation_v2.json",
+        "root_sha256": "40c44691d78bf2ce7966ff1e8d5a2c84d6839aaa5dba1bb3e98dc5996076aaa8",
+        "mirror_sha256": "40c44691d78bf2ce7966ff1e8d5a2c84d6839aaa5dba1bb3e98dc5996076aaa8",
+        "matches": true
+      },
+      {
+        "path": "data/art/r17_weapon_families_v2.json",
+        "root_sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+        "mirror_sha256": "76260992044e1473ddce7b6ecb9598b4ca801d551c0a582370cdc608d29648a5",
+        "matches": true
+      },
+      {
+        "path": "data/art/visual_assets.json",
+        "root_sha256": "7838f7c3b2f3b44a6bc0e7ed9f5440d324989db66cc093c29c0c66f67ef120ab",
+        "mirror_sha256": "7838f7c3b2f3b44a6bc0e7ed9f5440d324989db66cc093c29c0c66f67ef120ab",
+        "matches": true
+      },
+      {
+        "path": "data/art/world_materials_v3.json",
+        "root_sha256": "d231b6790b43e9f1ef648d2ca41184f367ee14df28720c8f89e92ed9232eae4e",
+        "mirror_sha256": "d231b6790b43e9f1ef648d2ca41184f367ee14df28720c8f89e92ed9232eae4e",
+        "matches": true
+      },
+      {
+        "path": "data/art/world_v2.json",
+        "root_sha256": "6e636e20b5761319d981af98346ae62521141d6a92e32aebadb2e8b967fd9d19",
+        "mirror_sha256": "6e636e20b5761319d981af98346ae62521141d6a92e32aebadb2e8b967fd9d19",
+        "matches": true
+      },
+      {
+        "path": "data/enemies/enemies.json",
+        "root_sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6",
+        "mirror_sha256": "134f4fb16889e051cf6d4de24f4703a4a3fa69f9d68979a2a1a9886026b920b6",
+        "matches": true
+      },
+      {
+        "path": "data/items/equipment.json",
+        "root_sha256": "b64f235cf7e57df765421e3aaf2dffa730c284798367d594ae75d3eac83be2a0",
+        "mirror_sha256": "b64f235cf7e57df765421e3aaf2dffa730c284798367d594ae75d3eac83be2a0",
+        "matches": true
+      },
+      {
+        "path": "data/items/recipes.json",
+        "root_sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c",
+        "mirror_sha256": "edab4c0a68ab44baf2249138450ad2fe0112758752660b9a3e12890a2347113c",
+        "matches": true
+      },
+      {
+        "path": "data/maps/events.json",
+        "root_sha256": "c6453efcbcf84b94072e54c51a5bf860464f1e3013edb8914a600b24a4fdb1d6",
+        "mirror_sha256": "c6453efcbcf84b94072e54c51a5bf860464f1e3013edb8914a600b24a4fdb1d6",
+        "matches": true
+      },
+      {
+        "path": "data/maps/npcs.json",
+        "root_sha256": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+        "mirror_sha256": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+        "matches": true
+      },
+      {
+        "path": "data/maps/quests.json",
+        "root_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+        "mirror_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+        "matches": true
+      },
+      {
+        "path": "data/maps/wasteland_params.json",
+        "root_sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798",
+        "mirror_sha256": "c1ced97b04403e1f9d65beb8a2ee5f82e72b622e44e1d7afabd2585695e71798",
+        "matches": true
+      },
+      {
+        "path": "data/maps/wasteland_routes.json",
+        "root_sha256": "2bc6634952fdc75c21a68f12b2f3ebb60f1a1e840d3c029bb864a271703b5b05",
+        "mirror_sha256": "2bc6634952fdc75c21a68f12b2f3ebb60f1a1e840d3c029bb864a271703b5b05",
+        "matches": true
+      },
+      {
+        "path": "scenes/levels/guild/Guild.gd",
+        "root_sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62",
+        "mirror_sha256": "de8974b1e4b422286ef82d9f31465602bd4507f2646c5a11400d91c55486dc62",
+        "matches": true
+      },
+      {
+        "path": "scenes/levels/guild/Guild.tscn",
+        "root_sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955",
+        "mirror_sha256": "5cd0203d671a43a9e67499691dfb7cff68970bdacac13f8815bf744505ddd955",
+        "matches": true
+      },
+      {
+        "path": "scenes/levels/village/Village.gd",
+        "root_sha256": "3469b19d8c5cd8555e5775229460a8b86c63ba2bd14e77c4a9202b8e8f4ee4a2",
+        "mirror_sha256": "3469b19d8c5cd8555e5775229460a8b86c63ba2bd14e77c4a9202b8e8f4ee4a2",
+        "matches": true
+      },
+      {
+        "path": "scenes/levels/village/Village.tscn",
+        "root_sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c",
+        "mirror_sha256": "37bc734ba9fd6f5ad1b0f2d7ab23b02abe779b041b6443449ef17a3812552b2c",
+        "matches": true
+      },
+      {
+        "path": "scenes/levels/wasteland/Wasteland.gd",
+        "root_sha256": "e4363fdb05a11f3ac9c320f24cfe74a0c4466daf4231c5f6bc6cc7b4a5e54a76",
+        "mirror_sha256": "e4363fdb05a11f3ac9c320f24cfe74a0c4466daf4231c5f6bc6cc7b4a5e54a76",
+        "matches": true
+      },
+      {
+        "path": "scenes/levels/wasteland/Wasteland.tscn",
+        "root_sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565",
+        "mirror_sha256": "0c1459238ce1aec24d00b2361872a3637c341a200276a0e540308f52bad76565",
+        "matches": true
+      },
+      {
+        "path": "scenes/main/Main.gd",
+        "root_sha256": "97fca98846b900c9021d0967109ff42fd80e0bebae5cbae2861f157100a794a0",
+        "mirror_sha256": "97fca98846b900c9021d0967109ff42fd80e0bebae5cbae2861f157100a794a0",
+        "matches": true
+      },
+      {
+        "path": "scenes/main/Main.tscn",
+        "root_sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0",
+        "mirror_sha256": "203c6723fcc798980157d58d76844668f6c1d96bc6a1bd1b98474e57455070a0",
+        "matches": true
+      },
+      {
+        "path": "scenes/player/Player.gd",
+        "root_sha256": "6b5dbb255df45f41f45ba9146eddd2104a7ad7765dc4be583f22c0016ef09ecb",
+        "mirror_sha256": "6b5dbb255df45f41f45ba9146eddd2104a7ad7765dc4be583f22c0016ef09ecb",
+        "matches": true
+      },
+      {
+        "path": "scenes/player/player.tscn",
+        "root_sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e",
+        "mirror_sha256": "103fdf37151b89fb494abd77fa7f1f157237e025374130768c9708a4429d374e",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/AutomatedPlaytestRunner.tscn",
+        "root_sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf",
+        "mirror_sha256": "43f9b20418a4ed5d821095954bad8d4f65bf2315e0111ed9ae3d796f53fee8cf",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/CollisionRegressionRunner.tscn",
+        "root_sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71",
+        "mirror_sha256": "92d513eba218dfdd198a0e119c54e806395a9b73908a42cd7e12d0a247ab7c71",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/DirectionalPresentationRegression.tscn",
+        "root_sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163",
+        "mirror_sha256": "bec752bfced954a09107ccf086bbb4329511d06591067125c77e9978222fb163",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/GameplayRegressionRunner.tscn",
+        "root_sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42",
+        "mirror_sha256": "da185e51e77e65ee6f980ae92a3dde2bd79e2b830e611062b9acc9657c1f6e42",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/PerformanceRunner.tscn",
+        "root_sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24",
+        "mirror_sha256": "0896e30ff050df95b437a6c2b736de5b825f33373426f70bc67fa6b6fdacca24",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/PixelAssetBaker.tscn",
+        "root_sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e",
+        "mirror_sha256": "32c631de7c40d288a6b84ec3fb2bd9e5224cf5e0966579f9107cd6196580fa5e",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/SceneEntranceRegression.tscn",
+        "root_sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310",
+        "mirror_sha256": "2bcfdcdc4e11b6cd8d16e674d7fdbf59e5990ca3106e651688e4c97fb919a310",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/ValidationRunner.tscn",
+        "root_sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005",
+        "mirror_sha256": "acfa4c70a8f76ddf30aed1f98c045cda1d1a7888c1a31d0a3ddfd2056f185005",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/VisualReviewRunner.tscn",
+        "root_sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b",
+        "mirror_sha256": "040554d42ad55b63c4ab7151801afec66bb19232ce5aad1317118572f085450b",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/WorldAtlasRegression.tscn",
+        "root_sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee",
+        "mirror_sha256": "d268fc31b27e8e275b28d24c9404c0718182eec5a07230e1fa03f4433d72acee",
+        "matches": true
+      },
+      {
+        "path": "scenes/tests/WorldExpansionRunner.tscn",
+        "root_sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc",
+        "mirror_sha256": "d0eef317996101dec79bbc2f11f191d3e334e628014fc1e357ec54e308c4d9dc",
+        "matches": true
+      },
+      {
+        "path": "scenes/ui/HUD.gd",
+        "root_sha256": "b97e094a5574986f17b87e757acb4865c0035f1a28daad797a6daa682982c3d2",
+        "mirror_sha256": "b97e094a5574986f17b87e757acb4865c0035f1a28daad797a6daa682982c3d2",
+        "matches": true
+      },
+      {
+        "path": "scenes/ui/HUD.tscn",
+        "root_sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6",
+        "mirror_sha256": "e6778d6705157a196f29fc24cad44e6672c0abfcea93e1d238bbbb3e817878c6",
+        "matches": true
+      },
+      {
+        "path": "scripts/autoload/AudioManager.gd",
+        "root_sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f",
+        "mirror_sha256": "9c19907830f2848deb363bf202dc47cc968d94e4e1d5886d834ae716185d658f",
+        "matches": true
+      },
+      {
+        "path": "scripts/autoload/DataRegistry.gd",
+        "root_sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+        "mirror_sha256": "1f111618e0ceaeab5c41fbdb8b3e130b2343b00a1910a3eec818694f3aaa922f",
+        "matches": true
+      },
+      {
+        "path": "scripts/autoload/GameState.gd",
+        "root_sha256": "502c79484fd19bd83977af540a1cb0113e486ae6f13538a91081db82e0812645",
+        "mirror_sha256": "502c79484fd19bd83977af540a1cb0113e486ae6f13538a91081db82e0812645",
+        "matches": true
+      },
+      {
+        "path": "scripts/autoload/SaveManager.gd",
+        "root_sha256": "651187a906e038b8d73f9935ee398d486f244ae949f2c131afb9c4cdf90a6a92",
+        "mirror_sha256": "651187a906e038b8d73f9935ee398d486f244ae949f2c131afb9c4cdf90a6a92",
+        "matches": true
+      },
+      {
+        "path": "scripts/autoload/SceneRouter.gd",
+        "root_sha256": "5d29a46aa862ab99878e5c430e4cd595da9876ed69ba9658999e53883d86c81d",
+        "mirror_sha256": "5d29a46aa862ab99878e5c430e4cd595da9876ed69ba9658999e53883d86c81d",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/AnimatedNpc.gd",
+        "root_sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299",
+        "mirror_sha256": "6e99006d688fceeeccb7a1cd82dc5303f34df3d6e3e8c9994202529e0ca57299",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/AttackFlash.gd",
+        "root_sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c",
+        "mirror_sha256": "ccf8dc0af13a403ebf3fb8c18f49e3312743809d38d081f9e8fe5efccb0cd67c",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/DamagePopup.gd",
+        "root_sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825",
+        "mirror_sha256": "920f78ea80ba1eea4444c1abcdc453caba868d2ee6c29cba1a62a68c0dcb7825",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/DialogueNpc.gd",
+        "root_sha256": "9f96e9c2f726aa7f0495cfaa6eab281642c0a7cfd7e03bb95b7bc426868e74be",
+        "mirror_sha256": "9f96e9c2f726aa7f0495cfaa6eab281642c0a7cfd7e03bb95b7bc426868e74be",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/Enemy.gd",
+        "root_sha256": "22588b30a5a91f5b18a800156be452a21a8f2787fb5f021a39f5496c5a32eb1d",
+        "mirror_sha256": "22588b30a5a91f5b18a800156be452a21a8f2787fb5f021a39f5496c5a32eb1d",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/EnemyHealthBar.gd",
+        "root_sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef",
+        "mirror_sha256": "fa43533e5aff79d1772afad4af318cceab27eea98d7e5a49c029438b9a6499ef",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/HitEffect.gd",
+        "root_sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94",
+        "mirror_sha256": "1af5c5e55cd4e126665d091fc891ded7eb73fbc5a1d29b875d70feb733fb3c94",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/Interactable.gd",
+        "root_sha256": "f08662efe1bc6104783cff7042311a8f92ccc3e641dfbd416bca2d7d506c0d7d",
+        "mirror_sha256": "f08662efe1bc6104783cff7042311a8f92ccc3e641dfbd416bca2d7d506c0d7d",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/Pickup.gd",
+        "root_sha256": "b9acc973c155a047c1f074fa3a5c71af88bf8b185b990acb618c5ab0ba3c0a50",
+        "mirror_sha256": "b9acc973c155a047c1f074fa3a5c71af88bf8b185b990acb618c5ab0ba3c0a50",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/Projectile.gd",
+        "root_sha256": "2b10be60a11b6364b55db2bcb78e96477206088e846ef14a8d4c36723386ed0e",
+        "mirror_sha256": "2b10be60a11b6364b55db2bcb78e96477206088e846ef14a8d4c36723386ed0e",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/RouteGate.gd",
+        "root_sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1",
+        "mirror_sha256": "04955d8f98bb0f4fddec92b99810844de4323a3e61d23cc8bef72de688777dd1",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/WastelandAtmosphere.gd",
+        "root_sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+        "mirror_sha256": "85afaac23eafef087036c2eba38f91cc8b37775f59f2a3af94dc33fa2c7d012a",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/WorldProp.gd",
+        "root_sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de",
+        "mirror_sha256": "de4a1ee7afc7fd2e1158ca39f4042d5f9f022a865eeecf2b85574f4a81e088de",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/ExpeditionLedger.gd",
+        "root_sha256": "2d904833e3699c0cb9a5e55352df5f45c1377a0332a43457738698f08b327366",
+        "mirror_sha256": "2d904833e3699c0cb9a5e55352df5f45c1377a0332a43457738698f08b327366",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/InventorySystem.gd",
+        "root_sha256": "248becdbe039f9f729150fc6c4170ffd617345b4923fc1eda0faa14f14a8c3b9",
+        "mirror_sha256": "248becdbe039f9f729150fc6c4170ffd617345b4923fc1eda0faa14f14a8c3b9",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/LevelGenerator.gd",
+        "root_sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357",
+        "mirror_sha256": "423d32480cc29c7a7d05c8da115b2e547e11b1b5b09ff24fc2ee8f4f38096357",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/ProjectilePool.gd",
+        "root_sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67",
+        "mirror_sha256": "54fbcbbcf07a04b6f629db4298aa73e692b5a7d211ff3d4c35d09f0c9c68cb67",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/VillageTileMap.gd",
+        "root_sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0",
+        "mirror_sha256": "ca3d2711ff3dbb9931987e377bc8ec920304ad792005d1ad306fcf14041cdbb0",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/WorldBackdrop.gd",
+        "root_sha256": "a5b200a054a4605d9d64286d93a15dd2b7242fd72b66ffe0630277e115b80969",
+        "mirror_sha256": "a5b200a054a4605d9d64286d93a15dd2b7242fd72b66ffe0630277e115b80969",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/AutomatedPlaytestRunner.gd",
+        "root_sha256": "267cbb1f67c6ecc3a8aa2a323686c779e2e15d00b30f9d5bbf4e4223a5a3bbae",
+        "mirror_sha256": "267cbb1f67c6ecc3a8aa2a323686c779e2e15d00b30f9d5bbf4e4223a5a3bbae",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/CollisionRegressionRunner.gd",
+        "root_sha256": "5a9e409b22a6401ad464c6761d7c941f12faf84fc1a14f0317165d614124d313",
+        "mirror_sha256": "5a9e409b22a6401ad464c6761d7c941f12faf84fc1a14f0317165d614124d313",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/DirectionalPresentationRegression.gd",
+        "root_sha256": "85b5e0f3030c5e0d48663b20e282b35f24628c484779c975242cf1a2e421f13f",
+        "mirror_sha256": "85b5e0f3030c5e0d48663b20e282b35f24628c484779c975242cf1a2e421f13f",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/GameplayRegressionRunner.gd",
+        "root_sha256": "b880d57abbf6a81208c1ee67040d77c32d6ee25723d8538ccd4be84f8ca61970",
+        "mirror_sha256": "b880d57abbf6a81208c1ee67040d77c32d6ee25723d8538ccd4be84f8ca61970",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/PerformanceRunner.gd",
+        "root_sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a",
+        "mirror_sha256": "d653f68e8a08f8cb95351962e4bbadeef7d41996b86311cdc5b5853b8eebfd7a",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/SceneEntranceRegression.gd",
+        "root_sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc",
+        "mirror_sha256": "b7f3eb7a1986f3e30348e2c116416fd07bb48741dd559cdb776774fbf0eed1dc",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/VerticalSliceVerifier.gd",
+        "root_sha256": "a44e2be12574a07c3fee72af71dffaeff2acff39804536ef17b9a7c334a11b5a",
+        "mirror_sha256": "a44e2be12574a07c3fee72af71dffaeff2acff39804536ef17b9a7c334a11b5a",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/VisualReviewRunner.gd",
+        "root_sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda",
+        "mirror_sha256": "ff5c75f41745b9d918b1e51f3e70af8cb087fe2d5051df50aeb2ba9402c6dfda",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/WorldAtlasRegression.gd",
+        "root_sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e",
+        "mirror_sha256": "b9c52bb6d5751e84a3b27aee608dee9fb25b88e4cff122f48b05253ce60d518e",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/WorldExpansionRegression.gd",
+        "root_sha256": "30c6b9cae6ceb8d07e93bd659b7586cf4bde9748dc03870df37451b3bc98fab5",
+        "mirror_sha256": "30c6b9cae6ceb8d07e93bd659b7586cf4bde9748dc03870df37451b3bc98fab5",
+        "matches": true
+      },
+      {
+        "path": "scripts/tests/WorldExpansionRunner.gd",
+        "root_sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203",
+        "mirror_sha256": "3c2cbd19354980608195a7e7394d8d414dbb805739498bfa569c6ba9c7cf9203",
+        "matches": true
+      },
+      {
+        "path": "scripts/tools/PixelAssetBaker.gd",
+        "root_sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75",
+        "mirror_sha256": "2f23885cefeb9f13f651a0a2a7babc767b96504abec0b502d55f70402f658b75",
+        "matches": true
+      },
+      {
+        "path": "scripts/ui/SceneEntrance.gd",
+        "root_sha256": "d2be1a2effca601eb6485a0ca03137658ccbb298d987dafdf93cbac2b89f9074",
+        "mirror_sha256": "d2be1a2effca601eb6485a0ca03137658ccbb298d987dafdf93cbac2b89f9074",
+        "matches": true
+      },
+      {
+        "path": "scripts/ui/WorldAtlasPanel.gd",
+        "root_sha256": "735b14a5984357316bfe4a886442c8bd9cdf686dd34d47feee68f17ed3d4dc60",
+        "mirror_sha256": "735b14a5984357316bfe4a886442c8bd9cdf686dd34d47feee68f17ed3d4dc60",
+        "matches": true
+      },
+      {
+        "path": "scripts/ui/WorldMapView.gd",
+        "root_sha256": "8fccfb51b0b53b8b22529db3476a239aa3dd8abd7899dab281d8d326b18b57bc",
+        "mirror_sha256": "8fccfb51b0b53b8b22529db3476a239aa3dd8abd7899dab281d8d326b18b57bc",
+        "matches": true
+      },
+      {
+        "path": "scripts/utils/PixelArtFactory.gd",
+        "root_sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5",
+        "mirror_sha256": "2e980e52ee9a1bcbb6177b2ebb467046c08903219d245529ce1a58a5da9dc3a5",
+        "matches": true
+      },
+      {
+        "path": "scripts/utils/RuntimeAssetLoader.gd",
+        "root_sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f",
+        "mirror_sha256": "131629614a91ed329e60579539e18af86cd3d976f666ab234fc28775c39a550f",
+        "matches": true
+      },
+      {
+        "path": "scripts/components/CampaignAction.gd",
+        "root_sha256": "a289d06c00f63f72039485ed8da50a5e8dfea3ed4d471d52dc05067ad27d696f",
+        "mirror_sha256": "a289d06c00f63f72039485ed8da50a5e8dfea3ed4d471d52dc05067ad27d696f",
+        "matches": true
+      },
+      {
+        "path": "scripts/systems/CampaignProgress.gd",
+        "root_sha256": "ea4b8867b035f23859d3005d0153f2da60f3bcc671c0d83d0d5b8759c1097c77",
+        "mirror_sha256": "ea4b8867b035f23859d3005d0153f2da60f3bcc671c0d83d0d5b8759c1097c77",
+        "matches": true
+      },
+      {
+        "path": "assets/sprites/items/materials/broken_coil.png",
+        "root_sha256": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f",
+        "mirror_sha256": "3c5d306bfdc755143f208320595b530a3752622039f511e58db01c9c521cac1f",
+        "matches": true
+      },
+      {
+        "path": "assets/sprites/items/materials/precision_chip.png",
+        "root_sha256": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b",
+        "mirror_sha256": "62be8dc2f5113512d6cabab1ec91d899cf40690814923a77b85319f82501aa7b",
+        "matches": true
+      },
+      {
+        "path": "assets/sprites/player/redesign_v2/source/angular_candidates/r17_blade_idle_e11_25_v019.png",
+        "root_sha256": "b738ba7663f9f2774a8434b0dc56648134de35da04621513db23a7b76e859e0a",
+        "mirror_sha256": "b738ba7663f9f2774a8434b0dc56648134de35da04621513db23a7b76e859e0a",
+        "matches": true
+      }
+    ],
+    "matched_at_render_time": true
+  },
+  "view_matrix": [
+    "no-active-hub",
+    "highway-first-outing",
+    "city-provisional-field",
+    "city-ready-hub",
+    "legacy-ready-hub",
+    "catalogue-bottom",
+    "expanded-rules"
+  ],
+  "output_images": [
+    {
+      "phase": "baseline",
+      "resolution": "1280x720",
+      "name": "city-provisional-field.png",
+      "bytes": 507409,
+      "sha256": "bc629721e58d07e9a20adb79ed828cf1b75c13a63a5f490ccc13f5db2c533619"
+    },
+    {
+      "phase": "baseline",
+      "resolution": "1280x720",
+      "name": "no-active-hub.png",
+      "bytes": 627477,
+      "sha256": "e44a165538b02cca4be696e812b618aa9c793d126b3b764e7dc180465c422773"
+    },
+    {
+      "phase": "baseline",
+      "resolution": "1024x768",
+      "name": "city-provisional-field.png",
+      "bytes": 374779,
+      "sha256": "66dd5841ee0120a97702da16d9f149a475cc6e15231416fe1be93fb80f3b3db9"
+    },
+    {
+      "phase": "baseline",
+      "resolution": "1024x768",
+      "name": "no-active-hub.png",
+      "bytes": 409026,
+      "sha256": "3d80aa930bc47e011bf90591372b5eab1e732a6de43ba7e14deaf460112491dc"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "catalogue-bottom.png",
+      "bytes": 499121,
+      "sha256": "a12a7e9e3ef094150a3e29cd5575475eb06f61f1ad3c8d0b030de6db1ef32b07"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "city-provisional-field.png",
+      "bytes": 407081,
+      "sha256": "75d76b8fc46ca1d46f286da03f6f1a81a41b6ff7b8abe6d0bdcaa209be7ddc8a"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "city-ready-hub.png",
+      "bytes": 522053,
+      "sha256": "762f3fb90423ba187f27dfd9b11c47229552720663c9f0b5a4fc73e6b1f450cc"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "expanded-rules.png",
+      "bytes": 540003,
+      "sha256": "f14ca76dc78df7df534c1cca746ded798bad64b717c1bf7cab461107593cab5f"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "highway-first-outing.png",
+      "bytes": 527032,
+      "sha256": "9a5ff24aa5784c7f51c9a8fcb1149f3d423c8df78d68137972778e2efcef2635"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "legacy-ready-hub.png",
+      "bytes": 517354,
+      "sha256": "2d6558faab126a34dcf0d25c3aba355089c791e6d71b969625bfe104cc58d65b"
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "name": "no-active-hub.png",
+      "bytes": 503155,
+      "sha256": "9b6831d2512c84b356082dbc962ed71d27914c75ce4faa76fbbe3a828971423f"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "catalogue-bottom.png",
+      "bytes": 341922,
+      "sha256": "5593d57a2ff7a61184e070e599d557dcc557f08006ad03eb7f11d1a45e6c8ded"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "city-provisional-field.png",
+      "bytes": 334078,
+      "sha256": "55f52dbe7fd81d6492ac9d619562278a2e31c8142ed1cd7c376d1e9e8b0f9f71"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "city-ready-hub.png",
+      "bytes": 363727,
+      "sha256": "ca7f824b527f3b1ed69e4d0cda0ed5a764c787da75b62d6878ba35563bf9cabc"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "expanded-rules.png",
+      "bytes": 382861,
+      "sha256": "5da9cd8556ea9dd92496f40428826e51a180fa30d7208bf91935347d6e0a242b"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "highway-first-outing.png",
+      "bytes": 366699,
+      "sha256": "09675ddb629e50792409d03907ff26215491e2f17dca5ad1d999f0d92c2d1387"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "legacy-ready-hub.png",
+      "bytes": 358668,
+      "sha256": "812ff337dad8d7d165e37dae299449a31666351913a94f0fc751737c6f0a03e4"
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "name": "no-active-hub.png",
+      "bytes": 346523,
+      "sha256": "f578bc65694e9a3a9491f53267b5e8bbf98d428f43793ae1dbf8b3a9a65f985a"
+    }
+  ],
+  "render_processes": [
+    {
+      "phase": "baseline",
+      "resolution": "1280x720",
+      "log": "baseline/1280x720/wide.log",
+      "log_sha256": "61c2aff01422b73d2cf016b0941c0ddd2b6cbcf68bc17f93d5a561c83cd0407d",
+      "session_id": 30976,
+      "exit_code": 0,
+      "exit_evidence": "Observed final process completion via tool output",
+      "frame_records": [
+        "ART_QUEST_LAYOUT_FRAME: no-active-hub viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: city-provisional-field viewport=(1280.0, 720.0) image_result=0"
+      ],
+      "staged_state_records": [
+        "ART_QUEST_LAYOUT_STAGE: no-active-hub quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: city-provisional-field quest=metropolis_archive scene=wasteland route=ruined_metropolis outing=ch5b_household_record outing_index=1 ready=false checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1） campaign_actions={ \"ch5b_copy_archive\": \"done\", \"ch5b_record_family\": \"ch5b_publish_consent\" } haul={ \"precision_chip\": 1 } uncommitted_clues=[\"ruined_metropolis:story_metropolis_archive\"] completed=[\"clear_scrap_route\", \"toxic_sample\", \"crystal_scar_recon\", \"old_factory_core\"] disabled_actor_physics=51 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO"
+      ],
+      "layout_records": [
+        "ART_QUEST_LAYOUT_CONTROLS: no-active-hub panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@349 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@175 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=1165.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (100.0, 231.0), S: (210.0, 38.0)] fullmin=<missing> fullmin_rect=[P: (0.0, 0.0), S: (0.0, 0.0)] fullmin_combined_min=(0.0, 0.0) fullmin_text= checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractClaim:Button\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: city-provisional-field panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@1053 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@879 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=1579.0 scroll_page=554.0 claim=@Label@1055 claim_rect=[P: (100.0, 146.0), S: (1034.0, 75.0)] fullmin=ContractRequirements fullmin_rect=[P: (100.0, 231.0), S: (1034.0, 122.0)] fullmin_combined_min=(1.0, 122.0) fullmin_text=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1） | 數字包含本趟成果；成功返村才保留，材料在交付時扣除。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\"]"
+      ],
+      "input_guard_records": [],
+      "error_warning_lines": []
+    },
+    {
+      "phase": "baseline",
+      "resolution": "1024x768",
+      "log": "baseline/1024x768/narrow.log",
+      "log_sha256": "a5f3c1f0a8571fdfe5dbd0b476a2f6d38e65c15cc5a9a3db6aafea35d18829e4",
+      "session_id": null,
+      "exit_code": 0,
+      "exit_evidence": "Observed final process completion via tool output",
+      "frame_records": [
+        "ART_QUEST_LAYOUT_FRAME: no-active-hub viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: city-provisional-field viewport=(1024.0, 768.0) image_result=0"
+      ],
+      "staged_state_records": [
+        "ART_QUEST_LAYOUT_STAGE: no-active-hub quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: city-provisional-field quest=metropolis_archive scene=wasteland route=ruined_metropolis outing=ch5b_household_record outing_index=1 ready=false checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1） campaign_actions={ \"ch5b_copy_archive\": \"done\", \"ch5b_record_family\": \"ch5b_publish_consent\" } haul={ \"precision_chip\": 1 } uncommitted_clues=[\"ruined_metropolis:story_metropolis_archive\"] completed=[\"clear_scrap_route\", \"toxic_sample\", \"crystal_scar_recon\", \"old_factory_core\"] disabled_actor_physics=51 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO"
+      ],
+      "layout_records": [
+        "ART_QUEST_LAYOUT_CONTROLS: no-active-hub panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@349 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@175 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=2032.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (32.0, 255.0), S: (210.0, 38.0)] fullmin=<missing> fullmin_rect=[P: (0.0, 0.0), S: (0.0, 0.0)] fullmin_combined_min=(0.0, 0.0) fullmin_text= checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractClaim:Button\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: city-provisional-field panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@1053 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@879 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=2695.0 scroll_page=554.0 claim=@Label@1055 claim_rect=[P: (32.0, 170.0), S: (510.0, 101.0)] fullmin=ContractRequirements fullmin_rect=[P: (32.0, 281.0), S: (510.0, 122.0)] fullmin_combined_min=(1.0, 122.0) fullmin_text=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1） | 數字包含本趟成果；成功返村才保留，材料在交付時扣除。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\"]"
+      ],
+      "input_guard_records": [],
+      "error_warning_lines": []
+    },
+    {
+      "phase": "final",
+      "resolution": "1280x720",
+      "log": "final/1280x720/wide.log",
+      "log_sha256": "dc5a06c40632c0a81ff09f2c0a73182f36fc1a0f2cfab4dce4c0b5dfebd2b105",
+      "session_id": 63307,
+      "exit_code": 0,
+      "exit_evidence": "Observed final process completion via tool output",
+      "frame_records": [
+        "ART_QUEST_LAYOUT_FRAME: no-active-hub viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: highway-first-outing viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: city-provisional-field viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: city-ready-hub viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: legacy-ready-hub viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: catalogue-bottom viewport=(1280.0, 720.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: expanded-rules viewport=(1280.0, 720.0) image_result=0"
+      ],
+      "staged_state_records": [
+        "ART_QUEST_LAYOUT_STAGE: no-active-hub quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: highway-first-outing quest=clear_scrap_route scene=village route=scrap_highway outing=ch1a_escort_repair outing_index=0 ready=false checklist=待完成｜章節行動已帶回 0/2 趟 | 待完成｜現場行動：南門旁路繼電器 | 待完成｜擊倒本區污染體 0/5 | 已達成｜交付廢鐵 40/12 | 選讀，不影響交付｜巴士殘骸上的撤離名冊（未調查） campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: city-provisional-field quest=metropolis_archive scene=wasteland route=ruined_metropolis outing=ch5b_household_record outing_index=1 ready=false checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1） campaign_actions={ \"ch5b_copy_archive\": \"done\", \"ch5b_record_family\": \"ch5b_publish_consent\" } haul={ \"precision_chip\": 1 } uncommitted_clues=[\"ruined_metropolis:story_metropolis_archive\"] completed=[\"clear_scrap_route\", \"toxic_sample\", \"crystal_scar_recon\", \"old_factory_core\"] disabled_actor_physics=51 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: city-ready-hub quest=metropolis_archive scene=village route=ruined_metropolis outing= outing_index=2 ready=true checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜都心檔案：避難名冊與斷水街區（已帶回） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2 campaign_actions={  } haul={  } uncommitted_clues=[] completed=[\"clear_scrap_route\", \"toxic_sample\", \"crystal_scar_recon\", \"old_factory_core\"] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: legacy-ready-hub quest=clear_scrap_route scene=village route=scrap_highway outing= outing_index=-1 ready=true checklist=已達成｜擊倒本區污染體 5/5 | 已達成｜交付廢鐵 12/12 | 選讀，不影響交付｜巴士殘骸上的撤離名冊（未調查） campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: catalogue-bottom quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: expanded-rules quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO"
+      ],
+      "layout_records": [
+        "ART_QUEST_LAYOUT_CONTROLS: no-active-hub panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@349 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@175 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=593.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (110.0, 267.0), S: (230.0, 38.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 215.0), S: (1052.0, 20.0)] fullmin_combined_min=(1.0, 20.0) fullmin_text=從下方展開「可承接委託」查看路線、必要目標與報酬。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Available:Button\", \"ContractCatalog_Available:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: highway-first-outing panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@706 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@532 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=698.0 scroll_page=554.0 claim=ContractRequirements claim_rect=[P: (110.0, 241.0), S: (1052.0, 113.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 241.0), S: (1052.0, 113.0)] fullmin_combined_min=(1.0, 113.0) fullmin_text=必需進度 1/4 | ○ 章節行動已帶回 0/2 趟 | ○ 現場行動：南門旁路繼電器 | ○ 擊倒本區污染體 0/5 | ✓ 交付廢鐵 40/12 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: city-provisional-field panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@1386 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@1212 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=767.0 scroll_page=554.0 claim=ContractNextStep claim_rect=[P: (110.0, 212.0), S: (1052.0, 23.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 241.0), S: (1052.0, 138.0)] fullmin_combined_min=(1.0, 138.0) fullmin_text=必需進度 3/4 | ○ 章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | ✓ 都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | ✓ 擊倒本區污染體 5/5 | ✓ 交付軍用精密晶片 2/2（庫存 1＋本趟 1） | 本趟成果須成功返村才保留；交付材料會扣除。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Completed:Button\", \"ContractCatalog_Completed:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: city-ready-hub panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@1744 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@1570 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=701.0 scroll_page=554.0 claim=ContractNextStep claim_rect=[P: (110.0, 212.0), S: (1052.0, 23.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 241.0), S: (1052.0, 116.0)] fullmin_combined_min=(1.0, 116.0) fullmin_text=必需進度 4/4 | ✓ 章節行動已帶回 2/2 趟 | ✓ 都心檔案：避難名冊與斷水街區（已帶回） | ✓ 擊倒本區污染體 5/5 | ✓ 交付軍用精密晶片 2/2 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Completed:Button\", \"ContractCatalog_Completed:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: legacy-ready-hub panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@2101 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@1927 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=609.0 scroll_page=554.0 claim=ContractNextStep claim_rect=[P: (110.0, 212.0), S: (1052.0, 23.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 241.0), S: (1052.0, 68.0)] fullmin_combined_min=(1.0, 68.0) fullmin_text=必需進度 2/2 | ✓ 擊倒本區污染體 5/5 | ✓ 交付廢鐵 12/12 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: catalogue-bottom panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@2458 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@2284 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=39 scroll_max=593.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (110.0, 228.0), S: (230.0, 38.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 176.0), S: (1052.0, 20.0)] fullmin_combined_min=(1.0, 20.0) fullmin_text=從下方展開「可承接委託」查看路線、必要目標與報酬。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Available:Button\", \"ContractCatalog_Available:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: expanded-rules panel=ContractPanel panel_rect=[P: (90.0, 55.0), S: (1100.0, 610.0)] panel_combined_min=(1100.0, 610.0) nav=ModalNavigation nav_rect=[P: (100.0, 62.0), S: (1080.0, 34.0)] close=@Button@2815 close_rect=[P: (1091.0, 62.0), S: (88.0, 34.0)] scroll=@ScrollContainer@2641 scroll_rect=[P: (100.0, 104.0), S: (1080.0, 554.0)] scroll_value=0 scroll_max=669.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (110.0, 267.0), S: (230.0, 38.0)] fullmin=ContractRequirements fullmin_rect=[P: (110.0, 215.0), S: (1052.0, 20.0)] fullmin_combined_min=(1.0, 20.0) fullmin_text=從下方展開「可承接委託」查看路線、必要目標與報酬。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Available:Button\", \"ContractCatalog_Available:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]"
+      ],
+      "input_guard_records": [
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=89",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=88",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=84",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=84",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=88",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=89",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=89"
+      ],
+      "error_warning_lines": []
+    },
+    {
+      "phase": "final",
+      "resolution": "1024x768",
+      "log": "final/1024x768/narrow.log",
+      "log_sha256": "5b32d896849c9c45afd228df4a550077133cebacdc556178ec6ea03699571693",
+      "session_id": 5671,
+      "exit_code": 0,
+      "exit_evidence": "Observed final process completion via tool output",
+      "frame_records": [
+        "ART_QUEST_LAYOUT_FRAME: no-active-hub viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: highway-first-outing viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: city-provisional-field viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: city-ready-hub viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: legacy-ready-hub viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: catalogue-bottom viewport=(1024.0, 768.0) image_result=0",
+        "ART_QUEST_LAYOUT_FRAME: expanded-rules viewport=(1024.0, 768.0) image_result=0"
+      ],
+      "staged_state_records": [
+        "ART_QUEST_LAYOUT_STAGE: no-active-hub quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: highway-first-outing quest=clear_scrap_route scene=village route=scrap_highway outing=ch1a_escort_repair outing_index=0 ready=false checklist=待完成｜章節行動已帶回 0/2 趟 | 待完成｜現場行動：南門旁路繼電器 | 待完成｜擊倒本區污染體 0/5 | 已達成｜交付廢鐵 40/12 | 選讀，不影響交付｜巴士殘骸上的撤離名冊（未調查） campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: city-provisional-field quest=metropolis_archive scene=wasteland route=ruined_metropolis outing=ch5b_household_record outing_index=1 ready=false checklist=待完成｜章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | 已達成｜都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2（庫存 1＋本趟 1） campaign_actions={ \"ch5b_copy_archive\": \"done\", \"ch5b_record_family\": \"ch5b_publish_consent\" } haul={ \"precision_chip\": 1 } uncommitted_clues=[\"ruined_metropolis:story_metropolis_archive\"] completed=[\"clear_scrap_route\", \"toxic_sample\", \"crystal_scar_recon\", \"old_factory_core\"] disabled_actor_physics=51 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: city-ready-hub quest=metropolis_archive scene=village route=ruined_metropolis outing= outing_index=2 ready=true checklist=已達成｜章節行動已帶回 2/2 趟 | 已達成｜都心檔案：避難名冊與斷水街區（已帶回） | 已達成｜擊倒本區污染體 5/5 | 已達成｜交付軍用精密晶片 2/2 campaign_actions={  } haul={  } uncommitted_clues=[] completed=[\"clear_scrap_route\", \"toxic_sample\", \"crystal_scar_recon\", \"old_factory_core\"] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: legacy-ready-hub quest=clear_scrap_route scene=village route=scrap_highway outing= outing_index=-1 ready=true checklist=已達成｜擊倒本區污染體 5/5 | 已達成｜交付廢鐵 12/12 | 選讀，不影響交付｜巴士殘骸上的撤離名冊（未調查） campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: catalogue-bottom quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO",
+        "ART_QUEST_LAYOUT_STAGE: expanded-rules quest= scene=village route= outing= outing_index=-1 ready=false checklist= campaign_actions={  } haul={  } uncommitted_clues=[] completed=[] disabled_actor_physics=1 native_scene_frozen=true; synthetic_ram_only=true; no input, hand-in, action start/completion, choice, reward, settlement, or SaveManager IO"
+      ],
+      "layout_records": [
+        "ART_QUEST_LAYOUT_CONTROLS: no-active-hub panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@349 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@175 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=593.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (42.0, 291.0), S: (230.0, 38.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 239.0), S: (932.0, 20.0)] fullmin_combined_min=(1.0, 20.0) fullmin_text=從下方展開「可承接委託」查看路線、必要目標與報酬。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Available:Button\", \"ContractCatalog_Available:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: highway-first-outing panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@706 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@532 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=698.0 scroll_page=554.0 claim=ContractRequirements claim_rect=[P: (42.0, 265.0), S: (932.0, 113.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 265.0), S: (932.0, 113.0)] fullmin_combined_min=(1.0, 113.0) fullmin_text=必需進度 1/4 | ○ 章節行動已帶回 0/2 趟 | ○ 現場行動：南門旁路繼電器 | ○ 擊倒本區污染體 0/5 | ✓ 交付廢鐵 40/12 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: city-provisional-field panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@1386 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@1212 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=767.0 scroll_page=554.0 claim=ContractNextStep claim_rect=[P: (42.0, 236.0), S: (932.0, 23.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 265.0), S: (932.0, 138.0)] fullmin_combined_min=(1.0, 138.0) fullmin_text=必需進度 3/4 | ○ 章節行動已帶回 1/2 趟；本趟完成，須先從返村門帶回 | ✓ 都心檔案：避難名冊與斷水街區（已讀，待該路線撤離） | ✓ 擊倒本區污染體 5/5 | ✓ 交付軍用精密晶片 2/2（庫存 1＋本趟 1） | 本趟成果須成功返村才保留；交付材料會扣除。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Completed:Button\", \"ContractCatalog_Completed:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: city-ready-hub panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@1744 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@1570 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=701.0 scroll_page=554.0 claim=ContractNextStep claim_rect=[P: (42.0, 236.0), S: (932.0, 23.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 265.0), S: (932.0, 116.0)] fullmin_combined_min=(1.0, 116.0) fullmin_text=必需進度 4/4 | ✓ 章節行動已帶回 2/2 趟 | ✓ 都心檔案：避難名冊與斷水街區（已帶回） | ✓ 擊倒本區污染體 5/5 | ✓ 交付軍用精密晶片 2/2 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Completed:Button\", \"ContractCatalog_Completed:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: legacy-ready-hub panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@2101 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@1927 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=609.0 scroll_page=554.0 claim=ContractNextStep claim_rect=[P: (42.0, 236.0), S: (932.0, 23.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 265.0), S: (932.0, 68.0)] fullmin_combined_min=(1.0, 68.0) fullmin_text=必需進度 2/2 | ✓ 擊倒本區污染體 5/5 | ✓ 交付廢鐵 12/12 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Waiting:Button\", \"ContractCatalog_Waiting:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: catalogue-bottom panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@2458 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@2284 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=39 scroll_max=593.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (42.0, 252.0), S: (230.0, 38.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 200.0), S: (932.0, 20.0)] fullmin_combined_min=(1.0, 20.0) fullmin_text=從下方展開「可承接委託」查看路線、必要目標與報酬。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Available:Button\", \"ContractCatalog_Available:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]",
+        "ART_QUEST_LAYOUT_CONTROLS: expanded-rules panel=ContractPanel panel_rect=[P: (22.0, 79.0), S: (980.0, 610.0)] panel_combined_min=(980.0, 610.0) nav=ModalNavigation nav_rect=[P: (32.0, 86.0), S: (960.0, 34.0)] close=@Button@2815 close_rect=[P: (903.0, 86.0), S: (88.0, 34.0)] scroll=@ScrollContainer@2641 scroll_rect=[P: (32.0, 128.0), S: (960.0, 554.0)] scroll_value=0 scroll_max=669.0 scroll_page=554.0 claim=ContractClaim claim_rect=[P: (42.0, 291.0), S: (230.0, 38.0)] fullmin=ContractRequirements fullmin_rect=[P: (42.0, 239.0), S: (932.0, 20.0)] fullmin_combined_min=(1.0, 20.0) fullmin_text=從下方展開「可承接委託」查看路線、必要目標與報酬。 checklist_and_layout_controls=[\"ModalNavigation:HBoxContainer\", \"ContractRequirements:Label\", \"ContractClaim:Button\", \"ContractCatalogGroup_Available:Button\", \"ContractCatalog_Available:GridContainer\", \"ContractCatalogGroup_Locked:Button\", \"ContractCatalog_Locked:GridContainer\"]"
+      ],
+      "input_guard_records": [
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=89",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=88",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=84",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=84",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=88",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=89",
+        "ART_QUEST_LAYOUT_INPUT_GUARD: input_absorbed=true; hud_process_stopped=true; hud_input_stopped=true; button_callbacks_disconnected=89"
+      ],
+      "error_warning_lines": []
+    }
+  ],
+  "native_layout": {
+    "wide": "panel (90,55) 1100x610; pinned nav (100,62) 1080x34; scroll (100,104) 1080x554",
+    "narrow": "panel (22,79) 980x610; pinned nav (32,86) 960x34; scroll (32,128) 960x554",
+    "visually_reviewed_all_final_images": true,
+    "visible_clipping_observed": false
+  },
+  "preview_safety": {
+    "native_scene_process_disabled": true,
+    "tree_paused": true,
+    "hud_always_for_capture": true,
+    "hud_process_stopped_after_layout": true,
+    "hud_input_processing_stopped": true,
+    "input_absorbed_by_fixture": true,
+    "all_hud_button_pressed_callbacks_disconnected_before_capture": true,
+    "no_gameplay_actions_or_save_io_invoked_by_fixture": true,
+    "staging": "Direct in-memory state only; no save/load or user input"
+  },
+  "validation_boundary": {
+    "test_suites_run": false,
+    "qa_suites_run": false,
+    "ordinary_visual_render": true,
+    "gameplay_input": false,
+    "handin_or_reward": false,
+    "save_payload_read_or_written": false,
+    "performance_measurement": false
+  },
+  "real_save_stat_only": {
+    "path": "C:\\Users\\wuwu6\\AppData\\Roaming\\Godot\\app_userdata\\FirstGame\\save_game.json",
+    "payload_read": false,
+    "payload_written": false,
+    "length_bytes": 1319,
+    "last_write_utc": "2026-10-24T07:24:28.1989499Z",
+    "previous_checkpoint_stat": "1203 bytes / 1792682904815624900 ns (as recorded in the preceding checkpoint)",
+    "comparison_note": "Current metadata differs from the preceding checkpoint; attribution is unknown. These renders use a separate custom user directory."
+  },
+  "post_capture_text_changes": [
+    {
+      "path": "data/maps/quests.json",
+      "capture_root_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+      "capture_mirror_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+      "current_root_sha256": "be7a5c8a880f9ec75384975be9178e8c9746bb0ff68e4957c3fd49d8eb6fab00",
+      "current_mirror_sha256": "09aeb3360cac6a5785c4e41b762ae8c0b5685688a43e4d3bf6c75981b554b33a",
+      "current_matches": false,
+      "change_scope": "player-facing copy only; J description rows are collapsed in these captures and no NPC dialogue is staged"
+    },
+    {
+      "path": "data/maps/npcs.json",
+      "capture_root_sha256": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+      "capture_mirror_sha256": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+      "current_root_sha256": "dbed8e1ab11330c6e897c88d012cfa241cec908ae4a0d5280347c18364e28db7",
+      "current_mirror_sha256": "51bdad06dfd0240837ff2219ef6a995f69c0dee1067d7cb17881f9bc35f8b4b9",
+      "current_matches": false,
+      "change_scope": "player-facing copy only; J description rows are collapsed in these captures and no NPC dialogue is staged"
+    }
+  ]
+}

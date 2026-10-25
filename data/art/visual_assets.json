@@ -18,6 +18,131 @@
       "source_dimensions": [
         8064,
         1024
+      ],
+      "directional_body_path": "res://assets/sprites/player/r17_directional_body.png",
+      "directional_rects": [
+        [
+          124,
+          72,
+          221,
+          355
+        ],
+        [
+          522,
+          71,
+          260,
+          348
+        ],
+        [
+          966,
+          70,
+          255,
+          349
+        ],
+        [
+          1395,
+          71,
+          248,
+          348
+        ],
+        [
+          199,
+          481,
+          219,
+          350
+        ],
+        [
+          538,
+          475,
+          265,
+          349
+        ],
+        [
+          971,
+          475,
+          264,
+          345
+        ],
+        [
+          1395,
+          475,
+          261,
+          349
+        ]
+      ],
+      "directional_feet": [
+        [
+          281,
+          423
+        ],
+        [
+          674,
+          413
+        ],
+        [
+          1098,
+          416
+        ],
+        [
+          1503,
+          416
+        ],
+        [
+          253,
+          827
+        ],
+        [
+          648,
+          817
+        ],
+        [
+          1101,
+          815
+        ],
+        [
+          1543,
+          817
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "e3e5edbccef05f2e52171e94bd0f74bd2a2c195984735483ca60bedd9c1246c4",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround",
+      "directional_hands": [
+        [
+          263,
+          309
+        ],
+        [
+          596,
+          316
+        ],
+        [
+          999,
+          309
+        ],
+        [
+          1418,
+          302
+        ],
+        [
+          281,
+          717
+        ],
+        [
+          555,
+          712
+        ],
+        [
+          1206,
+          716
+        ],
+        [
+          1620,
+          714
+        ]
       ]
     },
     "npc_forge_master": {
@@ -157,7 +282,98 @@
       "source_dimensions": [
         96,
         72
-      ]
+      ],
+      "directional_path": "res://assets/sprites/enemies/scrap_biter_8dir.png",
+      "directional_rects": [
+        [
+          14,
+          95,
+          526,
+          306
+        ],
+        [
+          586,
+          59,
+          348,
+          355
+        ],
+        [
+          1020,
+          18,
+          237,
+          392
+        ],
+        [
+          1393,
+          96,
+          338,
+          320
+        ],
+        [
+          17,
+          499,
+          533,
+          305
+        ],
+        [
+          580,
+          457,
+          394,
+          351
+        ],
+        [
+          1030,
+          447,
+          237,
+          407
+        ],
+        [
+          1332,
+          466,
+          418,
+          359
+        ]
+      ],
+      "directional_feet": [
+        [
+          300,
+          400
+        ],
+        [
+          770,
+          410
+        ],
+        [
+          1140,
+          405
+        ],
+        [
+          1530,
+          405
+        ],
+        [
+          240,
+          799
+        ],
+        [
+          765,
+          806
+        ],
+        [
+          1145,
+          810
+        ],
+        [
+          1555,
+          810
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "f6a08e4da1c79c033309f79bc80320c14e62664c9f8172f8f2f55a8b3ff240d2",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
     },
     "enemy_toxic_runner": {
       "type": "enemy",
@@ -176,7 +392,98 @@
       "source_dimensions": [
         96,
         72
-      ]
+      ],
+      "directional_path": "res://assets/sprites/enemies/toxic_runner_8dir.png",
+      "directional_rects": [
+        [
+          129,
+          15,
+          245,
+          421
+        ],
+        [
+          533,
+          15,
+          288,
+          419
+        ],
+        [
+          947,
+          15,
+          313,
+          414
+        ],
+        [
+          1373,
+          17,
+          288,
+          418
+        ],
+        [
+          106,
+          447,
+          235,
+          419
+        ],
+        [
+          508,
+          447,
+          285,
+          407
+        ],
+        [
+          951,
+          447,
+          313,
+          407
+        ],
+        [
+          1404,
+          447,
+          282,
+          407
+        ]
+      ],
+      "directional_feet": [
+        [
+          251,
+          434
+        ],
+        [
+          677,
+          432
+        ],
+        [
+          1103,
+          427
+        ],
+        [
+          1517,
+          433
+        ],
+        [
+          223,
+          864
+        ],
+        [
+          650,
+          852
+        ],
+        [
+          1107,
+          852
+        ],
+        [
+          1545,
+          852
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "93e986c87fd730bd6ed56062489164c70abb89ce270d40086d2983468b8cedbe",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
     },
     "enemy_spore_gunner": {
       "type": "enemy",
@@ -195,7 +502,98 @@
       "source_dimensions": [
         96,
         72
-      ]
+      ],
+      "directional_path": "res://assets/sprites/enemies/spore_gunner_8dir.png",
+      "directional_rects": [
+        [
+          81,
+          51,
+          318,
+          353
+        ],
+        [
+          513,
+          44,
+          328,
+          361
+        ],
+        [
+          921,
+          42,
+          365,
+          355
+        ],
+        [
+          1359,
+          49,
+          363,
+          355
+        ],
+        [
+          45,
+          481,
+          338,
+          357
+        ],
+        [
+          510,
+          478,
+          339,
+          360
+        ],
+        [
+          917,
+          464,
+          385,
+          373
+        ],
+        [
+          1367,
+          464,
+          363,
+          373
+        ]
+      ],
+      "directional_feet": [
+        [
+          240,
+          402
+        ],
+        [
+          677,
+          403
+        ],
+        [
+          1103,
+          395
+        ],
+        [
+          1540,
+          402
+        ],
+        [
+          214,
+          836
+        ],
+        [
+          679,
+          836
+        ],
+        [
+          1109,
+          835
+        ],
+        [
+          1548,
+          835
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "15d4549914ab5ba1ed0dca9770da0e03242a979cf4b83f9564dac4f2143b045c",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
     },
     "enemy_rust_brute": {
       "type": "enemy",
@@ -214,7 +612,98 @@
       "source_dimensions": [
         96,
         72
-      ]
+      ],
+      "directional_path": "res://assets/sprites/enemies/rust_brute_8dir.png",
+      "directional_rects": [
+        [
+          127,
+          8,
+          197,
+          420
+        ],
+        [
+          521,
+          8,
+          280,
+          420
+        ],
+        [
+          959,
+          8,
+          296,
+          419
+        ],
+        [
+          1407,
+          8,
+          289,
+          423
+        ],
+        [
+          101,
+          450,
+          191,
+          423
+        ],
+        [
+          518,
+          445,
+          285,
+          422
+        ],
+        [
+          957,
+          445,
+          299,
+          416
+        ],
+        [
+          1415,
+          445,
+          284,
+          422
+        ]
+      ],
+      "directional_feet": [
+        [
+          225,
+          426
+        ],
+        [
+          661,
+          426
+        ],
+        [
+          1107,
+          425
+        ],
+        [
+          1551,
+          429
+        ],
+        [
+          196,
+          871
+        ],
+        [
+          660,
+          865
+        ],
+        [
+          1106,
+          859
+        ],
+        [
+          1557,
+          865
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "060060b7905dcec9d725bd6c06a08a35ed1fb3c08453c42afc29509921e1db90",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
     },
     "enemy_rot_wing": {
       "type": "enemy",
@@ -233,7 +722,98 @@
       "source_dimensions": [
         96,
         72
-      ]
+      ],
+      "directional_path": "res://assets/sprites/enemies/rot_wing_8dir.png",
+      "directional_rects": [
+        [
+          118,
+          28,
+          282,
+          400
+        ],
+        [
+          512,
+          35,
+          294,
+          395
+        ],
+        [
+          959,
+          51,
+          300,
+          365
+        ],
+        [
+          1390,
+          35,
+          304,
+          397
+        ],
+        [
+          77,
+          472,
+          285,
+          379
+        ],
+        [
+          559,
+          469,
+          269,
+          379
+        ],
+        [
+          955,
+          475,
+          307,
+          376
+        ],
+        [
+          1378,
+          471,
+          269,
+          383
+        ]
+      ],
+      "directional_feet": [
+        [
+          259,
+          426
+        ],
+        [
+          659,
+          428
+        ],
+        [
+          1109,
+          414
+        ],
+        [
+          1542,
+          430
+        ],
+        [
+          219,
+          849
+        ],
+        [
+          693,
+          846
+        ],
+        [
+          1108,
+          849
+        ],
+        [
+          1512,
+          852
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "2ba2275c06e7fe97d2561a0acacce0c228da58e8bb35d1479e6db7e976158ac9",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
     },
     "enemy_mech_husk": {
       "type": "enemy",
@@ -252,7 +832,98 @@
       "source_dimensions": [
         96,
         72
-      ]
+      ],
+      "directional_path": "res://assets/sprites/enemies/mech_husk_8dir.png",
+      "directional_rects": [
+        [
+          79,
+          24,
+          308,
+          382
+        ],
+        [
+          516,
+          25,
+          311,
+          381
+        ],
+        [
+          947,
+          18,
+          326,
+          388
+        ],
+        [
+          1364,
+          30,
+          336,
+          376
+        ],
+        [
+          49,
+          470,
+          325,
+          382
+        ],
+        [
+          500,
+          473,
+          351,
+          376
+        ],
+        [
+          930,
+          471,
+          352,
+          374
+        ],
+        [
+          1395,
+          467,
+          355,
+          383
+        ]
+      ],
+      "directional_feet": [
+        [
+          233,
+          404
+        ],
+        [
+          671,
+          404
+        ],
+        [
+          1110,
+          404
+        ],
+        [
+          1532,
+          404
+        ],
+        [
+          211,
+          850
+        ],
+        [
+          675,
+          847
+        ],
+        [
+          1106,
+          843
+        ],
+        [
+          1572,
+          848
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "1e124c499f9c9d1619d3533adb737c4f0b0321a23a8db605cb10b568793d9ee2",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
     },
     "boss_waste_titan": {
       "type": "boss",
@@ -294,7 +965,30 @@
       "source_dimensions": [
         192,
         150
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-workstations-v4-02.png",
+        "source_rect": [
+          40,
+          32,
+          500,
+          482
+        ],
+        "foot": [
+          290,
+          470
+        ],
+        "width": 204,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "saturation": 0.67,
+        "exposure": 0.86
+      }
     },
     "structure_craft": {
       "type": "structure",
@@ -317,7 +1011,30 @@
       "source_dimensions": [
         176,
         140
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-workstations-v4-02.png",
+        "source_rect": [
+          560,
+          100,
+          458,
+          416
+        ],
+        "foot": [
+          790,
+          474
+        ],
+        "width": 200,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "saturation": 0.6,
+        "exposure": 0.8
+      }
     },
     "structure_shop": {
       "type": "structure",
@@ -340,7 +1057,30 @@
       "source_dimensions": [
         184,
         132
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-workstations-v4-02.png",
+        "source_rect": [
+          1028,
+          80,
+          487,
+          450
+        ],
+        "foot": [
+          1268,
+          493
+        ],
+        "width": 214,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "saturation": 0.6,
+        "exposure": 0.8
+      }
     },
     "structure_mod_station": {
       "type": "structure",
@@ -363,7 +1103,30 @@
       "source_dimensions": [
         196,
         146
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-workstations-v4-02.png",
+        "source_rect": [
+          40,
+          540,
+          492,
+          440
+        ],
+        "foot": [
+          285,
+          925
+        ],
+        "width": 204,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "saturation": 0.6,
+        "exposure": 0.8
+      }
     },
     "structure_recycle_machine": {
       "type": "structure",
@@ -386,7 +1149,30 @@
       "source_dimensions": [
         184,
         132
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-workstations-v4-02.png",
+        "source_rect": [
+          548,
+          520,
+          470,
+          460
+        ],
+        "foot": [
+          790,
+          918
+        ],
+        "width": 200,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "saturation": 0.6,
+        "exposure": 0.8
+      }
     },
     "structure_save_station": {
       "type": "structure",
@@ -409,7 +1195,55 @@
       "source_dimensions": [
         168,
         132
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-workstations-v4-02.png",
+        "source_rect": [
+          1025,
+          548,
+          493,
+          436
+        ],
+        "foot": [
+          1271,
+          930
+        ],
+        "width": 196,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "b92959854992c1c8b7047525fa4d59814c260538b5ea05c86828f577e257c082",
+        "saturation": 0.6,
+        "exposure": 0.8
+      },
+      "world_presentation_by_scene": {
+        "guild": {
+          "path": "res://assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+          "source_rect": [
+            1315,
+            190,
+            625,
+            554
+          ],
+          "foot": [
+            1625,
+            700
+          ],
+          "width": 200,
+          "alpha_cutoff": 0.7,
+          "authored_ground_contact": true,
+          "source_dimensions": [
+            1956,
+            804
+          ],
+          "source_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+          "saturation": 0.6,
+          "exposure": 0.8
+        }
+      }
     },
     "structure_guild_gate": {
       "type": "structure",
@@ -432,7 +1266,55 @@
       "source_dimensions": [
         190,
         128
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/architecture/guild-entrance-v4-03.png",
+        "source_rect": [
+          8,
+          52,
+          1240,
+          1136
+        ],
+        "foot": [
+          630,
+          1150
+        ],
+        "width": 250,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1254,
+          1254
+        ],
+        "source_sha256": "87bb631791ba5e90b4bf2175cb12bbb5c5afc8d17f8b067d2a55baf7cc034db9",
+        "saturation": 0.8,
+        "exposure": 0.9
+      },
+      "world_presentation_by_scene": {
+        "guild": {
+          "path": "res://assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+          "source_rect": [
+            750,
+            165,
+            526,
+            563
+          ],
+          "foot": [
+            1015,
+            685
+          ],
+          "width": 168,
+          "alpha_cutoff": 0.7,
+          "authored_ground_contact": true,
+          "source_dimensions": [
+            1956,
+            804
+          ],
+          "source_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+          "saturation": 0.6,
+          "exposure": 0.8
+        }
+      }
     },
     "structure_wasteland_gate": {
       "type": "structure",
@@ -455,7 +1337,30 @@
       "source_dimensions": [
         184,
         128
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+        "source_rect": [
+          16,
+          90,
+          685,
+          604
+        ],
+        "foot": [
+          350,
+          650
+        ],
+        "width": 208,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1956,
+          804
+        ],
+        "source_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+        "saturation": 0.6,
+        "exposure": 0.8
+      }
     },
     "structure_village_return_gate": {
       "type": "structure",
@@ -478,7 +1383,30 @@
       "source_dimensions": [
         184,
         128
-      ]
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-guild-fixtures-v4-02.png",
+        "source_rect": [
+          16,
+          90,
+          685,
+          604
+        ],
+        "foot": [
+          350,
+          650
+        ],
+        "width": 208,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1956,
+          804
+        ],
+        "source_sha256": "266ca5c0ce9ef9180f29303c8a1103a7c9fbc57b48e15a01a99ee5be78b4e8a4",
+        "saturation": 0.6,
+        "exposure": 0.8
+      }
     },
     "prop_rust_rock": {
       "type": "prop",
@@ -1136,11 +2064,16 @@
     },
     "prop_highway_bus": {
       "type": "prop",
-      "path": "res://assets/sprites/props/expanded/highway_bus.png",
+      "path": "res://assets/world_v4/landmarks/evacuation-bus-v4-01.png",
       "size": [
+        348,
+        232
+      ],
+      "saved_position_fallback_size": [
         208,
         139
       ],
+      "fade_when_occluding": true,
       "collision_footprint": [
         0.05,
         0.62,
@@ -1154,12 +2087,14 @@
       "usage_id": "prop_highway_bus",
       "unique_required": true,
       "minimap_marker": "prop",
-      "source_ref": "imagegen:2026-10-21",
+      "source_ref": "built-in image_gen edit 2026-10-23; old original preserved",
       "source_dimensions": [
         1536,
         1024
       ],
-      "source_sha256": "f64cdca6fd79dff1b0a8d89be902b74aa2b9e818aef2a7c7f84fc6c3372fbcf9"
+      "source_sha256": "10a3c6405ae3c51747605a4b87db505781cf1f273e5151e1d8d45ddfea5e073c",
+      "alpha_cutoff": 0.18,
+      "authored_ground_contact": true
     },
     "prop_marsh_pump": {
       "type": "prop",
@@ -1798,6 +2733,764 @@
         64,
         64
       ]
+    },
+    "prop_evacuation_archive": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/expanded/evacuation_archive.png",
+      "size": [
+        248,
+        226
+      ],
+      "collision_footprint": [
+        0.2,
+        0.71,
+        0.72,
+        0.22
+      ],
+      "display_name": "撤離名冊站",
+      "unique_required": true,
+      "source_dimensions": [
+        1312,
+        1199
+      ],
+      "source_sha256": "2ff9b35d4dc8c24b90354d374c6411927923d1a6f1347490ccec71b614946eb3",
+      "source_ref": "imagegen:2026-10-22"
+    },
+    "prop_memory_vault": {
+      "type": "prop",
+      "path": "res://assets/sprites/props/expanded/memory_vault.png",
+      "size": [
+        264,
+        176
+      ],
+      "collision_footprint": [
+        0.13,
+        0.72,
+        0.73,
+        0.2
+      ],
+      "display_name": "記憶淨水保存艙",
+      "unique_required": true,
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "source_sha256": "3a3ad83d1386f2adc28b88f1379a9dd9867bc88321978fc13770065303378ad5",
+      "source_ref": "imagegen:2026-10-22"
+    },
+    "enemy_waste_titan": {
+      "type": "enemy",
+      "path": "res://assets/sprites/enemies/waste_titan_8dir.png",
+      "size": [
+        96,
+        72
+      ],
+      "asset_id": "enemy_waste_titan",
+      "usage_id": "enemy_waste_titan",
+      "unique_required": true,
+      "map_marker": "boss",
+      "minimap_marker": "boss",
+      "source_ref": "preserved_existing_enemy",
+      "source_sha256": "5b2e6d163c2350d26c4fbad8cfe9cc690ff39acf060215351a29ce5a17ea4ee9",
+      "source_dimensions": [
+        1774,
+        887
+      ],
+      "directional_path": "res://assets/sprites/enemies/waste_titan_8dir.png",
+      "directional_rects": [
+        [
+          94,
+          7,
+          280,
+          419
+        ],
+        [
+          465,
+          10,
+          401,
+          416
+        ],
+        [
+          893,
+          10,
+          433,
+          410
+        ],
+        [
+          1352,
+          9,
+          400,
+          417
+        ],
+        [
+          38,
+          450,
+          284,
+          422
+        ],
+        [
+          465,
+          459,
+          410,
+          381
+        ],
+        [
+          895,
+          460,
+          427,
+          387
+        ],
+        [
+          1342,
+          460,
+          410,
+          379
+        ]
+      ],
+      "directional_feet": [
+        [
+          234,
+          424
+        ],
+        [
+          665,
+          424
+        ],
+        [
+          1109,
+          418
+        ],
+        [
+          1552,
+          424
+        ],
+        [
+          180,
+          870
+        ],
+        [
+          670,
+          838
+        ],
+        [
+          1108,
+          845
+        ],
+        [
+          1547,
+          837
+        ]
+      ],
+      "directional_dimensions": [
+        1774,
+        887
+      ],
+      "directional_source_sha256": "5b2e6d163c2350d26c4fbad8cfe9cc690ff39acf060215351a29ce5a17ea4ee9",
+      "directional_source_ref": "imagegen:2026-10-22:original-eight-view-turnaround"
+    },
+    "ui_world_atlas": {
+      "type": "ui",
+      "path": "res://assets/ui/world_atlas.png",
+      "size": [
+        1448,
+        1086
+      ],
+      "asset_id": "ui_world_atlas",
+      "usage_id": "world_atlas",
+      "unique_required": true,
+      "source_ref": "imagegen:2026-10-22:original-world-concept",
+      "source_sha256": "dba4eb36eefd3198e8e7f0289399f7f5b7d25184103d585d51dc69b7b564751c",
+      "source_dimensions": [
+        1448,
+        1086
+      ],
+      "transparent_background": false
+    },
+    "player_r17_walk_a": {
+      "type": "player_keypose",
+      "path": "res://assets/sprites/player/r17_walk_contact_a.png",
+      "directional_path": "res://assets/sprites/player/r17_walk_contact_a.png",
+      "directional_rects": [
+        [
+          88,
+          58,
+          299,
+          364
+        ],
+        [
+          515,
+          58,
+          301,
+          366
+        ],
+        [
+          951,
+          58,
+          284,
+          366
+        ],
+        [
+          1383,
+          58,
+          303,
+          366
+        ],
+        [
+          117,
+          466,
+          301,
+          356
+        ],
+        [
+          527,
+          462,
+          319,
+          369
+        ],
+        [
+          946,
+          466,
+          274,
+          370
+        ],
+        [
+          1357,
+          463,
+          291,
+          368
+        ]
+      ],
+      "directional_feet": [
+        [
+          281,
+          419
+        ],
+        [
+          685,
+          421
+        ],
+        [
+          1090,
+          421
+        ],
+        [
+          1498,
+          421
+        ],
+        [
+          236,
+          819
+        ],
+        [
+          670,
+          828
+        ],
+        [
+          1094,
+          833
+        ],
+        [
+          1540,
+          828
+        ]
+      ],
+      "directional_hands": [
+        [
+          270,
+          265
+        ],
+        [
+          635,
+          272
+        ],
+        [
+          1025,
+          267
+        ],
+        [
+          1410,
+          263
+        ],
+        [
+          164,
+          667
+        ],
+        [
+          550,
+          665
+        ],
+        [
+          968,
+          672
+        ],
+        [
+          1618,
+          672
+        ]
+      ],
+      "directional_source_sha256": "fb99770e83f15185625ea59a479cd25093d738a48332e28c72aebcc82924a6df",
+      "source_ref": "res://assets/sprites/player/r17_directional_body.png",
+      "directional_dimensions": [
+        1774,
+        887
+      ]
+    },
+    "player_r17_walk_b": {
+      "type": "player_keypose",
+      "path": "res://assets/sprites/player/r17_walk_contact_b.png",
+      "directional_path": "res://assets/sprites/player/r17_walk_contact_b.png",
+      "directional_rects": [
+        [
+          81,
+          66,
+          285,
+          361
+        ],
+        [
+          500,
+          66,
+          325,
+          374
+        ],
+        [
+          954,
+          66,
+          266,
+          374
+        ],
+        [
+          1393,
+          66,
+          292,
+          374
+        ],
+        [
+          142,
+          466,
+          284,
+          353
+        ],
+        [
+          520,
+          465,
+          308,
+          366
+        ],
+        [
+          955,
+          465,
+          257,
+          367
+        ],
+        [
+          1380,
+          465,
+          284,
+          367
+        ]
+      ],
+      "directional_feet": [
+        [
+          281,
+          424
+        ],
+        [
+          685,
+          437
+        ],
+        [
+          1090,
+          437
+        ],
+        [
+          1498,
+          437
+        ],
+        [
+          236,
+          816
+        ],
+        [
+          670,
+          828
+        ],
+        [
+          1094,
+          829
+        ],
+        [
+          1540,
+          829
+        ]
+      ],
+      "directional_hands": [
+        [
+          307,
+          271
+        ],
+        [
+          661,
+          274
+        ],
+        [
+          1061,
+          270
+        ],
+        [
+          1415,
+          274
+        ],
+        [
+          185,
+          665
+        ],
+        [
+          545,
+          693
+        ],
+        [
+          976,
+          696
+        ],
+        [
+          1618,
+          657
+        ]
+      ],
+      "directional_source_sha256": "c9cd82a9538658e77a1013577015f4da86d55d206dc7337c624474f4afd72e61",
+      "source_ref": "res://assets/sprites/player/r17_directional_body.png",
+      "directional_dimensions": [
+        1774,
+        887
+      ]
+    },
+    "prop_rescue_relay": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/field-mechanisms-v4-01.png",
+      "source_rect": [
+        27,
+        226,
+        786,
+        585
+      ],
+      "size": [
+        124,
+        94
+      ],
+      "display_name": "救援中繼器",
+      "blocks_movement": false,
+      "map_marker": "event",
+      "asset_id": "prop_rescue_relay",
+      "usage_id": "prop_rescue_relay",
+      "unique_required": true,
+      "minimap_marker": "event",
+      "source_ref": "imagegen:2026-10-23 field mechanisms v4-01",
+      "source_dimensions": [
+        1774,
+        887
+      ],
+      "source_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "prop_alarm_isolator": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/field-mechanisms-v4-01.png",
+      "source_rect": [
+        1088,
+        78,
+        661,
+        740
+      ],
+      "size": [
+        108,
+        120
+      ],
+      "display_name": "警戒隔離閘",
+      "blocks_movement": false,
+      "map_marker": "event",
+      "asset_id": "prop_alarm_isolator",
+      "usage_id": "prop_alarm_isolator",
+      "unique_required": true,
+      "minimap_marker": "event",
+      "source_ref": "imagegen:2026-10-23 field mechanisms v4-01",
+      "source_dimensions": [
+        1774,
+        887
+      ],
+      "source_sha256": "d21155531bb013c08e0428a0ea9e95c7e0fa8464c628ed1209302db63057b160",
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true
+    },
+    "prop_covered_wagon": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/convoy-remnants-v4-01.png",
+      "source_rect": [
+        60,
+        195,
+        900,
+        580
+      ],
+      "size": [
+        168,
+        120
+      ],
+      "display_name": "破篷補給車",
+      "blocks_movement": true,
+      "map_marker": "prop",
+      "asset_id": "prop_covered_wagon",
+      "usage_id": "prop_covered_wagon",
+      "unique_required": true,
+      "minimap_marker": "prop",
+      "source_ref": "imagegen:2026-10-23 convoy remnants v4-01",
+      "source_dimensions": [
+        1663,
+        946
+      ],
+      "source_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true,
+      "collision_footprint": [
+        0.08,
+        0.78,
+        0.84,
+        0.12
+      ]
+    },
+    "prop_overturned_wagon": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/convoy-remnants-v4-01.png",
+      "source_rect": [
+        995,
+        300,
+        650,
+        490
+      ],
+      "size": [
+        168,
+        120
+      ],
+      "display_name": "翻覆貨車",
+      "blocks_movement": true,
+      "map_marker": "prop",
+      "asset_id": "prop_overturned_wagon",
+      "usage_id": "prop_overturned_wagon",
+      "unique_required": true,
+      "minimap_marker": "prop",
+      "source_ref": "imagegen:2026-10-23 convoy remnants v4-01",
+      "source_dimensions": [
+        1663,
+        946
+      ],
+      "source_sha256": "e62d8391b6d232d30df506d188f55b340429e91dc9b2500575111e07ab87951c",
+      "alpha_cutoff": 0.45,
+      "authored_ground_contact": true,
+      "collision_footprint": [
+        0.08,
+        0.78,
+        0.84,
+        0.12
+      ]
+    },
+    "prop_hub_house": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "size": [
+        710,
+        510
+      ],
+      "source_rect": [
+        20,
+        80,
+        710,
+        510
+      ],
+      "asset_id": "prop_hub_house",
+      "usage_id": "prop_hub_house",
+      "display_name": "村民石木屋",
+      "map_marker": "prop",
+      "minimap_marker": "prop",
+      "unique_required": true,
+      "authored_ground_contact": true,
+      "source_ref": "built_in_imagegen_hub_living_v4",
+      "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+        "source_rect": [
+          20,
+          80,
+          710,
+          510
+        ],
+        "foot": [
+          380,
+          520
+        ],
+        "width": 300,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+        "saturation": 0.8,
+        "exposure": 0.9
+      }
+    },
+    "prop_hub_lodge": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "size": [
+        799,
+        565
+      ],
+      "source_rect": [
+        733,
+        40,
+        799,
+        565
+      ],
+      "asset_id": "prop_hub_lodge",
+      "usage_id": "prop_hub_lodge",
+      "display_name": "公會舊舍",
+      "map_marker": "prop",
+      "minimap_marker": "prop",
+      "unique_required": true,
+      "authored_ground_contact": true,
+      "source_ref": "built_in_imagegen_hub_living_v4",
+      "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+        "source_rect": [
+          733,
+          40,
+          799,
+          565
+        ],
+        "foot": [
+          1130,
+          539
+        ],
+        "width": 340,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+        "saturation": 0.8,
+        "exposure": 0.9
+      }
+    },
+    "prop_cistern_dry": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "size": [
+        680,
+        385
+      ],
+      "source_rect": [
+        45,
+        607,
+        680,
+        385
+      ],
+      "asset_id": "prop_cistern_dry",
+      "usage_id": "prop_cistern_dry",
+      "display_name": "乾涸蓄水槽",
+      "map_marker": "prop",
+      "minimap_marker": "prop",
+      "unique_required": true,
+      "authored_ground_contact": true,
+      "source_ref": "built_in_imagegen_hub_living_v4",
+      "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+        "source_rect": [
+          45,
+          607,
+          680,
+          385
+        ],
+        "foot": [
+          388,
+          908
+        ],
+        "width": 150,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+        "saturation": 0.8,
+        "exposure": 0.9
+      }
+    },
+    "prop_cistern_restored": {
+      "type": "prop",
+      "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+      "size": [
+        684,
+        385
+      ],
+      "source_rect": [
+        784,
+        607,
+        684,
+        385
+      ],
+      "asset_id": "prop_cistern_restored",
+      "usage_id": "prop_cistern_restored",
+      "display_name": "淨水回流",
+      "map_marker": "prop",
+      "minimap_marker": "prop",
+      "unique_required": true,
+      "authored_ground_contact": true,
+      "source_ref": "built_in_imagegen_hub_living_v4",
+      "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "world_presentation": {
+        "path": "res://assets/world_v4/props/hub-residences-cisterns-v4-01.png",
+        "source_rect": [
+          784,
+          607,
+          684,
+          385
+        ],
+        "foot": [
+          1128,
+          908
+        ],
+        "width": 150,
+        "alpha_cutoff": 0.7,
+        "authored_ground_contact": true,
+        "source_dimensions": [
+          1536,
+          1024
+        ],
+        "source_sha256": "befbeda65608c9ac7907d27aed2d3b71b13b5336e976e525df16d7c595fd6ef9",
+        "saturation": 0.8,
+        "exposure": 0.9
+      }
     }
   }
 }

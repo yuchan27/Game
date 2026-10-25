@@ -22,11 +22,23 @@ writers separate file ownership; one lead coordinates APIs and integrated checks
 
 Use a matching Skill for details. From the project root, prepare dependencies if
 needed. Pass a discovered executable with `--godot` or `GODOT_BIN`; verify 4.6.3.
+The following are shell-specific examples, not required host paths.
 
+### Windows PowerShell
 ```powershell
 python -m venv .godot/qa-venv
 & .godot/qa-venv/Scripts/python.exe -m pip install -r requirements-qa.txt
+$env:GODOT_BIN = 'C:\path\to\Godot_v4.6.3-stable_win64_console.exe'
 & .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile core
+```
+
+### POSIX shell
+```sh
+python3 -m venv .godot/qa-venv
+. .godot/qa-venv/bin/activate
+python -m pip install -r requirements-qa.txt
+export GODOT_BIN="/path/to/godot"
+python scripts/tools/run_qa.py --godot "$GODOT_BIN" --profile core
 ```
 
 The launcher isolates project/user data and keeps per-check logs outside the source
@@ -46,6 +58,9 @@ test against real `user://save_game.json`, authored assets or historical reports
 & .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile visual
 & .godot/qa-venv/Scripts/python.exe scripts/tools/run_qa.py --godot $env:GODOT_BIN --profile performance
 ```
+
+Use the equivalent Python executable and environment-variable syntax for the
+active shell; confirm profile names with `python scripts/tools/run_qa.py --help`.
 
 Inspect logs even for exit 0. Headless visual output is not a pass. Synthetic
 physics cadence is not rendered FPS. Compare equivalent timing definitions and

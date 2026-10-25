@@ -5,6 +5,61 @@ const PLAYER_FRAME_SIZE := Vector2i(112, 128)
 const ARMOR_ICON_DIR := "res://assets/sprites/items/armor/"
 const ARMOR_ICON_CANVAS_SIZE := Vector2i(256, 256)
 static var _texture_cache: Dictionary = {}
+static var _world_presentation_materials: Dictionary = {}
+
+
+static func world_presentation_source(asset: Dictionary, scene_context := "") -> Dictionary:
+	var raw: Variant = asset.get("world_presentation", {})
+	var overrides: Variant = asset.get("world_presentation_by_scene", {})
+	if overrides is Dictionary and overrides.has(scene_context):
+		raw = overrides[scene_context]
+	return raw if raw is Dictionary else {}
+
+
+static func apply_world_presentation(sprite: Sprite2D, asset: Dictionary, scene_context := "") -> Rect2:
+	# World-only metadata leaves the original path available to UI and fallbacks.
+	var raw := world_presentation_source(asset, scene_context)
+	var crop: Variant = raw.get("source_rect", [])
+	var foot: Variant = raw.get("foot", [])
+	var width: Variant = raw.get("width", 0)
+	if not crop is Array or crop.size() != 4 or not foot is Array or foot.size() != 2:
+		return Rect2()
+	for value: Variant in crop + foot + [width]:
+		if typeof(value) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(value)):
+			return Rect2()
+	var path := String(raw.get("path", ""))
+	if not path.begins_with("res://assets/") or float(width) <= 0.0:
+		return Rect2()
+	var texture := load_png(path)
+	if texture == null:
+		return Rect2()
+	var region := Rect2(float(crop[0]), float(crop[1]), float(crop[2]), float(crop[3]))
+	var anchor := Vector2(float(foot[0]), float(foot[1]))
+	if region.size.x <= 0.0 or region.size.y <= 0.0 or not Rect2(Vector2.ZERO, texture.get_size()).encloses(region) or not region.has_point(anchor):
+		return Rect2()
+	var cutoff: Variant = raw.get("alpha_cutoff", 0.45)
+	if typeof(cutoff) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(cutoff)):
+		return Rect2()
+	var alpha := clampf(float(cutoff), 0.01, 0.95)
+	if not _world_presentation_materials.has(alpha):
+		var shader := Shader.new()
+		shader.code = "shader_type canvas_item; uniform float alpha_cutoff = 0.45; void fragment() { if (texture(TEXTURE, UV).a < alpha_cutoff) { discard; } }"
+		var material := ShaderMaterial.new()
+		material.shader = shader
+		material.set_shader_parameter("alpha_cutoff", alpha)
+		_world_presentation_materials[alpha] = material
+	var atlas := AtlasTexture.new()
+	atlas.atlas = texture
+	atlas.region = region
+	atlas.filter_clip = true
+	var ratio := float(width) / region.size.x
+	sprite.texture = atlas
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.centered = false
+	sprite.scale = Vector2.ONE * ratio
+	sprite.position = -(anchor - region.position) * ratio
+	sprite.material = _world_presentation_materials[alpha]
+	return Rect2(sprite.position, region.size * ratio)
 
 
 static func clear_cache() -> void:

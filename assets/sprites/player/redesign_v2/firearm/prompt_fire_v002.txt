@@ -1,0 +1,6 @@
+Use case: precise-object-edit
+Edit target: the attached eight-direction R-17 firing/recoil pixel sprite sheet.
+Make exactly one change: remove all eight orange/white muzzle flashes and their exterior glow. Preserve each bare rifle muzzle with its correct existing aim direction. Do not draw new flashes or effects.
+Keep the knight, carbine, all hands, every armor/cape pixel, firing recoil pose, planted feet, silhouette, character sizes and their 4-column by 2-row positions the same. Keep the exact compact rifle proportion about half body height. The recoil body pose is the final character art; muzzle flash will be drawn separately by game.
+Preserve direction reading order E,SE,S,SW / W,NW,N,NE and important foreshortening: South is front muzzle toward camera; North is back rifle away mostly occluded, never lateral.
+Keep 1536x1024 PNG. Genuinely fully transparent background alpha zero, opaque character interiors; remove diffuse halos outside silhouettes. Crisp pixel-art outlines and small stepped clusters unchanged. No background/shadow/glow/text/labels/border; do not add content or crop figures.

@@ -1,0 +1,29 @@
+Selected source: damp-cut-slate-v4-01.png
+Selected built-in image_gen output: C:\Users\wuwu6\.codex\generated_images\01a16509-18a4-7ec1-b9fa-8247778ff862\exec-55b955f7-6d93-4d54-8d72-4f20da5848e0.png
+The selected PNG is copied byte-for-byte from that output. The final prompt edits the first generated draft.
+
+Generation prompt:
+Use case: stylized-concept
+Asset type: one opaque seamless repeating 2D ground texture for an abandoned cistern or ancient cathedral floor in the 2.5D pixel-art medieval wasteland game.
+Input images: Image 1 is a reference only for quiet pixel-art material clusters and restrained lighting. Image 2 is a reference only for the small paving-unit scale and density. Do not copy either warm-brown palette or Image 2's regular staggered road courses.
+Primary request: a distinct damp cut-slate floor: dark, cool, old irregular paving flags, partly buried in broad broken patches of dirt. It must read as broader irregular slate patches than the small regular warm highway setts, while remaining small ground units rather than giant slabs.
+Style/medium: deliberate 2D hand-authored pixel art with crisp stepped edges, simple flat top surfaces, low contrast and a few close color levels. Exact square source 1254 x 1254 pixels, mapped to 512 x 512 world pixels (about 2.45 source pixels per world pixel).
+Composition/framing: flat top-down ground plane only, evenly distributed with no focal area. Show at least 30 distinct paving units across each full-width pass; make most exposed units 25–45 source pixels wide (about 10–18 world pixels), irregular but compact and worn. Use an uneven offset arrangement, not aligned rows. Make broad broken earth/burial patches cover more than 40% of the tile, flowing across multiple stone tops and into seams. The tile must wrap seamlessly in both axes; edge-cut shapes continue naturally at the opposite edge, with matching first/last rows and columns.
+Lighting/mood: dim, cool, diffuse damp atmosphere; the slate is slightly moist in color only.
+Color palette: muted blue-charcoal and slate-gray, cool ash earth, occasional very subdued gray-olive moss in a few seams. Keep the palette dark and close in value.
+Materials/textures: flat slate top faces with irregular chipped outlines; broad, calm dirt areas partly cover the pavers. No individual bevels or raised sides. Add only sparse tiny pixel details and a few dim moss seams.
+Constraints: exactly one fully opaque 1254 x 1254 square PNG, no alpha; material surface only; keep at least 30 small visible slate units across the full canvas; no fewer than 40% broad dirt/burial coverage.
+Avoid: small-brick grids, regular highway setts, giant slabs, large pavers, over 45-source-pixel-wide units, black outlines around every unit, black grid joints, bright bevels, cast shadows, strong highlights, glossy reflections, wet hotspots, dense moss, bright green, speckles, gravel/noise, photoreal texture, blur, dithering, 3D rendering, isometric perspective, horizon, props, furniture, architecture, people, scenery, plants, text, border, vignette, transparency, watermark.
+
+Refinement prompt (Image 1 was the first generated draft; this produced the selected source):
+Use case: stylized-concept
+Asset type: one opaque, seamless repeating damp cut-slate ground texture for a 2.5D pixel-art game.
+Input images: Image 1 is the edit target. Preserve its small paving density, overall flat ground-plane view, and broad partly buried pattern; change the material color and calm the surface.
+Primary request: make this floor clearly cool and slate-led, with irregular worn flagstone patches in dark blue-charcoal and cool ash sediment. Remove the warm brown/umber cast completely. The exposed buried earth should be cool ash-gray mineral soil, not brown soil.
+Style/medium: crisp hand-authored 2D pixel art with stepped edges and flat top surfaces; reduce the tiny grain and speckles so broad shapes dominate. Exact 1254 x 1254 source for a 512 x 512 world tile.
+Composition/framing: no focal area; uneven compact paving with at least 30 distinct slate units across every full-width sweep. Most visible units are irregular, gently fractured floor flags, each about 25–45 source pixels wide (10–18 world pixels); vary their outlines and widths so they do not read as highway bricks. Broad cool-gray burial patches cross the paving and seams over more than 40% of the total area. Seamlessly repeat in both directions: edge-cut shapes continue naturally across opposite edges, with matching first/last rows and columns.
+Lighting/mood: dim, cool, soft diffuse light; dampness is only a subdued cool tint, with no reflective highlights.
+Color palette: dark blue-charcoal slate, slate-violet gray, cool ash-gray and a trace of subdued gray-olive moss in occasional seams. Keep neighboring values close and low contrast.
+Materials/textures: flat flagstone tops with chipped irregular edges, partially covered by broad cool sediment patches. Very sparse tiny surface marks; no bevels or side faces.
+Constraints: exactly one fully opaque 1254 x 1254 square PNG with no alpha; flat ground-only material.
+Avoid: any warm brown or umber soil, warm cobbles, brick-like uniform rectangles, aligned rows, black outlines around units, black grid joints, oversized slabs, fewer than 30 visible slate units across a full-width sweep, bright bevels, cast shadows, glossy reflections, wet hotspots, dense moss, bright green, micrograin, speckles, gravel, photoreal texture, blur, dithering, 3D scene, isometric perspective, horizon, objects, architecture, plants, people, text, border, vignette, transparency, watermark.

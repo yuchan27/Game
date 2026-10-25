@@ -1,44 +1,62 @@
-# 美術資產清理與保留紀錄
+# Project cleanup — 2026-10-23
 
-## 本輪正式來源
+Current cleanup follows the user's request to simplify the project without
+running tests. Inspection covered literal paths, class names, resource UIDs and
+Python imports across scenes, scripts, data, documentation and Skills. The graph
+service was incomplete/unavailable for these paths, so source inspection supplied
+the evidence. This is not an exhaustive dynamic-resource proof.
 
-- `docs/art_direction_reference_r17_full_body.png`：R-17 高細節完整身體回收機器人正式參考來源。
-- `data/art/player_animation_manifest.json`：玩家 atlas 的格尺寸、動作、方向與幀數契約。
-- `data/art/visual_assets.json`：正式場景、NPC、敵人、Boss、道具、掉落物、UI 圖示與地圖標記來源。
-- `assets/sprites/player/recycler_player_multiaction_8dir.png`：Godot 目前實際讀取的 R-17 完整身體多動作八方向 atlas。
-- `docs/player_full_body_idle_preview.png`、`docs/player_full_body_first_frame_x4.png`：本輪保留的主角全身檢查圖，用於確認不是半身裁切或人類疊圖。
-- `assets/sprites/items/recycler_item_icons.png` 與 `assets/sprites/items/*.png`：裝備列、背包、掉落物使用的正式圖示。
-- `assets/audio/*.wav`：目前 HUD、攻擊、受傷、轉場、升級與選單使用的音效。
+## Removed files
 
-## 清理政策
+| Files | Reason |
+| --- | --- |
+| `scripts/components/Health.gd` and its `.uid` | Unreferenced HealthComponent; live health belongs to existing GameState/enemy owners. |
+| `scripts/ui/MiniMapView.gd` and its `.uid` | Unreferenced compatibility wrapper; current HUD instantiates WorldMapView. |
+| `docs/automated_playtest_report.json`, `docs/performance_report.json` | Stale generated snapshots; runners already output to external/user QA directories. Ignored to prevent reintroduction. |
+| `scripts/tools/build_r17_rigged_atlas.py` | Unreferenced superseded procedural production script that could replace current knight art. |
+| `scripts/tools/build_release_candidate_assets.py` | Unreferenced old robot/full-asset generator superseded by current versioned production. |
+| `.agents/skills/godot-2p5d-pixel-art-and-animation/scripts/clear_godot_import_cache.py` | Obsolete bulk-cache deletion helper; normal reimport/isolated production previews replace it. Skill and guide references updated. |
 
-本專案明確禁止批量刪除檔案或目錄，因此本輪沒有使用 `Remove-Item -Recurse`、`rm -rf`、`rmdir /s` 或任何批量刪除指令。  
-若後續要移除未使用素材，必須先跑 audit，再一次只刪除一個明確路徑。
+34 individual files, 23,605,810 bytes. Every file was copied before removal into
+`C:/Users/wuwu6/AppData/Local/WastelandRecycler/cleanup/20261023-production-cleanup/`.
+The external `manifest.json` records original relative paths, byte counts and
+SHA-256 hashes. Each deletion targeted one confirmed absolute file; no directory
+was recursively deleted and no player save was changed by this cleanup.
 
-## 已建立的驗證方式
+The additional nine removals are the rejected native-3D mannequin demo sources
+(`docs/art-direction/r17_v2/demo/`, four files) and its `rig_proof/` report/four
+PNGs (five files). The current character owner explicitly released these paths;
+production now uses the reviewed pixel-art `sprite_preview/` workflow. They were
+also backed up and each file removed individually. No directory was deleted.
 
-使用下列指令檢查正式美術來源、空白圖片、重複命名資產、玩家動畫 manifest、JSON 與亂碼：
+## Deliberately retained
 
-```powershell
-python scripts\tools\verify_visual_assets.py
-```
+- VillageTileMap is actively instantiated by Village; it is not dead code.
+- Legacy player action/split/30-frame art still participates in fallback or source
+  contracts. Existing original art and generated v2 sources remain preserved.
+- Automated runners remain available for a later verification stage. The user's
+  request to defer tests does not imply removing the test infrastructure.
+- Historical art/audit documents remain references; AGENTS, GAME_DESIGN and the
+  current art-direction index identify current authority.
 
-通過條件：
+No tests were run for this cleanup. Current source review and updated references
+are not a runtime validation result.
 
-- `visual_assets.json` 中所有正式圖片都存在。
-- 命名 NPC、建築、敵人、Boss、裝備與掉落物不可共用同一正式 PNG path。
-- 正式 PNG 不可是全透明空圖。
-- 玩家 atlas 與 `player_animation_manifest.json` 的 frame size、動作數、方向數、幀數一致。
-- `data/`、`scenes/`、`scripts/`、`docs/` 的玩家可見文字不可出現 mojibake 亂碼。
+Four further rejected blade sheets (`v001`, `v003`, windup `v012`, impact `v013`)
+were released by the active character owner, backed up and removed individually.
+Approved concept v002 and all active blade source sheets/configuration remain.
 
-## 後續可人工清理的範圍
+Six superseded firearm/heavy artifacts were subsequently released by their owner,
+reference-inspected, copied to the same external archive and individually removed:
+firearm ready v001/fire v001, heavy ready v001/impact v001, and heavy impact v001's
+native preview/measurement JSON. Their backup hashes were compared before each
+single-file removal. Accepted firearm v002, heavy ready v002/windup v001/impact
+v002 and their active registrations remain. Exact original paths and hashes are
+in the external manifest; rejected-generation prompts remain as provenance.
 
-若 `verify_visual_assets.py` 或後續擴充 audit 報告列出未引用素材，請人工確認下列條件後再逐一刪除：
-
-- 不在 `data/art/visual_assets.json`。
-- 不在 `data/art/player_animation_manifest.json`。
-- 不被 Godot `.tscn`、`.gd`、JSON 或 import metadata 引用。
-- 不是正在產生或驗證截圖的來源圖。
-- 不是文件要求保留的美術方向參考。
-
-目前不建議直接刪除 `docs/visual_review_*.png`，因為它們是本輪可玩性與美術 review 的驗收證據。
+Six further superseded gait artifacts were then released and archived: the two
+failed heavy contact-B source PNGs and v002's preview/measurement/log, plus the
+rifle contact-B v001 PNG superseded by accepted v002. Each exact file had its
+backup hash checked and was removed individually. Keep accepted heavy passing
+v001, rifle contact-B v002/passing v001 and all generation prompts. The current
+family manifest uses none of the removed source paths.

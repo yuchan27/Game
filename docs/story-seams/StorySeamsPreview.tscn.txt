@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://StorySeamsPreview.gd" id="1_story_seams_preview"]
+
+[node name="StorySeamsPreview" type="Node"]
+script = ExtResource("1_story_seams_preview")

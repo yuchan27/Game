@@ -1,0 +1,29 @@
+Selected source: cold-fractured-shale-v4-01.png
+Selected built-in image_gen output: C:\Users\wuwu6\.codex\generated_images\01a16509-18a4-7ec1-b9fa-8247778ff862\exec-4c300138-e2fb-451b-9ef2-bd6b632cdc88.png
+The selected PNG is copied byte-for-byte from that output. The final prompt edits the first generated draft.
+
+Generation prompt:
+Use case: stylized-concept
+Asset type: one opaque, seamless, repeating 2D ground-material texture for the 2.5D pixel-art medieval wasteland game.
+Input images: Image 1 and Image 2 are references only for the established crisp pixel-cluster scale and restrained overcast finish. Do not copy their warm brown palette, paving layout, or surface pattern.
+Primary request: create a quiet cold fractured-shale floor identity from broad flat mineral soil and sparse fine fracture seams. This is only a flat top-down ground plane.
+Style/medium: deliberate hand-authored pixel art with crisp stepped clusters and hard pixel edges, matching a 1254 x 1254 source that maps to 512 x 512 world pixels (about 2.45 source pixels per world pixel). Four close value levels, mostly broad calm shapes and simple flat interiors.
+Composition/framing: exact square tile filled edge to edge, evenly distributed, no focal point. Make the texture genuinely seamless in both axes: all edge-cut color regions and hairline fractures continue at the matching opposite edges with no visible join when repeated.
+Lighting/mood: flat diffuse overcast light; cold, quiet, ancient mineral ground.
+Color palette: muted blue-charcoal, slate-violet ash, and cool packed mineral soil; keep neighboring colors close and the violet barely perceptible. It must also sit naturally under neutral soot-dark factory architecture.
+Materials/textures: broad, low-contrast, mostly flat shale and mineral-soil patches; sparse thin fractured seams, generally 1–3 source pixels wide, with only rare tiny muted-purple glints inside a seam. Add a few tiny shale slivers only; every sliver stays below 20 source pixels (about 8 world pixels). Keep large open areas between seams.
+Constraints: exactly one fully opaque 1254 x 1254 square PNG, no alpha; flat ground surface only; source is intended to repeat at 512 world pixels per tile.
+Avoid: giant dark cracks or chasms, deep black fissures, raised rocks, large stones, slabs, boulders, overlarge fragments, crystal formations, neon purple, bright accents, strong outlines, bevels, cast shadows, directional shading, dense grain, speckles, dithering, photonoise, gravel carpet, paving rows, 3D rendering, isometric perspective, horizon, props, scenery, plants, text, border, vignette, transparency, watermark.
+
+Refinement prompt (Image 1 was the first generated draft; this produced the selected source):
+Use case: stylized-concept
+Asset type: one opaque, seamless repeating ground-material texture for a pixel-art game.
+Input images: Image 1 is the edit target and source of the desired cold slate palette and broad fractured-shale composition.
+Primary request: refine this exact material into a calmer, genuinely tileable pixel-art ground texture. Preserve the broad cool charcoal/slate-violet mineral patches and sparse fine fractures, but remove most high-frequency grit, tiny speckles, and over-detailed surface marks. Make the broad shapes clearly dominate.
+Style/medium: crisp hand-authored 2D pixel art, hard stepped clusters, flat interiors, low contrast, about four close color-value levels. Source dimensions remain exactly 1254 x 1254 pixels and maps to 512 x 512 world pixels.
+Composition/framing: no focal area; balanced across the square. Make the four borders wrap seamlessly in both directions. The first and last pixel rows must match exactly across corresponding columns, and the first and last pixel columns must match exactly across corresponding rows; all fractures and broad shapes crossing an edge must continue without a jump.
+Lighting/mood: flat diffuse overcast light, quiet cold ancient stone.
+Color palette: preserve the current muted blue-charcoal, slate-violet ash and cool mineral soil, keeping violet glints barely perceptible.
+Materials/textures: large calm flat shale and mineral-soil patches; sparse thin branching fractures only, never forming a broad dark void; only a few tiny shale slivers, each under 20 source pixels.
+Constraints: exactly one fully opaque 1254 x 1254 square PNG with no alpha; flat top-down ground plane only.
+Avoid: photonoise, grain, dense speckles, dithering, excessive tiny clusters, giant cracks, deep black seams, large rocks, crystals, neon purple, bright accents, bevels, cast shadows, 3D or isometric perspective, horizon, scenery, props, plants, text, border, vignette, transparency, watermark.
